@@ -35,6 +35,11 @@ public class Configuration {
     public void setName(String name) {
         this.name = name;
     }
+
+    @Override
+    public String toString() {
+        return "Configuration{" + "id=" + id + ", name=" + name + '}';
+    }
     
     
 }

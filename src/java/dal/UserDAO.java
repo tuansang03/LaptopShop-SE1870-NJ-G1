@@ -14,8 +14,11 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import model.Brand;
 import model.Category;
+import model.Color;
+import model.Configuration;
 import model.Post;
 import model.Product;
+import model.ProductDetail;
 import model.Role;
 
 /**
@@ -110,6 +113,31 @@ public class UserDAO extends DBContext {
     }
 
 //    ------------------------------EDIT NGAY 19/09/2024 -DOANKD -----------------------------------------------
+    
+       public Product getProductByIdD(int id) {
+        String sql = "select * from Product where id=?";
+        try {
+            PreparedStatement st = connection.prepareStatement(sql);
+            st.setInt(1, id);
+            ResultSet rs = st.executeQuery();
+            if (rs.next()) {
+                
+                Category c = getCategoryByIdD(rs.getInt("CategoryId"));
+                Brand b = getBrandByIdD(rs.getInt("BrandId"));
+                Product product = new Product(rs.getInt("Id"),
+                        b,
+                        c,
+                        rs.getString("Name"),
+                        rs.getString("Status"));
+                return product;
+            }
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
+        return null;
+    }
+    
+    
     public Category getCategoryByIdD(int id) {
         String sql = "select * from Category where id=?";
         try {
@@ -192,6 +220,22 @@ public class UserDAO extends DBContext {
         }
         return null;
     }
+        public Color getColorById(int id) {
+        String sql = "select * from Color where id=?";
+        try {
+            PreparedStatement st = connection.prepareStatement(sql);
+            st.setInt(1, id);
+            ResultSet rs = st.executeQuery();
+            if (rs.next()) {
+                Color newColor = new Color(rs.getInt("Id"),
+                        rs.getString("Name"));
+                return newColor;
+            }
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
+        return null;
+    }
 
     public User getUserByIdD(int id) {
         String sql = "select * from User where id=?";
@@ -200,7 +244,6 @@ public class UserDAO extends DBContext {
             st.setInt(1, id);
             ResultSet rs = st.executeQuery();
 
-            
             if (rs.next()) {
                 Role role = getRoleByIdD(rs.getInt("RoleId"));
                 User u = new User(rs.getInt("id"),
@@ -219,6 +262,7 @@ public class UserDAO extends DBContext {
         }
         return null;
     }
+
     public List<Post> getPostListD() {
 
         List<Post> list = new ArrayList<>();
@@ -256,6 +300,72 @@ public class UserDAO extends DBContext {
             System.out.println(e);
         }
         return list;
+    }
+        public Configuration getConfigurationById(int id) {
+        String sql = "select * from Configuration where id=?";
+        try {
+            PreparedStatement st = connection.prepareStatement(sql);
+            st.setInt(1, id);
+            ResultSet rs = st.executeQuery();
+            if (rs.next()) {
+                Configuration c = new Configuration(rs.getInt("Id"),
+                        rs.getString("Name"));
+                return c;
+            }
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
+        return null;
+    }
+
+    public List<ProductDetail> getListProductDetailD() {
+        List<ProductDetail> list = new ArrayList<>();
+        String sql = "SELECT [Id]\n"
+                + "      ,[ProductId]\n"
+                + "      ,[ColorId]\n"
+                + "      ,[ConfigurationId]\n"
+                + "      ,[Price]\n"
+                + "      ,[Quantity]\n"
+                + "      ,[ShortDescription]\n"
+                + "      ,[Description]\n"
+                + "      ,[Status]\n"
+                + "  FROM [dbo].[ProductDetail]";
+        
+        try {
+            PreparedStatement st = connection.prepareStatement(sql);
+
+            ResultSet rs = st.executeQuery();
+            while (rs.next()) {
+                ProductDetail newProduct = new ProductDetail();
+                newProduct.setId(rs.getInt("Id"));
+                Product product = getProductByIdD(rs.getInt("ProductId"));
+                newProduct.setProduct(product);
+                Color c = getColorById(rs.getInt("ColorId"));
+                newProduct.setColor(c);
+                Configuration c1 = getConfigurationById(rs.getInt("ConfigurationId"));
+                newProduct.setConfiguration(c1);
+                newProduct.setPrice(rs.getInt("Price"));
+                newProduct.setPrice(rs.getInt("Quantity"));
+                newProduct.setShortDescription(rs.getString("ShortDescription"));
+                newProduct.setDescription(rs.getString("Description"));
+                newProduct.setStatus(rs.getString("Status"));
+                
+                list.add(newProduct);
+            }
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
+        return list;
+    }
+    
+    public static void main(String[] args) {
+        
+        UserDAO dao = new UserDAO();
+        List<ProductDetail> list = dao.getListProductDetailD();
+        for (int i = 0; i < list.size(); i++) {
+            ProductDetail get = list.get(i);
+            System.out.println(get);
+        }
     }
     //----------------------------------------------------------------------------------
 }

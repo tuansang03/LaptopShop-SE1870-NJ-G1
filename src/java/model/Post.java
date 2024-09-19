@@ -107,6 +107,11 @@ public class Post {
     public void setPublishDate(Date publishDate) {
         this.publishDate = publishDate;
     }
+
+    @Override
+    public String toString() {
+        return "Post{" + "id=" + id + ", user=" + user + ", brand=" + brand + ", category=" + category + ", tittle=" + tittle + ", shortContent=" + shortContent + ", fullContent=" + fullContent + ", thumbnail=" + thumbnail + ", publishDate=" + publishDate + '}';
+    }
     
     
     
