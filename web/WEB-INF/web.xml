@@ -6,7 +6,7 @@
     </servlet>
     <servlet>
         <servlet-name>VerifyOTPServlet</servlet-name>
-        <servlet-class>controller.VerifyOTPServlet</servlet-class>
+        <servlet-class>dal.VerifyOTPServlet</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>ResendOTP</servlet-name>
