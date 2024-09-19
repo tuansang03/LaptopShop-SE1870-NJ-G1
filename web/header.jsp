@@ -17,7 +17,9 @@
             .logo_h img{
                 width: 180px                    
             }
-            
+            .nav-link:hover{
+                
+            }
             
             
         </style>
