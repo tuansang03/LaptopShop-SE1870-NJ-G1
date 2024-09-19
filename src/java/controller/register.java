@@ -77,7 +77,9 @@ public class register extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         String name = request.getParameter("name");
-        String fullname = request.getParameter("fullname");
+        String firstName = request.getParameter("firstName");
+        String lastName= request.getParameter("lastName");
+        String fullname=firstName +" "+lastName;
         String password = request.getParameter("password");
         String confirmPassword = request.getParameter("confirmPassword");
         String email = request.getParameter("email");

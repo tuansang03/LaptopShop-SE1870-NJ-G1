@@ -8,6 +8,7 @@ import dal.UserDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -59,7 +60,20 @@ public class login extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+Cookie arr[] = request.getCookies();
+        if (arr != null) {
+            for (Cookie cookie : arr) {
+                if (cookie.getName().equals("userC")) {
+                    request.setAttribute("usernameC", cookie.getValue());
 
+                }
+                if (cookie.getName().equals("passC")) {
+                    request.setAttribute("passC", cookie.getValue());
+                }
+            }
+
+        }
+        request.getRequestDispatcher("login.jsp").forward(request, response);
     }
 
     /**
@@ -75,10 +89,19 @@ public class login extends HttpServlet {
             throws ServletException, IOException {
         String username = request.getParameter("username");
         String password = request.getParameter("password");
+        String remember = request.getParameter("rememberMe");
         UserDAO dao = new UserDAO();
         String hashedPassword = hashPassword(password);
         User u = dao.UserLogin(username, hashedPassword);
         HttpSession session = request.getSession();
+        if ("true".equals(remember)) {
+            Cookie uC = new Cookie("userC", username);
+            Cookie p = new Cookie("passC", password);
+            uC.setMaxAge(60 * 60);
+            p.setMaxAge(60 * 60);
+            response.addCookie(uC);
+            response.addCookie(p);
+        }
         if (u != null) {
             if (u.getRole().getId() == 3) {
                 session.setAttribute("user", u);

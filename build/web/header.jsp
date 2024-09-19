@@ -1,4 +1,6 @@
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+
 <!DOCTYPE html>
 <html>
     <head>
@@ -6,13 +8,13 @@
         <title>JSP Page</title>
     </head>
     <body>
-       <header class="header_area">
+        <header class="header_area">
             <div class="main_menu">
                 <nav class="navbar navbar-expand-lg navbar-light">
                     <div class="container">
                         <a class="navbar-brand logo_h" href="index.jsp"><img src="img/logo.png" alt=""></a>
                         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
-                            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                                aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                             <span class="icon-bar"></span>
                             <span class="icon-bar"></span>
                             <span class="icon-bar"></span>
@@ -22,7 +24,7 @@
                                 <li class="nav-item active"><a class="nav-link" href="index.jsp">Home</a></li>
                                 <li class="nav-item submenu dropdown">
                                     <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
-                                    aria-expanded="false">Shop</a>
+                                       aria-expanded="false">Shop</a>
                                     <ul class="dropdown-menu">
                                         <li class="nav-item"><a class="nav-link" href="category.jsp">Shop Category</a></li>
                                         <li class="nav-item"><a class="nav-link" href="single-product.jsp">Product Details</a></li>
@@ -33,7 +35,7 @@
                                 </li>
                                 <li class="nav-item submenu dropdown">
                                     <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
-                                    aria-expanded="false">Blog</a>    
+                                       aria-expanded="false">Blog</a>    
                                     <ul class="dropdown-menu">
                                         <li class="nav-item"><a class="nav-link" href="blog.jsp">Blog</a></li>
                                         <li class="nav-item"><a class="nav-link" href="single-blog.jsp">Blog Details</a></li>
@@ -41,9 +43,9 @@
                                 </li>
                                 <li class="nav-item submenu dropdown">
                                     <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
-                                    aria-expanded="false">Pages</a>
+                                       aria-expanded="false">Pages</a>
                                     <ul class="dropdown-menu">
-                                        <li class="nav-item"><a class="nav-link" href="login.jsp">Login</a></li>
+                                        <li class="nav-item"><a class="nav-link" href="login">Login</a></li>
                                         <li class="nav-item"><a class="nav-link" href="register.jsp">Register</a></li>
                                         <li class="nav-item"><a class="nav-link" href="tracking-order.jsp">Tracking</a></li>
                                     </ul>
@@ -59,9 +61,28 @@
                             <!-- Thêm nút đăng nhập và đăng ký -->
                             <ul class="navbar-nav">
                                 <li class="nav-item">
-                                    <a class="nav-link" href="login.jsp">Login</a>
+                                <c:choose>
+                                    <c:when test="${sessionScope.admin == null && sessionScope.user == null && sessionScope.sale == null}">
+                                        <a href="login"><i class="fa fa-user"></i> Login</a>
+                                    </c:when>
+                                    <c:otherwise>
+                                        <div class="dropdown">
+                                            <button class="dropbtn"><i class="fa fa-user">
+
+                                                    <c:if test="${sessionScope.user != null}">
+                                                    </i> ${user.fullName}</button>
+                                                </c:if>
+                                            <c:if test="${sessionScope.sale != null}">
+                                                    </i> ${sale.fullName}</button>
+                                                </c:if>
+                                    <c:if test="${sessionScope.admin != null}">
+                                                    </i> ${admin.fullName}</button>
+                                                </c:if>
+                                    </c:otherwise>
+                                </c:choose>
+                                                    <c:if test="${sessionScope.user !=null ||sessionScope.admin !=null || sessionScope.sale !=null}"><a href="logout">Logout</a></c:if>
                                 </li>
-                                
+
                             </ul>
                         </div>
                     </div>
