@@ -63,12 +63,12 @@
 				<div class="col-lg-6">
 					<div class="login_form_inner">
 						<h3>Log in to enter</h3>
-						<form class="row login_form" action="#/" id="contactForm" >
+                                                <form class="row login_form" action="login" id="contactForm" method="post" >
 							<div class="col-md-12 form-group">
-								<input type="text" class="form-control" id="name" name="name" placeholder="Username" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Username'">
+								<input type="text" class="form-control" id="name" name="username" placeholder="Username" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Username'">
 							</div>
 							<div class="col-md-12 form-group">
-								<input type="text" class="form-control" id="name" name="name" placeholder="Password" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Password'">
+								<input type="password" class="form-control" id="name" name="password" placeholder="Password" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Password'">
 							</div>
 							<div class="col-md-12 form-group">
 								<div class="creat_account">
@@ -86,8 +86,28 @@
 			</div>
 		</div>
 	</section>
-	<!--================End Login Box Area =================-->
+ <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
+<script>
+    // Hiển thị thông báo nếu đăng nhập thành công
+    <% if (request.getAttribute("success") != null) { %>
+        Swal.fire({
+            icon: 'success',
+            title: 'Success!',
+            text: '<%= request.getAttribute("success") %>',
+            confirmButtonText: 'OK'
+        });
+    <% }%>
+    
+    <% if (request.getAttribute("error") != null) { %>
+      Swal.fire({
+        icon: 'error',
+        title: 'Oops...',
+        text: '<%= request.getAttribute("error") %>',
+        confirmButtonText: 'OK'
+      });
+    <% } %>
+</script>
 
 
   <!--================ Start footer Area  =================-->	
