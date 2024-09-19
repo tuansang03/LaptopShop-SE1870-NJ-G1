@@ -12,6 +12,18 @@
         <title>JSP Page</title>
     </head>
     <body>
+        
+        <style>
+            .logo_h img{
+                width: 180px                    
+            }
+            
+            
+            
+        </style>
+            
+            
+        
        <header class="header_area">
     <div class="main_menu">
       <nav class="navbar navbar-expand-lg navbar-light">
