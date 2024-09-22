@@ -4,6 +4,10 @@
         <servlet-name>register</servlet-name>
         <servlet-class>controller.register</servlet-class>
     </servlet>
+    <welcome-file-list>
+    <welcome-file>home</welcome-file>
+</welcome-file-list>
+
     <servlet>
         <servlet-name>VerifyOTPServlet</servlet-name>
         <servlet-class>dal.VerifyOTPServlet</servlet-class>

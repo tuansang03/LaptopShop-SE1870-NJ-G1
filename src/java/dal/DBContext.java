@@ -1,4 +1,4 @@
-package dal;
+    package dal;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -34,6 +34,5 @@ public class DBContext {
         } catch (ClassNotFoundException | SQLException ex) {
             Logger.getLogger(DBContext.class.getName()).log(Level.SEVERE, null, ex);
         }
-    }
-  
+    }    
 }

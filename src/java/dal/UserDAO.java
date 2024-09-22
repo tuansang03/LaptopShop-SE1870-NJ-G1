@@ -16,6 +16,7 @@ import model.Brand;
 import model.Category;
 import model.Color;
 import model.Configuration;
+import model.Image;
 import model.Post;
 import model.Product;
 import model.ProductDetail;
@@ -112,8 +113,7 @@ public class UserDAO extends DBContext {
         return null;
     }
 
-//    ------------------------------EDIT NGAY 19/09/2024 -DOANKD -----------------------------------------------
-    
+//    ------------------------------EDIT NGAY 19/09/2024 -DOANKD -----------------------------------------------    
        public Product getProductByIdD(int id) {
         String sql = "select * from Product where id=?";
         try {
@@ -135,9 +135,7 @@ public class UserDAO extends DBContext {
             System.out.println(e);
         }
         return null;
-    }
-    
-    
+    }    
     public Category getCategoryByIdD(int id) {
         String sql = "select * from Category where id=?";
         try {
@@ -155,7 +153,6 @@ public class UserDAO extends DBContext {
         }
         return null;
     }
-
     public Brand getBrandByIdD(int id) {
         String sql = "select * from Brand where id=?";
         try {
@@ -166,16 +163,13 @@ public class UserDAO extends DBContext {
                 Brand newBrand = new Brand(rs.getInt("Id"),
                         rs.getString("Name"));
                 return newBrand;
-
             }
         } catch (SQLException e) {
             System.out.println(e);
         }
         return null;
     }
-
     public List<Product> getProductListD() {
-
         List<Product> list = new ArrayList<>();
         String sql = "SELECT [Id]\n"
                 + "      ,[BrandId]\n"
@@ -348,9 +342,24 @@ public class UserDAO extends DBContext {
                 newProduct.setPrice(rs.getInt("Quantity"));
                 newProduct.setShortDescription(rs.getString("ShortDescription"));
                 newProduct.setDescription(rs.getString("Description"));
-                newProduct.setStatus(rs.getString("Status"));
-                
+                newProduct.setStatus(rs.getString("Status"));                
                 list.add(newProduct);
+            }
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
+        return list;
+    }    
+        public List<String> getPictureList(){
+        List<String> list = new ArrayList<>();
+        String sql = "SELECT [Image]\n" +
+"  FROM [SWP391_LaptopShop].[dbo].[Image]";
+        try {
+            PreparedStatement st = connection.prepareStatement(sql);
+            ResultSet rs = st.executeQuery();
+            while (rs.next()) {
+                String img = rs.getString("Image");
+                list.add(img);
             }
         } catch (SQLException e) {
             System.out.println(e);
@@ -358,14 +367,16 @@ public class UserDAO extends DBContext {
         return list;
     }
     
+    
+    
     public static void main(String[] args) {
         
         UserDAO dao = new UserDAO();
-        List<ProductDetail> list = dao.getListProductDetailD();
+        List<String> list = dao.getPictureList();
         for (int i = 0; i < list.size(); i++) {
-            ProductDetail get = list.get(i);
-            System.out.println(get);
+            System.out.println(list.get(i));
+           
         }
     }
-    //----------------------------------------------------------------------------------
+    //================================================================================================================
 }

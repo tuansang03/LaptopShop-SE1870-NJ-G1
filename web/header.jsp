@@ -4,12 +4,17 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>JSP Page</title>
+                <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Farro:wght@300;400;500;700&display=swap" rel="stylesheet">
     </head>
     <body>
         
         <style>
             
-            
+            *{
+                font-family: "Farro", sans-serif;
+            }
             .logo_h img{
                 width: 180px;
 
@@ -22,7 +27,9 @@
             .nav-link:hover{
                 
             }
-            
+            .header_button{
+                
+            }
             
         </style>
             
@@ -32,7 +39,7 @@
             <div class="main_menu">
                 <nav class="navbar navbar-expand-lg navbar-light">
                     <div class="container">
-                        <a class="navbar-brand logo_h" href="index.jsp"><img src="img/logo.png" alt=""></a>
+                        <a class="navbar-brand logo_h" href="home"><img src="img/logo.png" alt=""></a>
                         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
                             aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                             <span class="icon-bar"></span>
@@ -41,7 +48,7 @@
                         </button>
                         <div class="collapse navbar-collapse offset" id="navbarSupportedContent">
                             <ul class="nav navbar-nav menu_nav ml-auto mr-auto">
-                                <li class="nav-item active"><a class="nav-link" href="index.jsp">Home</a></li>
+                                <li class="nav-item active"><a class="nav-link" href="home">Home</a></li>
                                 <li class="nav-item submenu dropdown">
                                     <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
                                     aria-expanded="false">Shop</a>
@@ -70,7 +77,7 @@
                                         <li class="nav-item"><a class="nav-link" href="tracking-order.jsp">Tracking</a></li>
                                     </ul>
                                 </li>
-                                <li class="nav-item"><a class="nav-link" href="contact.jsp">Contact</a></li>
+                                <li class="nav-item"><a class="nav-link" class="header_button" href="AboutUs.jsp">About Us</a></li>
                             </ul>
 
                             <ul class="nav-shop">

@@ -41,12 +41,10 @@ public class PasswordUtil {
         }
         return hexString.toString();
     }
-
     public static boolean isValidPassword(String password) {
         // Kiểm tra độ dài mật khẩu có ít nhất 8 ký tự
         return password != null && password.length() >= 8;
     }
-
     public static void main(String[] args) {
         String password = "tienminh8";
         String hashedPassword = hashPassword(password);

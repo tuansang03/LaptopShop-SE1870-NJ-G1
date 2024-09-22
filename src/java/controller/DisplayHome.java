@@ -5,6 +5,7 @@
 
 package controller;
 
+import dal.UserDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -12,13 +13,18 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
+import model.Image;
+import model.Post;
 
 /**
  *
  * @author kieud
  */
 @WebServlet(name="ProductDisplayHome", urlPatterns={"/home"})
-public class ProductDisplayHome extends HttpServlet {
+public class DisplayHome extends HttpServlet {
    
     /** 
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code> methods.
@@ -55,8 +61,21 @@ public class ProductDisplayHome extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
-        processRequest(request, response);
+        UserDAO dao = new UserDAO();
+        List<String> list = dao.getPictureList();
+        List<Post> listP = dao.getPostListD();
+        List<String> randomlist = new ArrayList<>();
+        Random r = new Random();
+        for (int i = 0; i < 3; i++) {
+            int randomIndex = r.nextInt(list.size());
+            randomlist.add(list.get(randomIndex));
+            list.remove(randomIndex);
+        }
+        request.setAttribute("listH", randomlist);
+        request.setAttribute("listP", listP);
+        request.getRequestDispatcher("index.jsp").forward(request, response);
     } 
+
 
     /** 
      * Handles the HTTP <code>POST</code> method.
@@ -68,7 +87,7 @@ public class ProductDisplayHome extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
-        processRequest(request, response);
+
     }
 
     /** 
