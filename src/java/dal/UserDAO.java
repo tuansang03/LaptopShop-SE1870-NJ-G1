@@ -114,14 +114,14 @@ public class UserDAO extends DBContext {
     }
 
 //    ------------------------------EDIT NGAY 19/09/2024 -DOANKD -----------------------------------------------    
-       public Product getProductByIdD(int id) {
+    public Product getProductByIdD(int id) {
         String sql = "select * from Product where id=?";
         try {
             PreparedStatement st = connection.prepareStatement(sql);
             st.setInt(1, id);
             ResultSet rs = st.executeQuery();
             if (rs.next()) {
-                
+
                 Category c = getCategoryByIdD(rs.getInt("CategoryId"));
                 Brand b = getBrandByIdD(rs.getInt("BrandId"));
                 Product product = new Product(rs.getInt("Id"),
@@ -135,7 +135,8 @@ public class UserDAO extends DBContext {
             System.out.println(e);
         }
         return null;
-    }    
+    }
+
     public Category getCategoryByIdD(int id) {
         String sql = "select * from Category where id=?";
         try {
@@ -153,6 +154,7 @@ public class UserDAO extends DBContext {
         }
         return null;
     }
+
     public Brand getBrandByIdD(int id) {
         String sql = "select * from Brand where id=?";
         try {
@@ -169,6 +171,7 @@ public class UserDAO extends DBContext {
         }
         return null;
     }
+
     public List<Product> getProductListD() {
         List<Product> list = new ArrayList<>();
         String sql = "SELECT [Id]\n"
@@ -214,7 +217,8 @@ public class UserDAO extends DBContext {
         }
         return null;
     }
-        public Color getColorById(int id) {
+
+    public Color getColorById(int id) {
         String sql = "select * from Color where id=?";
         try {
             PreparedStatement st = connection.prepareStatement(sql);
@@ -232,7 +236,8 @@ public class UserDAO extends DBContext {
     }
 
     public User getUserByIdD(int id) {
-        String sql = "select * from User where id=?";
+        String sql = "SELECT * FROM [User] WHERE id=?";
+
         try {
             PreparedStatement st = connection.prepareStatement(sql);
             st.setInt(1, id);
@@ -260,16 +265,10 @@ public class UserDAO extends DBContext {
     public List<Post> getPostListD() {
 
         List<Post> list = new ArrayList<>();
-        String sql = "SELECT [Id]\n"
-                + "      ,[UserId]\n"
-                + "      ,[BrandId]\n"
-                + "      ,[CategoryId]\n"
-                + "      ,[Title]\n"
-                + "      ,[ShortContent]\n"
-                + "      ,[FullContent]\n"
-                + "      ,[Thumbnail]\n"
-                + "      ,[PublishDate]\n"
-                + "  FROM [dbo].[Post]";
+        String sql = "SELECT TOP 6 [Id], [UserId], [BrandId], [CategoryId], [Title], [ShortContent], [FullContent], [Thumbnail], [PublishDate] " +
+             "FROM [dbo].[Post] " +
+             "ORDER BY [Id] DESC";
+
         try {
             PreparedStatement st = connection.prepareStatement(sql);
 
@@ -295,7 +294,42 @@ public class UserDAO extends DBContext {
         }
         return list;
     }
-        public Configuration getConfigurationById(int id) {
+        public List<Post> getAllPostListD() {
+
+        List<Post> list = new ArrayList<>();
+        String sql = "SELECT  [Id], [UserId], [BrandId], [CategoryId], [Title], [ShortContent], [FullContent], [Thumbnail], [PublishDate] " +
+             "FROM [dbo].[Post] " +
+             "ORDER BY [Id] DESC";
+
+        try {
+            PreparedStatement st = connection.prepareStatement(sql);
+
+            ResultSet rs = st.executeQuery();
+            while (rs.next()) {
+                Post p = new Post();
+                p.setId(rs.getInt("Id"));
+                User u = getUserByIdD(rs.getInt("UserId"));
+                p.setUser(u);
+                Brand b = getBrandByIdD(rs.getInt("BrandId"));
+                p.setBrand(b);
+                Category c = getCategoryByIdD(rs.getInt("CategoryId"));
+                p.setCategory(c);
+                p.setTittle(rs.getString("Title"));
+                p.setShortContent(rs.getString("ShortContent"));
+                p.setFullContent(rs.getString("FullContent"));
+                p.setThumbnail(rs.getString("Thumbnail"));
+                p.setPublishDate(rs.getDate("PublishDate"));
+                list.add(p);
+            }
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
+        return list;
+    }
+    
+    
+
+    public Configuration getConfigurationById(int id) {
         String sql = "select * from Configuration where id=?";
         try {
             PreparedStatement st = connection.prepareStatement(sql);
@@ -324,7 +358,7 @@ public class UserDAO extends DBContext {
                 + "      ,[Description]\n"
                 + "      ,[Status]\n"
                 + "  FROM [dbo].[ProductDetail]";
-        
+
         try {
             PreparedStatement st = connection.prepareStatement(sql);
 
@@ -342,18 +376,19 @@ public class UserDAO extends DBContext {
                 newProduct.setPrice(rs.getInt("Quantity"));
                 newProduct.setShortDescription(rs.getString("ShortDescription"));
                 newProduct.setDescription(rs.getString("Description"));
-                newProduct.setStatus(rs.getString("Status"));                
+                newProduct.setStatus(rs.getString("Status"));
                 list.add(newProduct);
             }
         } catch (SQLException e) {
             System.out.println(e);
         }
         return list;
-    }    
-        public List<String> getPictureList(){
+    }
+
+    public List<String> getPictureList() {
         List<String> list = new ArrayList<>();
-        String sql = "SELECT [Image]\n" +
-"  FROM [SWP391_LaptopShop].[dbo].[Image]";
+        String sql = "SELECT [Image]\n"
+                + "  FROM [SWP391_LaptopShop].[dbo].[Image]";
         try {
             PreparedStatement st = connection.prepareStatement(sql);
             ResultSet rs = st.executeQuery();
@@ -367,15 +402,44 @@ public class UserDAO extends DBContext {
         return list;
     }
     
-    
-    
+public Post getPostById(int id) {
+    String sql = "SELECT [Id], [UserId], [BrandId], [CategoryId], [Title], " +
+                 "[ShortContent], [FullContent], [Thumbnail], [PublishDate] " +
+                 "FROM [dbo].[Post] WHERE [Id] = ?";
+    try {
+        PreparedStatement st = connection.prepareStatement(sql);
+        st.setInt(1, id);
+        ResultSet rs = st.executeQuery();
+        if (rs.next()) {
+            Post p = new Post();
+            p.setId(rs.getInt("Id"));
+            User u = getUserByIdD(rs.getInt("UserId"));
+            p.setUser(u);
+            Brand b = getBrandByIdD(rs.getInt("BrandId"));
+            p.setBrand(b);
+            Category c = getCategoryByIdD(rs.getInt("CategoryId"));
+            p.setCategory(c);
+            p.setTittle(rs.getString("Title"));
+            p.setShortContent(rs.getString("ShortContent"));
+            p.setFullContent(rs.getString("FullContent"));
+            p.setThumbnail(rs.getString("Thumbnail"));
+            p.setPublishDate(rs.getDate("PublishDate"));
+            return p; // Trả về bài viết tìm thấy
+        }
+    } catch (SQLException e) {
+        System.out.println(e);
+    }
+    return null; // Trả về null nếu không tìm thấy
+}
+
+
     public static void main(String[] args) {
-        
+
         UserDAO dao = new UserDAO();
-        List<String> list = dao.getPictureList();
+        List<Post> list = dao.getPostListD();
         for (int i = 0; i < list.size(); i++) {
             System.out.println(list.get(i));
-           
+
         }
     }
     //================================================================================================================

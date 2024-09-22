@@ -23,17 +23,25 @@
 
         <link rel="stylesheet" href="css/style.css">
 
+        <link rel="stylesheet"
+              href="https://cdn.jsdelivr.net/npm/boxicons@latest/css/boxicons.min.css">
+        <!-- or -->
+        <link rel="stylesheet"
+              href="https://unpkg.com/boxicons@latest/css/boxicons.min.css">
 
 
     </head>
     <body>
         <style>
             .xxxx{
-                width: 540px;
+                width: 450px;
                 height: 400px;
 
 
                 margin-left: 10.5%
+            }
+            .xxxxx{
+                width: 100%
             }
             .xxxx img{
                 width: auto;
@@ -46,7 +54,7 @@
                 font-family: "Farro", sans-serif;
             }
             .ramdon_title{
-                font-size: 2.4em; /* Kích thước chữ */
+                font-size: 1.8em; /* Kích thước chữ */
                 font-weight: 400; /* Đậm */
                 color: #333; /* Màu chữ */
                 text-align: center; /* Căn giữa */
@@ -57,11 +65,24 @@
                 margin: 0 0 20px 0; /* Khoảng cách bên ngoài */
             }
             .post{
-                width: 32%
+                width: 30%
             }
             .hero-banner{
+            }
+            .button-hero{
+                background: wheat;
+                color: black;
+                border: 1px solid #000;
+
+            }
+            .hero-banner::before{
+                background: #8bb0d5 !important;
+                background-repeat: no-repeat !important;
+                background-size: cover !important;
+                background-position: center !important;
                 
-               
+            }
+
         </style>
         <!--================ Start Header Menu Area =================-->
         <%@include file="header.jsp" %>
@@ -107,8 +128,12 @@
 
                         <c:forEach items="${listH}" var="o" varStatus="status">
                             <div class="hero-carousel__slide xxxx">
-                                <img src="${o}" alt="" class="img-fluid">
-                                <a href="#" class="hero-carousel__slideOverlay">
+                                <div class="xxxxx">
+                                    <img src="${o}" alt="" class="img-fluid">
+                                    
+                                    
+                                </div>
+                                <a href="" class="hero-carousel__slideOverlay">
                                     <h3>Wireless Headphone</h3>
                                     <p>Accessories Item</p>
                                 </a>
@@ -120,7 +145,7 @@
             </section>
 
 
-            <!-- ================ trending product section start ================= -->  
+<!--             ================ trending product section start =================   
             <section class="section-margin calc-60px">
                 <div class="container">
                     <div class="section-intro pb-60px">
@@ -134,7 +159,12 @@
                                     <img class="card-img" src="img/product/product1.png" alt="">
                                     <ul class="card-product__imgOverlay">
                                         <li><button><i class="ti-search"></i></button></li>
-                                        <li><button><i class="ti-shopping-cart"></i></button></li>
+                                        <li>
+                                            <a href="cart.jsp" class="btn">
+                                                <i class="ti-shopping-cart"></i>
+                                            </a>
+                                        </li>
+
                                         <li><button><i class="ti-heart"></i></button></li>
                                     </ul>
                                 </div>
@@ -145,12 +175,12 @@
                                 </div>
                             </div>
                         </div>
-                        
-                        </div>
+
                     </div>
                 </div>
+                </div>
             </section>
-            <!-- ================ trending product section end ================= -->  
+             ================ trending product section end =================   -->
 
 
             <!-- ================ offer section start ================= --> 
@@ -319,25 +349,25 @@
                     </div>
 
                     <div class="row">
-                        
-                        <c:forEach items="${listP}" var="p" varStatus="status">>
-                        
+
+                        <c:forEach items="${listP}" var="p" varStatus="status">
+
                             <div class="post">
-                            <div class="card card-blog">
-                                <div class="card-blog__img">
-                                    <img class="card-img rounded-0" src="${p.thumbnail}" alt="">
-                                </div>
-                                <div class="card-body">
-                                    <ul class="card-blog__info">
-                                        <li><a href="#">${p.user.userName}</a></li>
-                                        <li><i class="ti-comments-smiley"></i>${p.brand.name}</li>
-                                    </ul>
-                                    <h4 class="card-blog__title"><a href="single-blog.jsp">${p.tittle}</a></h4>
-                                    <p>${p.shortContent}</p>
-                                    <a class="card-blog__link" href="#">Read More <i class="ti-arrow-right"></i></a>
+                                <div class="card card-blog">
+                                    <div class="card-blog__img">
+                                        <img class="card-img rounded-0" src="${p.thumbnail}" alt="">
+                                    </div>
+                                    <div class="card-body">
+                                        <ul class="card-blog__info">
+                                            <li><a href="#" class="bx bxs-user"> ${p.user.userName}</a></li>
+                                            <li><i class="bx bx-laptop"></i>${p.brand.name}</li>
+                                        </ul>
+                                        <h4 class="card-blog__title"><a href="single-blog.jsp">${p.tittle}</a></h4>
+                                        <p>${p.shortContent}</p>
+                                        <a class="card-blog__link" href="postdetail?id=${p.id}">Read More <i class="ti-arrow-right"></i></a>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
 
                         </c:forEach>
                     </div>

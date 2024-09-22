@@ -13,18 +13,18 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
-import java.util.Random;
-import model.Image;
 import model.Post;
 
 /**
  *
  * @author kieud
  */
-@WebServlet(name="ProductDisplayHome", urlPatterns={"/home"})
-public class DisplayHome extends HttpServlet {
+@WebServlet(name="DisplayPostDetail", urlPatterns={"/postdetail"})
+public class DisplayPostDetail extends HttpServlet {
    
     /** 
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code> methods.
@@ -41,10 +41,10 @@ public class DisplayHome extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet ProductDisplayHome</title>");  
+            out.println("<title>Servlet DisplayPostDetail</title>");  
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet ProductDisplayHome at " + request.getContextPath () + "</h1>");
+            out.println("<h1>Servlet DisplayPostDetail at " + request.getContextPath () + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
@@ -61,21 +61,31 @@ public class DisplayHome extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
-        UserDAO dao = new UserDAO();
-        List<String> list = dao.getPictureList();
-        List<Post> listP = dao.getPostListD();
-        List<String> randomlist = new ArrayList<>();
-        Random r = new Random();
-        for (int i = 0; i < 5; i++) {
-            int randomIndex = r.nextInt(list.size());
-            randomlist.add(list.get(randomIndex));
-            list.remove(randomIndex);
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+    String idStr = request.getParameter("id");
+    if (idStr != null) {
+        try {
+            int id = Integer.parseInt(idStr); // Chuyển đổi String sang int
+            UserDAO dao = new UserDAO();
+            Post post = dao.getPostById(id); // Gọi hàm lấy bài viết theo id
+            
+            String formattedDate = sdf.format(post.getPublishDate());
+            request.setAttribute("postDetailTime", formattedDate);
+            request.setAttribute("postDetail", post);
+            request.getRequestDispatcher("single-blog.jsp").forward(request, response);
+        } catch (NumberFormatException e) {
+            // Xử lý lỗi nếu id không phải là số nguyên
+            response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Invalid post ID");
         }
-        request.setAttribute("listH", randomlist);
-        request.setAttribute("listP", listP);
-        request.getRequestDispatcher("index.jsp").forward(request, response);
-    } 
+    } else {
+        // Xử lý lỗi nếu không có id trong request
+        response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Missing post ID");
+    }
+}
 
+
+    
+    
 
     /** 
      * Handles the HTTP <code>POST</code> method.
@@ -87,7 +97,7 @@ public class DisplayHome extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
-
+        processRequest(request, response);
     }
 
     /** 

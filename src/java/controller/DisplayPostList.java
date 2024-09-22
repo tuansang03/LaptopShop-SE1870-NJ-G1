@@ -13,18 +13,15 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
-import model.Image;
 import model.Post;
 
 /**
  *
  * @author kieud
  */
-@WebServlet(name="ProductDisplayHome", urlPatterns={"/home"})
-public class DisplayHome extends HttpServlet {
+@WebServlet(name="DisplayPostList", urlPatterns={"/postlist"})
+public class DisplayPostList extends HttpServlet {
    
     /** 
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code> methods.
@@ -41,10 +38,10 @@ public class DisplayHome extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet ProductDisplayHome</title>");  
+            out.println("<title>Servlet DisplayPostList</title>");  
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet ProductDisplayHome at " + request.getContextPath () + "</h1>");
+            out.println("<h1>Servlet DisplayPostList at " + request.getContextPath () + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
@@ -62,20 +59,11 @@ public class DisplayHome extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
         UserDAO dao = new UserDAO();
-        List<String> list = dao.getPictureList();
-        List<Post> listP = dao.getPostListD();
-        List<String> randomlist = new ArrayList<>();
-        Random r = new Random();
-        for (int i = 0; i < 5; i++) {
-            int randomIndex = r.nextInt(list.size());
-            randomlist.add(list.get(randomIndex));
-            list.remove(randomIndex);
-        }
-        request.setAttribute("listH", randomlist);
-        request.setAttribute("listP", listP);
-        request.getRequestDispatcher("index.jsp").forward(request, response);
+        List<Post> listP = dao.getAllPostListD();        
+        request.setAttribute("postlist", listP);
+        request.getRequestDispatcher("blog.jsp").forward(request, response);
+        
     } 
-
 
     /** 
      * Handles the HTTP <code>POST</code> method.
@@ -87,7 +75,7 @@ public class DisplayHome extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
-
+        processRequest(request, response);
     }
 
     /** 
