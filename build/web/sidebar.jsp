@@ -314,13 +314,16 @@
 
                     <a href="manageCategory"><i class="fas fa-calendar"></i> Quản lí danh mục</a>
 
-                    <a href="manageCustomer"><i class="fas fa-users"></i> Quản lý khách hàng</a>
+                    <a href="CustomerManageController?service=listall"><i class="fas fa-users"></i> Quản lý khách hàng</a>
+
+                    <a href="BrandController?service=listall"><i class="fas fa-calendar"></i> Quản lí thương hiệu</a>
+
 
                     <a href="stats"><i class="fas fa-server"></i> Thống kê sản phẩm</a>
-                    
+
                     <a href="orderManage"><i class="fas fa-object-group"></i> Quản lý đơn hàng</a>
-                    
-                    
+
+
 
                     <a href="editAdmin.jsp"><i class="fas fa-upload  "></i> Cập nhật thông tin</a>
                     <div class="user">

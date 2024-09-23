@@ -4,8 +4,24 @@
         <servlet-name>register</servlet-name>
         <servlet-class>controller.register</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>BrandController</servlet-name>
+        <servlet-class>controller.BrandManageController</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>CustomerManageController</servlet-name>
+        <servlet-class>controller.CustomerManageController</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>register</servlet-name>
         <url-pattern>/register</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>BrandController</servlet-name>
+        <url-pattern>/BrandController</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>CustomerManageController</servlet-name>
+        <url-pattern>/CustomerManageController</url-pattern>
     </servlet-mapping>
 </web-app>

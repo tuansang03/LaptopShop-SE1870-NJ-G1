@@ -3,22 +3,24 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
  */
 
-package loc;
+package controller;
 
+import dal.UserDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
-import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import java.util.ArrayList;
+import java.util.List;
+import model.User;
 
 /**
  *
  * @author LOC
  */
-@WebServlet(name="testloc", urlPatterns={"/testloc"})
-public class testloc extends HttpServlet {
+public class CustomerManageController extends HttpServlet {
    
     /** 
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code> methods.
@@ -35,10 +37,10 @@ public class testloc extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet testloc</title>");  
+            out.println("<title>Servlet CustomerManageController</title>");  
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet testloc at " + request.getContextPath () + "</h1>");
+            out.println("<h1>Servlet CustomerManageController at " + request.getContextPath () + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
@@ -55,7 +57,19 @@ public class testloc extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
-        processRequest(request, response);
+        String service = request.getParameter("service");
+        
+        if (service == null) {
+            service = "listall";
+        }
+        
+        if (service.equalsIgnoreCase("listall")){
+            UserDAO userDAO = new UserDAO();
+            List<User> listUser = new ArrayList<>();
+            listUser = userDAO.getAll();
+            request.setAttribute("listUser", listUser);
+            request.getRequestDispatcher("manageuserdisplay").forward(request, response);
+        }
     } 
 
     /** 
@@ -75,9 +89,9 @@ public class testloc extends HttpServlet {
      * Returns a short description of the servlet.
      * @return a String containing servlet description
      */
-    @Override
-    public String getServletInfo() {
-        return "Short description";
-    }// </editor-fold>
+//    @Override
+//    public String getServletInfo() {
+//        return "Short description";
+//    }// </editor-fold>
 
 }
