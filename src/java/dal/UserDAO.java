@@ -238,7 +238,7 @@ public class UserDAO extends DBContext {
     }
 
     public User getUserByIdD(int id) {
-        String sql = "select * from User where id=?";
+        String sql = "SELECT * FROM [User] where id = ?";
         try {
             PreparedStatement st = connection.prepareStatement(sql);
             st.setInt(1, id);
@@ -361,11 +361,8 @@ public class UserDAO extends DBContext {
     public static void main(String[] args) {
         
         UserDAO dao = new UserDAO();
-        List<ProductDetail> list = dao.getListProductDetailD();
-        for (int i = 0; i < list.size(); i++) {
-            ProductDetail get = list.get(i);
-            System.out.println(get);
-        }
+        User u = dao.getUserByIdD(1);
+        System.out.println(u);
     }
     //----------------------------------------------------------------------------------
 }
