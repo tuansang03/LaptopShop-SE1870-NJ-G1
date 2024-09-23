@@ -22,7 +22,7 @@ public class FeedbackDAOS extends DBContext{
             ResultSet rs = st.executeQuery();
             if (rs.next()) {
                 UserDAO uDAO = new UserDAO();
-                ProductDAO pDAO = new ProductDAO();
+                ProductDAOS pDAO = new ProductDAOS();
                 Feedback f = new Feedback(
                         rs.getInt("Id"), 
                         uDAO.getUserByIdD(rs.getInt("UserId")), 

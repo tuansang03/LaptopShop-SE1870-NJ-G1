@@ -4,12 +4,10 @@
  */
 package controller;
 
-import dal.CartDAO;
-import dal.ImageDAO;
+import dal.CartDAOS;
+import dal.ImageDAOS;
 import java.io.IOException;
-import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
-import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -42,7 +40,7 @@ public class LoadProductCart extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
         HttpSession session = request.getSession();
         User user = (User) session.getAttribute("user");
-        CartDAO cartDAO = new CartDAO();
+        CartDAOS cartDAO = new CartDAOS();
         Cart cartUser = cartDAO.getCartByUserID(user.getId());
 
 
@@ -54,7 +52,7 @@ public class LoadProductCart extends HttpServlet {
         
         List<CartItem> listCartItem = cartDAO.getAllProductOfCartItem(cartUser.getId());
 
-        ImageDAO iDAO = new ImageDAO();
+        ImageDAOS iDAO = new ImageDAOS();
 
         List<Image> listImages = new ArrayList<>();
 

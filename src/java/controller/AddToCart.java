@@ -4,9 +4,9 @@
  */
 package controller;
 
-import dal.CartDAO;
-import dal.ImageDAO;
-import dal.ProductDAO;
+import dal.CartDAOS;
+import dal.ImageDAOS;
+import dal.ProductDAOS;
 import java.io.IOException;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -14,7 +14,6 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
-import java.util.List;
 import model.Cart;
 import model.CartItem;
 import model.Image;
@@ -59,9 +58,9 @@ public class AddToCart extends HttpServlet {
         String colorid_raw = request.getParameter("colorid");
         String confid_raw = request.getParameter("confid");
         User user = (User) session.getAttribute("user");
-        ProductDAO pDAO = new ProductDAO();
-        CartDAO cartDAO = new CartDAO();
-        ImageDAO iDAO = new ImageDAO();
+        ProductDAOS pDAO = new ProductDAOS();
+        CartDAOS cartDAO = new CartDAOS();
+        ImageDAOS iDAO = new ImageDAOS();
 
         int pid = Integer.parseInt(pid_raw);
         int colorid = Integer.parseInt(colorid_raw);

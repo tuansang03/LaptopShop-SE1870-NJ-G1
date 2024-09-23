@@ -5,9 +5,8 @@
 
 package controller;
 
-import dal.CartDAO;
+import dal.CartDAOS;
 import java.io.IOException;
-import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
@@ -37,7 +36,7 @@ public class ChangeQuantityProduct extends HttpServlet {
         String num_raw = request.getParameter("num");
         String cartID_raw = request.getParameter("cid");
         String pdtID_raw = request.getParameter("pdtid");
-        CartDAO cartDAO = new CartDAO();
+        CartDAOS cartDAO = new CartDAOS();
         HttpSession session = request.getSession();
         User user = (User) session.getAttribute("user");
         Cart cartUser = cartDAO.getCartByUserID(user.getId());

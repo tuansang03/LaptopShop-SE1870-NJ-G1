@@ -5,9 +5,8 @@
 
 package controller;
 
-import dal.CartDAO;
+import dal.CartDAOS;
 import java.io.IOException;
-import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -34,7 +33,7 @@ public class DeleteCart extends HttpServlet {
         String cid_raw = request.getParameter("cid");
         String pid_raw = request.getParameter("pid");
         
-        CartDAO cDAO = new CartDAO();
+        CartDAOS cDAO = new CartDAOS();
         
         int cid = Integer.parseInt(cid_raw);
         int pid = Integer.parseInt(pid_raw);

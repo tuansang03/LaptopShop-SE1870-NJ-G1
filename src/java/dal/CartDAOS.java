@@ -90,7 +90,7 @@ public class CartDAOS extends DBContext {
             ResultSet rs = st.executeQuery();
 
             while (rs.next()) {
-                ProductDAO pDAO = new ProductDAO();
+                ProductDAOS pDAO = new ProductDAOS();
                 CartItem cart = new CartItem(
                         rs.getInt("Id"),
                         getCartID(rs.getInt("CartId")),
@@ -114,7 +114,7 @@ public class CartDAOS extends DBContext {
             ResultSet rs = st.executeQuery();
 
             if (rs.next()) {
-                ProductDAO pDAO = new ProductDAO();
+                ProductDAOS pDAO = new ProductDAOS();
                 CartItem cart = new CartItem(
                         rs.getInt("Id"),
                         getCartID(rs.getInt("CartId")),

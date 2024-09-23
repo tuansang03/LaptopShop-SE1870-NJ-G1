@@ -29,8 +29,8 @@ public class ProductDAOS extends DBContext {
             st.setInt(1, id);
             ResultSet rs = st.executeQuery();
             if (rs.next()) {
-                BrandDAO brand = new BrandDAO();
-                CategoryDAO cate = new CategoryDAO();
+                BrandDAOS brand = new BrandDAOS();
+                CategoryDAOS cate = new CategoryDAOS();
 
                 Product p = new Product(
                         rs.getInt("Id"),

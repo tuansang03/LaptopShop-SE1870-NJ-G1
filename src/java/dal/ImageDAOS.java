@@ -21,8 +21,8 @@ public class ImageDAOS extends DBContext{
             ResultSet rs = st.executeQuery();
             
             if (rs.next()) {
-                ProductDAO pDAO = new ProductDAO();
-                FeedbackDAO fDAO = new FeedbackDAO();
+                ProductDAOS pDAO = new ProductDAOS();
+                FeedbackDAOS fDAO = new FeedbackDAOS();
                 Image image = new Image(
                         rs.getInt("Id"), 
                         pDAO.getProductDetailByID(rs.getInt("ProductDetailId")), 
