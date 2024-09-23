@@ -137,35 +137,34 @@ public class inputProductDetail extends HttpServlet {
                 AttributeDAO attDao = new AttributeDAO();
                 ArrayList<Attribute> attList = attDao.getAllAttribute();
                 for (Attribute att : attList) {
-            String paramName = "attribute_" + productDetailId + "_" + att.getId();
-            
-            // Lấy giá trị của thuộc tính từ request
-            String attributeValue = request.getParameter(paramName);
-            
-            // Kiểm tra xem giá trị thuộc tính có hợp lệ không
-            if (attributeValue != null && !attributeValue.trim().isEmpty()) {
-                // Tạo đối tượng ProductAttribute
-                ProductAttribute productAttribute = new ProductAttribute();
-                ProductDetail productDetail = new ProductDetail();
-                productDetail.setId(product.getId());
-                productAttribute.setProductdetail(productDetail); // Gán ProductDetail
-                productAttribute.setAttribute(att); // Gán Attribute
-                productAttribute.setValue(attributeValue); // Gán giá trị thuộc tính
+                    String paramName = "attribute_" + productDetailId + "_" + att.getId();
 
-                // Cập nhật hoặc chèn ProductAttribute vào cơ sở dữ liệu
-                productDetailDAO.addProductDetailAttribute(productAttribute);
-            }
-            }
+                    // Lấy giá trị của thuộc tính từ request
+                    String attributeValue = request.getParameter(paramName);
 
-        }
+                    // Kiểm tra xem giá trị thuộc tính có hợp lệ không
+                    if (attributeValue != null && !attributeValue.trim().isEmpty()) {
+                        // Tạo đối tượng ProductAttribute
+                        ProductAttribute productAttribute = new ProductAttribute();
+                        ProductDetail productDetail = new ProductDetail();
+                        productDetail.setId(product.getId());
+                        productAttribute.setProductdetail(productDetail); // Gán ProductDetail
+                        productAttribute.setAttribute(att); // Gán Attribute
+                        productAttribute.setValue(attributeValue); // Gán giá trị thuộc tính
+
+                        // Cập nhật hoặc chèn ProductAttribute vào cơ sở dữ liệu
+                        productDetailDAO.addProductDetailAttribute(productAttribute);
+                    }
+                }
+
+            }
 
 // Sau khi xử lý xong, chuyển hướng hoặc thông báo
-         // Điều hướng đến trang danh sách sản phẩm
-
-    }
+            // Điều hướng đến trang danh sách sản phẩm
+        }
         session.removeAttribute("productId");
         response.sendRedirect(
-                "readProduct"); 
+                "readProduct");
     }
 
     /**

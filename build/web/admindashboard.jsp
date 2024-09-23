@@ -42,7 +42,7 @@
             </tbody>
         </table>
         <div>
-            <button class="btn btn-primary addProductBtn"><a href="addProduct">Thêm sản phẩm mới</a></button>
+
 
 
             <div class="list-page">

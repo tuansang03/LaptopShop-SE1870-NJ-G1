@@ -12,14 +12,13 @@
                 const imageContainer = document.getElementById(containerId);
                 const newInput = document.createElement("input");
                 newInput.type = "text";
-                newInput.name = "imageUrls_" +productDetailId + "[]";  // Tên phải khớp với tên trong form ban đầu
+                newInput.name = "imageUrls_" + productDetailId + "[]";  // Tên phải khớp với tên trong form ban đầu
                 newInput.className = "form-control mt-2";
                 newInput.placeholder = "Enter image URL";
-                console.log(productDetailId);
                 imageContainer.appendChild(newInput);
             }
 
-
+           
         </script>
     </head>
     <body>
@@ -44,9 +43,10 @@
                                                 <th>Attributes</th>
                                                 <th>Short Description</th>
                                                 <th>Images</th>
+                                                <th>Action</th> <!-- Thêm cột Action -->
                                             </tr>
                                         </thead>
-                                        <tbody>
+                                        <tbody id="productDetail_${p.id}"> <!-- Thêm ID cho tbody -->
                                             <tr>
                                                 <td>${p.product.name} - ${p.color.name} - ${p.configuration.name}</td>
                                                 <!-- Price -->
@@ -67,13 +67,10 @@
                                                                     <td>
                                                                         <input type="text" name="attribute_${p.id}_${att.id}" 
                                                                                class="form-control" 
-                                                                               
                                                                                placeholder="Enter ${att.name}">
                                                                     </td>
                                                                 </tr>
                                                             </c:forEach>
-
-
                                                         </tbody>
                                                     </table>
                                                 </td>
@@ -85,19 +82,31 @@
                                                 <td>
                                                     <div id="imageUrlContainer-${p.id}" class="form-group">
                                                         <input type="text" name="imageUrls_${p.id}[]" class="form-control" placeholder="Enter image URL">
-
                                                     </div>
-                                                    <button type="button" class="btn btn-secondary" onclick="addImageUrl(`imageUrlContainer-${p.id}`, `${p.id}`)">Add Another Image URL</button>
-
-
+                                                    <button type="button" class="btn btn-secondary" onclick="addImageUrl('imageUrlContainer-${p.id}', '${p.id}')">Add Another Image URL</button>
                                                 </td>
-                                            </tr>
+
+                                                <!-- Action Column: Nút xóa -->
+                                                <td>
+                                                    <button type="button" class="btn btn-danger" onclick="confirmDelete(${p.id})">Delete</button>
+                                                </td>
+
+                                        <script>
+                                            function confirmDelete(productId) {
+                                                const confirmation = confirm("Are you sure you want to delete this product?");
+                                                if (confirmation) {
+                                                    // Nếu người dùng xác nhận, điều hướng đến URL xóa
+                                                    window.location.href = "deletePDBeforeUpdate?" + productId;
+                                                }
+                                            }
+                                        </script>
+                                        </tr>
                                         </tbody>
                                     </table>
                                 </c:forEach>
 
                                 <!-- Submit tất cả sản phẩm -->
-                                <button type="submit" class="btn btn-success">Update All Products</button>
+                                <button type="submit" class="btn btn-success">Add All Products</button>
                             </div>
                         </div>
                     </div>
