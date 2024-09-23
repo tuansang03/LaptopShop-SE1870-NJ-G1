@@ -105,12 +105,14 @@ Cookie arr[] = request.getCookies();
         if (u != null) {
             if (u.getRole().getId() == 3) {
                 session.setAttribute("user", u);
+                response.sendRedirect("index.jsp");
             } else if (u.getRole().getId() == 2) {
                 session.setAttribute("sale", u);
             } else if (u.getRole().getId() == 1) {
                 session.setAttribute("admin", u);
+                response.sendRedirect("admindashboard.jsp");
             }
-            response.sendRedirect("index.jsp");
+            
         }else{
             request.setAttribute("error", "Incorrect username or password");
             request.getRequestDispatcher("login.jsp").forward(request, response);

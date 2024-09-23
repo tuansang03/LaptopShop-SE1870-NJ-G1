@@ -6,7 +6,7 @@
     </servlet>
     <servlet>
         <servlet-name>VerifyOTPServlet</servlet-name>
-        <servlet-class>dal.VerifyOTPServlet</servlet-class>
+        <servlet-class>controller.VerifyOTPServlet</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>ResendOTP</servlet-name>
@@ -19,6 +19,26 @@
     <servlet>
         <servlet-name>logout</servlet-name>
         <servlet-class>controller.logout</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>manageProduct</servlet-name>
+        <servlet-class>controller.manageProduct</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>readProduct</servlet-name>
+        <servlet-class>controller.readProduct</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>ProductDAO</servlet-name>
+        <servlet-class>dal.ProductDAO</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>addProduct</servlet-name>
+        <servlet-class>controller.addProduct</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>inputProductDetail</servlet-name>
+        <servlet-class>controller.inputProductDetail</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>register</servlet-name>
@@ -39,5 +59,25 @@
     <servlet-mapping>
         <servlet-name>logout</servlet-name>
         <url-pattern>/logout</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>manageProduct</servlet-name>
+        <url-pattern>/manageProduct</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>readProduct</servlet-name>
+        <url-pattern>/readProduct</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ProductDAO</servlet-name>
+        <url-pattern>/ProductDAO</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>addProduct</servlet-name>
+        <url-pattern>/addProduct</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>inputProductDetail</servlet-name>
+        <url-pattern>/inputProductDetail</url-pattern>
     </servlet-mapping>
 </web-app>
