@@ -6,6 +6,7 @@ package controller;
 
 import com.oracle.wls.shaded.org.apache.bcel.generic.AALOAD;
 import dal.BrandDAO;
+import dal.ProductDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -83,46 +84,48 @@ public class BrandManageController extends HttpServlet {
             boolean checkUpdate = brandDAO.updateBrand(brand);
 //            Brand brand1 = brandDAO.getBrandById(id);
 //            request.setAttribute("updatebranddisplay", brand1);
-            if(checkUpdate==true){
+            if (checkUpdate == true) {
                 Brand brandAfterUpdate = brandDAO.getBrandById(id);
                 String mess = "Update thành công!!!";
                 request.setAttribute("mess", mess);
                 request.setAttribute("updatebranddisplay", brandAfterUpdate);
-            }
-            else{
+            } else {
                 Brand brandAfterUpdate = brandDAO.getBrandById(id);
                 String mess = "Update thất bại!";
                 request.setAttribute("mess", mess);
                 request.setAttribute("updatebranddisplay", brandAfterUpdate);
             }
-            
-            
+
             request.getRequestDispatcher("updatebranddisplay.jsp").forward(request, response);
-            
+
         }
-        
+
         if (service.equalsIgnoreCase("deleteBrand")) {
-    // Lấy id của brand từ request
-    int id = Integer.parseInt(request.getParameter("id"));
-    
-    // Gọi DAO để xóa brand
-    BrandDAO brandDAO = new BrandDAO();
-    boolean isDeleted = brandDAO.deleteBrandById(id);
-    
-    // Kiểm tra xem xóa thành công hay không
-    if (isDeleted ) {
-        
-        request.setAttribute("mess", "Xóa thành công!");
-        List<Brand> listBrand = new ArrayList<>();
-        listBrand = brandDAO.getAll();
-        request.setAttribute("listBrand", listBrand);
-    } else {
-        request.setAttribute("mess", "Xóa thất bại!");
-    }
-    
-    // Sau khi xóa, điều hướng về trang danh sách brand hoặc trang bạn muốn
-    request.getRequestDispatcher("managebranddisplay.jsp").forward(request, response);
-}
+            // Lấy id của brand từ request
+            int id = Integer.parseInt(request.getParameter("id"));
+
+            // Gọi DAO để xóa brand
+            BrandDAO brandDAO = new BrandDAO();
+            ProductDAO productDAO = new ProductDAO();
+            boolean isDeleted = brandDAO.deleteBrandById(id);
+
+            // Kiểm tra xem xóa thành công hay không
+            if (isDeleted && productDAO.getProductsByBrand(id) == null) {
+
+                request.setAttribute("mess", "Xóa thành công!");
+                List<Brand> listBrand = new ArrayList<>();
+                listBrand = brandDAO.getAll();
+                request.setAttribute("listBrand", listBrand);
+            } else {
+                List<Brand> listBrand = new ArrayList<>();
+                listBrand = brandDAO.getAll();
+                request.setAttribute("listBrand", listBrand);
+                request.setAttribute("mess", "Xóa thất bại, tồn tại sản phẩm nằm trong brand này!");
+            }
+
+            // Sau khi xóa, điều hướng về trang danh sách brand hoặc trang bạn muốn
+            request.getRequestDispatcher("managebranddisplay.jsp").forward(request, response);
+        }
 
     }
 

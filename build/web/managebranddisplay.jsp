@@ -20,23 +20,27 @@
 
         <%@include file="sidebar.jsp" %>
 
-
     <div class="col-md-10 content">
         <h2>Manage Brand</h2>
+
+        <!-- Thông báo -->
+        <c:if test="${not empty mess}">
+            <div class="alert ${mess == 'Delete successful' ? 'alert-success' : 'alert-danger'}">
+                ${mess}
+            </div>
+        </c:if>
+
         <table>
             <thead>
                 <tr>
                     <th>ID</th>
                     <th>Name</th>
                     <th>Action</th>
-
-
                 </tr>
             </thead>
 
             <tbody>
                 <c:forEach var="p" items="${listBrand}"> 
-
                     <tr>
                         <td>${p.id}</td>
                         <td>${p.name}</td>
@@ -47,17 +51,14 @@
                             <form action="BrandController" method="GET" style="display:inline;">
                                 <!-- Truyền id của brand -->
                                 <input type="hidden" name="id" value="${p.id}">
-
                                 <!-- Truyền biến service với giá trị deleteBrand -->
                                 <input type="hidden" name="service" value="deleteBrand">
-
                                 <!-- Nút xóa có xác nhận -->
                                 <button type="submit" onclick="return confirm('Are you sure you want to delete this brand?');">
                                     Delete
                                 </button>
                             </form>
                         </td>
-
                     </tr>
                 </c:forEach>
             </tbody>
@@ -69,12 +70,10 @@
                 justify-content: center;
                 margin-top: 20px;
             }
-
             .list-page .item {
                 display: flex;
                 align-items: center;
             }
-
             .list-page .item a {
                 text-decoration: none;
                 color: #333;
@@ -83,17 +82,14 @@
                 border: 1px solid #ccc;
                 border-radius: 3px;
             }
-
             .list-page .item a.active {
                 background-color: #007bff;
                 color: #fff;
                 border-color: #007bff;
             }
-
             .list-page .item a:hover {
                 background-color: #f0f0f0;
             }
-
         </style>
     </div>
 
