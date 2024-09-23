@@ -131,6 +131,7 @@
                             </ul>
 
                             <ul class="nav-shop">
+<<<<<<< HEAD
                                 <li class="nav-item"></li>
                                 <div class="search-container">
                                     <button type="button" class="search-btn" onclick="toggleSearchField()">
@@ -184,6 +185,18 @@
                                     <a class="button button-header" href="register.jsp">Sign Up</a>
                                 </li>
 
+=======
+                                <li class="nav-item"><button><i class="ti-search"></i></button></li>
+                                <li class="nav-item">
+                                    <a href="loadProductCart">
+                                        <button>
+                                            <i class="ti-shopping-cart"></i><span class="nav-shop__circle">3</span>
+                                        </button>
+                                    </a>
+                                        
+                                </li>
+                                <li class="nav-item"><a class="button button-header" href="#">Buy Now</a></li>
+>>>>>>> 2e6a3e409741c11777b6a412f7a7fcd2921c8513
                             </ul>
                             <!-- Thêm nút đăng nhập và đăng ký -->
 

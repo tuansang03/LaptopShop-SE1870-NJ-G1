@@ -236,8 +236,12 @@ public class UserDAO extends DBContext {
     }
 
     public User getUserByIdD(int id) {
+<<<<<<< HEAD
         String sql = "SELECT * FROM [User] WHERE id=?";
 
+=======
+        String sql = "SELECT * FROM [User] where id = ?";
+>>>>>>> 2e6a3e409741c11777b6a412f7a7fcd2921c8513
         try {
             PreparedStatement st = connection.prepareStatement(sql);
             st.setInt(1, id);
@@ -436,11 +440,16 @@ public Post getPostById(int id) {
     public static void main(String[] args) {
 
         UserDAO dao = new UserDAO();
+<<<<<<< HEAD
         List<Post> list = dao.getPostListD();
         for (int i = 0; i < list.size(); i++) {
             System.out.println(list.get(i));
 
         }
+=======
+        User u = dao.getUserByIdD(1);
+        System.out.println(u);
+>>>>>>> 2e6a3e409741c11777b6a412f7a7fcd2921c8513
     }
     //================================================================================================================
 }
