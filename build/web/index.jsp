@@ -351,8 +351,14 @@
                     <div class="row">
 
                         <c:forEach items="${listP}" var="p" varStatus="status">
+                            <style>
+                                .tach{
+                                    margin-right: 15px;
+                                }
+                                
+                            </style>
 
-                            <div class="post">
+                            <div class="post tach">
                                 <div class="card card-blog">
                                     <div class="card-blog__img">
                                         <img class="card-img rounded-0" src="${p.thumbnail}" alt="">
@@ -361,6 +367,7 @@
                                         <ul class="card-blog__info">
                                             <li><a href="#" class="bx bxs-user"> ${p.user.userName}</a></li>
                                             <li><i class="bx bx-laptop"></i>${p.brand.name}</li>
+                                            <li><i class="bx bx-laptop"></i>${p.publishDate}</li>
                                         </ul>
                                         <h4 class="card-blog__title"><a href="single-blog.jsp">${p.tittle}</a></h4>
                                         <p>${p.shortContent}</p>
