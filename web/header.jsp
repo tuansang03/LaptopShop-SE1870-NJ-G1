@@ -1,4 +1,6 @@
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+
 <!DOCTYPE html>
 <html>
     <head>
@@ -9,6 +11,7 @@
         <link href="https://fonts.googleapis.com/css2?family=Farro:wght@300;400;500;700&display=swap" rel="stylesheet">
     </head>
     <body>
+
 
         <style>
 
@@ -85,6 +88,8 @@
 
 
 
+
+
         <header class="header_area">
             <div class="main_menu">
                 <nav class="navbar navbar-expand-lg navbar-light">
@@ -122,7 +127,7 @@
                                     <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
                                        aria-expanded="false">Pages</a>
                                     <ul class="dropdown-menu">
-                                        <li class="nav-item"><a class="nav-link" href="login.jsp">Login</a></li>
+                                        <li class="nav-item"><a class="nav-link" href="login">Login</a></li>
                                         <li class="nav-item"><a class="nav-link" href="register.jsp">Register</a></li>
                                         <li class="nav-item"><a class="nav-link" href="tracking-order.jsp">Tracking</a></li>
                                     </ul>
@@ -131,7 +136,7 @@
                             </ul>
 
                             <ul class="nav-shop">
-<<<<<<< HEAD
+
                                 <li class="nav-item"></li>
                                 <div class="search-container">
                                     <button type="button" class="search-btn" onclick="toggleSearchField()">
@@ -179,26 +184,48 @@
                                     </a>
                                 </li>
 
-                                <li class="nav-item">
+ 
 
-                                    <a class="nav-link button button-header" href="login.jsp">Login</a>
-                                    <a class="button button-header" href="register.jsp">Sign Up</a>
-                                </li>
 
-=======
-                                <li class="nav-item"><button><i class="ti-search"></i></button></li>
+                                
                                 <li class="nav-item">
                                     <a href="loadProductCart">
-                                        <button>
-                                            <i class="ti-shopping-cart"></i><span class="nav-shop__circle">3</span>
-                                        </button>
+                       
                                     </a>
                                         
                                 </li>
-                                <li class="nav-item"><a class="button button-header" href="#">Buy Now</a></li>
->>>>>>> 2e6a3e409741c11777b6a412f7a7fcd2921c8513
+                                
+
                             </ul>
                             <!-- Thêm nút đăng nhập và đăng ký -->
+
+
+
+                            <ul class="navbar-nav">
+                                <li class="nav-item">
+                                <c:choose>
+                                    <c:when test="${sessionScope.admin == null && sessionScope.user == null && sessionScope.sale == null}">
+                                        <a href="login"><i class="fa fa-user"></i> Login</a>
+                                    </c:when>
+                                    <c:otherwise>
+                                        <div class="dropdown">
+                                            <button class="dropbtn"><i class="fa fa-user">
+
+                                                    <c:if test="${sessionScope.user != null}">
+                                                    </i> ${user.fullName}</button>
+                                                </c:if>
+                                            <c:if test="${sessionScope.sale != null}">
+                                                    </i> ${sale.fullName}</button>
+                                                </c:if>
+                                    <c:if test="${sessionScope.admin != null}">
+                                                    </i> ${admin.fullName}</button>
+                                                </c:if>
+                                    </c:otherwise>
+                                </c:choose>
+                                                    <c:if test="${sessionScope.user !=null ||sessionScope.admin !=null || sessionScope.sale !=null}"><a href="logout">Logout</a></c:if>
+                                </li>
+
+                            </ul>
 
                         </div>
                     </div>

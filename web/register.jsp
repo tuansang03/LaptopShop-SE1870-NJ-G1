@@ -62,7 +62,10 @@
                                     <input type="text" class="form-control" id="name" name="name" placeholder="Username" required>
                                 </div>
                                 <div class="col-md-12 form-group">
-                                    <input type="text" class="form-control" id="fullname" name="fullname" placeholder="Full Name" required>
+                                    <input type="text" class="form-control" id="firstName" name="firstName" placeholder="First Name" required>
+                                </div>
+                                <div class="col-md-12 form-group">
+                                    <input type="text" class="form-control" id="lastName" name="lastName" placeholder="Last Name" required>
                                 </div>
                                 <div class="col-md-12 form-group">
                                     <input type="email" class="form-control" id="email" name="email" placeholder="Email Address" required>

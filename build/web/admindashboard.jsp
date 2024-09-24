@@ -38,42 +38,11 @@
             </thead>
 
             <tbody>
-                <c:forEach var="p" items="${pList}"> 
-
-                    <tr>
-                        <td>${p.product_id}</td>
-
-                        <td><img src="${p.img}" alt="Product Image" width="100"></td>
-                        <td>${p.product_name}</td>
-                        <td>${p.description}</td>
-                        <td>${p.price}</td>
-                        <td>${p.stock}</td>
-                        <c:forEach var="c" items="${cList}">
-                            <c:if test="${p.category.category_id==c.category_id}">
-                                <td>${c.category_name}</td>
-                            </c:if>
-                        </c:forEach>
-                        <td>
-                            <button class="btn btn-primary edit-btn"><a href="updateProduct?id=${p.product_id}&index=${tag}">Edit</a></button>
-                            <c:choose>
-                                <c:when test="${p.active==1}">
-                                    <button class="btn btn-warning"><a href="hidden?id=${p.product_id}&index=${tag}">Hidden</a></button>
-                                </c:when>
-                                <c:otherwise>
-                                    <button class="btn btn-primary"><a href="hidden?id=${p.product_id}&index=${tag}">Active</a></button>
-                                </c:otherwise>
-                            </c:choose>
-
-
-                            <button class="btn btn-danger"><a href="DeleteProduct?id=${p.product_id}&index=${tag}">Delete</a></button>
-                            
-                        </td>
-                    </tr>
-                </c:forEach>
+                
             </tbody>
         </table>
         <div>
-            <button class="btn btn-primary addProductBtn"><a href="addProduct">Thêm sản phẩm mới</a></button>
+
 
 
             <div class="list-page">
