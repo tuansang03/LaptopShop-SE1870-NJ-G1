@@ -3,29 +3,38 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package model;
-
+import java.util.ArrayList;
+import java.util.List;
 /**
  *
  * @author PHONG
  */
 public class ProductList {
+    int id;
     String name;
     String brand;
     String category;
-    String color;
     String img;
     int price;
 
     public ProductList() {
     }
 
-    public ProductList(String name, String brand, String category, String color, String img, int price) {
+    public ProductList(int id, String name, String brand, String category, String img, int price) {
+        this.id = id;
         this.name = name;
         this.brand = brand;
         this.category = category;
-        this.color = color;
         this.img = img;
         this.price = price;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public String getName() {
@@ -52,14 +61,6 @@ public class ProductList {
         this.category = category;
     }
 
-    public String getColor() {
-        return color;
-    }
-
-    public void setColor(String color) {
-        this.color = color;
-    }
-
     public String getImg() {
         return img;
     }
@@ -75,6 +76,5 @@ public class ProductList {
     public void setPrice(int price) {
         this.price = price;
     }
-
     
 }

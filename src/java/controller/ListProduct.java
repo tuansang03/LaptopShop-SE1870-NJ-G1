@@ -62,8 +62,12 @@ public class ListProduct extends HttpServlet {
         ProductDAO d = new ProductDAO();
         String category = request.getParameter("category");
         String brand = request.getParameter("brand");
-        String color = request.getParameter("color");
-        List <ProductList>  list = d.listProduct(category, brand, color);
+        String price = request.getParameter("price");
+        String name = request.getParameter("name");
+        List <ProductList>  list = d.listProduct(category, brand, price, name);
+        request.setAttribute("category", category);
+        request.setAttribute("brand", brand);
+        request.setAttribute("price", price);
         request.setAttribute("productlist", list);
         request.getRequestDispatcher("category.jsp").forward(request, response);
     }

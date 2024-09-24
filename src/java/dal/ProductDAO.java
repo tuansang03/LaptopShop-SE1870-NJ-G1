@@ -17,27 +17,20 @@ import model.*;
  */
 public class ProductDAO extends DBContext {
 
-    public List<ProductList> getProductList() {
-        List<ProductList> list = new ArrayList<>();
-        String sql = "select p.[Name] as name, b.[Name] as brand, c.[Name] as category, co.[Name] as color, im.[Image] as img, pd.Price as price\n"
-                + "from Product p\n"
-                + "join ProductDetail pd on p.Id=pd.ProductId\n"
-                + "join [Image] im on im.ProductDetailId=pd.id\n"
-                + "join Brand b on b.Id=p.BrandId\n"
-                + "join Category c on c.Id=p.CategoryId\n"
-                + "join Color co on co.Id=pd.ColorId";
+    public List<Product> list() {
+        List<Product> list = new ArrayList<>();
+        String sql = "select * from Product";
         try {
             PreparedStatement st = connection.prepareStatement(sql);
             ResultSet re = st.executeQuery();
             while (re.next()) {
-                ProductList p = new ProductList(
+                Product p = new Product(
+                        re.getInt("id"),
+                        getBrandById(re.getInt("brand")),
+                        getCategoryById(re.getInt("category")),
                         re.getString("name"),
-                        re.getString("brand"),
-                        re.getString("category"),
-                        re.getString("color"),
-                        re.getString("img"),
-                        re.getInt("price")
-                );
+                        re.getString("status"));
+                Category c = new Category(re.getInt("productCategoryID"), re.getString("category_name"));
                 list.add(p);
             }
         } catch (SQLException e) {
@@ -45,39 +38,94 @@ public class ProductDAO extends DBContext {
         }
 
         return list;
+    }
+
+    public Brand getBrandById(int id) {
+        String sql = "select * from Brand where Id=" + id;
+
+        try {
+            PreparedStatement st = connection.prepareStatement(sql);
+            ResultSet re = st.executeQuery();
+            if (re.next()) {
+                Brand b = new Brand(re.getInt("id"), re.getString("name"));
+                return b;
+
+            }
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
+
+        return null;
 
     }
 
-    public List<ProductList> listProduct(String category, String brand, String color) {
+    public Category getCategoryById(int id) {
+        String sql = "select * from Category where Id=" + id;
+
+        try {
+            PreparedStatement st = connection.prepareStatement(sql);
+            ResultSet re = st.executeQuery();
+            if (re.next()) {
+                Category c = new Category(re.getInt("id"), re.getString("name"));
+                return c;
+
+            }
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
+
+        return null;
+
+    }
+
+    public List<ProductList> listProduct(String category, String brand, String price, String name) {
         List<ProductList> list = new ArrayList<>();
-        String sql = "select p.[Name] as name, b.[Name] as brand, c.[Name] as category, co.[Name] as color, im.[Image] as img, pd.Price as price\n"
-                + "from Product p\n"
-                + "join ProductDetail pd on p.Id=pd.ProductId\n"
-                + "join [Image] im on im.ProductDetailId=pd.id\n"
-                + "join Brand b on b.Id=p.BrandId\n"
-                + "join Category c on c.Id=p.CategoryId\n"
-                + "join Color co on co.Id=pd.ColorId ";
+        String sql = "WITH RankedProducts AS (\n"
+                + "    SELECT p.Id, \n"
+                + "           p.[Name] AS name, \n"
+                + "           b.[Name] AS brand, \n"
+                + "           c.[Name] AS category, \n"
+                + "           im.[Image] AS img, \n"
+                + "           pd.Price AS price,\n"
+                + "           ROW_NUMBER() OVER (PARTITION BY p.Id ORDER BY pd.Id) AS rn\n"
+                + "    FROM Product p\n"
+                + "    JOIN ProductDetail pd ON p.Id = pd.ProductId\n"
+                + "    JOIN [Image] im ON im.ProductDetailId = pd.Id\n"
+                + "    JOIN Brand b ON b.Id = p.BrandId\n"
+                + "    JOIN Category c ON c.Id = p.CategoryId\n"
+                + ")\n"
+                + "SELECT Id, name, brand, category, img, price\n"
+                + "FROM RankedProducts\n"
+                + "WHERE rn = 1";
 
         if (category != null) {
-            sql += " and c.[Name] ='" + category + "'";
+            sql += " and category ='" + category + "'";
         }
         if (brand != null) {
-            sql += " and b.[Name] ='" + brand + "'";
+            sql += " and brand ='" + brand + "'";
         }
-        if (color != null) {
-            sql += " and co.[Name] ='" + color + "'";
+        if (price != null){
+         if (price.compareTo("default")==0) {
+            sql += " order by Id"; 
+        } else {
+            sql += " order by price "+price; 
+         }   
         }
-        
+         
+         if (name != null) {
+            sql += " and name like N'%" + name + "%'";
+        }
+
         try {
             PreparedStatement st = connection.prepareStatement(sql);
             //st.setInt(1, cid);
             ResultSet re = st.executeQuery();
             while (re.next()) {
                 ProductList p = new ProductList(
+                        re.getInt("id"),
                         re.getString("name"),
                         re.getString("brand"),
                         re.getString("category"),
-                        re.getString("color"),
                         re.getString("img"),
                         re.getInt("price")
                 );
@@ -91,13 +139,4 @@ public class ProductDAO extends DBContext {
 
     }
 
-    public static void main(String[] args) {
-        ProductDAO dao = new ProductDAO();
-        List<ProductList> list = new ArrayList<>();
-        list = dao.getProductList();
-        System.out.printf("%-30s %-7s %-5s%n", "name", "img", "price");
-        for (ProductList p : list) {
-            System.out.printf("%-30s %-7s %-5s%n", p.getName(), p.getImg(), p.getPrice());
-        }
-    }
 }
