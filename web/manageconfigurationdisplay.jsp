@@ -5,7 +5,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ADMIN System</title>
+    <title>ADMIN System - Manage Configuration</title>
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet">
     <link rel="shortcut icon" href="assets/img/logo/favicon.svg">
@@ -20,24 +20,23 @@
 
     <%@include file="sidebar.jsp" %>
     <style>
-        .status-icon {
-            font-size: 24px; /* Tăng kích thước icon */
-            cursor: pointer; /* Thay đổi con trỏ khi hover */
-            transition: color 0.3s; /* Hiệu ứng chuyển màu */
+        .action-buttons {
+            display: flex;
+            gap: 10px;
         }
 
-        .status-icon:hover {
-            color: #28a745; /* Màu xanh khi hover */
+        .action-buttons .btn {
+            padding: 5px 10px;
         }
     </style>
 </head>
 <body>
     <div class="col-md-10 content">
-        <h2>Manage Users</h2>
+        <h2>Manage Configuration</h2>
 
         <!-- Thông báo -->
         <c:if test="${not empty mess}">
-            <div class="alert ${mess == 'Ban successful' ? 'alert-success' : 'alert-danger'}">
+            <div class="alert ${mess == 'Update successful' ? 'alert-success' : 'alert-danger'}">
                 ${mess}
             </div>
         </c:if>
@@ -46,30 +45,28 @@
             <thead>
                 <tr>
                     <th>ID</th>
-                    <th>User Name</th>
-                    <th>Full Name</th>
-                    <th>Email</th>
-                    <th>Status</th>
+                    <th>Configuration Name</th>
+                    <th>Action</th>
                 </tr>
             </thead>
 
             <tbody>
-                <c:forEach var="user" items="${listUser}"> 
+                <c:forEach var="config" items="${listConfiguration}"> 
                     <tr>
-                        <td>${user.id}</td>
-                        <td>${user.userName}</td>
-                        <td>${user.fullName}</td>
-                        <td>${user.email}</td>
-                        <!-- Hiển thị trạng thái -->
+                        <td>${config.id}</td>
+                        <td>${config.name}</td>
                         <td>
-                            <c:choose>
-                                <c:when test="${user.status != 'ban'}">
-                                    <span class="text-success status-icon" onclick="updateStatus('${user.id}');">&#10003;</span> <!-- Dấu tích màu xanh -->
-                                </c:when>
-                                <c:otherwise>
-                                    <span class="text-danger status-icon">&#10006;</span> <!-- Dấu X màu đỏ -->
-                                </c:otherwise>
-                            </c:choose>
+                            <div class="action-buttons">
+                                <!-- Nút Update -->
+                                <button class="btn btn-warning" onclick="editConfig('${config.id}');">
+                                    <i class="fas fa-edit"></i> Update
+                                </button>
+
+                                <!-- Nút Delete -->
+                                <button class="btn btn-danger" onclick="deleteConfig('${config.id}');">
+                                    <i class="fas fa-trash-alt"></i> Delete
+                                </button>
+                            </div>
                         </td>
                     </tr>
                 </c:forEach>
@@ -77,10 +74,17 @@
         </table>
 
         <script>
-            function updateStatus(userId) {
-                if (confirm('Are you sure you want to ban this user?')) {
+            function editConfig(configId) {
+                if (confirm('Are you sure you want to edit this configuration?')) {
                     // Chuyển hướng đến servlet với tham số
-                    window.location.href = 'CustomerManageController?id=' + userId + '&service=banUser';
+                    window.location.href = 'ConfigurationManageController?id=' + configId + '&service=editConfig';
+                }
+            }
+
+            function deleteConfig(configId) {
+                if (confirm('Are you sure you want to delete this configuration?')) {
+                    // Chuyển hướng đến servlet với tham số
+                    window.location.href = 'ConfigurationManageController?id=' + configId + '&service=deleteConfig';
                 }
             }
         </script>

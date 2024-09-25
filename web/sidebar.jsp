@@ -312,13 +312,13 @@
                     <a href="manageProduct"><i class="fas fa-box-open"></i> Quản lí sản phẩm</a>
 
 
-                    <a href="manageCategory"><i class="fas fa-calendar"></i> Quản lí danh mục</a>
+                    
 
-                    <a href="CustomerManageController?service=listall"><i class="fas fa-users"></i> Quản lý khách hàng</a>
+                    <a href="CustomerManageController?service=listall"><i class="fas fa-users"></i> Manage User</a>
 
-                    <a href="BrandController?service=listall"><i class="fas fa-calendar"></i> Quản lí thương hiệu</a>
+                    <a href="BrandController?service=listall"><i class="fas fa-calendar"></i> Manage Brand</a>
 
-
+                    <a href="ConfigurationManageController?service=listall"><i class="fas fa-calendar"></i> Manage Configuration</a>
                     <a href="stats"><i class="fas fa-server"></i> Thống kê sản phẩm</a>
 
                     <a href="orderManage"><i class="fas fa-object-group"></i> Quản lý đơn hàng</a>

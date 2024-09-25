@@ -86,12 +86,12 @@ public class BrandManageController extends HttpServlet {
 //            request.setAttribute("updatebranddisplay", brand1);
             if (checkUpdate == true) {
                 Brand brandAfterUpdate = brandDAO.getBrandById(id);
-                String mess = "Update thành công!!!";
+                String mess = "Update successfull!!";
                 request.setAttribute("mess", mess);
                 request.setAttribute("updatebranddisplay", brandAfterUpdate);
             } else {
                 Brand brandAfterUpdate = brandDAO.getBrandById(id);
-                String mess = "Update thất bại!";
+                String mess = "Update failed!";
                 request.setAttribute("mess", mess);
                 request.setAttribute("updatebranddisplay", brandAfterUpdate);
             }
@@ -120,7 +120,7 @@ public class BrandManageController extends HttpServlet {
                 List<Brand> listBrand = new ArrayList<>();
                 listBrand = brandDAO.getAll();
                 request.setAttribute("listBrand", listBrand);
-                request.setAttribute("mess", "Xóa thất bại, tồn tại sản phẩm nằm trong brand này!");
+                request.setAttribute("mess", "Delete failed, exits product have this brand!");
             }
 
             // Sau khi xóa, điều hướng về trang danh sách brand hoặc trang bạn muốn

@@ -20,7 +20,7 @@ import model.User;
  *
  * @author LOC
  */
-public class CustomerManageController extends HttpServlet {
+public class UserManageController extends HttpServlet {
    
     /** 
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code> methods.
@@ -68,7 +68,17 @@ public class CustomerManageController extends HttpServlet {
             List<User> listUser = new ArrayList<>();
             listUser = userDAO.getAll();
             request.setAttribute("listUser", listUser);
-            request.getRequestDispatcher("manageuserdisplay").forward(request, response);
+            request.getRequestDispatcher("manageuserdisplay.jsp").forward(request, response);
+        }
+        
+        if (service.equalsIgnoreCase("banUser")){
+            UserDAO userDAO = new UserDAO();
+            int id = Integer.parseInt(request.getParameter("id"));
+            userDAO.banAnUser(id);
+            List<User> listUser = new ArrayList<>();
+            listUser = userDAO.getAll();
+            request.setAttribute("listUser", listUser);
+            request.getRequestDispatcher("manageuserdisplay.jsp").forward(request, response);
         }
     } 
 
