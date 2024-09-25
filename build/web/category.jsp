@@ -242,20 +242,24 @@
                             <section class="product-container">
                                 <!-- Sử dụng thẻ c:forEach để lặp qua danh sách sản phẩm -->
                             <c:forEach var="p" items="${productlist}">
-                                <div class="product-item">
-                                    <!-- Hiển thị ảnh sản phẩm -->
-                                    <img src="${p.img}" alt="${p.name}">
+                                <!-- Mỗi thẻ sản phẩm trở thành một liên kết -->
+                                <a href="information?productId=${p.detail}" class="product-link">
+                                    <div class="product-item">
+                                        <!-- Hiển thị ảnh sản phẩm -->
+                                        <img src="${p.img}" alt="${p.name}">
 
-                                    <!-- Hiển thị thương hiệu -->
-                                    <div class="brand">${p.brand}</div>
+                                        <!-- Hiển thị thương hiệu -->
+                                        <div class="brand">${p.brand}</div>
 
-                                    <!-- Hiển thị tên sản phẩm -->
-                                    <h3>${p.name}</h3>
+                                        <!-- Hiển thị tên sản phẩm -->
+                                        <h3>${p.name}</h3>
 
-                                    <!-- Hiển thị giá tiền -->
-                                    <p>Giá: ${p.price} VND</p>
-                                </div>
+                                        <!-- Hiển thị giá tiền -->
+                                        <p>Giá: ${p.price} VND</p>
+                                    </div>
+                                </a>
                             </c:forEach>
+
 
                             <!-- Nếu danh sách trống, hiển thị thông báo -->
                             <c:if test="${empty productlist}">
