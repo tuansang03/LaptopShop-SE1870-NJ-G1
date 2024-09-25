@@ -5,6 +5,7 @@
 
 package controller;
 
+import dal.UserDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -12,13 +13,15 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import java.util.List;
+import model.Image;
 
 /**
  *
  * @author kieud
  */
 @WebServlet(name="displaySearchSuggest", urlPatterns={"/displaySearchSuggest"})
-public class displaySearchSuggest extends HttpServlet {
+public class displaySearchPage extends HttpServlet {
    
     /** 
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code> methods.
@@ -53,10 +56,22 @@ public class displaySearchSuggest extends HttpServlet {
      * @throws IOException if an I/O error occurs
      */
     @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+ protected void doGet(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
-        processRequest(request, response);
-    } 
+    String query = request.getParameter("query"); // Lấy giá trị từ tham số request
+    String error = "";
+    UserDAO dao = new UserDAO();    
+    // Gọi phương thức với tham số đúng
+    List<Image> list = dao.getPictureListByProductName(query); 
+    if(list.isEmpty()){
+        error = " ! ! ! There is no product that match your Keyword";
+    }
+    request.setAttribute("err", error);
+    request.setAttribute("pop", list); // Đặt danh sách hình ảnh vào thuộc tính request
+    request.getRequestDispatcher("SearchOverviewPage.jsp").forward(request, response); // Chuyển hướng đến trang JSP
+}
+
+    
 
     /** 
      * Handles the HTTP <code>POST</code> method.

@@ -80,7 +80,25 @@
                 background-repeat: no-repeat !important;
                 background-size: cover !important;
                 background-position: center !important;
-                
+
+            }
+            .nhot{
+                text-align: justify;
+                font-weight: 400;
+            }
+            .tien{
+                color: #f36767;
+            }
+            .card-product__price{
+                font-size: 18px !important;
+            }
+            .card-product__title{
+                font-size: 19px !important;
+                color: #35516d !important;
+            }
+            .borderr{
+                border:1px solid gray !important;
+                box-shadow: 0px 0px 5px gray;
             }
 
         </style>
@@ -130,8 +148,8 @@
                             <div class="hero-carousel__slide xxxx">
                                 <div class="xxxxx">
                                     <img src="${o}" alt="" class="img-fluid">
-                                    
-                                    
+
+
                                 </div>
                                 <a href="" class="hero-carousel__slideOverlay">
                                     <h3>Wireless Headphone</h3>
@@ -145,42 +163,42 @@
             </section>
 
 
-<!--             ================ trending product section start =================   
-            <section class="section-margin calc-60px">
-                <div class="container">
-                    <div class="section-intro pb-60px">
-                        <p>Popular Item in the market</p>
-                        <h2><span class="section-intro__style">Trending Product</span></h2>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-6 col-lg-4 col-xl-3">
-                            <div class="card text-center card-product">
-                                <div class="card-product__img">
-                                    <img class="card-img" src="img/product/product1.png" alt="">
-                                    <ul class="card-product__imgOverlay">
-                                        <li><button><i class="ti-search"></i></button></li>
-                                        <li>
-                                            <a href="cart.jsp" class="btn">
-                                                <i class="ti-shopping-cart"></i>
-                                            </a>
-                                        </li>
-
-                                        <li><button><i class="ti-heart"></i></button></li>
-                                    </ul>
+            <!--             ================ trending product section start =================   
+                        <section class="section-margin calc-60px">
+                            <div class="container">
+                                <div class="section-intro pb-60px">
+                                    <p>Popular Item in the market</p>
+                                    <h2><span class="section-intro__style">Trending Product</span></h2>
                                 </div>
-                                <div class="card-body">
-                                    <p>Accessories</p>
-                                    <h4 class="card-product__title"><a href="single-product.jsp">Quartz Belt Watch</a></h4>
-                                    <p class="card-product__price">$150.00</p>
+                                <div class="row">
+                                    <div class="col-md-6 col-lg-4 col-xl-3">
+                                        <div class="card text-center card-product">
+                                            <div class="card-product__img">
+                                                <img class="card-img" src="img/product/product1.png" alt="">
+                                                <ul class="card-product__imgOverlay">
+                                                    <li><button><i class="ti-search"></i></button></li>
+                                                    <li>
+                                                        <a href="cart.jsp" class="btn">
+                                                            <i class="ti-shopping-cart"></i>
+                                                        </a>
+                                                    </li>
+            
+                                                    <li><button><i class="ti-heart"></i></button></li>
+                                                </ul>
+                                            </div>
+                                            <div class="card-body">
+                                                <p>Accessories</p>
+                                                <h4 class="card-product__title"><a href="single-product.jsp">Quartz Belt Watch</a></h4>
+                                                <p class="card-product__price">$150.00</p>
+                                            </div>
+                                        </div>
+                                    </div>
+            
                                 </div>
                             </div>
-                        </div>
-
-                    </div>
-                </div>
-                </div>
-            </section>
-             ================ trending product section end =================   -->
+                            </div>
+                        </section>
+                         ================ trending product section end =================   -->
 
 
             <!-- ================ offer section start ================= --> 
@@ -204,139 +222,37 @@
             <section class="section-margin calc-60px">
                 <div class="container">
                     <div class="section-intro pb-60px">
-                        <p>Popular Item in the market</p>
-                        <h2>Best <span class="section-intro__style">Sellers</span></h2>
+                        <p>addest Item in the market</p>
+                        <h2>Newest <span class="section-intro__style">Products</span></h2>
                     </div>
-                    <div class="owl-carousel owl-theme" id="bestSellerCarousel">
-                        <div class="card text-center card-product">
-                            <div class="card-product__img">
-                                <img class="img-fluid" src="img/product/product1.png" alt="">
-                                <ul class="card-product__imgOverlay">
-                                    <li><button><i class="ti-search"></i></button></li>
-                                    <li><button><i class="ti-shopping-cart"></i></button></li>
-                                    <li><button><i class="ti-heart"></i></button></li>
-                                </ul>
-                            </div>
-                            <div class="card-body">
-                                <p>Accessories</p>
-                                <h4 class="card-product__title"><a href="single-product.jsp">Quartz Belt Watch</a></h4>
-                                <p class="card-product__price">$150.00</p>
-                            </div>
-                        </div>
 
-                        <div class="card text-center card-product">
-                            <div class="card-product__img">
-                                <img class="img-fluid" src="img/product/product2.png" alt="">
-                                <ul class="card-product__imgOverlay">
-                                    <li><button><i class="ti-search"></i></button></li>
-                                    <li><button><i class="ti-shopping-cart"></i></button></li>
-                                    <li><button><i class="ti-heart"></i></button></li>
-                                </ul>
-                            </div>
-                            <div class="card-body">
-                                <p>Beauty</p>
-                                <h4 class="card-product__title"><a href="single-product.jsp">Women Freshwash</a></h4>
-                                <p class="card-product__price">$150.00</p>
-                            </div>
-                        </div>
+                    <div class="owl-carousel owl-theme " id="bestSellerCarousel">
+                        <c:forEach items="${listPro}" var="o3" varStatus="status">
 
-                        <div class="card text-center card-product">
-                            <div class="card-product__img">
-                                <img class="img-fluid" src="img/product/product3.png" alt="">
-                                <ul class="card-product__imgOverlay">
-                                    <li><button><i class="ti-search"></i></button></li>
-                                    <li><button><i class="ti-shopping-cart"></i></button></li>
-                                    <li><button><i class="ti-heart"></i></button></li>
-                                </ul>
-                            </div>
-                            <div class="card-body">
-                                <p>Decor</p>
-                                <h4 class="card-product__title"><a href="single-product.jsp">Room Flash Light</a></h4>
-                                <p class="card-product__price">$150.00</p>
-                            </div>
-                        </div>
+                            <div class="card text-center card-product borderr">
+                                <div class="card-product__img">
+                                    <img class="img-fluid" src="${o3.getImage()}" alt="">
+                                    <ul class="card-product__imgOverlay">
+                                        <li><button><i class="ti-search"></i></button></li>
+                                        <li><a class="ti-shopping-cart" href="addtocart?pid=${o3.getProductDetail().getProduct().getId()}&&colorid=${o3.getProductDetail().getColor().getId()}&&confid=${o3.getProductDetail().getConfiguration().getId()}"></a></li>
+                                        <li><button><i class="ti-heart"></i></button></li>
+                                    </ul>
 
-                        <div class="card text-center card-product">
-                            <div class="card-product__img">
-                                <img class="img-fluid" src="img/product/product4.png" alt="">
-                                <ul class="card-product__imgOverlay">
-                                    <li><button><i class="ti-search"></i></button></li>
-                                    <li><button><i class="ti-shopping-cart"></i></button></li>
-                                    <li><button><i class="ti-heart"></i></button></li>
-                                </ul>
+                                </div>
+                                <div class="card-body">
+                                    <p class="nhot">${o3.getProductDetail().getProduct().getBrand().getName()}</p>
+                                    <h5 class="card-product__title  nhot" ><a href="single-product.jsp">${o3.getProductDetail().getProduct().getName()} 
+                                            ${o3.getProductDetail().getProduct().getCategory().getName()}${o3.getProductDetail().getConfiguration().getName()} (${o3.getProductDetail().getColor().getName()})</a></h5>
+                                    <p class="card-product__price nhot tien">${o3.getProductDetail().getPrice()} VND</p>
+                                </div>
                             </div>
-                            <div class="card-body">
-                                <p>Decor</p>
-                                <h4 class="card-product__title"><a href="single-product.jsp">Room Flash Light</a></h4>
-                                <p class="card-product__price">$150.00</p>
-                            </div>
-                        </div>
 
-                        <div class="card text-center card-product">
-                            <div class="card-product__img">
-                                <img class="img-fluid" src="img/product/product1.png" alt="">
-                                <ul class="card-product__imgOverlay">
-                                    <li><button><i class="ti-search"></i></button></li>
-                                    <li><button><i class="ti-shopping-cart"></i></button></li>
-                                    <li><button><i class="ti-heart"></i></button></li>
-                                </ul>
-                            </div>
-                            <div class="card-body">
-                                <p>Accessories</p>
-                                <h4 class="card-product__title"><a href="single-product.jsp">Quartz Belt Watch</a></h4>
-                                <p class="card-product__price">$150.00</p>
-                            </div>
-                        </div>
+                        </c:forEach>
 
-                        <div class="card text-center card-product">
-                            <div class="card-product__img">
-                                <img class="img-fluid" src="img/product/product2.png" alt="">
-                                <ul class="card-product__imgOverlay">
-                                    <li><button><i class="ti-search"></i></button></li>
-                                    <li><button><i class="ti-shopping-cart"></i></button></li>
-                                    <li><button><i class="ti-heart"></i></button></li>
-                                </ul>
-                            </div>
-                            <div class="card-body">
-                                <p>Beauty</p>
-                                <h4 class="card-product__title"><a href="single-product.jsp">Women Freshwash</a></h4>
-                                <p class="card-product__price">$150.00</p>
-                            </div>
-                        </div>
-
-                        <div class="card text-center card-product">
-                            <div class="card-product__img">
-                                <img class="img-fluid" src="img/product/product3.png" alt="">
-                                <ul class="card-product__imgOverlay">
-                                    <li><button><i class="ti-search"></i></button></li>
-                                    <li><button><i class="ti-shopping-cart"></i></button></li>
-                                    <li><button><i class="ti-heart"></i></button></li>
-                                </ul>
-                            </div>
-                            <div class="card-body">
-                                <p>Decor</p>
-                                <h4 class="card-product__title"><a href="single-product.jsp">Room Flash Light</a></h4>
-                                <p class="card-product__price">$150.00</p>
-                            </div>
-                        </div>
-
-                        <div class="card text-center card-product">
-                            <div class="card-product__img">
-                                <img class="img-fluid" src="img/product/product4.png" alt="">
-                                <ul class="card-product__imgOverlay">
-                                    <li><button><i class="ti-search"></i></button></li>
-                                    <li><button><i class="ti-shopping-cart"></i></button></li>
-                                    <li><button><i class="ti-heart"></i></button></li>
-                                </ul>
-                            </div>
-                            <div class="card-body">
-                                <p>Decor</p>
-                                <h4 class="card-product__title"><a href="single-product.jsp">Room Flash Light</a></h4>
-                                <p class="card-product__price">$150.00</p>
-                            </div>
-                        </div>
                     </div>
+
                 </div>
+
             </section>
             <!-- ================ Best Selling item  carousel end ================= --> 
 
@@ -355,7 +271,7 @@
                                 .tach{
                                     margin-right: 15px;
                                 }
-                                
+
                             </style>
 
                             <div class="post tach">

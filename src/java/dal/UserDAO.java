@@ -265,9 +265,9 @@ public class UserDAO extends DBContext {
     public List<Post> getPostListD() {
 
         List<Post> list = new ArrayList<>();
-        String sql = "SELECT TOP 6 [Id], [UserId], [BrandId], [CategoryId], [Title], [ShortContent], [FullContent], [Thumbnail], [PublishDate] " +
-             "FROM [dbo].[Post] " +
-             "ORDER BY [Id] DESC";
+        String sql = "SELECT TOP 6 [Id], [UserId], [BrandId], [CategoryId], [Title], [ShortContent], [FullContent], [Thumbnail], [PublishDate] "
+                + "FROM [dbo].[Post] "
+                + "ORDER BY [Id] DESC";
 
         try {
             PreparedStatement st = connection.prepareStatement(sql);
@@ -294,12 +294,13 @@ public class UserDAO extends DBContext {
         }
         return list;
     }
-        public List<Post> getAllPostListD() {
+
+    public List<Post> getAllPostListD() {
 
         List<Post> list = new ArrayList<>();
-        String sql = "SELECT  [Id], [UserId], [BrandId], [CategoryId], [Title], [ShortContent], [FullContent], [Thumbnail], [PublishDate] " +
-             "FROM [dbo].[Post] " +
-             "ORDER BY [Id] DESC";
+        String sql = "SELECT  [Id], [UserId], [BrandId], [CategoryId], [Title], [ShortContent], [FullContent], [Thumbnail], [PublishDate] "
+                + "FROM [dbo].[Post] "
+                + "ORDER BY [Id] DESC";
 
         try {
             PreparedStatement st = connection.prepareStatement(sql);
@@ -326,8 +327,6 @@ public class UserDAO extends DBContext {
         }
         return list;
     }
-    
-    
 
     public Configuration getConfigurationById(int id) {
         String sql = "select * from Configuration where id=?";
@@ -346,22 +345,39 @@ public class UserDAO extends DBContext {
         return null;
     }
 
+    public String getImageById(int id) {
+        String sql = "select * from Image where ProductDetailId=?";
+        try {
+            PreparedStatement st = connection.prepareStatement(sql);
+            st.setInt(1, id);
+            ResultSet rs = st.executeQuery();
+            if (rs.next()) {
+                String c = rs.getString("Image");
+                return c;
+            }
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
+        return null;
+    }
+
+   
+
     public List<ProductDetail> getListProductDetailD() {
         List<ProductDetail> list = new ArrayList<>();
-        String sql = "SELECT [Id]\n"
-                + "      ,[ProductId]\n"
-                + "      ,[ColorId]\n"
-                + "      ,[ConfigurationId]\n"
-                + "      ,[Price]\n"
-                + "      ,[Quantity]\n"
-                + "      ,[ShortDescription]\n"
-                + "      ,[Description]\n"
-                + "      ,[Status]\n"
+        String sql = "SELECT TOP 8 [Id],\n"
+                + "      [ProductId],\n"
+                + "      [ColorId],\n"
+                + "      [ConfigurationId],\n"
+                + "      [Price],\n"
+                + "      [Quantity],\n"
+                + "      [ShortDescription],\n"
+                + "      [Description],\n"
+                + "      [Status]\n"
                 + "  FROM [dbo].[ProductDetail]";
 
         try {
             PreparedStatement st = connection.prepareStatement(sql);
-
             ResultSet rs = st.executeQuery();
             while (rs.next()) {
                 ProductDetail newProduct = new ProductDetail();
@@ -372,8 +388,11 @@ public class UserDAO extends DBContext {
                 newProduct.setColor(c);
                 Configuration c1 = getConfigurationById(rs.getInt("ConfigurationId"));
                 newProduct.setConfiguration(c1);
-                newProduct.setPrice(rs.getInt("Price"));
-                newProduct.setPrice(rs.getInt("Quantity"));
+
+                // Chỉnh sửa phần này
+                newProduct.setPrice(rs.getInt("Price")); // Đặt giá trị cho Price
+                newProduct.setQuantity(rs.getInt("Quantity")); // Đặt giá trị cho Quantity
+
                 newProduct.setShortDescription(rs.getString("ShortDescription"));
                 newProduct.setDescription(rs.getString("Description"));
                 newProduct.setStatus(rs.getString("Status"));
@@ -384,53 +403,151 @@ public class UserDAO extends DBContext {
         }
         return list;
     }
+    public ProductDetail getProductDetailById(int id) {
+    ProductDetail newProduct = null;
+    String sql = "SELECT [Id],\n"
+            + "      [ProductId],\n"
+            + "      [ColorId],\n"
+            + "      [ConfigurationId],\n"
+            + "      [Price],\n"
+            + "      [Quantity],\n"
+            + "      [ShortDescription],\n"
+            + "      [Description],\n"
+            + "      [Status]\n"
+            + "  FROM [dbo].[ProductDetail] WHERE [Id] = ?"; // Thêm điều kiện WHERE
 
-    public List<String> getPictureList() {
-        List<String> list = new ArrayList<>();
-        String sql = "SELECT [Image]\n"
-                + "  FROM [SWP391_LaptopShop].[dbo].[Image]";
-        try {
-            PreparedStatement st = connection.prepareStatement(sql);
-            ResultSet rs = st.executeQuery();
-            while (rs.next()) {
-                String img = rs.getString("Image");
-                list.add(img);
-            }
-        } catch (SQLException e) {
-            System.out.println(e);
-        }
-        return list;
-    }
-    
-public Post getPostById(int id) {
-    String sql = "SELECT [Id], [UserId], [BrandId], [CategoryId], [Title], " +
-                 "[ShortContent], [FullContent], [Thumbnail], [PublishDate] " +
-                 "FROM [dbo].[Post] WHERE [Id] = ?";
     try {
         PreparedStatement st = connection.prepareStatement(sql);
-        st.setInt(1, id);
+        st.setInt(1, id); // Thiết lập giá trị cho tham số `id`
         ResultSet rs = st.executeQuery();
+
+        // Nếu có kết quả từ ResultSet
         if (rs.next()) {
-            Post p = new Post();
-            p.setId(rs.getInt("Id"));
-            User u = getUserByIdD(rs.getInt("UserId"));
-            p.setUser(u);
-            Brand b = getBrandByIdD(rs.getInt("BrandId"));
-            p.setBrand(b);
-            Category c = getCategoryByIdD(rs.getInt("CategoryId"));
-            p.setCategory(c);
-            p.setTittle(rs.getString("Title"));
-            p.setShortContent(rs.getString("ShortContent"));
-            p.setFullContent(rs.getString("FullContent"));
-            p.setThumbnail(rs.getString("Thumbnail"));
-            p.setPublishDate(rs.getDate("PublishDate"));
-            return p; // Trả về bài viết tìm thấy
+            newProduct = new ProductDetail();
+            newProduct.setId(rs.getInt("Id"));
+            Product product = getProductByIdD(rs.getInt("ProductId"));
+            newProduct.setProduct(product);
+            Color c = getColorById(rs.getInt("ColorId"));
+            newProduct.setColor(c);
+            Configuration c1 = getConfigurationById(rs.getInt("ConfigurationId"));
+            newProduct.setConfiguration(c1);
+
+            // Đặt giá trị cho Price và Quantity
+            newProduct.setPrice(rs.getInt("Price"));
+            newProduct.setQuantity(rs.getInt("Quantity"));
+
+            newProduct.setShortDescription(rs.getString("ShortDescription"));
+            newProduct.setDescription(rs.getString("Description"));
+            newProduct.setStatus(rs.getString("Status"));
         }
     } catch (SQLException e) {
         System.out.println(e);
     }
-    return null; // Trả về null nếu không tìm thấy
+    return newProduct;
 }
 
-    //================================================================================================================
+
+public List<Image> getPictureList() {
+    List<Image> list = new ArrayList<>();
+    String sql = "SELECT [Id]\n"
+            + "      ,[ProductDetailId]\n"
+            + "      ,[Image]\n"
+            + "  FROM [dbo].[Image]";
+    try {
+        PreparedStatement st = connection.prepareStatement(sql);
+        ResultSet rs = st.executeQuery();
+        while (rs.next()) {
+            Image image = new Image();
+            image.setId(rs.getInt("Id"));
+            
+            // Lấy ProductDetail từ ProductDetailId
+            ProductDetail productDetail = getProductDetailById(rs.getInt("ProductDetailId"));
+            image.setProductDetail(productDetail);
+            
+            // Đặt giá trị cho trường Image
+            image.setImage(rs.getString("Image"));
+            
+            // Thêm đối tượng Image vào danh sách
+            list.add(image);  // Bạn đã bỏ qua dòng này
+        }
+    } catch (SQLException e) {
+        System.out.println(e);
+    }
+    return list;
 }
+public List<Image> getPictureListByProductName(String productName) {
+    List<Image> list = new ArrayList<>();
+    String sql = "SELECT i.Id, i.ProductDetailId, i.Image " +
+                 "FROM Image i " +
+                 "JOIN ProductDetail pd ON i.ProductDetailId = pd.Id " +
+                 "JOIN Product p ON pd.ProductId = p.Id " +
+                 "WHERE p.Name LIKE ?";
+    try {
+        PreparedStatement st = connection.prepareStatement(sql);
+        st.setString(1, "%" + productName + "%"); // Tìm kiếm theo tên sản phẩm
+        ResultSet rs = st.executeQuery();
+        while (rs.next()) {
+            Image image = new Image();
+            image.setId(rs.getInt("Id"));
+            
+            // Lấy ProductDetail từ ProductDetailId
+            ProductDetail productDetail = getProductDetailById(rs.getInt("ProductDetailId"));
+            image.setProductDetail(productDetail);
+            
+            // Đặt giá trị cho trường Image
+            image.setImage(rs.getString("Image"));
+            
+            // Thêm đối tượng Image vào danh sách
+            list.add(image);
+        }
+    } catch (SQLException e) {
+        System.out.println(e);
+    }
+    return list;
+}
+
+
+    public static void main(String[] args) {
+        UserDAO dAO = new UserDAO();
+        List<Image>list =dAO.getPictureListByProductName("xxxxxxxxxxxxx");
+        for (Image image : list) {
+            System.out.println(image);
+        }
+        
+    }
+
+
+
+    public Post getPostById(int id) {
+        String sql = "SELECT [Id], [UserId], [BrandId], [CategoryId], [Title], "
+                + "[ShortContent], [FullContent], [Thumbnail], [PublishDate] "
+                + "FROM [dbo].[Post] WHERE [Id] = ?";
+        try {
+            PreparedStatement st = connection.prepareStatement(sql);
+            st.setInt(1, id);
+            ResultSet rs = st.executeQuery();
+            if (rs.next()) {
+                Post p = new Post();
+                p.setId(rs.getInt("Id"));
+                User u = getUserByIdD(rs.getInt("UserId"));
+                p.setUser(u);
+                Brand b = getBrandByIdD(rs.getInt("BrandId"));
+                p.setBrand(b);
+                Category c = getCategoryByIdD(rs.getInt("CategoryId"));
+                p.setCategory(c);
+                p.setTittle(rs.getString("Title"));
+                p.setShortContent(rs.getString("ShortContent"));
+                p.setFullContent(rs.getString("FullContent"));
+                p.setThumbnail(rs.getString("Thumbnail"));
+                p.setPublishDate(rs.getDate("PublishDate"));
+                return p; // Trả về bài viết tìm thấy
+            }
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
+        return null; // Trả về null nếu không tìm thấy
+    }
+
+}
+//================================================================================================================
+

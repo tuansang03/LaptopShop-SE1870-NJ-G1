@@ -5,7 +5,7 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>JSP Page</title>
+        <title>home</title>
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
         <link href="https://fonts.googleapis.com/css2?family=Farro:wght@300;400;500;700&display=swap" rel="stylesheet">
@@ -143,7 +143,7 @@
                                         <i class="ti-search"></i>
                                     </button>
 
-                                    <form action="search" method="get" id="searchForm">
+                                    <form action="displaySearchSuggest" method="get" id="searchForm">
                                         <input type="text" id="searchField" name="query" class="search-field" placeholder="Search for products..." />
                                         <ul id="suggestions" class="suggestions"></ul>
                                     </form>
