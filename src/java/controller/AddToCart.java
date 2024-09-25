@@ -5,7 +5,6 @@
 package controller;
 
 import dal.CartDAOS;
-import dal.ImageDAOS;
 import dal.ProductDAOS;
 import java.io.IOException;
 import jakarta.servlet.ServletException;
@@ -16,7 +15,6 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import model.Cart;
 import model.CartItem;
-import model.Image;
 import model.ProductDetail;
 import model.User;
 
@@ -60,7 +58,6 @@ public class AddToCart extends HttpServlet {
         User user = (User) session.getAttribute("user");
         ProductDAOS pDAO = new ProductDAOS();
         CartDAOS cartDAO = new CartDAOS();
-        ImageDAOS iDAO = new ImageDAOS();
 
         int pid = Integer.parseInt(pid_raw);
         int colorid = Integer.parseInt(colorid_raw);
@@ -74,20 +71,14 @@ public class AddToCart extends HttpServlet {
         }
         CartItem existProduct = cartDAO.getCartItemByCartIdAndProductId(cartUser.getId(), pDetail.getId());
 
+        //check if exist product in cart
         if (existProduct != null) {
             int newQuantity = existProduct.getQuantity() + 1;
-            //existProduct.setQuantity(newQuantity);
             cartDAO.updateCartItemQuantity(existProduct.getCart().getId(), pDetail.getId(), newQuantity);
         } else {
             cartDAO.addToCartItem(cartUser.getId(), pDetail.getId(), 1);
         }
 
-        //List<CartItem> listCartItem = cartDAO.getAllProductOfCartItem(cartUser.getId());
-
-        Image image = iDAO.getOneImageByProductDetailID(pDetail.getId());
-
-        request.setAttribute("image", image);
-        //request.setAttribute("listCartItem", listCartItem);
         request.getRequestDispatcher("index.jsp").forward(request, response);
 
 }

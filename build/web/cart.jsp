@@ -18,6 +18,62 @@
         <link rel="stylesheet" href="vendors/nice-select/nice-select.css">
         <link rel="stylesheet" href="vendors/nouislider/nouislider.min.css">
         <link rel="stylesheet" href="css/style.css">
+        <script>
+            // Hàm kiểm tra tất cả sản phẩm và tính tổng giá
+            function checkAll(mainCheckBox) {
+                // Lấy tất cả checkbox có class 'subCheckBox'
+                const checkBoxes = document.querySelectorAll('.subCheckBox');
+                const totalPriceElement = document.getElementById('totalPrice');
+
+                // Cập nhật trạng thái cho tất cả checkbox con
+                checkBoxes.forEach(function (check) {
+                    check.checked = mainCheckBox.checked;
+                });
+
+                // Tính tổng sau khi thay đổi trạng thái checkbox
+                calculateTotal();
+            }
+
+            // Hàm tính tổng giá của các sản phẩm đã được check
+            function calculateTotal() {
+                const checkBoxes = document.querySelectorAll('.subCheckBox');
+                const totalPriceElement = document.getElementById('totalPrice');
+                let total = 0;
+
+                checkBoxes.forEach(checkbox => {
+                    if (checkbox.checked) {
+                        // Lấy giá trị từ data-price của checkbox đã được check
+                        total += parseFloat(checkbox.getAttribute('data-price'));
+                    }
+                });
+
+                // Cập nhật giá trị tổng vào phần tử hiển thị tổng giá
+                totalPriceElement.innerText = total.toLocaleString('vi-VN') + 'đ';
+            }
+
+            // Khởi tạo sự kiện khi tài liệu đã được tải xong
+            document.addEventListener('DOMContentLoaded', function () {
+                const mainCheckBox = document.getElementById('mainCheckBox');
+                const subCheckBoxes = document.querySelectorAll('.subCheckBox');
+
+                mainCheckBox.addEventListener('change', function () {
+                    checkAll(mainCheckBox);
+                });
+
+                // Lắng nghe sự kiện thay đổi trên tất cả checkbox
+                subCheckBoxes.forEach(checkbox => {
+                    checkbox.addEventListener('change', function () {
+                        // Kiểm tra nếu tất cả checkbox con đều được checked
+                        const allChecked = Array.from(subCheckBoxes).every(cb => cb.checked);
+                        mainCheckBox.checked = allChecked; // Cập nhật trạng thái cho mainCheckBox
+                        calculateTotal(); // Tính toán tổng giá
+                    });
+                });
+
+                // Tính toán tổng giá ban đầu nếu có checkbox con được checked
+                calculateTotal();
+            });
+        </script>
 
     </head>
     <body>
@@ -50,13 +106,17 @@
             <div class="container">
                 <div class="cart_inner">
                     <div class="table-responsive">
-                        <table class="table">
+                        <a style="display: flex;justify-content: right;margin-right: 10%;font-size: 16px;" href="deleteAllCart?cid=${cartID}">Delete All</a>
+                        <table class="table" style="table-layout: fixed;">
                             <thead>
                                 <tr>
-                                    <th scope="col">Product</th>
-                                    <th scope="col">Price</th>
-                                    <th scope="col">Quantity</th>
-                                    <th scope="col">Total</th>
+                                    <th style="width: 2%"  scope="col">
+                                        <input checked type="checkbox" id="mainCheckBox" onclick="checkAll(this)">
+                                    </th>
+                                    <th style="width:45%;" scope="col">Product</th>
+                                    <th style="width: 20%;" scope="col">Price</th>
+                                    <th style="width: 15%;" scope="col">Quantity</th>
+                                    <th style="width: 18%;" scope="col">Total</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -64,12 +124,15 @@
                                 <c:forEach items="${requestScope.listCartItem}" var="p">
                                     <tr>
                                         <td>
+                                            <input checked type="checkbox" class="subCheckBox" data-price="${(p.getQuantity()) * (p.getProductdetail().getPrice())}">
+                                        </td>
+                                        <td>
                                             <div class="media">
                                                 <div>
                                                     <c:forEach items="${requestScope.listImages}" var="i">
                                                         <div class="d-flex">
                                                             <c:if test="${p.getProductdetail().getId() == i.getProductDetail().getId()}">
-                                                                <img style="width: 150px" src="${i.getImage()}" alt="">
+                                                                <img style="width: 80px" src="${i.getImage()}" alt="">
                                                             </c:if>
                                                         </div>
                                                     </c:forEach>
@@ -77,6 +140,7 @@
                                                 <div class="media-body">
                                                     <a href="#">${p.getProductdetail().getProduct().getName()}</a>
                                                     <p>${p.getProductdetail().getColor().getName()}</p>
+                                                    <p style="font-size: 11px;">${p.getProductdetail().getConfiguration().getName()}</p>
                                                 </div>
 
                                             </div>
@@ -93,16 +157,22 @@
                                             </h5>
                                         </td>
                                         <td >
-                                            <div style="display: flex; flex-direction: column">
-                                                <div class="product_count">
-                                                    <div style="display: flex; align-items: center; justify-content: left; text-align: center;">
-                                                        <a style="font-size: 12px; padding: 5px 10px; text-decoration: none; color: #000;" href="changeQuantity?num=1&cid=${p.getCart().getId()}&pdtid=${p.getProductdetail().getId()}">+</a>
-                                                        <input type="text" name="qty" id="sst" maxlength="12" value="${p.getQuantity()}" title="Quantity:" style="text-align: center;padding: 5px;">
-                                                        <a style="font-size: 12px; padding: 5px 10px; text-decoration: none; color: #000;" href="changeQuantity?num=-1&cid=${p.getCart().getId()}&pdtid=${p.getProductdetail().getId()}">-</a>
+                                            <div style="display: flex; flex-direction: column;">
+                                                <div>
+                                                    <div style="display: flex; align-items: center; justify-content: space-between; text-align: center;border: 1px solid;border-color: #ded7d7;border-radius: 6px; width: 78%;">
+                                                        <a style="font-size: 14px; padding: 5px 10px; text-decoration: none; color: #000;" href="changeQuantity?num=-1&cid=${p.getCart().getId()}&pdtid=${p.getProductdetail().getId()}">-</a>
+                                                        <form action="inputQuantityProduct">
+                                                            <input type="hidden" name="pdtid" value="${p.getProductdetail().getId()}"/>
+                                                            <input type="text" name="qty" id="sst" maxlength="12" value="${p.getQuantity()}" 
+                                                                   title="Quantity:" style="all: unset; width: 100%;" 
+                                                                   onchange="this.form.submit();">
+                                                        </form>
+                                                        <a style="font-size: 14px; padding: 5px 10px; text-decoration: none; color: #000;" href="changeQuantity?num=1&cid=${p.getCart().getId()}&pdtid=${p.getProductdetail().getId()}">+</a>
+
                                                     </div>
                                                 </div>
                                                 <div>
-                                                    <a style="margin-left: 20px;" href="deleteCart?cid=${p.getCart().getId()}&pid=${p.getProductdetail().getId()}">Delete</a>
+                                                    <a style="margin-left: 20%;" href="deleteCart?cid=${p.getCart().getId()}&pid=${p.getProductdetail().getId()}">Delete</a>
                                                 </div>
 
                                             </div>
@@ -146,7 +216,11 @@
                                         <h5>Subtotal</h5>
                                     </td>
                                     <td>
-                                        <h5><fmt:formatNumber value="${total}" type="number"/>đ</h5>
+                                        <h5>
+                                            <span id="totalPrice">
+                                                <fmt:formatNumber value="${total}" type="number"/>đ
+                                            </span>
+                                        </h5>
                                     </td>
                                 </tr>
                                 <tr class="shipping_area">
