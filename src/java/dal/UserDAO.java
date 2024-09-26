@@ -19,15 +19,16 @@ public class UserDAO extends DBContext {
     public void insertUser(User user){
         String sql="INSERT INTO [dbo].[User]\n" +
 "           ([Username]\n" +
-"           ,[Password]\n" +
-"           ,[Fullname]\n" +
+"          ,[Password]\n" +
+"          ,[Fullname]\n" +
 "           \n" +
 "           ,[Email]\n" +
 "           \n" +
-"           ,[RoleId]\n" +
+"           ,[RoleId],\n" +
+"		   [Status]\n" +
 "           )\n" +
-"     VALUES\n" +
-"           (?,?,?,?,3)";
+"    VALUES\n" +
+"          (?,?,?,?,3,'active')";
         try {
             PreparedStatement pre=connection.prepareStatement(sql);
             pre.setString(1, user.getUserName());
@@ -93,6 +94,7 @@ public class UserDAO extends DBContext {
                 Role role =new Role();
                 role.setId(rs.getInt(8));
                 u.setRole(role);
+                u.setStatus(rs.getString(9));
                 return u;
             }
         } catch (SQLException ex) {

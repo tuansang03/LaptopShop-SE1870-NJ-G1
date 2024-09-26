@@ -103,9 +103,13 @@ Cookie arr[] = request.getCookies();
             response.addCookie(p);
         }
         if (u != null) {
+            if(u.getStatus().equalsIgnoreCase("ban")){
+                session.setAttribute("ban", u);
+                response.sendRedirect("ban.jsp");
+            }
             if (u.getRole().getId() == 3) {
                 session.setAttribute("user", u);
-                response.sendRedirect("index.jsp");
+                response.sendRedirect("home");
             } else if (u.getRole().getId() == 2) {
                 session.setAttribute("sale", u);
             } else if (u.getRole().getId() == 1) {
