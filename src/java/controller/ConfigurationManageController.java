@@ -75,40 +75,83 @@ public class ConfigurationManageController extends HttpServlet {
             request.getRequestDispatcher("manageconfigurationdisplay.jsp").forward(request, response);
         }
 
-if (service.equalsIgnoreCase("editConfig")) {
-    int id = Integer.parseInt(request.getParameter("id"));
-    ConfigurationDAO configurationDAO = new ConfigurationDAO();
-    Configuration configuration = configurationDAO.getConfigurationById(id);
-    request.setAttribute("update", configuration);
-    request.getRequestDispatcher("updateconfigurationdisplay.jsp").forward(request, response);
-}
+        if (service.equalsIgnoreCase("editConfig")) {
+            int id = Integer.parseInt(request.getParameter("id"));
+            ConfigurationDAO configurationDAO = new ConfigurationDAO();
+            Configuration configuration = configurationDAO.getConfigurationById(id);
+            request.setAttribute("update", configuration);
+            request.getRequestDispatcher("updateconfigurationdisplay.jsp").forward(request, response);
+        }
 
-if (service.equalsIgnoreCase("updatedone")) {
-    int id = Integer.parseInt(request.getParameter("id"));
+        if (service.equalsIgnoreCase("updatedone")) {
+            int id = Integer.parseInt(request.getParameter("id"));
+            String name = request.getParameter("name");
+
+            // Kiểm tra nếu tham số name null hoặc rỗng
+            if (name == null || name.trim().isEmpty()) {
+                request.setAttribute("mess", "Name cannot be empty");
+                Configuration configuration = new Configuration(id, ""); // Để trống name
+                request.setAttribute("update", configuration);
+                request.getRequestDispatcher("updateconfigurationdisplay.jsp").forward(request, response);
+                return;
+            }
+
+            Configuration c = new Configuration(id, name);
+            ConfigurationDAO configurationDAO = new ConfigurationDAO();
+            boolean check = configurationDAO.updateConfiguration(c);
+
+            if (check) {
+                request.setAttribute("mess", "Update successful");
+            } else {
+                request.setAttribute("mess", "Update failed");
+            }
+
+            Configuration configuration = configurationDAO.getConfigurationById(id);
+            request.setAttribute("update", configuration);
+            request.getRequestDispatcher("updateconfigurationdisplay.jsp").forward(request, response);
+        }
+        
+        if(service.equalsIgnoreCase("deleteConfig")){
+            int id = Integer.parseInt(request.getParameter("id"));
+            ConfigurationDAO configurationDAO = new ConfigurationDAO();
+            boolean check = configurationDAO.deleteConfiguration(id);
+            List<Configuration> listConfiguration = new ArrayList<>();
+            listConfiguration = configurationDAO.getAll();
+            if(check == true){
+                request.setAttribute("listConfiguration", listConfiguration);
+                request.setAttribute("mess", "Delete successfull!");
+                request.getRequestDispatcher("manageconfigurationdisplay.jsp").forward(request, response);
+            }
+            else{
+                request.setAttribute("listConfiguration", listConfiguration);
+                request.setAttribute("mess", "Delete failed!");
+                request.getRequestDispatcher("manageconfigurationdisplay.jsp").forward(request, response);
+            }
+        }
+        
+if (service.equalsIgnoreCase("addConfig")) {
+    // Chỉ hiển thị trang thêm cấu hình
+    request.getRequestDispatcher("insertconfigurationdisplay.jsp").forward(request, response);
+} 
+
+if (service.equalsIgnoreCase("addConfigDone")) {
     String name = request.getParameter("name");
-
-    // Kiểm tra nếu tham số name null hoặc rỗng
-    if (name == null || name.trim().isEmpty()) {
-        request.setAttribute("mess", "Name cannot be empty");
-        Configuration configuration = new Configuration(id, ""); // Để trống name
-        request.setAttribute("update", configuration);
-        request.getRequestDispatcher("updateconfigurationdisplay.jsp").forward(request, response);
-        return;
-    }
-
-    Configuration c = new Configuration(id, name);
-    ConfigurationDAO configurationDAO = new ConfigurationDAO();
-    boolean check = configurationDAO.updateConfiguration(c);
-
-    if (check) {
-        request.setAttribute("mess", "Update successful");
+    
+    if (name != null && !name.trim().isEmpty()) { // Kiểm tra xem name có hợp lệ không
+        ConfigurationDAO configurationDAO = new ConfigurationDAO();
+        boolean check = configurationDAO.insertConfiguration(name);
+        
+        if (check) {
+            request.setAttribute("mess", "Add configuration successful!");
+        } else {
+            request.setAttribute("mess", "Add configuration failed!");
+        }
     } else {
-        request.setAttribute("mess", "Update failed");
+        request.setAttribute("mess", "Invalid configuration name!");
     }
-
-    Configuration configuration = configurationDAO.getConfigurationById(id);
-    request.setAttribute("update", configuration);
-    request.getRequestDispatcher("updateconfigurationdisplay.jsp").forward(request, response);
+    
+    // Chuyển tiếp đến trang để hiển thị thông báo
+    request.getRequestDispatcher("insertconfigurationdisplay.jsp").forward(request, response);
 }
 
     }

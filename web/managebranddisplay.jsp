@@ -23,6 +23,19 @@
     <div class="col-md-10 content">
         <h2>Manage Brand</h2>
 
+        <!-- Form tìm kiếm thương hiệu -->
+        <form action="BrandController" method="GET" class="form-inline mb-3">
+            <input type="text" name="search" class="form-control mr-2" placeholder="Search Brand" value="${param.search}">
+            <input type="hidden" name="service" value="searchBrand">
+            <button type="submit" class="btn btn-primary">Search</button>
+        </form>
+
+        <!-- Nút Add Brand -->
+        <form action="BrandController" method="GET" class="form-inline mb-3">
+            <input type="hidden" name="service" value="addBrandRequest">
+            <button type="submit" class="btn btn-success">Add Brand</button>
+        </form>
+
         <!-- Thông báo -->
         <c:if test="${not empty mess}">
             <div class="alert ${mess == 'Delete successful' ? 'alert-success' : 'alert-danger'}">
@@ -30,7 +43,8 @@
             </div>
         </c:if>
 
-        <table>
+        <!-- Phần hiển thị bảng trong Manage Brand -->
+        <table class="table table-bordered">
             <thead>
                 <tr>
                     <th>ID</th>
@@ -45,19 +59,21 @@
                         <td>${p.id}</td>
                         <td>${p.name}</td>
                         <td>
-                            <!-- Nút Update -->
-                            <a href="BrandController?id=${p.id}&&service=updateBrandRequest">Update</a>
-                            <!-- Nút Delete -->
-                            <form action="BrandController" method="GET" style="display:inline;">
-                                <!-- Truyền id của brand -->
-                                <input type="hidden" name="id" value="${p.id}">
-                                <!-- Truyền biến service với giá trị deleteBrand -->
-                                <input type="hidden" name="service" value="deleteBrand">
-                                <!-- Nút xóa có xác nhận -->
-                                <button type="submit" onclick="return confirm('Are you sure you want to delete this brand?');">
-                                    Delete
+                            <div class="action-buttons">
+                                <!-- Nút Update -->
+                                <button class="btn btn-warning" onclick="editBrand('${p.id}');">
+                                    <i class="fas fa-edit"></i> Update
                                 </button>
-                            </form>
+
+                                <!-- Nút Delete -->
+                                <form action="BrandController" method="GET" style="display:inline;">
+                                    <input type="hidden" name="id" value="${p.id}">
+                                    <input type="hidden" name="service" value="deleteBrand">
+                                    <button type="submit" onclick="return confirm('Are you sure you want to delete this brand?');" class="btn btn-danger">
+                                        <i class="fas fa-trash-alt"></i> Delete
+                                    </button>
+                                </form>
+                            </div>
                         </td>
                     </tr>
                 </c:forEach>
@@ -92,6 +108,13 @@
             }
         </style>
     </div>
+
+<script>
+    function editBrand(brandId) {
+        // Chuyển hướng trực tiếp đến servlet mà không cần xác nhận
+        window.location.href = 'BrandController?id=' + brandId + '&service=updateBrandRequest';
+    }
+</script>
 
 </body>
 </html>

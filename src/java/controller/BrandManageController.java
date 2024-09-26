@@ -112,7 +112,7 @@ public class BrandManageController extends HttpServlet {
             // Kiểm tra xem xóa thành công hay không
             if (isDeleted && productDAO.getProductsByBrand(id) == null) {
 
-                request.setAttribute("mess", "Xóa thành công!");
+                request.setAttribute("mess", "Delete successfull!");
                 List<Brand> listBrand = new ArrayList<>();
                 listBrand = brandDAO.getAll();
                 request.setAttribute("listBrand", listBrand);
@@ -120,11 +120,42 @@ public class BrandManageController extends HttpServlet {
                 List<Brand> listBrand = new ArrayList<>();
                 listBrand = brandDAO.getAll();
                 request.setAttribute("listBrand", listBrand);
-                request.setAttribute("mess", "Delete failed, exits product have this brand!");
+                request.setAttribute("mess", "Delete failed, exist product have this brand!");
             }
 
             // Sau khi xóa, điều hướng về trang danh sách brand hoặc trang bạn muốn
             request.getRequestDispatcher("managebranddisplay.jsp").forward(request, response);
+        }
+
+        if (service.equalsIgnoreCase("searchBrand")) {
+            String key = request.getParameter("search");
+            BrandDAO brandDAO = new BrandDAO();
+            List<Brand> listBrand = new ArrayList<>();
+            listBrand = brandDAO.getBrandsByKeyword(key);
+            request.setAttribute("listBrand", listBrand);
+            request.getRequestDispatcher(MAIN_URL).forward(request, response);
+        }
+
+        if (service.equalsIgnoreCase("addBrandRequest")) {
+            response.sendRedirect("insertbranddisplay.jsp");
+        }
+        
+        if(service.equalsIgnoreCase("addBrand")){
+            String name = request.getParameter("name");
+            BrandDAO brandDAO = new BrandDAO();
+            List<Brand> listBrand = new ArrayList<>();
+            boolean check = brandDAO.insertBrand(name);
+            if(check==true){
+                listBrand = brandDAO.getAll();
+                request.setAttribute("listBrand", listBrand);
+                request.setAttribute("mess", "Add Brand successful!");
+                request.getRequestDispatcher("insertbranddisplay.jsp").forward(request, response);
+            }
+            else{
+                               request.setAttribute("mess", "Add Brand Failed!");
+                request.getRequestDispatcher("insertbranddisplay.jsp").forward(request, response); 
+            }
+            
         }
 
     }

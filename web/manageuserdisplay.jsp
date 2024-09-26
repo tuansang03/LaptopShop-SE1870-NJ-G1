@@ -21,19 +21,26 @@
     <%@include file="sidebar.jsp" %>
     <style>
         .status-icon {
-            font-size: 24px; /* Tăng kích thước icon */
-            cursor: pointer; /* Thay đổi con trỏ khi hover */
-            transition: color 0.3s; /* Hiệu ứng chuyển màu */
+            font-size: 24px;
+            cursor: pointer;
+            transition: color 0.3s;
         }
 
         .status-icon:hover {
-            color: #28a745; /* Màu xanh khi hover */
+            color: #28a745;
         }
     </style>
 </head>
 <body>
     <div class="col-md-10 content">
         <h2>Manage Users</h2>
+
+        <!-- Thêm form tìm kiếm user -->
+        <form action="CustomerManageController" method="GET" class="form-inline mb-3">
+            <input type="text" name="keyword" class="form-control mr-2" placeholder="Search by username or email" value="${param.keyword}">
+            <input type="hidden" name="service" value="searchUser">
+            <button type="submit" class="btn btn-primary">Search</button>
+        </form>
 
         <!-- Thông báo -->
         <c:if test="${not empty mess}">
@@ -64,10 +71,10 @@
                         <td>
                             <c:choose>
                                 <c:when test="${user.status != 'ban'}">
-                                    <span class="text-success status-icon" onclick="updateStatus('${user.id}');">&#10003;</span> <!-- Dấu tích màu xanh -->
+                                    <span class="text-success status-icon" onclick="updateStatus('${user.id}');">&#10003;</span>
                                 </c:when>
                                 <c:otherwise>
-                                    <span class="text-danger status-icon">&#10006;</span> <!-- Dấu X màu đỏ -->
+                                    <span class="text-danger status-icon">&#10006;</span>
                                 </c:otherwise>
                             </c:choose>
                         </td>
@@ -79,7 +86,6 @@
         <script>
             function updateStatus(userId) {
                 if (confirm('Are you sure you want to ban this user?')) {
-                    // Chuyển hướng đến servlet với tham số
                     window.location.href = 'CustomerManageController?id=' + userId + '&service=banUser';
                 }
             }

@@ -80,6 +80,17 @@ public class UserManageController extends HttpServlet {
             request.setAttribute("listUser", listUser);
             request.getRequestDispatcher("manageuserdisplay.jsp").forward(request, response);
         }
+        
+        if(service.equalsIgnoreCase("searchUser")){
+            UserDAO userDAO = new UserDAO();
+            List<User> listUser = new ArrayList<>();
+            String key = request.getParameter("keyword");
+            listUser = userDAO.getUsersByKeyword(key);
+            request.setAttribute("listUser", listUser);
+            request.getRequestDispatcher("manageuserdisplay.jsp").forward(request, response);
+        }
+        
+
     } 
 
     /** 

@@ -79,11 +79,55 @@ public List<User> getAll() {
         }
     }
 }
+// private Connection connection; // Biến kết nối tới database
+
+    // Hàm tìm kiếm user theo từ khóa
+public List<User> getUsersByKeyword(String keyword) {
+    List<User> users = new ArrayList<>();
+    PreparedStatement stm = null;
+    ResultSet rs = null;
+
+    // Sử dụng tên bảng đầy đủ với schema nếu cần (ví dụ: dbo.User)
+    String sql = "SELECT * FROM dbo.[User]  WHERE userName LIKE ? OR email LIKE ?";
+
+    try {
+        stm = connection.prepareStatement(sql);
+        String searchPattern = "%" + keyword + "%";  // Sử dụng wildcard cho tìm kiếm
+        stm.setString(1, searchPattern);
+        stm.setString(2, searchPattern);
+        rs = stm.executeQuery();
+
+        while (rs.next()) {
+            User user = new User();
+            user.setId(rs.getInt("id"));
+            user.setUserName(rs.getString("userName"));
+            user.setFullName(rs.getString("fullName"));
+            user.setEmail(rs.getString("email"));
+            user.setStatus(rs.getString("status"));
+            // Thêm user vào danh sách
+            users.add(user);
+        }
+
+    } catch (SQLException ex) {
+        ex.printStackTrace();
+    } finally {
+        try {
+            if (rs != null) rs.close();
+            if (stm != null) stm.close();
+            // Không đóng connection ở đây
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    return users;
+}
 
 
 
-//    public static void main(String[] args) {
-//        UserDAO dao = new UserDAO();
-//        System.out.println(dao.getAll());
-//    }
+
+    public static void main(String[] args) {
+        UserDAO dao = new UserDAO();
+        System.out.println(dao.getUsersByKeyword("Loc"));
+    }
 }

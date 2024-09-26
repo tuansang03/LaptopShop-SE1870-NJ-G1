@@ -28,11 +28,23 @@
         .action-buttons .btn {
             padding: 5px 10px;
         }
+
+        /* Style cho nút Add Configuration */
+        .btn-add-config {
+            margin-bottom: 20px;
+        }
     </style>
 </head>
 <body>
     <div class="col-md-10 content">
         <h2>Manage Configuration</h2>
+        
+        <!-- Nút Add Configuration -->
+        <div class="mb-3">
+            <button class="btn btn-success btn-add-config" onclick="window.location.href='ConfigurationManageController?service=addConfig';">
+                <i class="fas fa-plus"></i> Add Configuration
+            </button>
+        </div>
 
         <!-- Thông báo -->
         <c:if test="${not empty mess}">
@@ -75,15 +87,11 @@
 
         <script>
             function editConfig(configId) {
-                if (confirm('Are you sure you want to edit this configuration?')) {
-                    // Chuyển hướng đến servlet với tham số
-                    window.location.href = 'ConfigurationManageController?id=' + configId + '&service=editConfig';
-                }
+                window.location.href = 'ConfigurationManageController?id=' + configId + '&service=editConfig';
             }
 
             function deleteConfig(configId) {
                 if (confirm('Are you sure you want to delete this configuration?')) {
-                    // Chuyển hướng đến servlet với tham số
                     window.location.href = 'ConfigurationManageController?id=' + configId + '&service=deleteConfig';
                 }
             }
