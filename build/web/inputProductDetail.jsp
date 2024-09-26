@@ -1,8 +1,12 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css">
 <!DOCTYPE html>
 <html lang="en">
     <head>
+    
+
+
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Product Variants</title>
@@ -10,21 +14,51 @@
         <script>
             function addImageUrl(containerId, productDetailId) {
                 const imageContainer = document.getElementById(containerId);
+
+                // Tạo một div mới để chứa input và nút xóa
+                const newDiv = document.createElement("div");
+                newDiv.className = "form-group mt-2"; // Thêm lớp để định dạng
+
+                // Tạo input cho URL
                 const newInput = document.createElement("input");
                 newInput.type = "text";
-                newInput.name = "imageUrls_" + productDetailId + "[]";  // Tên phải khớp với tên trong form ban đầu
-                newInput.className = "form-control mt-2";
+                newInput.name = "imageUrls_" + productDetailId + "[]";
+                newInput.className = "form-control";
                 newInput.placeholder = "Enter image URL";
-                imageContainer.appendChild(newInput);
+
+                // Tạo nút xóa
+                const deleteButton = document.createElement("button");
+                deleteButton.type = "button";
+                deleteButton.className = "btn btn-danger mt-2";
+                deleteButton.innerHTML = '<i class="bi bi-trash"></i>';
+                deleteButton.onclick = function () {
+                    newDiv.remove(); // Xóa div chứa input và nút xóa
+                };
+
+                // Thêm input và nút xóa vào div mới
+                newDiv.appendChild(newInput);
+                newDiv.appendChild(deleteButton);
+
+                // Thêm div mới vào container
+                imageContainer.appendChild(newDiv);
             }
 
-           
+
+
         </script>
     </head>
     <body>
+      
 
         <div class="container-fluid mt-5">
             <h2>Product Variants</h2>
+            <% String errorMessage = (String) session.getAttribute("errorMessage");
+   if (errorMessage != null) { %>
+   <div class="alert alert-danger">
+       <%= errorMessage %>
+   </div>
+<% session.removeAttribute("errorMessage"); } %>
+
             <form action="inputProductDetail" method="post">
                 <div class="row justify-content-center">
                     <div class="col-md-12">
@@ -35,6 +69,7 @@
                                     <!-- 1 Product -->
                                     <h5>Product Detail for ${p.product.name}</h5>
                                     <table class="table table-bordered">
+                                        
                                         <thead>
                                             <tr>
                                                 <th>Product Detail</th>
@@ -67,7 +102,7 @@
                                                                     <td>
                                                                         <input type="text" name="attribute_${p.id}_${att.id}" 
                                                                                class="form-control" 
-                                                                               placeholder="Enter ${att.name}">
+                                                                               placeholder="Enter ${att.name}" required>
                                                                     </td>
                                                                 </tr>
                                                             </c:forEach>
@@ -81,14 +116,15 @@
                                                 <!-- Image URLs -->
                                                 <td>
                                                     <div id="imageUrlContainer-${p.id}" class="form-group">
-                                                        <input type="text" name="imageUrls_${p.id}[]" class="form-control" placeholder="Enter image URL">
+                                                        <input type="text" name="imageUrls_${p.id}[]" class="form-control" placeholder="Enter image URL" required>
                                                     </div>
                                                     <button type="button" class="btn btn-secondary" onclick="addImageUrl('imageUrlContainer-${p.id}', '${p.id}')">Add Another Image URL</button>
                                                 </td>
 
                                                 <!-- Action Column: Nút xóa -->
                                                 <td>
-                                                    <button type="button" class="btn btn-danger" onclick="confirmDelete(${p.id})">Delete</button>
+                                                    <button type="button" class="btn btn-danger" onclick="confirmDelete(${p.id})"> <i class="bi bi-trash"></i></button>
+                                                   
                                                 </td>
 
                                         <script>
@@ -96,7 +132,7 @@
                                                 const confirmation = confirm("Are you sure you want to delete this product?");
                                                 if (confirmation) {
                                                     // Nếu người dùng xác nhận, điều hướng đến URL xóa
-                                                    window.location.href = "deletePDBeforeUpdate?" + productId;
+                                                    window.location.href = "deletePDBeforeUpdate?id=" + productId;
                                                 }
                                             }
                                         </script>

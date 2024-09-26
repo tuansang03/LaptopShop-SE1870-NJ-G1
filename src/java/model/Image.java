@@ -55,5 +55,10 @@ public class Image {
     public void setImage(String image) {
         this.image = image;
     }
+
+    @Override
+    public String toString() {
+        return "Image{" + "id=" + id + ", productDetail=" + productDetail + ", feedBack=" + feedBack + ", image=" + image + '}';
+    }
    
 }

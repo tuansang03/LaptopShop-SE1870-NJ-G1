@@ -4,7 +4,7 @@
 <!DOCTYPE html>
 <html lang="en">
     <head>
-    
+
 
 
         <meta charset="UTF-8">
@@ -45,31 +45,38 @@
 
 
 
+
         </script>
     </head>
     <body>
-      
+
 
         <div class="container-fluid mt-5">
-            <h2>Product Variants</h2>
+            <h2>Product Variants Update</h2>
             <% String errorMessage = (String) session.getAttribute("errorMessage");
    if (errorMessage != null) { %>
-   <div class="alert alert-danger">
-       <%= errorMessage %>
-   </div>
-<% session.removeAttribute("errorMessage"); } %>
+            <div class="alert alert-danger">
+                <%= errorMessage %>
+            </div>
+            <% session.removeAttribute("errorMessage"); } %>
 
-            <form action="inputProductDetail" method="post">
+            <form action="viewDetail" method="post">
+
                 <div class="row justify-content-center">
                     <div class="col-md-12">
                         <div class="card">
-                            <div class="card-header">Product Variants</div>
+                            <div class="card-header">Product Variants Update</div>
                             <div class="card-body">
+                                <div class="form-group">
+                                    <label for="productDescription">Description</label>
+                                    <textarea class="form-control" id="productDescription" name="description" rows="3" placeholder="Enter product description" required>${desc}</textarea>
+                                </div>
+
                                 <c:forEach var="p" items="${pDList}">
+
                                     <!-- 1 Product -->
                                     <h5>Product Detail for ${p.product.name}</h5>
                                     <table class="table table-bordered">
-                                        
                                         <thead>
                                             <tr>
                                                 <th>Product Detail</th>
@@ -93,38 +100,76 @@
                                                 <td>
                                                     <table class="table table-sm">
                                                         <thead>
-                                                            <tr><th>Attribute</th><th>Value</th></tr>
+                                                            <tr>
+                                                                <th>Attribute</th>
+                                                                <th>Value</th>
+                                                            </tr>
                                                         </thead>
                                                         <tbody>
+                                                            <!-- Lấy danh sách ProductAttribute cho từng ProductDetail -->
                                                             <c:forEach var="att" items="${attList}">
                                                                 <tr>
                                                                     <td>${att.name}</td>
                                                                     <td>
-                                                                        <input type="text" name="attribute_${p.id}_${att.id}" 
-                                                                               class="form-control" 
-                                                                               placeholder="Enter ${att.name}" required>
+                                                                        <c:set var="found" value="false"/> <!-- Biến để kiểm tra xem giá trị đã được tìm thấy -->
+                                                                        <c:forEach var="attMap" items="${attListMap[p.id]}">
+                                                                            <c:if test="${att.id == attMap.attribute.id}">
+                                                                                <input type="text" name="attribute_${p.id}_${attMap.attribute.id}" 
+                                                                                       class="form-control" 
+                                                                                       placeholder="Enter ${att.name}" 
+                                                                                       value="${attMap.value}">
+                                                                                <c:set var="found" value="true"/> <!-- Đánh dấu là đã tìm thấy -->
+                                                                            </c:if>
+                                                                        </c:forEach>
+                                                                        <c:if test="${!found}">
+                                                                            <input type="text" name="attribute_${p.id}_${att.id}" 
+                                                                                   class="form-control" 
+                                                                                   placeholder="Enter ${att.name}" 
+                                                                                   value="">
+                                                                        </c:if>
                                                                     </td>
                                                                 </tr>
                                                             </c:forEach>
                                                         </tbody>
                                                     </table>
+
                                                 </td>
 
                                                 <!-- Short Description -->
                                                 <td><input type="text" name="shortDescription_${p.id}" class="form-control" value="${p.shortDescription}" required></td>
 
+
                                                 <!-- Image URLs -->
                                                 <td>
                                                     <div id="imageUrlContainer-${p.id}" class="form-group">
-                                                        <input type="text" name="imageUrls_${p.id}[]" class="form-control" placeholder="Enter image URL" required>
+                                                        <c:forEach var="img" items="${imgListMap[p.id]}" varStatus="status">
+                                                            <div class="input-group mb-2">
+                                                                <input type="text" name="imageUrls_${p.id}[]" class="form-control" placeholder="Enter image URL" value="${img.image}" required>
+
+                                                                <!-- Nút xóa -->
+                                                                <form method="POST" action="deleteImage" style="display:inline;">
+                                                                    <input type="hidden" name="imageId" value="${img.id}">
+
+                                                                    <!-- Kiểm tra xem đây có phải là ảnh đầu tiên không -->
+                                                                    <c:if test="${status.first}">
+                                                                        <button type="button" class="btn btn-danger" disabled><i class="bi bi-trash"></i></button> <!-- Nút xóa bị vô hiệu hóa -->
+                                                                        </c:if>
+                                                                        <c:if test="${!status.first}">
+                                                                        <button type="submit" class="btn btn-danger"><i class="bi bi-trash"></i></button> <!-- Nút xóa bình thường -->
+                                                                        </c:if>
+                                                                </form>
+                                                            </div>
+                                                        </c:forEach>
                                                     </div>
                                                     <button type="button" class="btn btn-secondary" onclick="addImageUrl('imageUrlContainer-${p.id}', '${p.id}')">Add Another Image URL</button>
                                                 </td>
 
+
+
                                                 <!-- Action Column: Nút xóa -->
                                                 <td>
                                                     <button type="button" class="btn btn-danger" onclick="confirmDelete(${p.id})"> <i class="bi bi-trash"></i></button>
-                                                   
+
                                                 </td>
 
                                         <script>
@@ -132,7 +177,7 @@
                                                 const confirmation = confirm("Are you sure you want to delete this product?");
                                                 if (confirmation) {
                                                     // Nếu người dùng xác nhận, điều hướng đến URL xóa
-                                                    window.location.href = "deletePDBeforeUpdate?id=" + productId;
+                                                    window.location.href = "deletePDAfterUpdate?id=" + productId;
                                                 }
                                             }
                                         </script>
@@ -142,7 +187,7 @@
                                 </c:forEach>
 
                                 <!-- Submit tất cả sản phẩm -->
-                                <button type="submit" class="btn btn-success">Add All Products</button>
+                                <button type="submit" class="btn btn-success">Update All Products</button>
                             </div>
                         </div>
                     </div>

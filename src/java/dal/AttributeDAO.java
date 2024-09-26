@@ -12,6 +12,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import model.Attribute;
 import model.Brand;
+import model.ProductAttribute;
 
 /**
  *
@@ -36,4 +37,6 @@ public class AttributeDAO extends DBContext {
         }
         return null;
     }
+         
+
 }

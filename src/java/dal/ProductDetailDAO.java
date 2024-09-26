@@ -106,6 +106,10 @@ public class ProductDetailDAO extends DBContext {
                 config.setId(rs.getInt(6));
                 config.setName(rs.getString(7));
                 d.setConfiguration(config);
+                d.setPrice(rs.getInt(8));
+                d.setQuantity(rs.getInt(9));
+                d.setShortDescription(rs.getString(10));
+                d.setDescription(rs.getString(11));
                 productDetails.add(d);
             }
             return productDetails;
@@ -133,5 +137,86 @@ public class ProductDetailDAO extends DBContext {
             Logger.getLogger(ProductDetailDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
+public void deletePDBeforeUpdate(int id){
+    String sql="DELETE FROM ProductDetail WHERE Id = ?";
+        try {
+            PreparedStatement pre =connection.prepareStatement(sql);
+            pre.setInt(1, id);
+            pre.executeQuery();
+        } catch (SQLException ex) {
+            Logger.getLogger(ProductDetailDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    
+}
 
+public void deletePDById(int id){
+    String sql ="DELETE FROM [Image]\n" +
+"WHERE ProductDetailId = ?;\n" +
+"\n" +
+"DELETE FROM Product_Attribute\n" +
+"WHERE ProductDetailId = ?;\n" +
+"\n" +
+"DELETE FROM ProductDetail\n" +
+"WHERE Id= ?;";
+        try {
+            PreparedStatement pre =connection.prepareStatement(sql);
+            pre.setInt(1, id);
+            pre.setInt(2, id);
+            pre.setInt(3, id);
+            pre.executeQuery();
+        } catch (SQLException ex) {
+            Logger.getLogger(ProductDetailDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    
+            
+}
+
+public void updateProductDetail(ProductDetail product){
+    String sql ="UPDATE [dbo].[ProductDetail]\n" +
+"   SET \n" +
+"      [Price] = ?\n" +
+"      ,[Quantity] = ?\n" +
+"      ,[ShortDescription] = ?\n" +
+"      ,[Description] = ?\n" +
+"      \n" +
+" WHERE Id = ?";
+        try {
+            PreparedStatement pre = connection.prepareStatement(sql);
+            pre.setInt(1, product.getPrice()); // Thiết lập giá trị cho Price
+        pre.setInt(2, product.getQuantity()); // Thiết lập giá trị cho Quantity
+        pre.setString(3, product.getShortDescription()); // Thiết lập giá trị cho ShortDescription
+        pre.setString(4, product.getDescription()); // Thiết lập giá trị cho Description
+        pre.setInt(5, product.getId());
+        pre.executeUpdate();
+        } catch (SQLException ex) {
+            Logger.getLogger(ProductDetailDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+}
+public void updateProductDetailAttribute(ProductAttribute productAttribute) {
+    String sql = "UPDATE [dbo].Product_Attribute SET [Value] = ? WHERE [ProductDetailId] = ? AND [AttributeId] = ?";
+
+    try (PreparedStatement pre = connection.prepareStatement(sql)) {
+        pre.setString(1, productAttribute.getValue());
+        pre.setInt(2, productAttribute.getProductdetail().getId());
+        pre.setInt(3, productAttribute.getAttribute().getId());
+
+        int rowsAffected = pre.executeUpdate();
+        if (rowsAffected > 0) {
+            System.out.println("ProductAttribute updated successfully: " + productAttribute.getValue());
+        } else {
+            System.out.println("No ProductAttribute found for update.");
+        }
+    } catch (SQLException ex) {
+        Logger.getLogger(ProductDetailDAO.class.getName()).log(Level.SEVERE, null, ex);
+    }
+}
+
+public void deletePDAfterUpdate(int id){
+    
+}
+    public static void main(String[] args) {
+        ProductDetailDAO dao = new ProductDetailDAO();
+        ArrayList<ProductDetail> pDList = dao.getAllProductDetailById(138);
+        System.out.println(pDList);
+    }
 }

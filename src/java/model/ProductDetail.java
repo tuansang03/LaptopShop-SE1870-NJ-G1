@@ -4,11 +4,14 @@
  */
 package model;
 
+import java.util.ArrayList;
+
 /**
  *
  * @author ADMIN
  */
 public class ProductDetail {
+
     private int id;
     private Product product;
     private Color color;
@@ -18,6 +21,26 @@ public class ProductDetail {
     private String shortDescription;
     private String description;
     private String status;
+    private ArrayList<ProductAttribute> productAttributes; // Đã thêm thuộc tính này
+    private ArrayList<ProductAttribute> attributes;
+
+    public ArrayList<ProductAttribute> getProductAttributes() {
+        return productAttributes;
+    }
+
+    public void setProductAttributes(ArrayList<ProductAttribute> productAttributes) {
+        this.productAttributes = productAttributes;
+    }
+
+    public ArrayList<ProductAttribute> getAttributes() {
+        return attributes;
+    }
+
+    public void setAttributes(ArrayList<ProductAttribute> attributes) {
+        this.attributes = attributes;
+    }
+
+   
 
     public ProductDetail() {
     }
@@ -110,6 +133,5 @@ public class ProductDetail {
     public String toString() {
         return "ProductDetail{" + "id=" + id + ", product=" + product + ", color=" + color + ", configuration=" + configuration + ", price=" + price + ", quantity=" + quantity + ", shortDescription=" + shortDescription + ", description=" + description + ", status=" + status + '}';
     }
-    
-    
+
 }

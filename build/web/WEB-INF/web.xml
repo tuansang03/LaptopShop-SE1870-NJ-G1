@@ -40,6 +40,26 @@
         <servlet-name>inputProductDetail</servlet-name>
         <servlet-class>controller.inputProductDetail</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>deletePDBeforeUpdate</servlet-name>
+        <servlet-class>controller.deletePDBeforeUpdate</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>deleteProduct</servlet-name>
+        <servlet-class>controller.deleteProduct</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>viewDetail</servlet-name>
+        <servlet-class>controller.viewDetail</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>deletePDAfterUpdate</servlet-name>
+        <servlet-class>controller.deletePDAfterUpdate</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>deleteImage</servlet-name>
+        <servlet-class>controller.deleteImage</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>register</servlet-name>
         <url-pattern>/register</url-pattern>
@@ -79,5 +99,25 @@
     <servlet-mapping>
         <servlet-name>inputProductDetail</servlet-name>
         <url-pattern>/inputProductDetail</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>deletePDBeforeUpdate</servlet-name>
+        <url-pattern>/deletePDBeforeUpdate</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>deleteProduct</servlet-name>
+        <url-pattern>/deleteProduct</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>viewDetail</servlet-name>
+        <url-pattern>/viewDetail</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>deletePDAfterUpdate</servlet-name>
+        <url-pattern>/deletePDAfterUpdate</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>deleteImage</servlet-name>
+        <url-pattern>/deleteImage</url-pattern>
     </servlet-mapping>
 </web-app>

@@ -14,6 +14,12 @@
         <link rel="stylesheet" href="assets/css/animate.css">
         <link rel="stylesheet" href="assets/css/main.css">
 
+        <script>
+            function confirmDelete() {
+                return confirm("Are you sure you want to delete this product?");
+            }
+        </script>
+
         <%@include file="sidebar.jsp" %>
 
     <div class="col-md-10 content">
@@ -22,9 +28,9 @@
             <thead>
                 <tr>
                     <th>ID</th>
+                    <th>Name</th>
                     <th>Brand</th>
                     <th>Category</th>
-                    <th>Name</th>
                     <th>Action</th>
                 </tr>
             </thead>
@@ -32,37 +38,32 @@
                 <c:forEach var="p" items="${pList}">
                     <tr>
                         <td>${p.id}</td>
+                        <td>${p.name}</td>
                         <td>${p.brand.name}</td>
                         <td>${p.category.name}</td>
-                        <td>${p.name}</td>
-                        <td>  <a href="addDetail?p.id">Add detail</a></td>
+                        <td>
+                            <a href="viewDetail?id=${p.id}">View detail</a> 
+                            <a href="deleteProduct?id=${p.id}" onclick="return confirmDelete();">
+                                <i class="fas fa-trash-alt" style="color:red;"></i>
+                            </a>
+                        </td>
                     </tr>
                 </c:forEach>
             </tbody>
         </table>
 
         <div>
-            <!-- Nút để mở modal thêm sản phẩm -->
-            
-                <!-- Các trường input khác -->
-                <a href="addProduct">Add product</a>
-          
-
-
-            <!-- Modal (Pop-up) thêm sản phẩm -->
-           
-
-            <!-- Phân trang -->
+            <a href="addProduct">Add product</a>
             <div class="list-page">
                 <div class="item">
                     <c:if test="${tag > 1}">
-                        <a href="managePost?index=${tag - 1}"><i class="fa fa-long-arrow-left"></i><-</a>
+                        <a href="readProduct?index=${tag - 1}"><i class="fa fa-long-arrow-left"></i><-</a>
                     </c:if>
                     <c:forEach begin="1" end="${endPage}" var="i">
-                        <a class="${tag == i ? 'active' : ''}" href="managePost?index=${i}">${i}</a>
+                        <a class="${tag == i ? 'active' : ''}" href="readProduct?index=${i}">${i}</a>
                     </c:forEach>
                     <c:if test="${tag < endPage}">
-                        <a href="managePost?index=${tag + 1}"><i class="fa fa-long-arrow-right">-></i></a>
+                        <a href="readProduct?index=${tag + 1}"><i class="fa fa-long-arrow-right">-></i></a>
                     </c:if>
                 </div>
             </div>
@@ -97,7 +98,6 @@
         </style>
     </div>
 
-    <!-- Import Bootstrap và jQuery -->
     <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </body>
