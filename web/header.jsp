@@ -1,4 +1,9 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@ page import="java.util.List" %>
+<%@ page import="model.User" %>
+<%@ page import="dal.CartDAOS" %>
+<%@ page import="model.Cart" %>
+<%@ page import="model.CartItem" %>
 <!DOCTYPE html>
 <html>
     <head>
@@ -73,12 +78,28 @@
                                 <li class="nav-item"><a class="nav-link" href="contact.jsp">Contact</a></li>
                             </ul>
 
+                            <%
+                                 List<CartItem> listCart = null;
+                                 
+                                 User user = (User) session.getAttribute("user");
+                                 CartDAOS cartDAO = new CartDAOS();
+                                 if (!(user == null)) {
+                                    Cart cart = cartDAO.getCartByUserID(user.getId());
+                                    listCart = cartDAO.getAllProductOfCartItem(cart.getId());
+                                 }   
+                                    
+                                 int quantity = 0;
+                                    if(!(listCart == null)) {
+                                        quantity = listCart.size();
+                                    }
+                            %>
+                            
                             <ul class="nav-shop">
                                 <li class="nav-item"><button><i class="ti-search"></i></button></li>
                                 <li class="nav-item">
                                     <a href="loadProductCart">
                                         <button>
-                                            <i class="ti-shopping-cart"></i><span class="nav-shop__circle">3</span>
+                                            <i class="ti-shopping-cart"></i><span class="nav-shop__circle"><%= quantity%></span>
                                         </button>
                                     </a>
                                         
