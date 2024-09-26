@@ -47,139 +47,154 @@
             <div class="container">
                 <div class="row s_product_inner">
                     <div class="col-lg-6">
-                      <head>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.carousel.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.theme.default.min.css">
+                        <head>
+                            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.carousel.min.css">
+                            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.theme.default.min.css">
 
-    <style>
-        .main-image {
-            position: relative;
-            width: 100%;
-            height: auto;
-            margin-bottom: 10px;
-        }
+                            <style>
+                                .main-image {
+                                    position: relative;
+                                    width: 100%;
+                                    height: auto;
+                                    margin-bottom: 10px;
+                                }
 
-        .main-image img {
-            width: 100%;
-            height: auto;
-            object-fit: cover;
-        }
+                                .main-image img {
+                                    width: 100%;
+                                    height: auto;
+                                    object-fit: cover;
+                                }
 
-        /* Thumbnail Carousel Section */
-        .thumbnail-carousel {
-            margin-top: 5px;
-        }
+                                /* Thumbnail Carousel Section */
+                                .thumbnail-carousel {
+                                    margin-top: 5px;
+                                }
 
-        .thumbnail-item {
-            display: inline-block;
-            cursor: pointer;
-        }
+                                .thumbnail-item {
+                                    display: inline-block;
+                                    cursor: pointer;
+                                }
 
-        .thumbnail-item img {
-            width: 80px;
-            height: 80px;
-            object-fit: cover;
-            border: 2px solid #ddd;
-            margin-right: 10px;
-        }
+                                .thumbnail-item img {
+                                    width: 80px;
+                                    height: 80px;
+                                    object-fit: cover;
+                                    border: 2px solid #ddd;
+                                    margin-right: 10px;
+                                }
 
-        .thumbnail-item img:hover {
-            border-color: #333;
-        }
+                                .thumbnail-item img:hover {
+                                    border-color: #333;
+                                }
 
-        /* Style for navigation buttons */
-        .owl-nav button {
-            position: absolute;
-            top: 50%;
-            transform: translateY(-50%);
-            background-color: rgba(0, 0, 0, 0.5);
-            color: white;
-            font-size: 30px;
-            border: none;
-            padding: 10px;
-            cursor: pointer;
-        }
+                                /* Style for navigation buttons */
+                                .owl-nav button {
+                                    position: absolute;
+                                    top: 50%;
+                                    transform: translateY(-50%);
+                                    background-color: rgba(0, 0, 0, 0.5);
+                                    color: white;
+                                    font-size: 30px;
+                                    border: none;
+                                    padding: 10px;
+                                    cursor: pointer;
+                                }
 
-        .owl-nav button.owl-prev {
-            left: -30px;
-        }
+                                .owl-nav button.owl-prev {
+                                    left: -30px;
+                                }
 
-        .owl-nav button.owl-next {
-            right: -30px;
-        }
+                                .owl-nav button.owl-next {
+                                    right: -30px;
+                                }
 
-        .owl-nav button:hover {
-            background-color: rgba(0, 0, 0, 0.8);
-        }
+                                .owl-nav button:hover {
+                                    background-color: rgba(0, 0, 0, 0.8);
+                                }
 
-        .owl-nav button span {
-            display: block;
-            width: 30px;
-            height: 30px;
-            text-align: center;
-            line-height: 30px;
-        }
+                                .owl-nav button span {
+                                    display: block;
+                                    width: 30px;
+                                    height: 30px;
+                                    text-align: center;
+                                    line-height: 30px;
+                                }
 
-        /* Spacing between thumbnail carousel and main image */
-        .thumbnail-carousel {
-            margin-top: 10px;
-        }
-    </style>
-</head>
+                                /* Spacing between thumbnail carousel and main image */
+                                .thumbnail-carousel {
+                                    margin-top: 10px;
+                                }
 
-<body>
-    <div class="main-image">
-        <div class="owl-carousel owl-theme s_Product_carousel">
-            <c:forEach items="${image}" var="i">
-                <img class="img-fluid large-image" src="${i.image}" alt="">
-            </c:forEach>
-        </div>
-    </div>
+                                button {
+                                    padding: 10px 20px;
+                                    margin: 5px;
+                                    border: 1px solid #ccc;
+                                    background-color: #f0f0f0;
+                                    cursor: pointer;
+                                }
 
-    <!-- Thumbnails Section -->
-    <div class="thumbnail-carousel owl-carousel owl-theme">
-        <c:forEach items="${image}" var="i">
-            <div class="thumbnail-item">
-                <img class="img-thumbnail small-image" src="${i.image}" alt="">
-            </div>
-        </c:forEach>
-    </div>
+                                button.btn-selected {
+                                    background-color: #007bff;
+                                    color: white;
+                                    border: 1px solid #007bff;
+                                }
 
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js"></script>
+                            </style>
+                        </head>
 
-    <script>
-        $(document).ready(function() {
-            // Initialize the main image carousel
-            var mainCarousel = $('.s_Product_carousel').owlCarousel({
-                items: 1,
-                loop: true,
-                dots: false,
-                nav: true,
-                navText: ['<span>&lt;</span>', '<span>&gt;</span>'],
-                autoplay: false
-            });
+                        <body>
+                            <div class="main-image">
+                                <div class="owl-carousel owl-theme s_Product_carousel">
+                                    <c:forEach items="${image}" var="i">
+                                        <img class="img-fluid large-image" src="${i.image}" alt="">
+                                    </c:forEach>
+                                </div>
+                            </div>
 
-            // Initialize the thumbnail carousel
-            var thumbnailCarousel = $('.thumbnail-carousel').owlCarousel({
-                items: 4,
-                margin: 10,
-                dots: false,
-                nav: true,
-                autoplay: false
-            });
+                            <!-- Thumbnails Section -->
+                            <div class="thumbnail-carousel owl-carousel owl-theme">
+                                <c:forEach items="${image}" var="i">
+                                    <div class="thumbnail-item">
+                                        <img class="img-thumbnail small-image" src="${i.image}" alt="">
+                                    </div>
+                                </c:forEach>
+                            </div>
 
-            // On thumbnail click, change the main image
-            $('.thumbnail-item').on('click', function() {
-                var index = $(this).index();
-                mainCarousel.trigger('to.owl.carousel', [index, 300]); // Navigate to the clicked thumbnail index
+                            <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+                            <script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js"></script>
 
-                // Cập nhật khung ảnh lớn với ảnh thumbnail được chọn
-                $('.large-image').attr('src', $(this).find('img').attr('src'));
-            });
-        });
-    </script>
-</body>
+                            <script>
+                                $(document).ready(function () {
+                                    // Initialize the main image carousel
+                                    var mainCarousel = $('.s_Product_carousel').owlCarousel({
+                                        items: 1,
+                                        loop: true,
+                                        dots: false,
+                                        nav: true,
+                                        navText: ['<span>&lt;</span>', '<span>&gt;</span>'],
+                                        autoplay: false
+                                    });
+
+                                    // Initialize the thumbnail carousel
+                                    var thumbnailCarousel = $('.thumbnail-carousel').owlCarousel({
+                                        items: 4,
+                                        margin: 10,
+                                        dots: false,
+                                        nav: true,
+                                        autoplay: false
+                                    });
+
+                                    // On thumbnail click, change the main image
+                                    $('.thumbnail-item').on('click', function () {
+                                        var index = $(this).index();
+                                        mainCarousel.trigger('to.owl.carousel', [index, 300]); // Navigate to the clicked thumbnail index
+
+                                        // Cập nhật khung ảnh lớn với ảnh thumbnail được chọn
+                                        $('.large-image').attr('src', $(this).find('img').attr('src'));
+                                    });
+                                });
+                            </script>
+                        </body>
 
 
 
@@ -191,17 +206,40 @@
                                 <li><a class="active" href="listproduct?brand=${detail.product.brand.name}"><span>Brand</span>: ${detail.product.brand.name}</a></li>
                                 <li><a class="active" href="listproduct?category=${detail.product.category.name}"><span>Category</span>: ${detail.product.category.name}</a></li>
                             </ul>
-                            <p>
-                             RAM & ROM: ${detail.configuration.name}
-                             Color: ${detail.color.name}
-                            </p>
-                            <h2>${detail.price} VNĐ</h2>
+                            <br>
+                            RAM & ROM:
+                            <form action="information" method="get">
+                                <c:forEach items="${config}" var="c">
+                                    <button type="submit" name="productId" value="${c.id}" 
+                                            class="<c:if test='${selectedConfigId == c.id}'>btn-selected</c:if>">
+                                        ${c.name}
+                                    </button>
+                                </c:forEach>
+                            </form>
+                            Color:
+                            <form action="information" method="get">
+                                <c:forEach items="${color}" var="c">
+                                    <button type="submit" name="productId" value="${c.id}" 
+                                            class="<c:if test='${selectedColorId == c.id}'>btn-selected</c:if>">
+                                        ${c.name}
+                                    </button>
+                                </c:forEach>
+                            </form>
+                            <ul class="list">
+                                <li><a class="active"><span>Quantity</span>: ${detail.quantity}</a></li>
+                            </ul>
+
+                            
+                            <br>
+                            <h2>${price}</h2>
                             <p>${detail.shortDescription}</p>
                             <div class="product_count">
                                 <label for="qty">Quantity:</label>
-                                <button onclick="var result = document.getElementById('sst'); var sst = result.value; if (!isNaN(sst))
-                          result.value++;
-                      return false;"
+                                <button onclick="var result = document.getElementById('sst');
+                                        var sst = result.value;
+                                        if (!isNaN(sst))
+                                            result.value++;
+                                        return false;"
                                         class="increase items-count" type="button"><i class="ti-angle-left"></i></button>
                                 <input type="text" name="qty" id="sst" size="2" maxlength="12" value="1" title="Quantity:" class="input-text qty">
                                 <button onclick="var result = document.getElementById('sst'); var sst = result.value; if (!isNaN(sst) & amp; & amp; sst > 0) result.value--; return false;"
@@ -242,23 +280,23 @@
                 <div class="tab-content" id="myTabContent">
                     <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
                         <p>${detail.description}</p>
-                 
+
                     </div>
                     <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
                         <div class="table-responsive">
                             <table class="table">
                                 <tbody>
                                     <c:forEach items="${attribute}" var="a">
-                                    <tr>
-                                        <td>
-                                            <h5>${a.attribute.name}</h5>
-                                        </td>
-                                        <td>
-                                            <h5>${a.value}</h5>
-                                        </td>
-                                    </tr>    
+                                        <tr>
+                                            <td>
+                                                <h5>${a.attribute.name}</h5>
+                                            </td>
+                                            <td>
+                                                <h5>${a.value}</h5>
+                                            </td>
+                                        </tr>    
                                     </c:forEach>
-                                    
+
                                 </tbody>
                             </table>
                         </div>

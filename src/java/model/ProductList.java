@@ -16,12 +16,12 @@ public class ProductList {
     String brand;
     String category;
     String img;
-    int price;
+    String price;
 
     public ProductList() {
     }
 
-    public ProductList(int id, int detail, String name, String brand, String category, String img, int price) {
+    public ProductList(int id, int detail, String name, String brand, String category, String img, String price) {
         this.id = id;
         this.detail = detail;
         this.name = name;
@@ -79,12 +79,13 @@ public class ProductList {
         this.img = img;
     }
 
-    public int getPrice() {
+    public String getPrice() {
         return price;
     }
 
-    public void setPrice(int price) {
+    public void setPrice(String price) {
         this.price = price;
     }
+
 
 }

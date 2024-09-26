@@ -10,7 +10,7 @@ import java.sql.SQLException;
 import java.util.List;
 import java.util.ArrayList;
 import model.*;
-
+import java.text.DecimalFormat;
 /**
  *
  * @author PHONG
@@ -159,7 +159,7 @@ public class ProductDAO extends DBContext {
                         re.getString("brand"),
                         re.getString("category"),
                         re.getString("img"),
-                        re.getInt("price")
+                        formatCurrency(re.getInt("price"))
                 );
                 list.add(p);
 
@@ -169,6 +169,11 @@ public class ProductDAO extends DBContext {
 
         return list;
 
+    }
+    
+    public static String formatCurrency(int amount) {
+        DecimalFormat formatter = new DecimalFormat("#,###");
+        return formatter.format(amount) + " VNĐ";
     }
 
     public List<Image> getImageById(int id) {
@@ -225,7 +230,7 @@ public class ProductDAO extends DBContext {
 
     public List<ProductAttribute> getAttributeById(int id) {
         List<ProductAttribute> list = new ArrayList<>();
-        String sql = "select * from Product_Attribute where ProductDetailId = "+id+" order by AttributeId";
+        String sql = "select * from Product_Attribute where ProductDetailId = " + id + " order by AttributeId";
         try {
             PreparedStatement st = connection.prepareStatement(sql);
             ResultSet re = st.executeQuery();
@@ -243,7 +248,7 @@ public class ProductDAO extends DBContext {
 
         return list;
     }
-    
+
     public Attribute getAttribute(int id) {
         String sql = "SELECT * FROM Attribute WHERE id = ?";
         try (PreparedStatement st = connection.prepareStatement(sql)) {
@@ -259,5 +264,60 @@ public class ProductDAO extends DBContext {
         }
 
         return null;
+    }
+
+    public List<Configuration> listConfigurationById(int id) {
+        List<Configuration> list = new ArrayList<>();
+        String sql = "SELECT pd.Id, c.Name\n"
+                + "FROM ProductDetail pd\n"
+                + "JOIN Configuration c ON c.Id = pd.ConfigurationId\n"
+                + "WHERE pd.ProductId = (SELECT ProductId FROM ProductDetail WHERE Id = " + id + ")";
+        try {
+            PreparedStatement st = connection.prepareStatement(sql);
+            ResultSet re = st.executeQuery();
+            while (re.next()) {
+                Configuration c = new Configuration(
+                        re.getInt("id"),
+                        re.getString("name"));
+                list.add(c);
+            }
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
+
+        return list;
+    }
+
+    public List<Color> listColorById(int id, int cid) {
+        List<Color> list = new ArrayList<>();
+        String sql = "select pd.Id, c.Name\n"
+                + "from ProductDetail pd\n"
+                + "join Color c on c.Id=pd.ColorId\n"
+                + "and ProductId=(SELECT ProductId FROM ProductDetail WHERE Id ="+id+")\n"
+                + "and pd.ConfigurationId="+cid;
+        try {
+            PreparedStatement st = connection.prepareStatement(sql);
+            ResultSet re = st.executeQuery();
+            while (re.next()) {
+                Color c = new Color(
+                        re.getInt("id"),
+                        re.getString("name"));
+                list.add(c);
+            }
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
+
+        return list;
+    }
+
+    public static void main(String[] args) {
+        ProductDAO dao = new ProductDAO();
+        List<Color> color = dao.listColorById(1, 1);
+        for (int i = 0; i < color.size(); i++) {
+            System.out.println(i);
+            System.out.println(color.get(i).getId() + ", " + color.get(i).getName());
+        }
+
     }
 }

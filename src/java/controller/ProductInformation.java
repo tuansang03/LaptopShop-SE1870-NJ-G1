@@ -14,7 +14,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import dal.ProductDAO;
 import model.*;
 import java.util.List;
-
+import java.text.DecimalFormat;
 /**
  *
  * @author PHONG
@@ -61,38 +61,33 @@ public class ProductInformation extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         ProductDAO d = new ProductDAO();
+        
         int id = Integer.parseInt(request.getParameter("productId"));
         List<Image> list = d.getImageById(id);
         ProductDetail pd = d.getProductDetail(id);
+        List<Configuration> con = d.listConfigurationById(id);
         List<ProductAttribute> pa = d.getAttributeById(id);
+        int selectedConfigId=pd.getConfiguration().getId();
+        int selectedColorId=pd.getColor().getId();
+        List<Color> col=d.listColorById(id, selectedConfigId);
+        String price = formatCurrency( d.getProductDetail(id).getPrice());
         request.setAttribute("detail", pd);
         request.setAttribute("attribute", pa);
+        request.setAttribute("config", con);
+        request.setAttribute("selectedConfigId", selectedConfigId);
+        request.setAttribute("selectedColorId", selectedColorId);
         request.setAttribute("image", list);
+        request.setAttribute("color", col);
+        request.setAttribute("price", price);
+        
         request.getRequestDispatcher("single-product.jsp").forward(request, response);
     }
 
-    /**
-     * Handles the HTTP <code>POST</code> method.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
-    @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        processRequest(request, response);
-    }
+    public static String formatCurrency(int amount) {
+        DecimalFormat formatter = new DecimalFormat("#,###");
 
-    /**
-     * Returns a short description of the servlet.
-     *
-     * @return a String containing servlet description
-     */
-    @Override
-    public String getServletInfo() {
-        return "Short description";
-    }// </editor-fold>
+        // Định dạng số và thêm "VNĐ" ở cuối
+        return formatter.format(amount) + " VNĐ";
+    }
 
 }

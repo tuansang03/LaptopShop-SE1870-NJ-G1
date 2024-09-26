@@ -255,7 +255,7 @@
                                         <h3>${p.name}</h3>
 
                                         <!-- Hiển thị giá tiền -->
-                                        <p>Giá: ${p.price} VND</p>
+                                        <p>Giá: ${p.price}</p>
                                     </div>
                                 </a>
                             </c:forEach>
