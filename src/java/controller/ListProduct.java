@@ -12,8 +12,10 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import dal.ProductDAO;
+import java.util.ArrayList;
 import model.*;
 import java.util.List;
+
 /**
  *
  * @author PHONG
@@ -38,7 +40,7 @@ public class ListProduct extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet ListProduct</title>");            
+            out.println("<title>Servlet ListProduct</title>");
             out.println("</head>");
             out.println("<body>");
             out.println("<h1>Servlet ListProduct at " + request.getContextPath() + "</h1>");
@@ -60,16 +62,45 @@ public class ListProduct extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         ProductDAO d = new ProductDAO();
-        String category = request.getParameter("category");
-        String brand = request.getParameter("brand");
+        
         String price = request.getParameter("price");
         String name = request.getParameter("name");
-        List <ProductList>  list = d.listProduct(category, brand, price, name);
-        request.setAttribute("category", category);
-        request.setAttribute("brand", brand);
+        // Get selected brands and categories as arrays
+        String[] selectedBrands = request.getParameterValues("brand[]");
+        String[] selectedCategories = request.getParameterValues("category[]");
+        List<Brand> brandlist = d.listBrand();
+        List<Category> categorylist = d.listCategory();
+        List<ProductList> list = new ArrayList<>();
+        if(selectedBrands==null && selectedCategories==null){
+             list = d.listProduct(null,null, price, name);
+        }else{
+             list = d.listProduct(convert(selectedCategories),convert(selectedBrands), price, name);
+        }
+       
+        
+        request.setAttribute("a", convert(selectedCategories));
+        request.setAttribute("b", convert(selectedBrands));
+        
+        request.setAttribute("brandlist", brandlist);
+        request.setAttribute("categorylist", categorylist);
         request.setAttribute("price", price);
         request.setAttribute("productlist", list);
         request.getRequestDispatcher("category.jsp").forward(request, response);
+    }
+
+    public String convert(String[] array) {
+        if (array == null || array.length == 0) {
+            return null; // Trả về chuỗi rỗng nếu mảng null hoặc trống
+        }
+
+        StringBuilder result = new StringBuilder();
+        for (int i = 0; i < array.length; i++) {
+            result.append("'").append(array[i]).append("'"); // Thêm dấu ngoặc đơn
+            if (i < array.length - 1) {
+                result.append(","); // Thêm dấu phẩy giữa các phần tử
+            }
+        }
+        return result.toString();
     }
 
 }

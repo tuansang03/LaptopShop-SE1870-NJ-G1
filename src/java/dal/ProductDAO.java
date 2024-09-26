@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.ArrayList;
 import model.*;
 import java.text.DecimalFormat;
+
 /**
  *
  * @author PHONG
@@ -118,7 +119,7 @@ public class ProductDAO extends DBContext {
                 + "           c.[Name] AS category, \n"
                 + "           im.[Image] AS img, \n"
                 + "           pd.Price AS price,\n"
-                + "           ROW_NUMBER() OVER (PARTITION BY p.Id ORDER BY pd.Id) AS rn -- Đánh số thứ tự theo ProductId và lấy ProductDetailId đầu tiên\n"
+                + "           ROW_NUMBER() OVER (PARTITION BY p.Id ORDER BY pd.Id) AS rn\n"
                 + "    FROM Product p\n"
                 + "    JOIN ProductDetail pd ON pd.ProductId = p.Id\n"
                 + "    JOIN [Image] im ON im.ProductDetailId = pd.Id\n"
@@ -130,10 +131,10 @@ public class ProductDAO extends DBContext {
                 + "WHERE rn = 1";
 
         if (category != null) {
-            sql += " and category ='" + category + "'";
+            sql += " and category in (" + category + ")";
         }
         if (brand != null) {
-            sql += " and brand ='" + brand + "'";
+            sql += " and brand in (" + brand + ")";
         }
         if (price != null) {
             if (price.compareTo("default") == 0) {
@@ -170,10 +171,48 @@ public class ProductDAO extends DBContext {
         return list;
 
     }
-    
+
     public static String formatCurrency(int amount) {
         DecimalFormat formatter = new DecimalFormat("#,###");
         return formatter.format(amount) + " VNĐ";
+    }
+
+    public List<Brand> listBrand() {
+        List<Brand> list = new ArrayList<>();
+        String sql = "select * from Brand";
+        try {
+            PreparedStatement st = connection.prepareStatement(sql);
+            ResultSet re = st.executeQuery();
+            while (re.next()) {
+                Brand b = new Brand(
+                        re.getInt("id"),
+                        re.getString("name"));
+                list.add(b);
+            }
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
+
+        return list;
+    }
+
+    public List<Category> listCategory() {
+        List<Category> list = new ArrayList<>();
+        String sql = "select * from Category";
+        try {
+            PreparedStatement st = connection.prepareStatement(sql);
+            ResultSet re = st.executeQuery();
+            while (re.next()) {
+                Category b = new Category(
+                        re.getInt("id"),
+                        re.getString("name"));
+                list.add(b);
+            }
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
+
+        return list;
     }
 
     public List<Image> getImageById(int id) {
@@ -293,8 +332,8 @@ public class ProductDAO extends DBContext {
         String sql = "select pd.Id, c.Name\n"
                 + "from ProductDetail pd\n"
                 + "join Color c on c.Id=pd.ColorId\n"
-                + "and ProductId=(SELECT ProductId FROM ProductDetail WHERE Id ="+id+")\n"
-                + "and pd.ConfigurationId="+cid;
+                + "and ProductId=(SELECT ProductId FROM ProductDetail WHERE Id =" + id + ")\n"
+                + "and pd.ConfigurationId=" + cid;
         try {
             PreparedStatement st = connection.prepareStatement(sql);
             ResultSet re = st.executeQuery();
@@ -312,12 +351,29 @@ public class ProductDAO extends DBContext {
     }
 
     public static void main(String[] args) {
-        ProductDAO dao = new ProductDAO();
-        List<Color> color = dao.listColorById(1, 1);
-        for (int i = 0; i < color.size(); i++) {
+        /*ProductDAO dao = new ProductDAO();
+        List<ProductList> list = dao.listProduct(null, "'MacBook','Acer','ASUS'", null, null);
+        for (int i = 0; i < list.size(); i++) {
             System.out.println(i);
-            System.out.println(color.get(i).getId() + ", " + color.get(i).getName());
+            System.out.println(list.get(i).getId() + ", " + list.get(i).getName());
+        }*/
+        String[] c = {};
+        System.out.println(convert(c));
+
+    }
+
+    public static String convert(String[] array) {
+        if (array == null || array.length == 0) {
+            return ""; // Trả về chuỗi rỗng nếu mảng null hoặc trống
         }
 
+        StringBuilder result = new StringBuilder();
+        for (int i = 0; i < array.length; i++) {
+            result.append("'").append(array[i]).append("'"); // Thêm dấu ngoặc đơn
+            if (i < array.length - 1) {
+                result.append(","); // Thêm dấu phẩy giữa các phần tử
+            }
+        }
+        return result.toString();
     }
 }

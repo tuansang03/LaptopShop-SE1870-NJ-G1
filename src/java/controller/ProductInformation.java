@@ -70,6 +70,7 @@ public class ProductInformation extends HttpServlet {
         int selectedConfigId=pd.getConfiguration().getId();
         int selectedColorId=pd.getColor().getId();
         List<Color> col=d.listColorById(id, selectedConfigId);
+        List <ProductList>  listproduct = d.listProduct(pd.getProduct().getCategory().getName(), null, null, null);
         String price = formatCurrency( d.getProductDetail(id).getPrice());
         request.setAttribute("detail", pd);
         request.setAttribute("attribute", pa);
@@ -79,14 +80,12 @@ public class ProductInformation extends HttpServlet {
         request.setAttribute("image", list);
         request.setAttribute("color", col);
         request.setAttribute("price", price);
-        
+        request.setAttribute("listproduct", listproduct);
         request.getRequestDispatcher("single-product.jsp").forward(request, response);
     }
 
     public static String formatCurrency(int amount) {
         DecimalFormat formatter = new DecimalFormat("#,###");
-
-        // Định dạng số và thêm "VNĐ" ở cuối
         return formatter.format(amount) + " VNĐ";
     }
 

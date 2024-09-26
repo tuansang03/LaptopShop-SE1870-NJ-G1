@@ -1,4 +1,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
+
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html lang="en">
@@ -81,155 +84,78 @@
             </div>
         </section>
         <!-- ================ end banner area ================= -->
-
+        <label>
+            (${a})
+            (${b})
+        </label>
         <!-- ================ category section start ================= -->		  
         <section class="section-margin--small mb-5">
             <div class="container">
                 <div class="row">
                     <div class="col-xl-3 col-lg-4 col-md-5">
-                        <form action="listproduct" method="get"> 
-                            <div class="sidebar-categories">
-                                <div class="head">Browse Categories</div>
-                                <ul class="main-categories">
-                                    <li class="common-filter">
-                                        <ul>
+                        <form action="listproduct" method="get">
+                            <div class="sidebar-filter">
+                                <div class="top-filter-head">Browse Brands</div>
+                                <div class="common-filter">
+                                    <ul>
+                                        <c:forEach items="${brandlist}" var="b">
                                             <li class="filter-list">
-                                                <input class="pixel-radio" type="radio" id="gaming" name="category" value="gaming"
-                                                       <c:if test="${category == 'gaming'}">checked</c:if>>
-                                                       <label for="gaming">Gaming</label>
-                                                </li>
-                                                <li class="filter-list">
-                                                    <input class="pixel-radio" type="radio" id="ai" name="category" value="ai"
-                                                    <c:if test="${category == 'ai'}">checked</c:if>>
-                                                    <label for="ai">AI</label>
-                                                </li>
-                                                <li class="filter-list">
-                                                    <input class="pixel-radio" type="radio" id="graphic" name="category" value="graphic"
-                                                    <c:if test="${category == 'graphic'}">checked</c:if>>
-                                                    <label for="graphic">Graphic</label>
-                                                </li>
-                                                <li class="filter-list">
-                                                    <input class="pixel-radio" type="radio" id="office" name="category" value="office"
-                                                    <c:if test="${category == 'office'}">checked</c:if>>
-                                                    <label for="office">Office</label>
-                                                </li>
-                                                <li class="filter-list">
-                                                    <input class="pixel-radio" type="radio" id="workstation" name="category" value="workstation"
-                                                    <c:if test="${category == 'workstation'}">checked</c:if>>
-                                                    <label for="workstation">Workstation</label>
-                                                </li>
-                                                <li class="filter-list">
-                                                    <input class="pixel-radio" type="radio" id="student" name="category" value="student"
-                                                    <c:if test="${category == 'student'}">checked</c:if>>
-                                                    <label for="student">Student</label>
-                                                </li>
-                                                <li class="filter-list">
-                                                    <input class="pixel-radio" type="radio" id="touchscreen" name="category" value="touchscreen"
-                                                    <c:if test="${category == 'touchscreen'}">checked</c:if>>
-                                                    <label for="touchscreen">Touch screen</label>
-                                                </li>
-                                                <li class="filter-list">
-                                                    <input class="pixel-radio" type="radio" id="thinandlight" name="category" value="thinandlight"
-                                                    <c:if test="${category == 'thinandlight'}">checked</c:if>>
-                                                    <label for="thinandlight">Thin and light</label>
-                                                </li>
-                                            </ul>
-                                        </li>
+                                                <input class="pixel-radio" type="checkbox" name="brand[]" value="${b.name}"
+                                                       <c:if test="${fn:contains(brand, b.name)}">checked</c:if>>
+                                                <label>${b.name}</label>
+                                            </li>
+                                        </c:forEach>
                                     </ul>
                                 </div>
+                            </div>
 
-                                <div class="sidebar-filter">
-                                    <div class="top-filter-head">Browse Brands</div>
-                                    <div class="common-filter">
-                                        <ul>
+                            <div class="sidebar-filter">
+                                <div class="top-filter-head">Browse Categories</div>
+                                <div class="common-filter">
+                                    <ul>
+                                        <c:forEach items="${categorylist}" var="c">
                                             <li class="filter-list">
-                                                <input class="pixel-radio" type="radio" id="macbook" name="brand" value="macbook" 
-                                                <c:if test="${brand == 'macbook'}">checked</c:if>>
-                                                <label for="macbook">Macbook</label>
-                                            </li>
-                                            <li class="filter-list">
-                                                <input class="pixel-radio" type="radio" id="acer" name="brand" value="acer" 
-                                                <c:if test="${brand == 'acer'}">checked</c:if>>
-                                                <label for="acer">Acer</label>
-                                            </li>
-                                            <li class="filter-list">
-                                                <input class="pixel-radio" type="radio" id="asus" name="brand" value="asus" 
-                                                <c:if test="${brand == 'asus'}">checked</c:if>>
-                                                <label for="asus">ASUS</label>
-                                            </li>
-                                            <li class="filter-list">
-                                                <input class="pixel-radio" type="radio" id="dell" name="brand" value="dell" 
-                                                <c:if test="${brand == 'dell'}">checked</c:if>>
-                                                <label for="dell">Dell</label>
-                                            </li>
-                                            <li class="filter-list">
-                                                <input class="pixel-radio" type="radio" id="hp" name="brand" value="hp" 
-                                                <c:if test="${brand == 'hp'}">checked</c:if>>
-                                                <label for="hp">HP</label>
-                                            </li>
-                                            <li class="filter-list">
-                                                <input class="pixel-radio" type="radio" id="lenovo" name="brand" value="lenovo" 
-                                                <c:if test="${brand == 'lenovo'}">checked</c:if>>
-                                                <label for="lenovo">Lenovo</label>
-                                            </li>
-                                            <li class="filter-list">
-                                                <input class="pixel-radio" type="radio" id="msi" name="brand" value="msi" 
-                                                <c:if test="${brand == 'msi'}">checked</c:if>>
-                                                <label for="msi">MSI</label>
-                                            </li>
-                                            <li class="filter-list">
-                                                <input class="pixel-radio" type="radio" id="lg" name="brand" value="lg" 
-                                                <c:if test="${brand == 'lg'}">checked</c:if>>
-                                                <label for="lg">LG</label>
-                                            </li>
-                                        </ul>
-
-                                    </div>
-                                    <div class="common-filter">
-                                        <div class="head">Price</div>
-                                        <div class="price-range-area">
-                                            <div id="price-range"></div>
-                                            <div class="value-wrapper d-flex">
-                                                <div id="lower-value"></div>
-                                                <span>VNĐ</span>
-                                                <div class="to">to</div>
-                                                <div id="upper-value"></div>
-                                                <span>VNĐ</span>
-                                            </div>
-                                        </div>
-                                    </div>
+                                                <input class="pixel-radio" type="checkbox" name="category[]" value="${c.name}"
+                                                       <c:if test="${fn:contains(category, c.name)}">checked</c:if>>
+                                                <label>${c.name}</label>
+                                            </li>    
+                                        </c:forEach>
+                                    </ul>
                                 </div>
-                                <input type="submit" value="TÌM KIẾM" 
-                                       style="width: 100px; height: 30px; background-color: background; border-radius: 10px;">
-                            </form>
-                        </div>
+                            </div>
+
+                            <input type="submit" value="TÌM KIẾM" 
+                                   style="width: 100px; height: 30px; background-color: background; border-radius: 10px;">
+                        </form>
+
+                    </div>
 
 
-                        <div class="col-xl-9 col-lg-8 col-md-7">
-                            <!-- Start Filter Bar -->
-                            <div class="input-group filter-bar-search">
-                                <div class="sorting">
+                    <div class="col-xl-9 col-lg-8 col-md-7">
+                        <!-- Start Filter Bar -->
+                        <div class="input-group filter-bar-search">
+                            <div class="sorting">
+                                <form action="listproduct">
+                                    <select name="price">
+                                        <option value="default">Default sorting</option>
+                                        <option value="asc">Sort by price ascending</option>
+                                        <option value="desc">Sort by price descending</option>   
+                                    </select>
+                                    <input type="submit"value="Sort" />    
+                                </form>
+
+                            </div>
+                            <div>
+                                <div class="input-group filter-bar-search">
                                     <form action="listproduct">
-                                        <select name="price">
-                                            <option value="default">Default sorting</option>
-                                            <option value="asc">Sort by price ascending</option>
-                                            <option value="desc">Sort by price descending</option>   
-                                        </select>
-                                        <input type="submit"value="Sort" />    
+                                        <input type="text" name="name" placeholder="Search">
+                                        <input type="submit"value="Search" />    
                                     </form>
 
                                 </div>
-                                <div>
-                                    <div class="input-group filter-bar-search">
-                                        <form action="listproduct">
-                                            <input type="text" name="name" placeholder="Search">
-                                            <input type="submit"value="Search" />    
-                                        </form>    
-
-                                    </div>
-                                </div>
                             </div>
-                            <!-- End Filter Bar -->
+                        </div>
+                        <!-- End Filter Bar -->
 
 
 
@@ -238,9 +164,9 @@
 
 
 
-                            <!-- Start Best Seller -->
-                            <section class="product-container">
-                                <!-- Sử dụng thẻ c:forEach để lặp qua danh sách sản phẩm -->
+                        <!-- Start Best Seller -->
+                        <section class="product-container">
+                            <!-- Sử dụng thẻ c:forEach để lặp qua danh sách sản phẩm -->
                             <c:forEach var="p" items="${productlist}">
                                 <!-- Mỗi thẻ sản phẩm trở thành một liên kết -->
                                 <a href="information?productId=${p.detail}" class="product-link">
