@@ -73,6 +73,19 @@
                 // Tính toán tổng giá ban đầu nếu có checkbox con được checked
                 calculateTotal();
             });
+            
+            function doDeleteProduct(cid, pid, name) {
+                if (confirm("Do you want to delete product name: " + name)) {
+                    window.location = "deleteCart?cid=" +cid + "&&pid=" + pid;
+                }
+            }
+            
+            function doDeleteALLProduct(cid) {
+                if (confirm("Do you want to delete all product")) {
+                    window.location = "deleteAllCart?cid=" + cid;
+                }
+            }
+            
         </script>
 
     </head>
@@ -106,7 +119,9 @@
             <div class="container">
                 <div class="cart_inner">
                     <div class="table-responsive">
-                        <a style="display: flex;justify-content: right;margin-right: 10%;font-size: 16px;" href="deleteAllCart?cid=${cartID}">Delete All</a>
+                        <div style="display: flex;justify-content: right;margin-right: 10%;font-size: 16px;" >
+                            <a onclick="doDeleteALLProduct(${cartID})" href="#">Delete All</a>
+                        </div>
                         <table class="table" style="table-layout: fixed;">
                             <thead>
                                 <tr>
@@ -172,7 +187,7 @@
                                                     </div>
                                                 </div>
                                                 <div>
-                                                    <a style="margin-left: 20%;" href="deleteCart?cid=${p.getCart().getId()}&pid=${p.getProductdetail().getId()}">Delete</a>
+                                                    <a style="margin-left: 20%;" onclick="doDeleteProduct(${p.getCart().getId()}, ${p.getProductdetail().getId()}, '${p.getProductdetail().getProduct().getName()}')" href="#">Delete</a>
                                                 </div>
 
                                             </div>

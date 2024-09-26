@@ -36,13 +36,18 @@ public class InputQuantityProduct extends HttpServlet {
         String quantity_raw = request.getParameter("qty");
         String pdtid_raw = request.getParameter("pdtid");
         CartDAOS cDAO = new CartDAOS();
-
         try {
             int quantity = Integer.parseInt(quantity_raw);
             int pdtid = Integer.parseInt(pdtid_raw);
+            CartItem pCart = cDAO.getCartItemByPdtID(pdtid);
 
-            if (!(quantity_raw.isEmpty() || quantity_raw == null) && quantity > 0) {
-                cDAO.updateQuantityProduct(quantity, pdtid);
+            if (!(quantity_raw.isEmpty() || quantity_raw == null)) {
+                if (quantity > 0 && quantity <= pCart.getProductdetail().getQuantity()) {
+                    cDAO.updateQuantityProduct(quantity, pdtid);
+                }else {
+                    cDAO.updateQuantityProduct(pCart.getProductdetail().getQuantity(), pdtid);
+                }
+
             } else {
                 CartItem cart = cDAO.getCartItemByPdtID(pdtid);
                 quantity = cart.getQuantity();
