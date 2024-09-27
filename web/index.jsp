@@ -105,8 +105,41 @@
 
             }
             .borderr{
-             height: 500px   
+                height: 500px
             }
+           
+            .card-product__imgOverlay {
+                display: flex;
+                flex-direction: row;
+                justify-content: center; /* Căn giữa theo chiều dọc */
+                align-items: center;     /* Căn giữa theo chiều ngang */
+                gap: 30px;               /* Khoảng cách giữa các icon */
+                padding: 0;              /* Xóa padding mặc định của ul */
+                margin: 0;               /* Xóa margin mặc định của ul */
+                list-style: none;        /* Xóa dấu chấm trước mỗi li */
+                position: absolute;      /* Đảm bảo overlay nằm trên hình ảnh */
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: #b4d8ff !important;
+                
+                
+            }
+
+            .card-product__imgOverlay li {
+                list-style: none;
+                margin-top: 50px;
+            }
+
+            .card-product__imgOverlay li a {
+                color: black;            /* Tùy chỉnh màu sắc cho icon nếu cần */
+                font-size: 18px;
+            }
+            .product:hover .card-product__imgOverlay{
+                opacity: 0.7 !important;
+            }
+
         </style>
         <!--================ Start Header Menu Area =================-->
         <%@include file="header.jsp" %>
@@ -253,10 +286,11 @@
                                 <div class="card-product__img">
                                     <img class="img-fluid" src="${image.getImage()}" alt=""> <!-- Sử dụng 'image' để lấy hình ảnh -->
                                     <ul class="card-product__imgOverlay">
-                                        <li><button><i class="ti-search"></i></button></li>
-                                        <li class="cart_button"><a class="ti-shopping-cart" href="addtocart?pid=${o3.getProduct().getId()}&&colorid=${o3.getColor().getId()}&&confid=${o3.getConfiguration().getId()}"></a></li>
-                                        <li><button><i class="ti-heart"></i></button></li>
+                                        <li style="margin-top: 30px;"><a href="information?productId=${o3.getId()}"><i class="ti-search"></i></a></li>
+                                        <li class="cart_button" style="margin-top: 30px;"><a class="ti-shopping-cart" href="addtocart?pid=${o3.getProduct().getId()}&&colorid=${o3.getColor().getId()}&&confid=${o3.getConfiguration().getId()}"></a></li>
+                                        <li style="margin-top: 30px;"><a href="#"><i class="ti-heart"></i></a></li>
                                     </ul>
+
                                 </div>
                                 <div class="card-body">
                                     <p class="nhot">${o3.getProduct().getBrand().getName()}</p>
@@ -281,8 +315,8 @@
 
             </section>
             <!-- ================ Best Selling item  carousel end ================= --> 
-                        <!-- ================ Explore Product item  carousel ================= --> 
-            
+            <!-- ================ Explore Product item  carousel ================= --> 
+
             <!-- ================ Explore Product item  carousel end ================= --> 
 
             <!-- ================ Blog section start ================= -->  

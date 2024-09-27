@@ -5,6 +5,8 @@
 
 package controller;
 
+import dal.ImageDAOS;
+import dal.ProductDAOS;
 import dal.UserDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -13,9 +15,13 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import model.Image;
 import model.Post;
+import model.ProductDetail;
 
 /**
  *
@@ -66,7 +72,6 @@ public class displaySearchPage extends HttpServlet {
          maxPost = request.getParameter("max");
      }
      
-     
     String query = request.getParameter("query"); // Lấy giá trị từ tham số request
     String error = "";
     UserDAO dao = new UserDAO(); 
@@ -83,6 +88,7 @@ public class displaySearchPage extends HttpServlet {
          error = " ! ! ! There is no Post that match your Keyword";
     }
     
+
     request.setAttribute("pop_size", list.size());
     request.setAttribute("err", error);
      request.setAttribute("listP", listP);

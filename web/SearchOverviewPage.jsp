@@ -3,19 +3,13 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <title>Search</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Farro:wght@300;400;500;700&display=swap" rel="stylesheet">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" href="img/Fevicon.png" type="image/png">
     <link rel="stylesheet" href="vendors/bootstrap/bootstrap.min.css">
     <link rel="stylesheet" href="vendors/fontawesome/css/all.min.css">
-    <link rel="stylesheet" href="vendors/themify-icons/themify-icons.css">
-    <link rel="stylesheet" href="vendors/linericon/style.css">
-    <link rel="stylesheet" href="vendors/owl-carousel/owl.theme.default.min.css">
-    <link rel="stylesheet" href="vendors/owl-carousel/owl.carousel.min.css">
     <link rel="stylesheet" href="css/style.css">
     <style>
+        /* General Layout */
         .search-section {
             display: flex;
             justify-content: space-between;
@@ -23,7 +17,8 @@
         }
 
         .product-results, .post-results {
-            width: 48%; 
+            width: 48%;
+            margin-right: 30px;
         }
 
         .search-results-container, .post-container {
@@ -33,26 +28,36 @@
         }
 
         .product-only, .post {
-            width: 30%; 
-            margin-bottom: 20px;
+            width: 32%; /* Ensure 3 products per row */
         }
 
         .card {
             border: 1px solid #ccc;
-            border-radius: 5px;
+            border-radius: 10px;
             overflow: hidden;
-            position: relative;
+            transition: transform 0.3s, box-shadow 0.3s;
+            background-color: #fff;
         }
 
-        .card-product__img, .card-blog__img {
-            position: relative;
+        .card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 8px 16px rgba(0,0,0,0.1);
         }
 
         .card-product__img img, .card-blog__img img {
             width: 100%;
-            height: auto;
+            height: 230px; /* Fixed height for product images */
+            object-fit: contain;
+            padding-bottom: 30px;
         }
 
+        .card-body {
+            margin: 20px;
+            padding: 15px;
+            text-align: center;
+        }
+
+        /* Button and Overlay Styles */
         .card-product__imgOverlay {
             position: absolute;
             top: 0;
@@ -60,69 +65,113 @@
             right: 0;
             bottom: 0;
             display: flex;
-            align-items: center;
             justify-content: center;
+            align-items: center;
             opacity: 0;
-            transition: opacity 0.3s;
+            background-color: rgba(0, 0, 0, 0.5);
+            transition: opacity 0.3s ease-in-out;
         }
 
         .card:hover .card-product__imgOverlay {
             opacity: 1;
         }
 
-        .card-body {
-            padding: 10px;
-            text-align: center;
+        .card-product__imgOverlay li {
+            margin: 0 10px;
         }
 
-        .btn {
-            background: transparent;
-            border: none;
-            cursor: pointer;
+        .card-product__imgOverlay button, .card-product__imgOverlay a {
+            color: #fff;
+            font-size: 20px;
         }
 
-        .tach {
-            margin-right: 15px;
+        /* Text Styles */
+        .card-product__title {
+            font-size: 16px;
+            font-weight: 600;
+            color: #333;
         }
-        .card-product__img{
+
+        .card-product__price {
+            font-size: 18px;
+            font-weight: bold;
+            color: #e74c3c;
+        }
+
+        .icon-list {
+            margin-top: 10px;
+            padding: 0;
             display: flex;
+            justify-content: center;
+            gap: 10px;
         }
 
-        .card-blog {
-            margin-bottom: 20px;
+        .icon-list li {
+            list-style: none;
         }
 
-        .card-product__imgOverlay {
-            display: flex !important;
+        .icon-list button {
+            background-color: transparent;
+            border: none;
+            color: #888;
+            font-size: 18px;
         }
+      
+.card-product__title a:hover {
+    color: #3498db; 
+    text-decoration: none; 
+}
 
-        .x {
-            margin-left: 30px;
-        }
-        .card-product__imgOverlay, .icon-list {
+.card-blog__title a:hover {
+    color: #3498db;  
+    text-decoration: none; 
+}
+
+/* Optional: Add transition for smooth color change */
+.card-product__title a, .card-blog__title a {
+    transition: color 0.3s ease; 
+}
+
+/* Keep the overlay effect on hover */
+.card:hover .card-product__imgOverlay {
+    opacity: 1;
+}
+.post-container {
     display: flex;
+    flex-wrap: wrap;
     justify-content: space-between; 
-    align-items: center;
-    list-style: none;
-    padding: 10px;
-    margin: 0;
-    border: 1px solid gray;
-    
+    gap: 20px; 
 }
 
-.card-product__imgOverlay li, .icon-list li {
-    margin-right: 10px;
+.post {
+    flex: 1 1 calc(33.333% - 20px); 
+    box-sizing: border-box; 
+    margin-bottom: 30px; 
 }
 
-.card-product__imgOverlay li button, .icon-list li button, .icon-list li a {
-    background: none; 
-    border: none; 
+.card {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 100%;
+}
+
+.card-body {
+    padding: 15px;
 }
 
 
+
+        /* Responsive Adjustments */
         @media (max-width: 768px) {
             .product-only, .post {
-                width: 45%; 
+                width: 100%; /* 2 products per row on mobile */
+            }
+        }
+
+        @media (max-width: 576px) {
+            .product-only, .post {
+                width: 100%; /* Full width for single column on small screens */
             }
         }
     </style>
@@ -131,59 +180,41 @@
     <%@include file="header.jsp" %>
     <main>
         <section id="search-results">
-            <h2 class="x" style="text-align: center; padding: 20px"  >Search Results</h2>
+            <h2 class="x" style="text-align: center; padding: 20px">Search Results</h2>
             <br/>
             <h4 class="x" style="color: red">${err}</h4>
             <div class="search-section" style="margin-left: 30px">
-                <div class="product-results" style="padding: 20px">
-                    <h3 style="border: 1px solid gray; width: 200px;padding: 10px; border-radius: 7px">Products(${pop_size})</h3>
+                <div class="product-results">
+                    <h3 style="border: 1px solid gray; width: 200px; padding: 10px; border-radius: 7px">Products(${pop_size})</h3>
                     <br/>
                     <div class="search-results-container">
-                        <c:forEach items="${pop}" var="o3" varStatus="status">
+                        <c:forEach items="${pop}" var="o3">
                             <div class="results product-only">
                                 <div class="card">
                                     <div class="card-product__img">
-                                        <img class="img-fluid" src="${o3.getImage()}" alt="">
+                                        <img src="${o3.getImage()}" alt="">
                                         <ul class="card-product__imgOverlay">
-                                            <a href="information?productId=${o3.getProductDetail().getId()}"><li><button><i class="ti-search"></i></button><a/>
-                                            <a class="ti-shopping-cart" href="addtocart?pid=${o3.getProductDetail().getProduct().getId()}&&colorid=${o3.getProductDetail().getColor().getId()}&&confid=${o3.getProductDetail().getConfiguration().getId()}"></a>
-                                            <button><i class="ti-heart"></i></button>
-                                            
-                                            </li>
-                                            
-                                            
-                                        </ul>
-                                    </div>
-                                    <div class="card-body">
-                                        <p class="nhot">${o3.getProductDetail().getProduct().getBrand().getName()}</p>
-                                        <h5 class="card-product__title nhot">
-                                            <a href="information?productId=${o3.getProductDetail().getId()}"> ${o3.getProductDetail().getProduct().getName()} 
-                                            ${o3.getProductDetail().getProduct().getCategory().getName()} ${o3.getProductDetail().getConfiguration().getName()} (${o3.getProductDetail().getColor().getName()})</a>
-                                        </h5>   
-                                        <p class="card-product__price nhot tien">${o3.getProductDetail().getPrice()} VND</p>
-                                        <ul class="icon-list">
-                                            <li><button><i class="ti-search"></i></button></li>
+                                            <li><a href="information?productId=${o3.getProductDetail().getId()}"><i class="ti-search"></i></a></li>
                                             <li><a class="ti-shopping-cart" href="addtocart?pid=${o3.getProductDetail().getProduct().getId()}&&colorid=${o3.getProductDetail().getColor().getId()}&&confid=${o3.getProductDetail().getConfiguration().getId()}"></a></li>
                                             <li><button><i class="ti-heart"></i></button></li>
                                         </ul>
+                                    </div>
+                                    <div class="card-body">
+                                        <p>${o3.getProductDetail().getProduct().getBrand().getName()}</p>
+                                        <h5 class="card-product__title">
+                                            <a href="information?productId=${o3.getProductDetail().getId()}">${o3.getProductDetail().getProduct().getName()} ${o3.getProductDetail().getConfiguration().getName()} (${o3.getProductDetail().getColor().getName()})</a>
+                                        </h5>
+                                        <p class="card-product__price">${o3.getProductDetail().getPrice()} VND</p>
                                     </div>
                                 </div>
                             </div>
                         </c:forEach>
                     </div>
-                     See more ....
-                    <div style="text-align: center; margin-top: 30px">
-                        <a style="padding: 10px 15px; border: 1px solid black; margin-left: 15px;" href="">1</a>
-                        <a style="padding: 10px 15px; border: 1px solid black; margin-left: 15px" href="" >2</a>
-                        <a style="padding: 10px 15px; border: 1px solid black; margin-left: 15px" href="">3</a>
-                                        
-                                    </div>
-                    
                 </div>
                 <div class="post-results">
-                    <h3 style="border: 1px solid gray; width: 170px;padding: 10px; border-radius: 7px">Posts (${listPSize})</h3>
+                    <h3 style="border: 1px solid gray; width: 170px; padding: 10px; border-radius: 7px; margin-bottom: 33px;">Posts (${listPSize})</h3>
                     <div class="post-container">
-                        <c:forEach items="${listP}" var="p" varStatus="status">
+                        <c:forEach items="${listP}" var="p">
                             <div class="post tach">
                                 <div class="card card-blog">
                                     <div class="card-blog__img">
@@ -191,15 +222,14 @@
                                     </div>
                                     <div class="card-body">
                                         <ul class="card-blog__info">
-                                            <li><a href="#" class="bx bxs-user"> ${p.user.userName}</a></li>
+                                            <li><a href="#" class="bx bxs-user">${p.user.userName}</a></li>
                                             <li><i class="bx bx-laptop"></i>${p.brand.name}</li>
                                             <li><i class="bx bx-laptop"></i>${p.publishDate}</li>
                                         </ul>
                                         <h4 class="card-blog__title"><a href="single-blog.jsp">${p.tittle}</a></h4>
                                         <p>${p.shortContent}</p>
-                                        <a class="card-blog__link" href="postdetail?id=${p.id}">Read More <i class="ti-arrow-right"></i></a>
+                                        <a class="card-blog__link" href="postdetail?id=${p.id}">Read More -> <i class="ti-arrow-right"></i></a>
                                     </div>
-                                    
                                 </div>
                             </div>
                         </c:forEach>

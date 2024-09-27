@@ -31,7 +31,7 @@
 
 
   <!-- ================ start banner area ================= -->	
-  <section class="blog-banner-area" id="blog">
+  <section class="blog-banner-area" id="blog" style="background: url('');">
     <div class="container h-100">
       <div class="blog-banner">
         <div class="text-center">
@@ -56,14 +56,14 @@
 
         <div class="col-sm-6 col-lg-4 mb-4 mb-lg-0">
           <div class="categories_post">
-            <img class="card-img rounded-0" src="img/blog/cat-post/cat-post-2.jpg" alt="post">
+            <img class="card-img rounded-0" src="https://storage.googleapis.com/teko-gae.appspot.com/media/image/2023/6/13/5e39c9d3-d052-4f3a-a1c8-cac737d5e947/image.png" alt="post">
             <div class="categories_details">
               <div class="categories_text">
                 <a href="single-blog.jsp">
-                    <h5>Politics</h5>
+                    <h5>Technologies</h5>
                 </a>
                 <div class="border_line"></div>
-                <p>Be a part of politics</p>
+                <p></p>
               </div>
             </div>
           </div>

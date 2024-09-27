@@ -34,6 +34,81 @@
 
             }
 
+         
+    .container-fluid {
+        max-width: 100%;
+        padding: 0 15px;
+    }
+
+    .blog_area {
+        padding-top: 80px;
+    }
+
+    .posts-list {
+        padding-right: 15px;
+    }
+
+    .single-post {
+        margin-bottom: 50px;
+    }
+
+    .feature-img img {
+        width: 100%;
+        height: auto;
+    }
+
+    .blog_details h2 {
+        font-size: 30px;
+        line-height: 1.5;
+        margin-bottom: 20px;
+    }
+
+    .blog_info {
+        margin-bottom: 30px;
+    }
+
+    .quotes {
+        font-size: 18px;
+        line-height: 1.8;
+        margin-bottom: 30px;
+        padding: 20px;
+        background: #f9f9ff;
+        border-left: 5px solid #ffba00;
+    }
+
+    .navigation-area {
+        padding: 50px 0;
+        border-top: 1px solid #f1f1f1;
+    }
+
+    .nav-left, .nav-right {
+        display: flex;
+        align-items: center;
+    }
+
+    .nav-left .thumb, .nav-right .thumb {
+        margin-right: 15px;
+    }
+
+    .thumb img {
+        max-width: 100px;
+        height: auto;
+    }
+
+    .arrow {
+        margin-right: 15px;
+    }
+
+    .arrow span {
+        font-size: 30px;
+        color: #fff;
+    }
+
+    .detials a {
+        font-size: 18px;
+        color: #000;
+    }
+</style>
 
 
 
@@ -77,12 +152,12 @@
                                 <div class="blog_info text-right">
                                     <div class="post_tag">
 
-                                      Type:   <a class="active" href="listproduct?category=${postDetail.category.name}">${postDetail.category.name}</a>
+                                        Type:   <a class="active" style="font-size: 15px;" href="listproduct?category=${postDetail.category.name}">${postDetail.category.name}</a>
 
                                     </div>
                                     <div class="post_tag">
 
-                                        Brand: <a class="active" href="listproduct?brand=${postDetail.brand.name}">${postDetail.brand.name}</a>
+                                        Brand: <a class="active" style="font-size: 15px;" href="listproduct?brand=${postDetail.brand.name}">${postDetail.brand.name}</a>
 
                                     </div>
                                     <ul class="blog_meta list">
@@ -328,7 +403,7 @@
                             </form>
                         </div>-->
                     </div>
-                    <div class="col-lg-4">
+<!--                    <div class="col-lg-4">
                         <div class="blog_right_sidebar">
                             <aside class="single_sidebar_widget search_widget">
                                 <div class="input-group">
@@ -339,10 +414,10 @@
                                         </button>
                                     </span>
                                 </div>
-                                <!-- /input-group -->
+                                 /input-group 
                                 <div class="br"></div>
                             </aside>
-<!--                            <aside class="single_sidebar_widget author_widget">
+                            <aside class="single_sidebar_widget author_widget">
                                 <img class="author_img rounded-circle" src="img/blog/author.png" alt="">
                                 <h4>Charlie Barber</h4>
                                 <p>Senior blog writer</p>
@@ -365,8 +440,8 @@
                                     detractors.
                                 </p>
                                 <div class="br"></div>
-                            </aside>-->
-<!--                            <aside class="single_sidebar_widget popular_post_widget">
+                            </aside>
+                            <aside class="single_sidebar_widget popular_post_widget">
                                 <h3 class="widget_title">Popular Posts</h3>
                                 <div class="media post_item">
                                     <img src="img/blog/popular-post/post1.jpg" alt="post">
@@ -405,13 +480,13 @@
                                     </div>
                                 </div>
                                 <div class="br"></div>
-                            </aside>-->
-<!--                            <aside class="single_sidebar_widget ads_widget">
+                            </aside>
+                            <aside class="single_sidebar_widget ads_widget">
                                 <a href="#">
                                     <img class="img-fluid" src="img/blog/add.jpg" alt="">
                                 </a>
                                 <div class="br"></div>
-                            </aside>-->
+                            </aside>
                             <aside class="single_sidebar_widget post_category_widget">
                                 <h4 class="widget_title">Post Catgories</h4>
                                 <ul class="list cat-list">
@@ -421,7 +496,7 @@
                                             <p>37</p>
                                         </a>
                                     </li>
-<!--                                    <li>
+                                    <li>
                                         <a href="#" class="d-flex justify-content-between">
                                             <p>Lifestyle</p>
                                             <p>24</p>
@@ -456,7 +531,7 @@
                                             <p>Adventure</p>
                                             <p>44</p>
                                         </a>
-                                    </li>-->
+                                    </li>
                                 </ul>
                                 <div class="br"></div>
                             </aside>
@@ -522,7 +597,7 @@
                                 </ul>
                             </aside>
                         </div>
-                    </div>
+                    </div>-->
                 </div>
             </div>
 

@@ -1,14 +1,11 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
-<<<<<<< HEAD
 
-=======
 <%@ page import="java.util.List" %>
 <%@ page import="model.User" %>
 <%@ page import="dal.CartDAOS" %>
 <%@ page import="model.Cart" %>
 <%@ page import="model.CartItem" %>
->>>>>>> 48830e1dd30273dc1af73da0ca8a54b6cc731871
 <!DOCTYPE html>
 <html>
     <head>

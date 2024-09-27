@@ -75,7 +75,7 @@ protected void doGet(HttpServletRequest request, HttpServletResponse response)
     List<Post> listP = dao.getPostListD();
     List<Image> listProduct = dao.getPictureList();
     
-  ProductDAOS pDao = new ProductDAOS();
+ProductDAOS pDao = new ProductDAOS();
 List<ProductDetail> listProductDetails = pDao.getTop16ProductDetail();
 ImageDAOS iDAO = new ImageDAOS();
 List<Image> listImages = new ArrayList<>();

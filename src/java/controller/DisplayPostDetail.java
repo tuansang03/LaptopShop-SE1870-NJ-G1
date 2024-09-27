@@ -59,19 +59,34 @@ public class DisplayPostDetail extends HttpServlet {
      * @throws IOException if an I/O error occurs
      */
     @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+protected void doGet(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
-        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+    SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
     String idStr = request.getParameter("id");
+    
     if (idStr != null) {
         try {
             int id = Integer.parseInt(idStr); // Chuyển đổi String sang int
             UserDAO dao = new UserDAO();
-            Post post = dao.getPostById(id); // Gọi hàm lấy bài viết theo id
-            if(post==null){
-                post = dao.getPostById(id-1);
-                
+            List<Post> postCount = dao.getAllPostListD(); // Lấy danh sách tất cả các bài viết
+            int minId = 1; // ID nhỏ nhất
+            int maxId = postCount.size(); // ID lớn nhất
+            
+            // Kiểm tra và điều chỉnh ID
+            if (id < minId) {
+                id = minId; // Gán ID nhỏ nhất
+            } else if (id > maxId) {
+                id = maxId; // Gán ID lớn nhất
             }
+
+            Post post = dao.getPostById(id); // Gọi hàm lấy bài viết theo ID
+            
+            // Kiểm tra nếu không tìm thấy bài viết
+            if (post == null) {
+                response.sendError(HttpServletResponse.SC_NOT_FOUND, "Post not found");
+                return;
+            }
+
             String formattedDate = sdf.format(post.getPublishDate());
             request.setAttribute("postDetailTime", formattedDate);
             request.setAttribute("postDetail", post);
@@ -85,6 +100,7 @@ public class DisplayPostDetail extends HttpServlet {
         response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Missing post ID");
     }
 }
+
 
 
     

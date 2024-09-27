@@ -398,7 +398,7 @@ public List<Post> getNewestPostListD() {
 
     public List<ProductDetail> getListProductDetailD() {
         List<ProductDetail> list = new ArrayList<>();
-        String sql = "SELECT TOP 8 [Id],\n"
+        String sql = "SELECT [Id],\n"
                 + "      [ProductId],\n"
                 + "      [ColorId],\n"
                 + "      [ConfigurationId],\n"
