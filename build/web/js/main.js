@@ -116,4 +116,5 @@ $(function() {
   
 });
 
+$('.large-image').attr('src', $(this).find('img').attr('src'));
 

@@ -12,16 +12,15 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import dal.ProductDAO;
-import java.util.ArrayList;
 import model.*;
 import java.util.List;
-
+import java.text.DecimalFormat;
 /**
  *
  * @author PHONG
  */
-@WebServlet(name = "ListProduct", urlPatterns = {"/listproduct"})
-public class ListProduct extends HttpServlet {
+@WebServlet(name = "ProductInformation", urlPatterns = {"/information"})
+public class ProductInformation extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -40,10 +39,10 @@ public class ListProduct extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet ListProduct</title>");
+            out.println("<title>Servlet ProductInformation</title>");
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet ListProduct at " + request.getContextPath() + "</h1>");
+            out.println("<h1>Servlet ProductInformation at " + request.getContextPath() + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
@@ -62,43 +61,32 @@ public class ListProduct extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         ProductDAO d = new ProductDAO();
-
-        String price = request.getParameter("price");
-        String name = request.getParameter("name");
-        // Get selected brands and categories as arrays
-        String[] selectedBrands = request.getParameterValues("brand[]");
-        String[] selectedCategories = request.getParameterValues("category[]");
-        List<Brand> brandlist = d.listBrand();
-        List<Category> categorylist = d.listCategory();
-        List<ProductList> list = d.listProduct(convert(selectedCategories), convert(selectedBrands), price, name);
-
-
-        request.setAttribute("selectedBrands", selectedBrands);
-        request.setAttribute("selectedCategories", selectedCategories);
-
-        request.setAttribute("a", convert(selectedCategories));
-        request.setAttribute("b", convert(selectedBrands));
-
-        request.setAttribute("brandlist", brandlist);
-        request.setAttribute("categorylist", categorylist);
+        
+        int id = Integer.parseInt(request.getParameter("productId"));
+        List<Image> list = d.getImageById(id);
+        ProductDetail pd = d.getProductDetail(id);
+        List<Configuration> con = d.listConfigurationById(id);
+        List<ProductAttribute> pa = d.getAttributeById(id);
+        int selectedConfigId=pd.getConfiguration().getId();
+        int selectedColorId=pd.getColor().getId();
+        List<Color> col=d.listColorById(id, selectedConfigId);
+        List <ProductList>  listproduct = d.listProduct(pd.getProduct().getCategory().getName(), null, null, null);
+        String price = formatCurrency( d.getProductDetail(id).getPrice());
+        request.setAttribute("detail", pd);
+        request.setAttribute("attribute", pa);
+        request.setAttribute("config", con);
+        request.setAttribute("selectedConfigId", selectedConfigId);
+        request.setAttribute("selectedColorId", selectedColorId);
+        request.setAttribute("image", list);
+        request.setAttribute("color", col);
         request.setAttribute("price", price);
-        request.setAttribute("productlist", list);
-        request.getRequestDispatcher("category.jsp").forward(request, response);
+        request.setAttribute("listproduct", listproduct);
+        request.getRequestDispatcher("single-product.jsp").forward(request, response);
     }
 
-    public String convert(String[] array) {
-        if (array == null || array.length == 0) {
-            return null; // Trả về chuỗi rỗng nếu mảng null hoặc trống
-        }
-
-        StringBuilder result = new StringBuilder();
-        for (int i = 0; i < array.length; i++) {
-            result.append("'").append(array[i]).append("'"); // Thêm dấu ngoặc đơn
-            if (i < array.length - 1) {
-                result.append(","); // Thêm dấu phẩy giữa các phần tử
-            }
-        }
-        return result.toString();
+    public static String formatCurrency(int amount) {
+        DecimalFormat formatter = new DecimalFormat("#,###");
+        return formatter.format(amount) + " VNĐ";
     }
 
 }

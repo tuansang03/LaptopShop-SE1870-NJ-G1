@@ -10,6 +10,7 @@ import model.Product;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.DecimalFormat;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import model.Brand;
@@ -22,14 +23,22 @@ import java.util.List;
 import java.util.List;
 
 import java.util.ArrayList;
+import model.Attribute;
+import model.Color;
+import model.Configuration;
+import model.Image;
+import model.ProductAttribute;
+import model.ProductDetail;
 import model.ProductList;
+import model.ProductList;
+import model.*;
+import java.text.DecimalFormat;
 
 /**
  *
  * @author ADMIN
  */
 public class ProductDAO extends DBContext {
-
     public ArrayList<Product> readProduct() {
         ArrayList<Product> pList = new ArrayList<>();
         String sql = "SELECT p.*, b.Name, c.Name\n"
@@ -93,72 +102,102 @@ public class ProductDAO extends DBContext {
     
 
 
-
-    public List<Product> list() {
-        List<Product> list = new ArrayList<>();
-        String sql = "select * from Product";
-        try {
-            PreparedStatement st = connection.prepareStatement(sql);
-            ResultSet re = st.executeQuery();
-            while (re.next()) {
-                Product p = new Product(
-                        re.getInt("id"),
-                        getBrandById(re.getInt("brand")),
-                        getCategoryById(re.getInt("category")),
-                        re.getString("name"),
-                        re.getString("status"));
-                Category c = new Category(re.getInt("productCategoryID"), re.getString("category_name"));
-                list.add(p);
+    public Product getProductById(int id) {
+        String sql = "SELECT * FROM Product WHERE id = ?";
+        try (PreparedStatement st = connection.prepareStatement(sql)) {
+            st.setInt(1, id);  // Truyền tham số vào câu lệnh SQL
+            try (ResultSet re = st.executeQuery()) {
+                if (re.next()) {
+                    Product p = new Product(
+                            re.getInt("id"),
+                            getBrandById(re.getInt("brandid")),
+                            getCategoryById(re.getInt("categoryid")),
+                            re.getString("name"),
+                            re.getString("status")
+                    );
+                    return p;
+                }
             }
         } catch (SQLException e) {
             System.out.println(e);
         }
 
-        return list;
+        return null;
     }
 
     public Brand getBrandById(int id) {
-        String sql = "select * from Brand where Id=" + id;
-
-        try {
-            PreparedStatement st = connection.prepareStatement(sql);
-            ResultSet re = st.executeQuery();
-            if (re.next()) {
-                Brand b = new Brand(re.getInt("id"), re.getString("name"));
-                return b;
-
+        String sql = "SELECT * FROM Brand WHERE id = ?";
+        try (PreparedStatement st = connection.prepareStatement(sql)) {
+            st.setInt(1, id);  // Truyền tham số vào câu lệnh SQL
+            try (ResultSet re = st.executeQuery()) {
+                if (re.next()) {
+                    Brand b = new Brand(re.getInt("id"), re.getString("name"));
+                    return b;
+                }
             }
         } catch (SQLException e) {
             System.out.println(e);
         }
 
         return null;
-
     }
 
     public Category getCategoryById(int id) {
-        String sql = "select * from Category where Id=" + id;
-
-        try {
-            PreparedStatement st = connection.prepareStatement(sql);
-            ResultSet re = st.executeQuery();
-            if (re.next()) {
-                Category c = new Category(re.getInt("id"), re.getString("name"));
-                return c;
-
+        String sql = "SELECT * FROM Category WHERE id = ?";
+        try (PreparedStatement st = connection.prepareStatement(sql)) {
+            st.setInt(1, id);  // Truyền tham số vào câu lệnh SQL
+            try (ResultSet re = st.executeQuery()) {
+                if (re.next()) {
+                    Category c = new Category(re.getInt("id"), re.getString("name"));
+                    return c;
+                }
             }
         } catch (SQLException e) {
             System.out.println(e);
         }
 
         return null;
+    }
 
+    public Color getColorById(int id) {
+        String sql = "SELECT * FROM Color WHERE id = ?";
+        try (PreparedStatement st = connection.prepareStatement(sql)) {
+            st.setInt(1, id);  // Truyền tham số vào câu lệnh SQL
+            try (ResultSet re = st.executeQuery()) {
+                if (re.next()) {
+                    Color c = new Color(re.getInt("id"), re.getString("name"));
+                    return c;
+                }
+            }
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
+
+        return null;
+    }
+
+    public Configuration getConfigurationById(int id) {
+        String sql = "SELECT * FROM Configuration WHERE id = ?";
+        try (PreparedStatement st = connection.prepareStatement(sql)) {
+            st.setInt(1, id);  // Truyền tham số vào câu lệnh SQL
+            try (ResultSet re = st.executeQuery()) {
+                if (re.next()) {
+                    Configuration c = new Configuration(re.getInt("id"), re.getString("name"));
+                    return c;
+                }
+            }
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
+
+        return null;
     }
 
     public List<ProductList> listProduct(String category, String brand, String price, String name) {
         List<ProductList> list = new ArrayList<>();
         String sql = "WITH RankedProducts AS (\n"
-                + "    SELECT p.Id, \n"
+                + "    SELECT p.Id,\n"
+                + "	       pd.Id as detail,\n"
                 + "           p.[Name] AS name, \n"
                 + "           b.[Name] AS brand, \n"
                 + "           c.[Name] AS category, \n"
@@ -166,30 +205,30 @@ public class ProductDAO extends DBContext {
                 + "           pd.Price AS price,\n"
                 + "           ROW_NUMBER() OVER (PARTITION BY p.Id ORDER BY pd.Id) AS rn\n"
                 + "    FROM Product p\n"
-                + "    JOIN ProductDetail pd ON p.Id = pd.ProductId\n"
+                + "    JOIN ProductDetail pd ON pd.ProductId = p.Id\n"
                 + "    JOIN [Image] im ON im.ProductDetailId = pd.Id\n"
                 + "    JOIN Brand b ON b.Id = p.BrandId\n"
                 + "    JOIN Category c ON c.Id = p.CategoryId\n"
                 + ")\n"
-                + "SELECT Id, name, brand, category, img, price\n"
+                + "SELECT Id, detail, name, brand, category, img, price\n"
                 + "FROM RankedProducts\n"
                 + "WHERE rn = 1";
 
         if (category != null) {
-            sql += " and category ='" + category + "'";
+            sql += " and category in (" + category + ")";
         }
         if (brand != null) {
-            sql += " and brand ='" + brand + "'";
+            sql += " and brand in (" + brand + ")";
         }
-        if (price != null){
-         if (price.compareTo("default")==0) {
-            sql += " order by Id"; 
-        } else {
-            sql += " order by price "+price; 
-         }   
+        if (price != null) {
+            if (price.compareTo("default") == 0) {
+                sql += " order by Id";
+            } else {
+                sql += " order by price " + price;
+            }
         }
-         
-         if (name != null) {
+
+        if (name != null) {
             sql += " and name like N'%" + name + "%'";
         }
 
@@ -200,11 +239,12 @@ public class ProductDAO extends DBContext {
             while (re.next()) {
                 ProductList p = new ProductList(
                         re.getInt("id"),
+                        re.getInt("detail"),
                         re.getString("name"),
                         re.getString("brand"),
                         re.getString("category"),
                         re.getString("img"),
-                        re.getInt("price")
+                        formatCurrency(re.getInt("price"))
                 );
                 list.add(p);
 
@@ -216,5 +256,208 @@ public class ProductDAO extends DBContext {
 
     }
 
+    public static String formatCurrency(int amount) {
+        DecimalFormat formatter = new DecimalFormat("#,###");
+        return formatter.format(amount) + " VNĐ";
+    }
 
+    public List<Brand> listBrand() {
+        List<Brand> list = new ArrayList<>();
+        String sql = "select * from Brand";
+        try {
+            PreparedStatement st = connection.prepareStatement(sql);
+            ResultSet re = st.executeQuery();
+            while (re.next()) {
+                Brand b = new Brand(
+                        re.getInt("id"),
+                        re.getString("name"));
+                list.add(b);
+            }
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
+
+        return list;
+    }
+
+    public List<Category> listCategory() {
+        List<Category> list = new ArrayList<>();
+        String sql = "select * from Category";
+        try {
+            PreparedStatement st = connection.prepareStatement(sql);
+            ResultSet re = st.executeQuery();
+            while (re.next()) {
+                Category b = new Category(
+                        re.getInt("id"),
+                        re.getString("name"));
+                list.add(b);
+            }
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
+
+        return list;
+    }
+
+    public List<Image> getImageById(int id) {
+        List<Image> list = new ArrayList<>();
+        String sql = "select p.Id as product, pd.Id, i.FeedbackId, i.Image\n"
+                + "from Image i\n"
+                + "join ProductDetail pd on pd.Id=i.ProductDetailId\n"
+                + "join Product p on p.Id=pd.ProductId\n"
+                + "and pd.Id=" + id;
+        try {
+            PreparedStatement st = connection.prepareStatement(sql);
+            ResultSet re = st.executeQuery();
+            while (re.next()) {
+                Image i = new Image(
+                        re.getInt("id"),
+                        null,
+                        null,
+                        re.getString("image"));
+                list.add(i);
+            }
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
+
+        return list;
+    }
+
+    public ProductDetail getProductDetail(int id) {
+        String sql = "SELECT * FROM ProductDetail WHERE id = ?";
+        try (PreparedStatement st = connection.prepareStatement(sql)) {
+            st.setInt(1, id);  // Truyền tham số vào câu lệnh SQL
+            try (ResultSet re = st.executeQuery()) {
+                if (re.next()) {
+                    ProductDetail p = new ProductDetail(
+                            re.getInt("id"),
+                            getProductById(re.getInt("productid")),
+                            getColorById(re.getInt("colorid")),
+                            getConfigurationById(re.getInt("configurationid")),
+                            re.getInt("price"),
+                            re.getInt("quantity"),
+                            re.getString("shortdescription"),
+                            re.getString("description"),
+                            re.getString("status")
+                    );
+                    return p;
+                }
+            }
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
+
+        return null;
+    }
+
+    public List<ProductAttribute> getAttributeById(int id) {
+        List<ProductAttribute> list = new ArrayList<>();
+        String sql = "select * from Product_Attribute where ProductDetailId = " + id + " order by AttributeId";
+        try {
+            PreparedStatement st = connection.prepareStatement(sql);
+            ResultSet re = st.executeQuery();
+            while (re.next()) {
+                ProductAttribute p = new ProductAttribute(
+                        re.getInt("id"),
+                        getProductDetail(re.getInt("productdetailid")),
+                        getAttribute(re.getInt("attributeid")),
+                        re.getString("value"));
+                list.add(p);
+            }
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
+
+        return list;
+    }
+
+    public Attribute getAttribute(int id) {
+        String sql = "SELECT * FROM Attribute WHERE id = ?";
+        try (PreparedStatement st = connection.prepareStatement(sql)) {
+            st.setInt(1, id);  // Truyền tham số vào câu lệnh SQL
+            try (ResultSet re = st.executeQuery()) {
+                if (re.next()) {
+                    Attribute b = new Attribute(re.getInt("id"), re.getString("name"));
+                    return b;
+                }
+            }
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
+
+        return null;
+    }
+
+    public List<Configuration> listConfigurationById(int id) {
+        List<Configuration> list = new ArrayList<>();
+        String sql = "SELECT pd.Id, c.Name\n"
+                + "FROM ProductDetail pd\n"
+                + "JOIN Configuration c ON c.Id = pd.ConfigurationId\n"
+                + "WHERE pd.ProductId = (SELECT ProductId FROM ProductDetail WHERE Id = " + id + ")";
+        try {
+            PreparedStatement st = connection.prepareStatement(sql);
+            ResultSet re = st.executeQuery();
+            while (re.next()) {
+                Configuration c = new Configuration(
+                        re.getInt("id"),
+                        re.getString("name"));
+                list.add(c);
+            }
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
+
+        return list;
+    }
+
+    public List<Color> listColorById(int id, int cid) {
+        List<Color> list = new ArrayList<>();
+        String sql = "select pd.Id, c.Name\n"
+                + "from ProductDetail pd\n"
+                + "join Color c on c.Id=pd.ColorId\n"
+                + "and ProductId=(SELECT ProductId FROM ProductDetail WHERE Id =" + id + ")\n"
+                + "and pd.ConfigurationId=" + cid;
+        try {
+            PreparedStatement st = connection.prepareStatement(sql);
+            ResultSet re = st.executeQuery();
+            while (re.next()) {
+                Color c = new Color(
+                        re.getInt("id"),
+                        re.getString("name"));
+                list.add(c);
+            }
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
+
+        return list;
+    }
+
+    public static void main(String[] args) {
+        /*ProductDAO dao = new ProductDAO();
+        List<ProductList> list = dao.listProduct(null, "'MacBook','Acer','ASUS'", null, null);
+        for (int i = 0; i < list.size(); i++) {
+            System.out.println(i);
+            System.out.println(list.get(i).getId() + ", " + list.get(i).getName());
+        }*/
+        String[] c = {};
+        System.out.println(convert(c));
+
+    }
+
+    public static String convert(String[] array) {
+        if (array == null || array.length == 0) {
+            return ""; // Trả về chuỗi rỗng nếu mảng null hoặc trống
+        }
+
+        StringBuilder result = new StringBuilder();
+        for (int i = 0; i < array.length; i++) {
+            result.append("'").append(array[i]).append("'"); // Thêm dấu ngoặc đơn
+            if (i < array.length - 1) {
+                result.append(","); // Thêm dấu phẩy giữa các phần tử
+            }
+        }
+        return result.toString();
+    }
 }

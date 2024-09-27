@@ -155,7 +155,7 @@
                                 <div class="xxxxx">
                                     <img src="${o.getImage()}" alt="" class="img-fluid">
                                 </div>
-                                <a href="single-product.jsp?pid=${o.getProductDetail().getProduct().getId()}" class="hero-carousel__slideOverlay">
+                                <a href="information?productId=${o.getId()}" class="hero-carousel__slideOverlay">
                                     <p class="nhot">${o.getProductDetail().getProduct().getBrand().getName()}</p>
                                     <h5 class="" style="color: white">
                                         ${o.getProductDetail().getProduct().getName()} 
@@ -261,7 +261,7 @@
                                 <div class="card-body">
                                     <p class="nhot">${o3.getProduct().getBrand().getName()}</p>
                                     <h5 class="card-product__title nhot">
-                                        <a href="information?productId=${p.detail}">${o3.getProduct().getName()} 
+                                        <a href="information?productId=${o3.getId()}">${o3.getProduct().getName()} 
                                             ${o3.getProduct().getCategory().getName()} ${o3.getConfiguration().getName()} (${o3.getColor().getName()})</a>
                                     </h5>
                                     <h5 class="card-product__price nhot tien" style="text-align: center">
@@ -282,37 +282,7 @@
             </section>
             <!-- ================ Best Selling item  carousel end ================= --> 
                         <!-- ================ Explore Product item  carousel ================= --> 
-            <section class="section-margin calc-60px">
-                <div class="container">
-                    <div class="section-intro pb-60px">
-                        <p>The most famous brands</p>
-                        <h2>Explore <span class="section-intro__style">Brands</span></h2>
-                    </div>
-                    
-
-                    <div class="owl-carousel owl-theme cc " >
-                        <c:forEach items="${listProduct}" var="o5" varStatus="status">
-                            <!-- Sử dụng chỉ mục từ ListDetail để lấy ảnh tương ứng từ ListPics -->
-                            
-
-                            
-                                <div class="card-product__img">
-                                    <img class="img-fluid" src="${o5.getImage()}" alt=""> <!-- Sử dụng 'image' để lấy hình ảnh -->
-                                </div>
-                                <div class="card-body">
-                                    <p class="nhot">${o5.getProductDetail().getProduct().getBrand().getName()}</p>
-
-
-                                </div>
-                            
-                        </c:forEach>
-                            
-
-                    </div>
-
-                </div>
-
-            </section>
+            
             <!-- ================ Explore Product item  carousel end ================= --> 
 
             <!-- ================ Blog section start ================= -->  

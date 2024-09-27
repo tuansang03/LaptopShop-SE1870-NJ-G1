@@ -3,27 +3,7 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group name="Group 20240613-10:26:14">
-            <file>file:/D:/Project%20SWP/LaptopShop-SE1870-NJ-G1/web/index.jsp</file>
-            <file>file:/D:/Project%20SWP/LaptopShop-SE1870-NJ-G1/src/java/controller/login.java</file>
-            <file>file:/D:/Project%20SWP/LaptopShop-SE1870-NJ-G1/src/java/model/Post.java</file>
-            <file>file:/D:/Project%20SWP/LaptopShop-SE1870-NJ-G1/web/blog.jsp</file>
-            <file>file:/D:/Project%20SWP/LaptopShop-SE1870-NJ-G1/web/AboutUs.jsp</file>
-            <file>file:/D:/Project%20SWP/LaptopShop-SE1870-NJ-G1/src/java/controller/AddToCart.java</file>
-            <file>file:/D:/Project%20SWP/LaptopShop-SE1870-NJ-G1/src/java/dal/CartDAOS.java</file>
-            <file>file:/D:/Project%20SWP/LaptopShop-SE1870-NJ-G1/web/header.jsp</file>
-            <file>file:/D:/Project%20SWP/LaptopShop-SE1870-NJ-G1/src/java/dal/ProductDAO.java</file>
-            <file>file:/D:/Project%20SWP/LaptopShop-SE1870-NJ-G1/src/java/dal/DBContext.java</file>
-            <file>file:/D:/Project%20SWP/LaptopShop-SE1870-NJ-G1/src/java/model/ProductList.java</file>
-            <file>file:/D:/Project%20SWP/LaptopShop-SE1870-NJ-G1/src/java/dal/UserDAO.java</file>
-            <file>file:/D:/Project%20SWP/LaptopShop-SE1870-NJ-G1/src/java/controller/inputProductDetail.java</file>
-            <file>file:/D:/Project%20SWP/LaptopShop-SE1870-NJ-G1/src/java/controller/LoadProductCart.java</file>
-            <file>file:/D:/Project%20SWP/LaptopShop-SE1870-NJ-G1/src/java/controller/DisplayHome.java</file>
-            <file>file:/D:/Project%20SWP/LaptopShop-SE1870-NJ-G1/src/java/controller/displaySearchPage.java</file>
-            <file>file:/D:/Project%20SWP/LaptopShop-SE1870-NJ-G1/src/java/controller/DisplayPostList.java</file>
-            <file>file:/D:/Project%20SWP/LaptopShop-SE1870-NJ-G1/src/java/controller/DisplayPostDetail.java</file>
-            <file>file:/D:/Project%20SWP/LaptopShop-SE1870-NJ-G1/src/java/dal/ProductDAOS.java</file>
-            <file>file:/D:/Project%20SWP/LaptopShop-SE1870-NJ-G1/web/single-blog.jsp</file>
-            <file>file:/D:/Project%20SWP/LaptopShop-SE1870-NJ-G1/src/java/model/ProductDetail.java</file>
+            <file>file:/D:/Project%20SWP/LaptopShop-SE1870-NJ-G1/web/SearchOverviewPage.jsp</file>
         </group>
     </open-files>
 </project-private>

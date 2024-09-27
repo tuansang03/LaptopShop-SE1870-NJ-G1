@@ -145,7 +145,7 @@
                                     <div class="card-product__img">
                                         <img class="img-fluid" src="${o3.getImage()}" alt="">
                                         <ul class="card-product__imgOverlay">
-                                            <li><button><i class="ti-search"></i></button>
+                                            <a href="information?productId=${o3.getProductDetail().getId()}"><li><button><i class="ti-search"></i></button><a/>
                                             <a class="ti-shopping-cart" href="addtocart?pid=${o3.getProductDetail().getProduct().getId()}&&colorid=${o3.getProductDetail().getColor().getId()}&&confid=${o3.getProductDetail().getConfiguration().getId()}"></a>
                                             <button><i class="ti-heart"></i></button>
                                             
