@@ -16,6 +16,10 @@
         <servlet-name>ConfigurationManageController</servlet-name>
         <servlet-class>controller.ConfigurationManageController</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>CategoryController</servlet-name>
+        <servlet-class>controller.CategoryController</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>register</servlet-name>
         <url-pattern>/register</url-pattern>
@@ -31,5 +35,9 @@
     <servlet-mapping>
         <servlet-name>ConfigurationManageController</servlet-name>
         <url-pattern>/ConfigurationManageController</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>CategoryController</servlet-name>
+        <url-pattern>/CategoryController</url-pattern>
     </servlet-mapping>
 </web-app>

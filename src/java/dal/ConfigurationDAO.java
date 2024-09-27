@@ -148,10 +148,49 @@ public boolean insertConfiguration(String name) {
 
     return false; // Trả về false nếu có lỗi xảy ra
 }
-    public static void main(String[] args) {
-        ConfigurationDAO dao = new ConfigurationDAO();
-        boolean check = dao.insertConfiguration("loc");
-        System.out.println(check);
+
+public List<Configuration> getConfigurationsByKeyword(String keyword) {
+    List<Configuration> configurations = new ArrayList<>();
+    PreparedStatement stm = null;
+    ResultSet rs = null;
+    String sql = "SELECT * FROM Configuration WHERE name LIKE ?";
+
+    try {
+        stm = connection.prepareStatement(sql);
+        // Thêm phần trăm (%) trước và sau từ khóa để tìm kiếm gần đúng (LIKE)
+        stm.setString(1, "%" + keyword + "%");
+        rs = stm.executeQuery();
+
+        // Duyệt qua kết quả và thêm các cấu hình vào danh sách
+        while (rs.next()) {
+            int id = rs.getInt("id");
+            String name = rs.getString("name");
+            // Bạn có thể thêm các trường khác nếu cần, ví dụ description hoặc value, v.v.
+            Configuration config = new Configuration(id, name);
+            configurations.add(config);
+        }
+    } catch (SQLException ex) {
+        Logger.getLogger(ConfigurationDAO.class.getName()).log(Level.SEVERE, null, ex);
+    } finally {
+        try {
+            if (rs != null) {
+                rs.close();
+            }
+            if (stm != null) {
+                stm.close();
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(ConfigurationDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
+
+    return configurations;
+}
+
+//    public static void main(String[] args) {
+//        ConfigurationDAO dao = new ConfigurationDAO();
+//        boolean check = dao.insertConfiguration("loc");
+//        System.out.println(check);
+//    }
 
 }

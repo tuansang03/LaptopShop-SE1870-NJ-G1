@@ -33,12 +33,42 @@
         .btn-add-config {
             margin-bottom: 20px;
         }
+
+        /* Style cho ô tìm kiếm */
+        .search-bar {
+            display: flex;
+            margin-bottom: 20px;
+        }
+
+        .search-bar input[type="text"] {
+            flex: 1;
+            padding: 5px;
+            font-size: 16px;
+            border: 1px solid #ccc;
+            border-radius: 3px;
+        }
+
+        .search-bar button {
+            padding: 5px 10px;
+            margin-left: 10px;
+            font-size: 16px;
+        }
     </style>
 </head>
 <body>
     <div class="col-md-10 content">
         <h2>Manage Configuration</h2>
-        
+
+        <!-- Ô tìm kiếm Configuration -->
+<form class="search-bar" action="ConfigurationManageController" method="GET">
+    <input type="hidden" name="service" value="searchConfigulation">
+    <input type="text" name="search" placeholder="Search configuration..." value="${param.search}">
+    <button type="submit" class="btn btn-primary">
+        <i class="fas fa-search"></i> Search
+    </button>
+</form>
+
+
         <!-- Nút Add Configuration -->
         <div class="mb-3">
             <button class="btn btn-success btn-add-config" onclick="window.location.href='ConfigurationManageController?service=addConfig';">
