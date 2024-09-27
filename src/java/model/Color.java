@@ -19,11 +19,9 @@ public class Color {
         this.id = id;
         this.name = name;
     }
-
     public int getId() {
         return id;
     }
-
     public void setId(int id) {
         this.id = id;
     }
@@ -34,6 +32,11 @@ public class Color {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    @Override
+    public String toString() {
+        return "Color{" + "id=" + id + ", name=" + name + '}';
     }
     
 }

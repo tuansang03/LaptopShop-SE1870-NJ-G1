@@ -9,96 +9,103 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>JSP Page</title>
+        <title>Footer</title>
+        <link rel="stylesheet" href="vendors/bootstrap/bootstrap.min.css">
+        <link rel="stylesheet" href="vendors/fontawesome/css/all.min.css">
+        <link rel="stylesheet" href="css/style.css">
+<style>
+    .footer {
+        background-color: #8bb0d5 !important; /* Màu nền trắng xám */
+        color: black !important; /* Màu chữ tối */
+        padding: 40px 0 !important;
+        border-top: 1px solid #e9ecef !important; /* Đường viền trên */
+    }
+    .footer h4 {
+        font-size: 18px !important;
+        margin-bottom: 20px !important;
+        color: black !important; /* Màu tiêu đề */
+    }
+    .footer p, .footer ul {
+        font-size: 14px !important;
+        line-height: 1.6 !important;
+    }
+    .footer .list a {
+        color: #343a40 !important; /* Màu chữ liên kết */
+        text-decoration: none !important;
+    }
+    .footer .list a:hover {
+        color: #007BFF !important; /* Màu chữ liên kết khi hover */
+        text-decoration: underline !important; /* Gạch chân khi hover */
+    }
+    .footer-bottom {
+        padding: 20px 0 !important;
+    }
+    .footer-bottom p {
+        margin: 0 !important;
+        font-size: 14px !important;
+    }
+    .instafeed img {
+        width: 100% !important; /* Ảnh gallery tự động điều chỉnh kích thước */
+        border-radius: 5px !important; /* Bo góc ảnh */
+    }
+    .footer-area{
+        background-color: #f0f0f0 !important; /* Màu nền trắng xám */
+        color: #343a40 !important; /* Màu chữ tối */
+    }
+</style>
+
+
     </head>
     <body>
         <footer class="footer">
-		<div class="footer-area">
-			<div class="container">
-				<div class="row section_gap">
-					<div class="col-lg-3 col-md-6 col-sm-6">
-						<div class="single-footer-widget tp_widgets">
-							<h4 class="footer_title large_title">Our Mission</h4>
-							<p>
-                                                            
-								So seed seed green that winged cattle in. Gathering thing made fly you're no 
-								divided deep moved us lan Gathering thing us land years living.
-							</p>
-							<p>
-								So seed seed green that winged cattle in. Gathering thing made fly you're no divided deep moved 
-							</p>
-						</div>
-					</div>
-					<div class="offset-lg-1 col-lg-2 col-md-6 col-sm-6">
-						<div class="single-footer-widget tp_widgets">
-							<h4 class="footer_title">Quick Links</h4>
-							<ul class="list">
-								<li><a href="#">Home</a></li>
-								<li><a href="#">Shop</a></li>
-								<li><a href="#">Blog</a></li>
-								<li><a href="#">Product</a></li>
-								<li><a href="#">Brand</a></li>
-								<li><a href="#">Contact</a></li>
-							</ul>
-						</div>
-					</div>
-					<div class="col-lg-2 col-md-6 col-sm-6">
-						<div class="single-footer-widget instafeed">
-							<h4 class="footer_title">Gallery</h4>
-							<ul class="list instafeed d-flex flex-wrap">
-								<li><img src="img/gallery/r1.jpg" alt=""></li>
-								<li><img src="img/gallery/r2.jpg" alt=""></li>
-								<li><img src="img/gallery/r3.jpg" alt=""></li>
-								<li><img src="img/gallery/r5.jpg" alt=""></li>
-								<li><img src="img/gallery/r7.jpg" alt=""></li>
-								<li><img src="img/gallery/r8.jpg" alt=""></li>
-							</ul>
-						</div>
-					</div>
-					<div class="offset-lg-1 col-lg-3 col-md-6 col-sm-6">
-						<div class="single-footer-widget tp_widgets">
-							<h4 class="footer_title">Contact Us</h4>
-							<div class="ml-40">
-								<p class="sm-head">
-									<span class="fa fa-location-arrow"></span>
-									Head Office
-								</p>
-								<p>123, Main Street, Your City</p>
-	
-								<p class="sm-head">
-									<span class="fa fa-phone"></span>
-									Phone Number
-								</p>
-								<p>
-									+123 456 7890 <br>
-									+123 456 7890
-								</p>
-	
-								<p class="sm-head">
-									<span class="fa fa-envelope"></span>
-									Email
-								</p>
-								<p>
-									free@infoexample.com <br>
-									www.infoexample.com
-								</p>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
+            <div class="footer-area">
+                <div class="container">
+                    <div class="row section_gap">
+                        <div class="col-lg-4 col-md-6 col-sm-6">
+                            <div class="single-footer-widget tp_widgets">
+                                <h4 class="footer_title large_title">Our Mission</h4>
+                                <p>
+                                    <legend>LaptopShop</legend> Our mission is to provide high-quality laptops that empower individuals and businesses. We strive to offer the latest technology at competitive prices, ensuring a seamless shopping experience with exceptional customer service. Your success is our priority!
+                                </p>
+                            </div>
+                        </div>
+                        <div class="col-lg-2 col-md-6 col-sm-6">
+                            <div class="single-footer-widget tp_widgets">
+                                <h4 class="footer_title">Quick Links</h4>
+                                <ul class="list">
+                                    <li><a href="home">Home</a></li>
+                                    <li><a href="category.jsp">Shop</a></li>
+                                    <li><a href="blog.jsp">Blog</a></li>
+                                    <li><a href="AboutUs.jsp">About Us</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="col-lg-4 col-md-6 col-sm-6">
+                            <div class="single-footer-widget instafeed">
+                                <h4 class="footer_title">Gallery</h4>
+                                <ul class="list instafeed d-flex flex-wrap">
+                                    <li><img src="img/gallery/r1.jpg" alt=""></li>
+                                    <li><img src="img/gallery/r2.jpg" alt=""></li>
+                                    <li><img src="img/gallery/r3.jpg" alt=""></li>
+                                    <li><img src="img/gallery/r5.jpg" alt=""></li>
+                                    <li><img src="img/gallery/r7.jpg" alt=""></li>
+                                    <li><img src="img/gallery/r8.jpg" alt=""></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
-		<div class="footer-bottom">
-			<div class="container">
-				<div class="row d-flex">
-					<p class="col-lg-12 footer-text text-center">
-						<!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
-Copyright &copy;<script>document.write(new Date().getFullYear());</script> All rights reserved | This template is made with <i class="fa fa-heart" aria-hidden="true"></i> by <a href="https://colorlib.com" target="_blank">Colorlib</a>
-<!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. --></p>
-				</div>
-			</div>
-		</div>
-	</footer>
+            <div class="footer-bottom">
+                <div class="container">
+                    <div class="row d-flex">
+                        <p class="col-lg-12 footer-text text-center">
+<!--                            Copyright &copy;<script>document.write(new Date().getFullYear());</script> All rights reserved | This template is made with <i class="fa fa-heart" aria-hidden="true"></i> by <a href="https://colorlib.com" target="_blank" style="color: #007BFF;">Colorlib</a>-->
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </footer>
     </body>
 </html>

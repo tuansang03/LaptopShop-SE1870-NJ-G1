@@ -87,6 +87,11 @@ public class Feedback {
     public void setReplyFeedbackId(int ReplyFeedbackId) {
         this.ReplyFeedbackId = ReplyFeedbackId;
     }
+
+    @Override
+    public String toString() {
+        return "Feedback{" + "id=" + id + ", user=" + user + ", product=" + product + ", rating=" + rating + ", FeedbackContent=" + FeedbackContent + ", FeedbackDate=" + FeedbackDate + ", ReplyFeedbackId=" + ReplyFeedbackId + '}';
+    }
     
     
     

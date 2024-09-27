@@ -319,6 +319,9 @@
 
                             <br>
                             <h2>${price}</h2>
+                            <h5 style="text-decoration: line-through; font-size: 16px; color: #a19c9c; padding-left: 16px ">
+                                ${sale}đ
+                            </h5>
                             <p>${detail.shortDescription}</p>
                             <div class="product_count">
                                 <a class="button primary-btn" href="addtocart?pid=${detail.product.id}&&colorid=${detail.color.id}&&confid=${detail.configuration.id}">Add to Cart</a>               

@@ -4,35 +4,135 @@
  */
 package dal;
 
+import java.beans.Statement;
+import java.util.ArrayList;
+import model.Product;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.List;
-import java.util.ArrayList;
 import model.*;
 import java.text.DecimalFormat;
 
 /**
  *
- * @author PHONG
+ * @author ADMIN
  */
 public class ProductDAO extends DBContext {
 
     public Product getProductById(int id) {
         String sql = "SELECT * FROM Product WHERE id = ?";
+
         try (PreparedStatement st = connection.prepareStatement(sql)) {
             st.setInt(1, id);  // Truyền tham số vào câu lệnh SQL
+
             try (ResultSet re = st.executeQuery()) {
                 if (re.next()) {
+                    // Lấy brand và category từ các phương thức khác
+                    Brand brand = getBrandById(re.getInt("brandid"));
+                    Category category = getCategoryById(re.getInt("categoryid"));
+
+                    // Tạo đối tượng Product
                     Product p = new Product(
-                            re.getInt("id"),
-                            getBrandById(re.getInt("brandid")),
-                            getCategoryById(re.getInt("categoryid")),
-                            re.getString("name"),
-                            re.getString("status")
+                            re.getInt("id"), // id
+                            brand, // brand object
+                            category, // category object
+                            re.getString("name"), // product name
+                            re.getString("status") // product status
                     );
+
                     return p;
                 }
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            // Bạn có thể chọn xử lý ngoại lệ theo cách của mình hoặc ném nó lên lớp trên
+            // Ví dụ: throw new RuntimeException(e);
+        }
+
+        // Trường hợp không tìm thấy sản phẩm hoặc có lỗi, trả về null
+        return null;
+    }
+
+    public ArrayList<Product> readProduct() {
+        ArrayList<Product> pList = new ArrayList<>();
+        String sql = "SELECT p.*, b.Name, c.Name\n"
+                + "FROM product p\n"
+                + "JOIN brand b ON p.BrandId = b.Id\n"
+                + "JOIN category c ON p.CategoryId = c.Id;";
+        try {
+            PreparedStatement pre = connection.prepareStatement(sql);
+            ResultSet rs = pre.executeQuery();
+
+            while (rs.next()) {
+                Product p = new Product();
+                p.setId(rs.getInt(1));
+                Brand b = new Brand();
+                b.setId(rs.getInt(2));
+                b.setName(rs.getString(6));
+                p.setBrand(b);
+                Category c = new Category();
+                c.setId(rs.getInt(3));
+                c.setName(rs.getString(7));
+                p.setCategory(c);
+                p.setName(rs.getString(4));
+                pList.add(p);
+            }
+            return pList;
+
+        } catch (SQLException ex) {
+            Logger.getLogger(ProductDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
+    }
+
+    public int insertProduct(int brandId, int categoryId, String name) {
+        String sql = "INSERT INTO [dbo].[Product] (BrandId, CategoryId, Name) VALUES (?, ?, ?)";
+        int generatedId = -1;  // Khởi tạo giá trị mặc định cho ID sinh ra
+
+        try {
+            // Sử dụng PreparedStatement với tùy chọn RETURN_GENERATED_KEYS để lấy ID tự động sinh
+            PreparedStatement pre = connection.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS);
+            pre.setInt(1, brandId);
+            pre.setInt(2, categoryId);
+            pre.setString(3, name);
+
+            // Thực thi câu lệnh INSERT
+            int affectedRows = pre.executeUpdate();
+
+            // Kiểm tra nếu có dòng nào bị ảnh hưởng (thêm thành công)
+            if (affectedRows > 0) {
+                // Lấy kết quả của khóa tự tăng
+                ResultSet generatedKeys = pre.getGeneratedKeys();
+                if (generatedKeys.next()) {
+                    generatedId = generatedKeys.getInt(1);  // Lấy ID của sản phẩm vừa thêm
+                }
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(ProductDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        return generatedId;  // Trả về ID của sản phẩm vừa được thêm
+    }
+
+    public List<Product> list() {
+        List<Product> list = new ArrayList<>();
+        String sql = "select * from Product";
+        try {
+            PreparedStatement st = connection.prepareStatement(sql);
+            ResultSet re = st.executeQuery();
+            while (re.next()) {
+                Product p = new Product(
+                        re.getInt("id"),
+                        getBrandById(re.getInt("brand")),
+                        getCategoryById(re.getInt("category")),
+                        re.getString("name"),
+                        re.getString("status"));
+                Category c = new Category(re.getInt("productCategoryID"), re.getString("category_name"));
+                list.add(p);
             }
         } catch (SQLException e) {
             System.out.println(e);
@@ -351,14 +451,13 @@ public class ProductDAO extends DBContext {
     }
 
     public static void main(String[] args) {
-        /*ProductDAO dao = new ProductDAO();
-        List<ProductList> list = dao.listProduct(null, "'MacBook','Acer','ASUS'", null, null);
+        ProductDAO dao = new ProductDAO();
+        List<ProductList> list = dao.listProduct("Gaming", null, null, null);
         for (int i = 0; i < list.size(); i++) {
             System.out.println(i);
             System.out.println(list.get(i).getId() + ", " + list.get(i).getName());
-        }*/
-        String[] c = {};
-        System.out.println(convert(c));
+        }
+
 
     }
 
@@ -376,4 +475,5 @@ public class ProductDAO extends DBContext {
         }
         return result.toString();
     }
+
 }
