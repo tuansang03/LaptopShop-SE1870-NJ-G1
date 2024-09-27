@@ -62,7 +62,7 @@ public class ListProduct extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         ProductDAO d = new ProductDAO();
-        
+
         String price = request.getParameter("price");
         String name = request.getParameter("name");
         // Get selected brands and categories as arrays
@@ -70,17 +70,15 @@ public class ListProduct extends HttpServlet {
         String[] selectedCategories = request.getParameterValues("category[]");
         List<Brand> brandlist = d.listBrand();
         List<Category> categorylist = d.listCategory();
-        List<ProductList> list = new ArrayList<>();
-        if(selectedBrands==null && selectedCategories==null){
-             list = d.listProduct(null,null, price, name);
-        }else{
-             list = d.listProduct(convert(selectedCategories),convert(selectedBrands), price, name);
-        }
-       
-        
+        List<ProductList> list = d.listProduct(convert(selectedCategories), convert(selectedBrands), price, name);
+
+
+        request.setAttribute("selectedBrands", selectedBrands);
+        request.setAttribute("selectedCategories", selectedCategories);
+
         request.setAttribute("a", convert(selectedCategories));
         request.setAttribute("b", convert(selectedBrands));
-        
+
         request.setAttribute("brandlist", brandlist);
         request.setAttribute("categorylist", categorylist);
         request.setAttribute("price", price);
