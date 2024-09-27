@@ -106,6 +106,7 @@ Cookie arr[] = request.getCookies();
             if(u.getStatus().equalsIgnoreCase("ban")){
                 session.setAttribute("ban", u);
                 response.sendRedirect("ban.jsp");
+                return;
             }
             if (u.getRole().getId() == 3) {
                 session.setAttribute("user", u);
