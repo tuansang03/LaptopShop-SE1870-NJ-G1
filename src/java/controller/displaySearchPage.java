@@ -15,6 +15,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.util.List;
 import model.Image;
+import model.Post;
 
 /**
  *
@@ -58,15 +59,34 @@ public class displaySearchPage extends HttpServlet {
     @Override
  protected void doGet(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
+     String minPost = "1";
+     String maxPost = "5";
+     if(request.getAttribute("min")!=null&&request.getAttribute("max")!=null){
+         minPost = request.getParameter("min");
+         maxPost = request.getParameter("max");
+     }
+     
+     
     String query = request.getParameter("query"); // Lấy giá trị từ tham số request
     String error = "";
-    UserDAO dao = new UserDAO();    
+    UserDAO dao = new UserDAO(); 
+    List<Post> listP = dao.getPostsByTitleOrContent(query);
     // Gọi phương thức với tham số đúng
     List<Image> list = dao.getPictureListByProductName(query); 
     if(list.isEmpty()){
         error = " ! ! ! There is no product that match your Keyword";
     }
+    else if(list.isEmpty()&& listP.isEmpty()){
+         error = " ! ! ! There is no product and Post that match your Keyword";
+    }
+    else if(listP.isEmpty()){
+         error = " ! ! ! There is no Post that match your Keyword";
+    }
+    
+    request.setAttribute("pop_size", list.size());
     request.setAttribute("err", error);
+     request.setAttribute("listP", listP);
+     request.setAttribute("listPSize", listP.size());
     request.setAttribute("pop", list); // Đặt danh sách hình ảnh vào thuộc tính request
     request.getRequestDispatcher("SearchOverviewPage.jsp").forward(request, response); // Chuyển hướng đến trang JSP
 }

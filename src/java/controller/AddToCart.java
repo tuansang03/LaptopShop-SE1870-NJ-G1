@@ -88,7 +88,7 @@ public class AddToCart extends HttpServlet {
 
         request.setAttribute("image", image);
         //request.setAttribute("listCartItem", listCartItem);
-        request.getRequestDispatcher("cart.jsp").forward(request, response);
+        request.getRequestDispatcher("home").forward(request, response);
 
 }
 

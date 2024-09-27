@@ -148,16 +148,12 @@
                                         <ul id="suggestions" class="suggestions"></ul>
                                     </form>
                                 </div>
-
                                 <script>
                                     document.querySelector('.search-btn').addEventListener('click', function () {
                                         var searchField = document.querySelector('.search-field');
                                         searchField.style.display = 'block';
                                         searchField.focus();
                                     });
-
-
-
                                     document.addEventListener('click', function (event) {
                                         var searchField = document.querySelector('.search-field');
                                         var searchBtn = document.querySelector('.search-btn');
@@ -173,10 +169,10 @@
                                     });
 
                                 </script>
-
+                                
                                 <li class="nav-item">
                                     <!--                                    da edit o day-->
-                                    <a href="cart.jsp">
+                                    <a href="loadProductCart">
                                         <button>
                                             <i class="ti-shopping-cart"></i>
                                             <span class="nav-shop__circle">3</span>

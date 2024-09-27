@@ -4,6 +4,7 @@
     Author     : ADMIN
 --%>
 
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
@@ -100,7 +101,12 @@
                 border:1px solid gray !important;
                 box-shadow: 0px 0px 5px gray;
             }
+            .cart_button{
 
+            }
+            .borderr{
+             height: 500px   
+            }
         </style>
         <!--================ Start Header Menu Area =================-->
         <%@include file="header.jsp" %>
@@ -121,7 +127,7 @@
                                 <h4 class="fontx">Laptop Shop</h4>
                                 <h1 class="fontx">Browse Our Best Laptop</h1>
                                 <p class="fontx">Unleash Your Potential – Quality Laptops for Every Journey</p>
-                                <a class="button button-hero" href="category.jsp">Browse Now</a>
+                                <a class="button button-hero" href="listproduct">Browse Now</a>
                             </div>
                         </div>
                     </div>
@@ -131,32 +137,44 @@
 
             <!--================ Hero Carousel start =================-->
 
-            <div class="ramdon_title">SOME RANDOM PRODUCT</div>
+            <div class="ramdon_title">EXPLORE OUR PRODUCT</div>
 
 
             <section class="section-margin mt-0">
 
                 <div class="owl-carousel owl-theme hero-carousel xxx">
 
-                    <c:if test="${empty listH}">
+                    <c:if test="${empty listR}">
                         <p>No images available.</p>
                     </c:if>
 
-                    <c:if test="${not empty listH}">
+                    <c:if test="${not empty listR}">
 
-                        <c:forEach items="${listH}" var="o" varStatus="status">
+                        <c:forEach items="${listR}" var="o" varStatus="status">
                             <div class="hero-carousel__slide xxxx">
                                 <div class="xxxxx">
-                                    <img src="${o}" alt="" class="img-fluid">
-
-
+                                    <img src="${o.getImage()}" alt="" class="img-fluid">
                                 </div>
-                                <a href="" class="hero-carousel__slideOverlay">
-                                    <h3>Wireless Headphone</h3>
-                                    <p>Accessories Item</p>
+                                <a href="single-product.jsp?pid=${o.getProductDetail().getProduct().getId()}" class="hero-carousel__slideOverlay">
+                                    <p class="nhot">${o.getProductDetail().getProduct().getBrand().getName()}</p>
+                                    <h5 class="" style="color: white">
+                                        ${o.getProductDetail().getProduct().getName()} 
+                                        ${o.getProductDetail().getProduct().getCategory().getName()} 
+                                        ${o.getProductDetail().getConfiguration().getName()} 
+                                        (${o.getProductDetail().getColor().getName()})
+                                    </h5>
+                                    <h5 class="card-product__price nhot tien" >
+                                        <!--price form database-->
+                                        <fmt:formatNumber value="${o.getProductDetail().getPrice()}" type="number"/>đ
+                                    </h5>
+                                    <h5 style="text-decoration: line-through; font-size: 16px; color: #a19c9c; padding-left: 16px ">
+                                        <!--price form setup-->
+                                        <fmt:formatNumber value="${(o.getProductDetail().getPrice()) * 1.2}" type="number"/>đ
+                                    </h5>
                                 </a>
                             </div>
                         </c:forEach>
+
                     </c:if>
 
                 </div>
@@ -207,10 +225,10 @@
                     <div class="row">
                         <div class="col-xl-5">
                             <div class="offer__content text-center">
-                                <h3>Up To 50% Off</h3>
-                                <h4>Winter Sale</h4>
-                                <p>Him she'd let them sixth saw light</p>
-                                <a class="button button--active mt-3 mt-xl-4" href="#">Shop Now</a>
+                                <h3>UP TO 20% OFF</h3>
+                                <h4>Fall Sale</h4>
+                                <p>Tap <a href="listproduct">Now</a> To Explore Our <legend style="color: #ef6767; font-weight: bold">BEST LAPTOPS</legend></p>
+                                <a class="button button--active mt-3 mt-xl-4" href="listproduct">Shop Now</a>
                             </div>
                         </div>
                     </div>
@@ -222,32 +240,40 @@
             <section class="section-margin calc-60px">
                 <div class="container">
                     <div class="section-intro pb-60px">
-                        <p>addest Item in the market</p>
+                        <p>Newest Item in the market</p>
                         <h2>Newest <span class="section-intro__style">Products</span></h2>
                     </div>
 
                     <div class="owl-carousel owl-theme " id="bestSellerCarousel">
-                        <c:forEach items="${listPro}" var="o3" varStatus="status">
+                        <c:forEach items="${ListDetail}" var="o3" varStatus="status">
+                            <!-- Sử dụng chỉ mục từ ListDetail để lấy ảnh tương ứng từ ListPics -->
+                            <c:set var="image" value="${ListPics[status.index]}" />
 
                             <div class="card text-center card-product borderr">
                                 <div class="card-product__img">
-                                    <img class="img-fluid" src="${o3.getImage()}" alt="">
+                                    <img class="img-fluid" src="${image.getImage()}" alt=""> <!-- Sử dụng 'image' để lấy hình ảnh -->
                                     <ul class="card-product__imgOverlay">
                                         <li><button><i class="ti-search"></i></button></li>
-                                        <li><a class="ti-shopping-cart" href="addtocart?pid=${o3.getProductDetail().getProduct().getId()}&&colorid=${o3.getProductDetail().getColor().getId()}&&confid=${o3.getProductDetail().getConfiguration().getId()}"></a></li>
+                                        <li class="cart_button"><a class="ti-shopping-cart" href="addtocart?pid=${o3.getProduct().getId()}&&colorid=${o3.getColor().getId()}&&confid=${o3.getConfiguration().getId()}"></a></li>
                                         <li><button><i class="ti-heart"></i></button></li>
                                     </ul>
-
                                 </div>
                                 <div class="card-body">
-                                    <p class="nhot">${o3.getProductDetail().getProduct().getBrand().getName()}</p>
-                                    <h5 class="card-product__title  nhot" ><a href="single-product.jsp">${o3.getProductDetail().getProduct().getName()} 
-                                            ${o3.getProductDetail().getProduct().getCategory().getName()}${o3.getProductDetail().getConfiguration().getName()} (${o3.getProductDetail().getColor().getName()})</a></h5>
-                                    <p class="card-product__price nhot tien">${o3.getProductDetail().getPrice()} VND</p>
+                                    <p class="nhot">${o3.getProduct().getBrand().getName()}</p>
+                                    <h5 class="card-product__title nhot">
+                                        <a href="information?productId=${p.detail}">${o3.getProduct().getName()} 
+                                            ${o3.getProduct().getCategory().getName()} ${o3.getConfiguration().getName()} (${o3.getColor().getName()})</a>
+                                    </h5>
+                                    <h5 class="card-product__price nhot tien" style="text-align: center">
+                                        <fmt:formatNumber value="${o3.getPrice()}" type="number"/> đ
+                                    </h5>
+                                    <h5 style="text-decoration: line-through; font-size: 12px; color: #a19c9c; padding-left: 16px">
+                                        <fmt:formatNumber value="${(o3.getPrice()) * 1.2}" type="number"/> đ
+                                    </h5>
                                 </div>
                             </div>
-
                         </c:forEach>
+
 
                     </div>
 
@@ -255,6 +281,39 @@
 
             </section>
             <!-- ================ Best Selling item  carousel end ================= --> 
+                        <!-- ================ Explore Product item  carousel ================= --> 
+            <section class="section-margin calc-60px">
+                <div class="container">
+                    <div class="section-intro pb-60px">
+                        <p>The most famous brands</p>
+                        <h2>Explore <span class="section-intro__style">Brands</span></h2>
+                    </div>
+                    
+
+                    <div class="owl-carousel owl-theme cc " >
+                        <c:forEach items="${listProduct}" var="o5" varStatus="status">
+                            <!-- Sử dụng chỉ mục từ ListDetail để lấy ảnh tương ứng từ ListPics -->
+                            
+
+                            
+                                <div class="card-product__img">
+                                    <img class="img-fluid" src="${o5.getImage()}" alt=""> <!-- Sử dụng 'image' để lấy hình ảnh -->
+                                </div>
+                                <div class="card-body">
+                                    <p class="nhot">${o5.getProductDetail().getProduct().getBrand().getName()}</p>
+
+
+                                </div>
+                            
+                        </c:forEach>
+                            
+
+                    </div>
+
+                </div>
+
+            </section>
+            <!-- ================ Explore Product item  carousel end ================= --> 
 
             <!-- ================ Blog section start ================= -->  
             <section class="blog">
@@ -283,9 +342,9 @@
                                         <ul class="card-blog__info">
                                             <li><a href="#" class="bx bxs-user"> ${p.user.userName}</a></li>
                                             <li><i class="bx bx-laptop"></i>${p.brand.name}</li>
-                                            <li><i class="bx bx-laptop"></i>${p.publishDate}</li>
+                                            <li><i class="bx bx-calendar"></i>${p.publishDate}</li>
                                         </ul>
-                                        <h4 class="card-blog__title"><a href="single-blog.jsp">${p.tittle}</a></h4>
+                                        <h4 class="card-blog__title"><a href="postdetail?id=${p.id}">${p.tittle}</a></h4>
                                         <p>${p.shortContent}</p>
                                         <a class="card-blog__link" href="postdetail?id=${p.id}">Read More <i class="ti-arrow-right"></i></a>
                                     </div>

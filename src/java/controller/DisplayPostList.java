@@ -59,7 +59,10 @@ public class DisplayPostList extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
         UserDAO dao = new UserDAO();
-        List<Post> listP = dao.getAllPostListD();        
+        List<Post> listP = dao.getAllPostListD();      
+         List<Post> listNew = dao.getNewestPostListD();
+        
+         request.setAttribute("postnew", listNew);
         request.setAttribute("postlist", listP);
         request.getRequestDispatcher("blog.jsp").forward(request, response);
         

@@ -107,6 +107,33 @@ public class ProductDAOS extends DBContext {
         }
         return listPD;
     }
+public List<ProductDetail> getTop16ProductDetail() {
+    String sql = "SELECT TOP 16 * FROM ProductDetail ORDER BY Id DESC"; // Lấy top 8 và sắp xếp theo Id giảm dần
+    List<ProductDetail> listPD = new ArrayList<>();
+    try {
+        PreparedStatement st = connection.prepareStatement(sql);
+        ResultSet rs = st.executeQuery();
+
+        while (rs.next()) {
+            ProductDetail pd = new ProductDetail(
+                    rs.getInt("Id"),
+                    getProductById(rs.getInt("ProductId")),
+                    getColorById(rs.getInt("ColorId")),
+                    getConfigurationById(rs.getInt("ConfigurationId")),
+                    rs.getInt("Price"),
+                    rs.getInt("Quantity"),
+                    rs.getString("ShortDescription"),
+                    rs.getString("Description"),
+                    rs.getString("Status"));
+
+            listPD.add(pd);
+        }
+    } catch (Exception e) {
+        System.out.println(e); // Thêm thông báo lỗi để dễ dàng kiểm tra
+    }
+    return listPD;
+}
+
     
     public ProductDetail getProductDetailByID(int id) {
         String sql = "SELECT * FROM ProductDetail WHERE id = ?";

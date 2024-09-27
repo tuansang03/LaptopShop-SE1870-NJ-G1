@@ -68,7 +68,10 @@ public class DisplayPostDetail extends HttpServlet {
             int id = Integer.parseInt(idStr); // Chuyển đổi String sang int
             UserDAO dao = new UserDAO();
             Post post = dao.getPostById(id); // Gọi hàm lấy bài viết theo id
-            
+            if(post==null){
+                post = dao.getPostById(id-1);
+                
+            }
             String formattedDate = sdf.format(post.getPublishDate());
             request.setAttribute("postDetailTime", formattedDate);
             request.setAttribute("postDetail", post);

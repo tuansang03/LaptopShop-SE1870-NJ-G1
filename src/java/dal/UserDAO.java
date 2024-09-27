@@ -294,6 +294,39 @@ public class UserDAO extends DBContext {
         }
         return list;
     }
+public List<Post> getNewestPostListD() {
+
+    List<Post> list = new ArrayList<>();
+    String sql = "SELECT TOP 5 [Id], [UserId], [BrandId], [CategoryId], [Title], [ShortContent], [FullContent], [Thumbnail], [PublishDate] "
+            + "FROM [dbo].[Post] "
+            + "ORDER BY [PublishDate] DESC"; // Sắp xếp theo PublishDate
+
+    try {
+        PreparedStatement st = connection.prepareStatement(sql);
+        ResultSet rs = st.executeQuery();
+        while (rs.next()) {
+            Post p = new Post();
+            p.setId(rs.getInt("Id"));
+            User u = getUserByIdD(rs.getInt("UserId"));
+            p.setUser(u);
+            Brand b = getBrandByIdD(rs.getInt("BrandId"));
+            p.setBrand(b);
+            Category c = getCategoryByIdD(rs.getInt("CategoryId"));
+            p.setCategory(c);
+            p.setTittle(rs.getString("Title"));
+            p.setShortContent(rs.getString("ShortContent"));
+            p.setFullContent(rs.getString("FullContent"));
+            p.setThumbnail(rs.getString("Thumbnail"));
+            p.setPublishDate(rs.getDate("PublishDate"));
+            list.add(p);
+        }
+    } catch (SQLException e) {
+        System.out.println(e);
+    }
+    return list;
+}
+
+        
 
     public List<Post> getAllPostListD() {
 
@@ -504,21 +537,7 @@ public List<Image> getPictureListByProductName(String productName) {
         System.out.println(e);
     }
     return list;
-}
-
-
-    public static void main(String[] args) {
-        UserDAO dAO = new UserDAO();
-        List<Image>list =dAO.getPictureListByProductName("xxxxxxxxxxxxx");
-        for (Image image : list) {
-            System.out.println(image);
-        }
-        
-    }
-
-
-
-    public Post getPostById(int id) {
+} public Post getPostById(int id) {
         String sql = "SELECT [Id], [UserId], [BrandId], [CategoryId], [Title], "
                 + "[ShortContent], [FullContent], [Thumbnail], [PublishDate] "
                 + "FROM [dbo].[Post] WHERE [Id] = ?";
@@ -547,6 +566,47 @@ public List<Image> getPictureListByProductName(String productName) {
         }
         return null; // Trả về null nếu không tìm thấy
     }
+public List<Post> getPostsByTitleOrContent(String searchString) {
+    List<Post> postList = new ArrayList<>();
+    String sql = "SELECT [Id], [UserId], [BrandId], [CategoryId], [Title], "
+               + "[ShortContent], [FullContent], [Thumbnail], [PublishDate] "
+               + "FROM [dbo].[Post] "
+               + "WHERE [Title] LIKE ? OR [ShortContent] LIKE ?"; // So sánh tiêu đề hoặc nội dung ngắn
+
+    try {
+        PreparedStatement st = connection.prepareStatement(sql);
+        String searchPattern = "%" + searchString + "%"; // Tạo mẫu tìm kiếm
+        st.setString(1, searchPattern);
+        st.setString(2, searchPattern);
+        
+        ResultSet rs = st.executeQuery();
+        while (rs.next()) {
+            Post p = new Post();
+            p.setId(rs.getInt("Id"));
+            
+            User u = getUserByIdD(rs.getInt("UserId"));  // Lấy thông tin người dùng
+            p.setUser(u);
+            
+            Brand b = getBrandByIdD(rs.getInt("BrandId")); // Lấy thông tin thương hiệu
+            p.setBrand(b);
+            
+            Category c = getCategoryByIdD(rs.getInt("CategoryId")); // Lấy thông tin danh mục
+            p.setCategory(c);
+            
+            p.setTittle(rs.getString("Title")); // Đặt tiêu đề
+            p.setShortContent(rs.getString("ShortContent")); // Đặt nội dung ngắn
+            p.setFullContent(rs.getString("FullContent")); // Đặt nội dung đầy đủ
+            p.setThumbnail(rs.getString("Thumbnail")); // Đặt thumbnail
+            p.setPublishDate(rs.getDate("PublishDate")); // Đặt ngày xuất bản
+            
+            postList.add(p); // Thêm bài viết vào danh sách
+        }
+    } catch (SQLException e) {
+        System.out.println(e);
+    }
+    return postList; // Trả về danh sách bài viết tìm thấy
+}
+
 
 }
 //================================================================================================================

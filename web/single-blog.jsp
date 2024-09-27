@@ -77,12 +77,12 @@
                                 <div class="blog_info text-right">
                                     <div class="post_tag">
 
-                                        <a class="active" href="#">${postDetail.category.name} Laptop</a>
+                                      Type:   <a class="active" href="listproduct?category=${postDetail.category.name}">${postDetail.category.name}</a>
 
                                     </div>
                                     <div class="post_tag">
 
-                                        <a class="active" href="#">${postDetail.brand.name}</a>
+                                        Brand: <a class="active" href="listproduct?brand=${postDetail.brand.name}">${postDetail.brand.name}</a>
 
                                     </div>
                                     <ul class="blog_meta list">
@@ -152,14 +152,14 @@
                                     <h5>Bill Kaulitz</h5>
 
                                 </div>
-                                <div class="row">
+<!--                                <div class="row">
                                     <div class="col-6">
                                         <img class="img-fluid" src="img/blog/post-img1.jpg" alt="">
                                     </div>
                                     <div class="col-6">
                                         <img class="img-fluid" src="img/blog/post-img2.jpg" alt="">
                                     </div>
-                                </div>
+                                </div>-->
                             </div>
                         </div>
                         <div class="navigation-area">
@@ -171,38 +171,34 @@
                                         </a>
                                     </div>
                                     <div class="arrow">
-                                        <a href="#">
+                                        <a href="postdetail?id=${postDetail.getId()-1}">
                                             <span class="lnr text-white lnr-arrow-left"></span>
                                         </a>
                                     </div>
                                     <div class="detials">
-                                        <p>Prev Post</p>
-                                        <a href="#">
-                                            <h4>Space The Final Frontier</h4>
-                                        </a>
+                                        <a href="postdetail?id=${postDetail.getId()-1}">Previous Post</a>
+                                   
                                     </div>
                                 </div>
                                 <div class="col-lg-6 col-md-6 col-12 nav-right flex-row d-flex justify-content-end align-items-center">
                                     <div class="detials">
-                                        <p>Next Post</p>
-                                        <a href="#">
-                                            <h4>Telescopes 101</h4>
-                                        </a>
+                                        <a href="postdetail?id=${postDetail.getId()+ 1}">Next Post</a>
+        
                                     </div>
                                     <div class="arrow">
-                                        <a href="#">
+                                        <a href="postdetail?id=${postDetail.getId()+ 1}">
                                             <span class="lnr text-white lnr-arrow-right"></span>
                                         </a>
                                     </div>
                                     <div class="thumb">
-                                        <a href="#">
+                                        <a href="postdetail?id=${postDetail.getId()+ 1}">
                                             <img class="img-fluid" src="img/blog/next.jpg" alt="">
                                         </a>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        <div class="comments-area">
+<!--                        <div class="comments-area">
                             <h4>05 Comments</h4>
                             <div class="comment-list">
                                 <div class="single-comment justify-content-between d-flex">
@@ -309,8 +305,8 @@
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                        <div class="comment-form">
+                        </div>-->
+<!--                        <div class="comment-form">
                             <h4>Leave a Reply</h4>
                             <form>
                                 <div class="form-group form-inline">
@@ -330,7 +326,7 @@
                                 </div>
                                 <a href="#" class="button button-postComment button--active">Post Comment</a>
                             </form>
-                        </div>
+                        </div>-->
                     </div>
                     <div class="col-lg-4">
                         <div class="blog_right_sidebar">
@@ -346,7 +342,7 @@
                                 <!-- /input-group -->
                                 <div class="br"></div>
                             </aside>
-                            <aside class="single_sidebar_widget author_widget">
+<!--                            <aside class="single_sidebar_widget author_widget">
                                 <img class="author_img rounded-circle" src="img/blog/author.png" alt="">
                                 <h4>Charlie Barber</h4>
                                 <p>Senior blog writer</p>
@@ -369,8 +365,8 @@
                                     detractors.
                                 </p>
                                 <div class="br"></div>
-                            </aside>
-                            <aside class="single_sidebar_widget popular_post_widget">
+                            </aside>-->
+<!--                            <aside class="single_sidebar_widget popular_post_widget">
                                 <h3 class="widget_title">Popular Posts</h3>
                                 <div class="media post_item">
                                     <img src="img/blog/popular-post/post1.jpg" alt="post">
@@ -409,13 +405,13 @@
                                     </div>
                                 </div>
                                 <div class="br"></div>
-                            </aside>
-                            <aside class="single_sidebar_widget ads_widget">
+                            </aside>-->
+<!--                            <aside class="single_sidebar_widget ads_widget">
                                 <a href="#">
                                     <img class="img-fluid" src="img/blog/add.jpg" alt="">
                                 </a>
                                 <div class="br"></div>
-                            </aside>
+                            </aside>-->
                             <aside class="single_sidebar_widget post_category_widget">
                                 <h4 class="widget_title">Post Catgories</h4>
                                 <ul class="list cat-list">
@@ -425,7 +421,7 @@
                                             <p>37</p>
                                         </a>
                                     </li>
-                                    <li>
+<!--                                    <li>
                                         <a href="#" class="d-flex justify-content-between">
                                             <p>Lifestyle</p>
                                             <p>24</p>
@@ -460,7 +456,7 @@
                                             <p>Adventure</p>
                                             <p>44</p>
                                         </a>
-                                    </li>
+                                    </li>-->
                                 </ul>
                                 <div class="br"></div>
                             </aside>

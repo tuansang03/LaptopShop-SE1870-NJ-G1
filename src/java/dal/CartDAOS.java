@@ -38,6 +38,7 @@ public class CartDAOS extends DBContext {
             st.setInt(3, quantity);
             st.executeUpdate();
         } catch (Exception e) {
+            
         }
     }
 
