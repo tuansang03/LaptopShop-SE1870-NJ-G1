@@ -157,9 +157,9 @@
                                     <div class="card-body">
                                         <p class="nhot">${o3.getProductDetail().getProduct().getBrand().getName()}</p>
                                         <h5 class="card-product__title nhot">
-                                            <a href="single-product.jsp">${o3.getProductDetail().getProduct().getName()} 
+                                            <a href="information?productId=${o3.getProductDetail().getId()}"> ${o3.getProductDetail().getProduct().getName()} 
                                             ${o3.getProductDetail().getProduct().getCategory().getName()} ${o3.getProductDetail().getConfiguration().getName()} (${o3.getProductDetail().getColor().getName()})</a>
-                                        </h5>
+                                        </h5>   
                                         <p class="card-product__price nhot tien">${o3.getProductDetail().getPrice()} VND</p>
                                         <ul class="icon-list">
                                             <li><button><i class="ti-search"></i></button></li>

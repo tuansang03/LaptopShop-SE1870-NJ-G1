@@ -43,13 +43,11 @@ public class LoadProductCart extends HttpServlet {
         CartDAOS cartDAO = new CartDAOS();
         Cart cartUser = cartDAO.getCartByUserID(user.getId());
 
-
         if (cartUser == null) {
             cartDAO.addToCart(user.getId());
             cartUser = cartDAO.getCartByUserID(user.getId());
         }
-        
-        
+
         List<CartItem> listCartItem = cartDAO.getAllProductOfCartItem(cartUser.getId());
 
         ImageDAOS iDAO = new ImageDAOS();
@@ -62,6 +60,10 @@ public class LoadProductCart extends HttpServlet {
             listImages.add(image); // Thêm hình ảnh vào danh sách
         }
         
+
+        int cartID = cartUser.getId();
+        
+        request.setAttribute("cartID", cartID);
         request.setAttribute("listImages", listImages);
         request.setAttribute("listCartItem", listCartItem);
         request.getRequestDispatcher("cart.jsp").forward(request, response);
@@ -93,7 +95,6 @@ public class LoadProductCart extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
     }
 
     /**

@@ -1,6 +1,14 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+<<<<<<< HEAD
 
+=======
+<%@ page import="java.util.List" %>
+<%@ page import="model.User" %>
+<%@ page import="dal.CartDAOS" %>
+<%@ page import="model.Cart" %>
+<%@ page import="model.CartItem" %>
+>>>>>>> 48830e1dd30273dc1af73da0ca8a54b6cc731871
 <!DOCTYPE html>
 <html>
     <head>
@@ -135,6 +143,22 @@
                                 <li class="nav-item"><a class="nav-link" class="header_button" href="AboutUs.jsp">About Us</a></li>
                             </ul>
 
+                            <%
+                                 List<CartItem> listCart = null;
+                                 
+                                 User user = (User) session.getAttribute("user");
+                                 CartDAOS cartDAO = new CartDAOS();
+                                 if (!(user == null)) {
+                                    Cart cart = cartDAO.getCartByUserID(user.getId());
+                                    listCart = cartDAO.getAllProductOfCartItem(cart.getId());
+                                 }   
+                                    
+                                 int quantity = 0;
+                                    if(!(listCart == null)) {
+                                        quantity = listCart.size();
+                                    }
+                            %>
+                            
                             <ul class="nav-shop">
 
                                 <li class="nav-item"></li>
@@ -174,8 +198,8 @@
                                     <!--                                    da edit o day-->
                                     <a href="loadProductCart">
                                         <button>
-                                            <i class="ti-shopping-cart"></i>
-                                            <span class="nav-shop__circle">3</span>
+
+                                            <i class="ti-shopping-cart"></i><span class="nav-shop__circle"><%= quantity%></span>
                                         </button>
                                     </a>
                                 </li>

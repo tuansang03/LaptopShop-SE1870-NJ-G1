@@ -6,20 +6,20 @@ package controller;
 
 import dal.CartDAOS;
 import java.io.IOException;
+import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import jakarta.servlet.http.HttpSession;
-import model.Cart;
 import model.CartItem;
-import model.User;
 
 /**
  *
  * @author ADMIN
  */
-public class ChangeQuantityProduct extends HttpServlet {
+@WebServlet(name = "InputQuantityProduct", urlPatterns = {"/inputQuantityProduct"})
+public class InputQuantityProduct extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -33,39 +33,32 @@ public class ChangeQuantityProduct extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        response.setContentType("text/html;charset=UTF-8");
-        String num_raw = request.getParameter("num");
-        String cartID_raw = request.getParameter("cid");
-        String pdtID_raw = request.getParameter("pdtid");
-        CartDAOS cartDAO = new CartDAOS();
-        HttpSession session = request.getSession();
-        User user = (User) session.getAttribute("user");
-        Cart cartUser = cartDAO.getCartByUserID(user.getId());
-
+        String quantity_raw = request.getParameter("qty");
+        String pdtid_raw = request.getParameter("pdtid");
+        CartDAOS cDAO = new CartDAOS();
         try {
-            int num = Integer.parseInt(num_raw);
-            int cartID = Integer.parseInt(cartID_raw);
-            int pdtID = Integer.parseInt(pdtID_raw);
+            int quantity = Integer.parseInt(quantity_raw);
+            int pdtid = Integer.parseInt(pdtid_raw);
+            CartItem pCart = cDAO.getCartItemByPdtID(pdtid);
 
-            CartItem existProduct = cartDAO.getCartItemByCartIdAndProductId(cartUser.getId(), pdtID);
-
-            if (existProduct != null && num == 1) {
-                int newQuantity = existProduct.getQuantity() + num;
-                if (newQuantity <= existProduct.getProductdetail().getQuantity()) {
-                    cartDAO.updateCartItemQuantity(cartID, pdtID, newQuantity);
+            if (!(quantity_raw.isEmpty() || quantity_raw == null)) {
+                if (quantity > 0 && quantity <= pCart.getProductdetail().getQuantity()) {
+                    cDAO.updateQuantityProduct(quantity, pdtid);
                 }else {
-                    cartDAO.updateCartItemQuantity(cartID, pdtID, existProduct.getProductdetail().getQuantity());
+                    cDAO.updateQuantityProduct(pCart.getProductdetail().getQuantity(), pdtid);
                 }
-            } else if (existProduct != null && num == -1 && existProduct.getQuantity() > 1) {
-                int newQuantity = existProduct.getQuantity() + num;
-                cartDAO.updateCartItemQuantity(cartID, pdtID, newQuantity);
-            } else if (existProduct != null && existProduct.getQuantity() == 1 && num == -1) {
-                cartDAO.deleteCartItem(cartID, pdtID); // Delete product if quantity = 0
+
+            } else {
+                CartItem cart = cDAO.getCartItemByPdtID(pdtid);
+                quantity = cart.getQuantity();
+                cDAO.updateQuantityProduct(quantity, pdtid);
             }
+
         } catch (Exception e) {
         }
 
         response.sendRedirect("loadProductCart");
+
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

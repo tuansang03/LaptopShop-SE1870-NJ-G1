@@ -4,7 +4,6 @@
  */
 package dal;
 
-
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
@@ -134,7 +133,7 @@ public class CartDAOS extends DBContext {
         String sql = "UPDATE [dbo].[CartItem]\n"
                 + "   SET [Quantity] = ?"
                 + " WHERE CartId = ? AND ProductDetailId = ?";
-        
+
         try {
             PreparedStatement st = connection.prepareStatement(sql);
             st.setInt(1, newQuantity);
@@ -147,7 +146,7 @@ public class CartDAOS extends DBContext {
 
     public void deleteCartItem(int cartID, int pID) {
         String sql = "DELETE FROM [CartItem] WHERE CartId = ? AND ProductDetailId = ?";
-        
+
         try {
             PreparedStatement st = connection.prepareStatement(sql);
             st.setInt(1, cartID);
@@ -157,12 +156,52 @@ public class CartDAOS extends DBContext {
         }
     }
     
-    public static void main(String[] args) {
-        CartDAOS c = new CartDAOS();
-        c.deleteCartItem(1, 1);
-        
+    public void deleteAllCartItem(int cartID) {
+        String sql = "DELETE FROM [CartItem] WHERE CartId = ? ";
+        try {
+            PreparedStatement st = connection.prepareStatement(sql);
+            st.setInt(1, cartID);
+            st.executeUpdate();
+        } catch (Exception e) {
+        }
     }
 
+    public void updateQuantityProduct(int qlt, int pdtID) {
+        String sql = "UPDATE [dbo].[CartItem] SET [Quantity] = ? WHERE ProductDetailId = ?";
+
+        try {
+            PreparedStatement st = connection.prepareStatement(sql);
+            st.setInt(1, qlt);
+            st.setInt(2, pdtID);
+            st.executeUpdate();
+        } catch (Exception e) {
+        }
+    }
+
+    public CartItem getCartItemByPdtID(int pdtid) {
+        String sql = "SELECT * FROM CartItem WHERE ProductDetailId = ?";
+
+        try {
+            PreparedStatement st = connection.prepareStatement(sql);
+            st.setInt(1, pdtid);
+            ResultSet rs = st.executeQuery();
+            ProductDAOS pDAO = new ProductDAOS();
+            while (rs.next()) {
+                CartItem cart = new CartItem(
+                        rs.getInt("Id"),
+                        getCartID(rs.getInt("CartId")),
+                        pDAO.getProductDetailByID(rs.getInt("ProductDetailId")),
+                        rs.getInt("Quantity"));
+                return cart;
+            }
+
+        } catch (Exception e) {
+        }
+        return null;
+    }
     
+    public static void main(String[] args) {
+        CartDAOS c = new CartDAOS();
+    }
 
 }
