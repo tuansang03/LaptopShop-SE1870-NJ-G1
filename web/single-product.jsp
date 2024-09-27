@@ -226,6 +226,12 @@
                                     color: #000;
                                 }
 
+                                .btn-selected {
+                                    background-color: #4CAF50; /* Ví dụ: màu xanh lá cây */
+                                    color: white;
+                                    font-weight: bold;
+                                }
+
                             </style>
                         </head>
 
@@ -298,20 +304,22 @@
                             <form action="information" method="get">
                                 <c:forEach items="${config}" var="c">
                                     <button type="submit" name="productId" value="${c.id}" 
-                                            class="<c:if test='${selectedConfigId == c.id}'>btn-selected</c:if>">
+                                            class="${co == c.name ? 'btn-selected' : ''}">
                                         ${c.name}
                                     </button>
                                 </c:forEach>
                             </form>
+
                             Color:
                             <form action="information" method="get">
                                 <c:forEach items="${color}" var="c">
                                     <button type="submit" name="productId" value="${c.id}" 
-                                            class="<c:if test='${selectedColorId == c.id}'>btn-selected</c:if>">
+                                            class="${col == c.name ? 'btn-selected' : ''}">
                                         ${c.name}
                                     </button>
                                 </c:forEach>
                             </form>
+
                             <ul class="list">
                                 <li><a class="active"><span>Quantity</span>: ${detail.quantity}</a></li>
                             </ul>
@@ -606,7 +614,7 @@
                                                     <div class="product-item">
                                                         <img src="${p.img}" alt="${p.name}">
                                                         <div class="brand">${p.brand}</div>
-                                                        <h3>${p.name}</h3>
+                                                        <h4>${p.name}</h4>
                                                         <p>Giá: ${p.price}</p>
                                                     </div>
                                                 </a>

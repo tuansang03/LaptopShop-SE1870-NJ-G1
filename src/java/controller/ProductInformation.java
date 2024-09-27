@@ -73,6 +73,8 @@ public class ProductInformation extends HttpServlet {
         List<Color> col = d.listColorById(id, selectedConfigId);
         List<ProductList> listproduct = d.listProduct("'" + pd.getProduct().getCategory().getName() + "'", null, null, null);
         String price = formatCurrency(d.getProductDetail(id).getPrice());
+        request.setAttribute("co", pd.getConfiguration().getName());
+        request.setAttribute("col", pd.getColor().getName());
         request.setAttribute("detail", pd);
         request.setAttribute("attribute", pa);
         request.setAttribute("config", con);

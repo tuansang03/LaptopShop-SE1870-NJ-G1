@@ -407,10 +407,11 @@ public class ProductDAO extends DBContext {
 
     public List<Configuration> listConfigurationById(int id) {
         List<Configuration> list = new ArrayList<>();
-        String sql = "SELECT pd.Id, c.Name\n"
+        String sql = "SELECT MIN(pd.Id) AS id, c.Name AS name\n"
                 + "FROM ProductDetail pd\n"
                 + "JOIN Configuration c ON c.Id = pd.ConfigurationId\n"
-                + "WHERE pd.ProductId = (SELECT ProductId FROM ProductDetail WHERE Id = " + id + ")";
+                + "WHERE pd.ProductId = (SELECT ProductId FROM ProductDetail WHERE Id = "+id+")\n"
+                + "GROUP BY c.Name";
         try {
             PreparedStatement st = connection.prepareStatement(sql);
             ResultSet re = st.executeQuery();
@@ -457,7 +458,6 @@ public class ProductDAO extends DBContext {
             System.out.println(i);
             System.out.println(list.get(i).getId() + ", " + list.get(i).getName());
         }
-
 
     }
 
