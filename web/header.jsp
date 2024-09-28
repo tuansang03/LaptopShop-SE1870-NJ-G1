@@ -141,19 +141,21 @@
                             </ul>
 
                             <%
-                                 List<CartItem> listCart = null;
-                                 
-                                 User user = (User) session.getAttribute("user");
-                                 CartDAOS cartDAO = new CartDAOS();
-                                 if (!(user == null)) {
-                                    Cart cart = cartDAO.getCartByUserID(user.getId());
-                                    listCart = cartDAO.getAllProductOfCartItem(cart.getId());
-                                 }   
-                                    
-                                 int quantity = 0;
-                                    if(!(listCart == null)) {
-                                        quantity = listCart.size();
+                                List<CartItem> listCart = null;
+                                User user = (User) session.getAttribute("user");
+                                CartDAOS cartDAO = new CartDAOS();
+
+                                    if (user != null) {
+                                        Cart cart = cartDAO.getCartByUserID(user.getId());
+                                    if (cart != null) {
+                                        listCart = cartDAO.getAllProductOfCartItem(cart.getId());
+                                        }
                                     }
+
+                                int quantity = 0;
+                                if (listCart != null) {
+                                    quantity = listCart.size();
+                                }
                             %>
                             
                             <ul class="nav-shop">
