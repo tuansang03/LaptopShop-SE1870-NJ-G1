@@ -128,10 +128,8 @@ public class ProductDetail {
     public void setStatus(String status) {
         this.status = status;
     }
-
     @Override
     public String toString() {
         return "ProductDetail{" + "id=" + id + ", product=" + product + ", color=" + color + ", configuration=" + configuration + ", price=" + price + ", quantity=" + quantity + ", shortDescription=" + shortDescription + ", description=" + description + ", status=" + status + '}';
     }
-
 }

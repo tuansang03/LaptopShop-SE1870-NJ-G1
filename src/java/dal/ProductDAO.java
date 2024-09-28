@@ -10,10 +10,29 @@ import model.Product;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.DecimalFormat;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import model.Brand;
 import model.Category;
+
+import java.util.List;
+
+import java.util.List;
+
+import java.util.List;
+
+import java.util.ArrayList;
+import model.Attribute;
+import model.Color;
+import model.Configuration;
+import model.Image;
+import model.ProductAttribute;
+import model.ProductDetail;
+import model.ProductList;
+import model.ProductList;
+import model.*;
+import java.text.DecimalFormat;
 
 /**
  *

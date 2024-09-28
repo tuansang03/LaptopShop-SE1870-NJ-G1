@@ -9,17 +9,21 @@ import dal.UserDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import jakarta.servlet.http.HttpSession;
-import model.User;
+import java.util.ArrayList;
+import java.util.List;
+import model.Post;
+import model.Product;
 
 /**
  *
- * @author ADMIN
+ * @author kieud
  */
-public class VerifyOTPServlet extends HttpServlet {
+@WebServlet(name="SearchHeader", urlPatterns={"/search"})
+public class SearchHeader extends HttpServlet {
    
     /** 
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code> methods.
@@ -36,10 +40,10 @@ public class VerifyOTPServlet extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet VerifyOTPServlet</title>");  
+            out.println("<title>Servlet SearchHeader</title>");  
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet VerifyOTPServlet at " + request.getContextPath () + "</h1>");
+            out.println("<h1>Servlet SearchHeader at " + request.getContextPath () + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
@@ -56,7 +60,36 @@ public class VerifyOTPServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
-        processRequest(request, response);
+       String keyword = request.getParameter("query");
+       UserDAO dao = new UserDAO();
+       List<Product> productSuggestList = new ArrayList<>();
+       List<Post> postSuggestList = new ArrayList<>();
+       List<Product> list = dao.getProductListD();
+       List<Post> list2 = dao.getPostListD();
+        for (int i = 0; i < list.size(); i++) {
+            Product get = list.get(i);
+            if(get.getName().contains(keyword)){
+                productSuggestList.add(get);
+            } 
+        }
+        for (int i = 0; i < list2.size(); i++) {
+            Post get = list2.get(i);
+            if(get.getTittle().contains(keyword)){
+                postSuggestList.add(get);
+            }
+        }
+        
+        
+        request.setAttribute("postSuggest", postSuggestList);
+        request.setAttribute("productSuggest", productSuggestList);
+        
+       
+       
+       
+       
+        
+        
+        
     } 
 
     /** 
@@ -69,25 +102,9 @@ public class VerifyOTPServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
-        String otpInput = request.getParameter("otp");
-    HttpSession session = request.getSession();
-    String otpStored = (String) session.getAttribute("otp");
+        processRequest(request, response);
+    }
 
-    if (otpStored != null && otpStored.equals(otpInput)) {
-        // OTP hợp lệ, chuyển hướng đến trang tiếp theo
-        User u= (User) session.getAttribute("uRegister");
-        UserDAO dao=new UserDAO();
-        dao.insertUser(u);
-        session.removeAttribute("uRegister");
-        session.removeAttribute("otp");
-        request.setAttribute("success", "Register successfully!");
-        request.getRequestDispatcher("login.jsp").forward(request, response);
-    } else {
-        // OTP không hợp lệ, trả về trang OTP với thông báo lỗi
-        request.setAttribute("error", "Invalid OTP. Please try again.");
-        request.getRequestDispatcher("otp_verification.jsp").forward(request, response);
-    }
-    }
     /** 
      * Returns a short description of the servlet.
      * @return a String containing servlet description

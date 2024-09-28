@@ -9,17 +9,22 @@ import dal.UserDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import jakarta.servlet.http.HttpSession;
-import model.User;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import model.Post;
 
 /**
  *
- * @author ADMIN
+ * @author kieud
  */
-public class VerifyOTPServlet extends HttpServlet {
+@WebServlet(name="DisplayPostDetail", urlPatterns={"/postdetail"})
+public class DisplayPostDetail extends HttpServlet {
    
     /** 
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code> methods.
@@ -36,10 +41,10 @@ public class VerifyOTPServlet extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet VerifyOTPServlet</title>");  
+            out.println("<title>Servlet DisplayPostDetail</title>");  
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet VerifyOTPServlet at " + request.getContextPath () + "</h1>");
+            out.println("<h1>Servlet DisplayPostDetail at " + request.getContextPath () + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
@@ -54,10 +59,52 @@ public class VerifyOTPServlet extends HttpServlet {
      * @throws IOException if an I/O error occurs
      */
     @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+protected void doGet(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
-        processRequest(request, response);
-    } 
+    SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+    String idStr = request.getParameter("id");
+    
+    if (idStr != null) {
+        try {
+            int id = Integer.parseInt(idStr); // Chuyển đổi String sang int
+            UserDAO dao = new UserDAO();
+            List<Post> postCount = dao.getAllPostListD(); // Lấy danh sách tất cả các bài viết
+            int minId = 1; // ID nhỏ nhất
+            int maxId = postCount.size(); // ID lớn nhất
+            
+            // Kiểm tra và điều chỉnh ID
+            if (id < minId) {
+                id = minId; // Gán ID nhỏ nhất
+            } else if (id > maxId) {
+                id = maxId; // Gán ID lớn nhất
+            }
+
+            Post post = dao.getPostById(id); // Gọi hàm lấy bài viết theo ID
+            
+            // Kiểm tra nếu không tìm thấy bài viết
+            if (post == null) {
+                response.sendError(HttpServletResponse.SC_NOT_FOUND, "Post not found");
+                return;
+            }
+
+            String formattedDate = sdf.format(post.getPublishDate());
+            request.setAttribute("postDetailTime", formattedDate);
+            request.setAttribute("postDetail", post);
+            request.getRequestDispatcher("single-blog.jsp").forward(request, response);
+        } catch (NumberFormatException e) {
+            // Xử lý lỗi nếu id không phải là số nguyên
+            response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Invalid post ID");
+        }
+    } else {
+        // Xử lý lỗi nếu không có id trong request
+        response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Missing post ID");
+    }
+}
+
+
+
+    
+    
 
     /** 
      * Handles the HTTP <code>POST</code> method.
@@ -69,25 +116,9 @@ public class VerifyOTPServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
-        String otpInput = request.getParameter("otp");
-    HttpSession session = request.getSession();
-    String otpStored = (String) session.getAttribute("otp");
+        processRequest(request, response);
+    }
 
-    if (otpStored != null && otpStored.equals(otpInput)) {
-        // OTP hợp lệ, chuyển hướng đến trang tiếp theo
-        User u= (User) session.getAttribute("uRegister");
-        UserDAO dao=new UserDAO();
-        dao.insertUser(u);
-        session.removeAttribute("uRegister");
-        session.removeAttribute("otp");
-        request.setAttribute("success", "Register successfully!");
-        request.getRequestDispatcher("login.jsp").forward(request, response);
-    } else {
-        // OTP không hợp lệ, trả về trang OTP với thông báo lỗi
-        request.setAttribute("error", "Invalid OTP. Please try again.");
-        request.getRequestDispatcher("otp_verification.jsp").forward(request, response);
-    }
-    }
     /** 
      * Returns a short description of the servlet.
      * @return a String containing servlet description
