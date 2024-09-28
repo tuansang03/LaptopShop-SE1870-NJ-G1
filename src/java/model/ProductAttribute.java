@@ -55,5 +55,10 @@ public class ProductAttribute {
     public void setValue(String value) {
         this.value = value;
     }
+
+    @Override
+    public String toString() {
+        return "ProductAttribute{" + "id=" + id + ", productdetail=" + productdetail + ", attribute=" + attribute + ", value=" + value + '}';
+    }
     
 }
