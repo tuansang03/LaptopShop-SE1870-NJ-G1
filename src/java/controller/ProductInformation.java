@@ -16,6 +16,7 @@ import model.*;
 import java.util.List;
 import java.text.DecimalFormat;
 
+
 /**
  *
  * @author PHONG
@@ -63,6 +64,7 @@ public class ProductInformation extends HttpServlet {
             throws ServletException, IOException {
         ProductDAO d = new ProductDAO();
 
+
         int id = Integer.parseInt(request.getParameter("productId"));
         List<Image> list = d.getImageById(id);
         ProductDetail pd = d.getProductDetail(id);
@@ -73,6 +75,8 @@ public class ProductInformation extends HttpServlet {
         List<Color> col = d.listColorById(id, selectedConfigId);
         List<ProductList> listproduct = d.listProduct("'" + pd.getProduct().getCategory().getName() + "'", null, null, null);
         String price = formatCurrency(d.getProductDetail(id).getPrice());
+        request.setAttribute("co", pd.getConfiguration().getName());
+        request.setAttribute("col", pd.getColor().getName());
         request.setAttribute("detail", pd);
         request.setAttribute("attribute", pa);
         request.setAttribute("config", con);
@@ -81,6 +85,9 @@ public class ProductInformation extends HttpServlet {
         request.setAttribute("image", list);
         request.setAttribute("color", col);
         request.setAttribute("price", price);
+        double salep = d.getProductDetail(id).getPrice() * 1.2;
+        String sale = formatCurrency2(salep);
+        request.setAttribute("sale", sale);
         request.setAttribute("listproduct", listproduct);
         request.getRequestDispatcher("single-product.jsp").forward(request, response);
     }
@@ -90,4 +97,8 @@ public class ProductInformation extends HttpServlet {
         return formatter.format(amount) + " VNĐ";
     }
 
+    public static String formatCurrency2(double amount) {
+        DecimalFormat formatter = new DecimalFormat("#,###");
+        return formatter.format(amount);
+    }
 }

@@ -250,9 +250,7 @@ public class UserDAO extends DBContext {
                         rs.getString("Username"),
                         rs.getString("Password"),
                         rs.getString("Fullname"),
-                        rs.getString("Phone"),
                         rs.getString("Email"),
-                        rs.getString("Address"),
                         role,
                         rs.getString("status"));
                 return u;

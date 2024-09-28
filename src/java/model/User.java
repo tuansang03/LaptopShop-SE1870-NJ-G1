@@ -13,9 +13,7 @@ public class User {
     private String userName;
     private String password;
     private String fullName;
-    private String phone;
     private String email;
-    private String address;
     private Role role;
     private String status;
 
@@ -34,19 +32,15 @@ public class User {
         this.email = email;
     }
 
-    
-    
     public User() {
     }
 
-    public User(int id, String userName, String password, String fullName, String phone, String email, String address, Role role, String status) {
+    public User(int id, String userName, String password, String fullName, String email,Role role, String status) {
         this.id = id;
         this.userName = userName;
         this.password = password;
         this.fullName = fullName;
-        this.phone = phone;
         this.email = email;
-        this.address = address;
         this.role = role;
         this.status = status;
     }
@@ -83,14 +77,6 @@ public class User {
         this.fullName = fullName;
     }
 
-    public String getPhone() {
-        return phone;
-    }
-
-    public void setPhone(String phone) {
-        this.phone = phone;
-    }
-
     public String getEmail() {
         return email;
     }
@@ -99,14 +85,7 @@ public class User {
         this.email = email;
     }
 
-    public String getAddress() {
-        return address;
-    }
-
-    public void setAddress(String address) {
-        this.address = address;
-    }
-
+   
     public Role getRole() {
         return role;
     }
@@ -125,7 +104,7 @@ public class User {
 
     @Override
     public String toString() {
-        return "User{" + "id=" + id + ", userName=" + userName + ", password=" + password + ", fullName=" + fullName + ", phone=" + phone + ", email=" + email + ", address=" + address + ", role=" + role + ", status=" + status + '}';
+        return "User{" + "id=" + id + ", userName=" + userName + ", password=" + password + ", fullName=" + fullName +  ", email=" + email  + ", role=" + role + ", status=" + status + '}';
     }
     
     

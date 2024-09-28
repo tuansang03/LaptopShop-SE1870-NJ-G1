@@ -213,45 +213,6 @@
                 </div>
             </section>
 
-
-            <!--             ================ trending product section start =================   
-                        <section class="section-margin calc-60px">
-                            <div class="container">
-                                <div class="section-intro pb-60px">
-                                    <p>Popular Item in the market</p>
-                                    <h2><span class="section-intro__style">Trending Product</span></h2>
-                                </div>
-                                <div class="row">
-                                    <div class="col-md-6 col-lg-4 col-xl-3">
-                                        <div class="card text-center card-product">
-                                            <div class="card-product__img">
-                                                <img class="card-img" src="img/product/product1.png" alt="">
-                                                <ul class="card-product__imgOverlay">
-                                                    <li><button><i class="ti-search"></i></button></li>
-                                                    <li>
-                                                        <a href="cart.jsp" class="btn">
-                                                            <i class="ti-shopping-cart"></i>
-                                                        </a>
-                                                    </li>
-            
-                                                    <li><button><i class="ti-heart"></i></button></li>
-                                                </ul>
-                                            </div>
-                                            <div class="card-body">
-                                                <p>Accessories</p>
-                                                <h4 class="card-product__title"><a href="single-product.jsp">Quartz Belt Watch</a></h4>
-                                                <p class="card-product__price">$150.00</p>
-                                            </div>
-                                        </div>
-                                    </div>
-            
-                                </div>
-                            </div>
-                            </div>
-                        </section>
-                         ================ trending product section end =================   -->
-
-
             <!-- ================ offer section start ================= --> 
             <section class="offer" id="parallax-1" data-anchor-target="#parallax-1" data-300-top="background-position: 20px 30px" data-top-bottom="background-position: 0 20px">
                 <div class="container">

@@ -13,13 +13,6 @@ import java.sql.SQLException;
 import java.text.DecimalFormat;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import model.Brand;
-import model.Category;
-
-import java.util.List;
-
-import java.util.List;
-
 import java.util.List;
 
 import java.util.ArrayList;
@@ -65,6 +58,7 @@ public class ProductDAO extends DBContext {
 
             ResultSet rs = pre.executeQuery();
 
+
             while (rs.next()) {
                 Product p = new Product();
                 p.setId(rs.getInt("Id"));  // Lấy ID của sản phẩm
@@ -97,6 +91,7 @@ public class ProductDAO extends DBContext {
         }
         return null;
     }
+
 
     public int insertProduct(int brandId, int categoryId, String name) {
         String sql = "INSERT INTO [dbo].[Product] (BrandId, CategoryId, Name) VALUES (?, ?, ?)";
