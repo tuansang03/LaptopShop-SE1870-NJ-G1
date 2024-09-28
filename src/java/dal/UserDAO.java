@@ -90,11 +90,11 @@ public class UserDAO extends DBContext {
                 u.setUserName(rs.getString(2));
                 u.setPassword(rs.getString(3));
                 u.setFullName(rs.getString(4));
-                u.setEmail(rs.getString(6));
+                u.setEmail(rs.getString(5));
                 Role role =new Role();
-                role.setId(rs.getInt(8));
+                role.setId(rs.getInt(6));
                 u.setRole(role);
-                u.setStatus(rs.getString(9));
+                u.setStatus(rs.getString(7));
                 return u;
             }
         } catch (SQLException ex) {
