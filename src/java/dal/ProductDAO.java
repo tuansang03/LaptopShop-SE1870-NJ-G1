@@ -410,8 +410,9 @@ public class ProductDAO extends DBContext {
         String sql = "SELECT MIN(pd.Id) AS id, c.Name AS name\n"
                 + "FROM ProductDetail pd\n"
                 + "JOIN Configuration c ON c.Id = pd.ConfigurationId\n"
-                + "WHERE pd.ProductId = (SELECT ProductId FROM ProductDetail WHERE Id = "+id+")\n"
-                + "GROUP BY c.Name";
+                + "WHERE pd.ProductId = (SELECT ProductId FROM ProductDetail WHERE Id = " + id + ")\n"
+                + "GROUP BY c.Name, c.Id\n"
+                + "ORDER BY c.Id";
         try {
             PreparedStatement st = connection.prepareStatement(sql);
             ResultSet re = st.executeQuery();
