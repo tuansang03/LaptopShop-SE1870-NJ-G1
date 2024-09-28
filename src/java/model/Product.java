@@ -9,6 +9,7 @@ package model;
  * @author ADMIN
  */
 public class Product {
+
     private int id;
     private Brand brand;
     private Category category;
@@ -24,6 +25,13 @@ public class Product {
         this.category = category;
         this.name = name;
         this.status = status;
+    }
+
+    public Product(int id, String name) {
+        this.id = id;
+
+        this.name = name;
+
     }
 
     public int getId() {

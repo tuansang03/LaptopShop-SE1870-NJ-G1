@@ -44,6 +44,15 @@ public class User {
         this.role = role;
         this.status = status;
     }
+    
+        public User(int id, String userName, String password, String fullName,String email, String status) {
+        this.id = id;
+        this.userName = userName;
+        this.password = password;
+        this.fullName = fullName;
+        this.email = email;
+        this.status = status;
+    }
 
     public int getId() {
         return id;

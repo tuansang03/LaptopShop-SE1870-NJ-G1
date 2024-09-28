@@ -312,8 +312,18 @@
                     <a href="readProduct"><i class="fas fa-box-open"></i> Manage Product</a>
 
 
-                 
-                    
+
+
+                    <a href="CustomerManageController?service=listall"><i class="fas fa-users"></i> Manage User</a>
+
+                    <a href="BrandController?service=listall"><i class="fas fa-calendar"></i> Manage Brand</a>
+
+                    <a href="ConfigurationManageController?service=listall"><i class="fas fa-calendar"></i> Manage Configuration</a>
+                    <a href="CategoryController?service=listall"><i class="fas fa-server"></i> Manage Category</a>
+
+                    <a href="orderManage"><i class="fas fa-object-group"></i> Quản lý đơn hàng</a>
+
+
 
                     <a href="editAdmin.jsp"><i class="fas fa-upload  "></i> Cập nhật thông tin</a>
                     <div class="user">
