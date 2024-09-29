@@ -68,16 +68,16 @@ protected void doGet(HttpServletRequest request, HttpServletResponse response)
         try {
             int id = Integer.parseInt(idStr); // Chuyển đổi String sang int
             UserDAO dao = new UserDAO();
-            List<Post> postCount = dao.getAllPostListD(); // Lấy danh sách tất cả các bài viết
-            int minId = 1; // ID nhỏ nhất
-            int maxId = postCount.size(); // ID lớn nhất
-            
-            // Kiểm tra và điều chỉnh ID
-            if (id < minId) {
-                id = minId; // Gán ID nhỏ nhất
-            } else if (id > maxId) {
-                id = maxId; // Gán ID lớn nhất
-            }
+//            List<Post> postCount = dao.getAllPostListD(); // Lấy danh sách tất cả các bài viết
+//            int minId = 1; // ID nhỏ nhất
+//            int maxId = postCount.size(); // ID lớn nhất
+//            
+//            // Kiểm tra và điều chỉnh ID
+//            if (id < minId) {
+//                id = minId; // Gán ID nhỏ nhất
+//            } else if (id > maxId) {
+//                id = maxId; // Gán ID lớn nhất
+//            }
 
             Post post = dao.getPostById(id); // Gọi hàm lấy bài viết theo ID
             
