@@ -62,7 +62,7 @@ public class DisplayPostList extends HttpServlet {
         List<Post> listP = dao.getAllPostListD();      
          List<Post> listNew = dao.getNewestPostListD();
         
-         request.setAttribute("postnew", listNew);
+        request.setAttribute("postnew", listNew);
         request.setAttribute("postlist", listP);
         request.getRequestDispatcher("blog.jsp").forward(request, response);
         
