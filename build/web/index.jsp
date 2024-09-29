@@ -256,11 +256,9 @@
                                 <div class="card-body">
                                     <p class="nhot">${o3.getProduct().getBrand().getName()}</p>
                                     <h5 class="card-product__title nhot">
-<<<<<<< HEAD
+
                                         <a href="information?productId=${o3.getId()}">${o3.getProduct().getName()} 
-=======
-                                        <a href="information?productId=${o3.id}">${o3.getProduct().getName()} 
->>>>>>> b604b77626ee9d3cb4f1c7e717832c7a4e9d0558
+
                                             ${o3.getProduct().getCategory().getName()} ${o3.getConfiguration().getName()} (${o3.getColor().getName()})</a>
                                     </h5>
                                     <h5 class="card-product__price nhot tien" style="text-align: center">
