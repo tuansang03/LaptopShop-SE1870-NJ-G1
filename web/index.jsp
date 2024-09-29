@@ -188,7 +188,7 @@
                                 <div class="xxxxx">
                                     <img src="${o.getImage()}" alt="" class="img-fluid">
                                 </div>
-                                <a href="information?productId=${o.getId()}" class="hero-carousel__slideOverlay">
+                                <a href="information?productId=${o.productDetail.id}" class="hero-carousel__slideOverlay">
                                     <p class="nhot">${o.getProductDetail().getProduct().getBrand().getName()}</p>
                                     <h5 class="" style="color: white">
                                         ${o.getProductDetail().getProduct().getName()} 
@@ -256,7 +256,9 @@
                                 <div class="card-body">
                                     <p class="nhot">${o3.getProduct().getBrand().getName()}</p>
                                     <h5 class="card-product__title nhot">
+
                                         <a href="information?productId=${o3.getId()}">${o3.getProduct().getName()} 
+
                                             ${o3.getProduct().getCategory().getName()} ${o3.getConfiguration().getName()} (${o3.getColor().getName()})</a>
                                     </h5>
                                     <h5 class="card-product__price nhot tien" style="text-align: center">

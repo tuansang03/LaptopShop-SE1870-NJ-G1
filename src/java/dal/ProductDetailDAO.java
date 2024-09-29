@@ -48,7 +48,7 @@ public class ProductDetailDAO extends DBContext {
     }
 
     public void insertMultipleProductDetails(int productId, int[] colorIds, int[] configIds, String description) {
-        String sql = "INSERT INTO [SWP391_LaptopShop].[dbo].[ProductDetail] "
+        String sql = "INSERT INTO [ProductDetail] "
                 + "([ProductId], [ColorId], [ConfigurationId], [Description]) "
                 + "VALUES (?, ?, ?, ?)";
 
@@ -80,10 +80,10 @@ public class ProductDetailDAO extends DBContext {
                 + "       pd.[ConfigurationId], cfg.[Name] AS ConfigurationName, \n"
                 + "       pd.[Price], pd.[Quantity], pd.[ShortDescription], \n"
                 + "       pd.[Description], pd.[Status]\n"
-                + "FROM [SWP391_LaptopShop].[dbo].[ProductDetail] pd\n"
-                + "JOIN [SWP391_LaptopShop].[dbo].[Color] c ON pd.[ColorId] = c.[Id]\n"
-                + "JOIN [SWP391_LaptopShop].[dbo].[Configuration] cfg ON pd.[ConfigurationId] = cfg.[Id]\n"
-                + "JOIN [SWP391_LaptopShop].[dbo].[Product] p ON pd.[ProductId] = p.[Id]\n"
+                + "FROM [ProductDetail] pd\n"
+                + "JOIN [Color] c ON pd.[ColorId] = c.[Id]\n"
+                + "JOIN [Configuration] cfg ON pd.[ConfigurationId] = cfg.[Id]\n"
+                + "JOIN [Product] p ON pd.[ProductId] = p.[Id]\n"
                 + "WHERE pd.[ProductId] = ?";
 
         PreparedStatement ps;
@@ -123,7 +123,7 @@ public class ProductDetailDAO extends DBContext {
     }
 
     public void addProductDetailAttribute(ProductAttribute productAttribute) {
-        String sql = "INSERT INTO [SWP391_LaptopShop].[dbo].[Product_Attribute] (ProductDetailId, AttributeId, Value) VALUES (?, ?, ?)";
+        String sql = "INSERT INTO [Product_Attribute] (ProductDetailId, AttributeId, Value) VALUES (?, ?, ?)";
 
         try (PreparedStatement pre = connection.prepareStatement(sql)) {
             // Gán giá trị cho các tham số

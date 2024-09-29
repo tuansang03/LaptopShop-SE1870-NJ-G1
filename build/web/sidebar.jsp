@@ -304,28 +304,29 @@
             <div class="row">
                 <div class="col-md-2 sidebar">
                     <div class="logo">
-                        <a href="home"> <img src="realfish.png" alt="Logo"></a> 
+                        <a href="home"> <img src="" alt="Logo"></a> 
                     </div>
 
 
 
-                    <a href="manageProduct"><i class="fas fa-box-open"></i> Quản lí sản phẩm</a>
+                    <a href="readProduct"><i class="fas fa-box-open"></i> Manage Product</a>
 
 
-                    <a href="manageCategory"><i class="fas fa-calendar"></i> Quản lí danh mục</a>
 
-                    <a href="manageCustomer"><i class="fas fa-users"></i> Quản lý khách hàng</a>
 
-                    <a href="stats"><i class="fas fa-server"></i> Thống kê sản phẩm</a>
-                    
+                    <a href="CustomerManageController?service=listall"><i class="fas fa-users"></i> Manage User</a>
+
+                    <a href="BrandController?service=listall"><i class="fas fa-calendar"></i> Manage Brand</a>
+
+                    <a href="ConfigurationManageController?service=listall"><i class="fas fa-calendar"></i> Manage Configuration</a>
+                    <a href="CategoryController?service=listall"><i class="fas fa-server"></i> Manage Category</a>
+                    <a href="postmanage?service=listall"><i class="fas fa-server"></i> Manage Post</a>
                     <a href="orderManage"><i class="fas fa-object-group"></i> Quản lý đơn hàng</a>
-                    
-                    
 
                     <a href="editAdmin.jsp"><i class="fas fa-upload  "></i> Cập nhật thông tin</a>
                     <div class="user">
 
-                        <p>Xin chào ${sessionScope.admin.username}</p>
+                        <p>Xin chào ${sessionScope.admin.fullName}</p>
 
                         <a href="logout"><i class="fas fa-sign-out-alt"></i> Đăng xuất</a>
                     </div>

@@ -756,7 +756,7 @@ body {
       <p class="text-blk heading">
         About Us
       </p>
-      <div class="text-blk subHeading">
+      <div class="text-blk subHeading" style="width: 100% !important">
           <h3>About Us</h3> 
           <p>
 Welcome to LaptopShop, your ultimate destination for top-quality laptops! Whether you're a professional seeking a high-performance machine, a student needing a reliable device, or a gamer in search of the latest in cutting-edge technology, we've got you covered.
@@ -784,7 +784,7 @@ Thank you for choosing LaptopShop as your go-to store for all your laptop needs.
       </div>
       <div class="responsive-cell-block wk-desk-6 wk-ipadp-6 wk-tab-12 wk-mobile-12">
         <div class="cardImgContainer">
-          <img class="cardImg" src="https://workik-widget-assets.s3.amazonaws.com/widget-assets/images/id2.svg">
+          <img class="cardImg" src="https://cybercrew.uk/wp-content/uploads/2022/08/dell-logo.png">
         </div>
         <div class="cardText">
           <p class="text-blk cardHeading">
@@ -797,7 +797,7 @@ Thank you for choosing LaptopShop as your go-to store for all your laptop needs.
       </div>
       <div class="responsive-cell-block wk-desk-6 wk-ipadp-6 wk-tab-12 wk-mobile-12">
         <div class="cardImgContainer">
-          <img class="cardImg" src="https://workik-widget-assets.s3.amazonaws.com/widget-assets/images/id2.svg">
+          <img class="cardImg" src="https://w7.pngwing.com/pngs/151/790/png-transparent-hewlett-packard-hp-elitebook-dell-laptop-logo-hewlett-packard-blue-text-trademark-thumbnail.png">
         </div>
         <div class="cardText">
           <p class="text-blk cardHeading">
@@ -810,7 +810,7 @@ Thank you for choosing LaptopShop as your go-to store for all your laptop needs.
       </div>
       <div class="responsive-cell-block wk-desk-6 wk-ipadp-6 wk-tab-12 wk-mobile-12">
         <div class="cardImgContainer">
-          <img class="cardImg" src="https://workik-widget-assets.s3.amazonaws.com/widget-assets/images/id2.svg">
+          <img class="cardImg" src="https://www.connection.com/media/2z1mmae3/laptop-guide-operating-system-macos-icon.png">
         </div>
         <div class="cardText">
           <p class="text-blk cardHeading">
@@ -823,7 +823,7 @@ Thank you for choosing LaptopShop as your go-to store for all your laptop needs.
       </div>
       <div class="responsive-cell-block wk-desk-6 wk-ipadp-6 wk-tab-12 wk-mobile-12">
         <div class="cardImgContainer">
-          <img class="cardImg" src="https://workik-widget-assets.s3.amazonaws.com/widget-assets/images/id2.svg">
+          <img class="cardImg" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRxe7gLMzrBMaElyfe3fORFSsIgFrT4A0LZdw&s">
         </div>
         <div class="cardText">
           <p class="text-blk cardHeading">
@@ -840,7 +840,7 @@ Thank you for choosing LaptopShop as your go-to store for all your laptop needs.
         </button>
       </a>
     </div>
-    <img class="redDots" src="https://workik-widget-assets.s3.amazonaws.com/widget-assets/images/cw3.svg">
+      <img class="redDots" src="https://workik-widget-assets.s3.amazonaws.com/widget-assets/images/cw3.svg">
   </div>
 </div>
         

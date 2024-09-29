@@ -140,8 +140,7 @@ public class BrandManageController extends HttpServlet {
 
         if (service.equalsIgnoreCase("addBrandRequest")) {
             response.sendRedirect("insertbranddisplay.jsp");
-        }
-        
+        }        
         if(service.equalsIgnoreCase("addBrand")){
             String name = request.getParameter("name");
             BrandDAO brandDAO = new BrandDAO();

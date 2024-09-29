@@ -91,7 +91,7 @@ public class ImageDAO extends DBContext {
     }
 
     public boolean deleteImageById(int imageId) {
-    String sql = "DELETE FROM [SWP391_LaptopShop].[dbo].[Image] WHERE [Id] = ?;";
+    String sql = "DELETE FROM [Image] WHERE [Id] = ?;";
     try {
         PreparedStatement pre = connection.prepareStatement(sql);
         pre.setInt(1, imageId);

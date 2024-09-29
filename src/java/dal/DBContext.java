@@ -34,7 +34,7 @@ public class DBContext {
         } catch (ClassNotFoundException | SQLException ex) {
             Logger.getLogger(DBContext.class.getName()).log(Level.SEVERE, null, ex);
         }
-
+        
     }
     public static void main(String[] args) {
         DBContext a = new DBContext();
