@@ -400,30 +400,7 @@ public class ProductDAO extends DBContext {
 
         return null;
     }
-    
-    public List<Configuration> listConfigurationById(int id) {
-        List<Configuration> list = new ArrayList<>();
-        String sql = "SELECT pd.Id, c.Name\n"
-                + "FROM ProductDetail pd\n"
-                + "JOIN Configuration c ON c.Id = pd.ConfigurationId\n"
-                + "WHERE pd.ProductId = (SELECT ProductId FROM ProductDetail WHERE Id = " + id + ")";
-        try {
-            PreparedStatement st = connection.prepareStatement(sql);
-            ResultSet re = st.executeQuery();
-            while (re.next()) {
-                Configuration c = new Configuration(
-                        re.getInt("id"),
-                        re.getString("name"));
-                list.add(c);
-            }
-        } catch (SQLException e) {
-            System.out.println(e);
-        }
-
-        return list;
-    }
-
-    public List<ProductAttribute> getAttributeById(int id) {
+      public List<ProductAttribute> getAttributeById(int id) {
         List<ProductAttribute> list = new ArrayList<>();
         String sql = "select * from Product_Attribute where ProductDetailId = " + id + " order by AttributeId";
         try {
@@ -460,8 +437,33 @@ public class ProductDAO extends DBContext {
 
         return null;
     }
-    
-     public List<Color> listColorById(int id, int cid) {
+
+    public List<Configuration> listConfigurationById(int id) {
+        List<Configuration> list = new ArrayList<>();
+        String sql = "SELECT MIN(pd.Id) AS id, c.Name AS name\n"
+                + "FROM ProductDetail pd\n"
+                + "JOIN Configuration c ON c.Id = pd.ConfigurationId\n"
+                + "WHERE pd.ProductId = (SELECT ProductId FROM ProductDetail WHERE Id = " + id + ")\n"
+                + "GROUP BY c.Name, c.Id\n"
+                + "ORDER BY c.Id";
+        try {
+            PreparedStatement st = connection.prepareStatement(sql);
+            ResultSet re = st.executeQuery();
+            while (re.next()) {
+                Configuration c = new Configuration(
+                        re.getInt("id"),
+                        re.getString("name"));
+                list.add(c);
+            }
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
+
+        return list;
+    }
+
+    public List<Color> listColorById(int id, int cid) {
+
         List<Color> list = new ArrayList<>();
         String sql = "select pd.Id, c.Name\n"
                 + "from ProductDetail pd\n"
