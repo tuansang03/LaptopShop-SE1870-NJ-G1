@@ -63,22 +63,31 @@ protected void doGet(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
     SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
     String idStr = request.getParameter("id");
+     UserDAO dao = new UserDAO();
+    int minmaxId[] = dao.getMinMaxPostId();
+    int min = minmaxId[0];
+    int max = minmaxId[1];
+    boolean outmin = false;
+    boolean outmax = false;
+    if(Integer.parseInt(idStr) <= min){
+        request.setAttribute("pre", "display:none");
+       outmin = true;
+    }
+    if(Integer.parseInt(idStr) >= max){
+        request.setAttribute("next", "display:none");
+        outmax = true;
+    }
     
     if (idStr != null) {
         try {
             int id = Integer.parseInt(idStr); // Chuyển đổi String sang int
-            UserDAO dao = new UserDAO();
-//            List<Post> postCount = dao.getAllPostListD(); // Lấy danh sách tất cả các bài viết
-//            int minId = 1; // ID nhỏ nhất
-//            int maxId = postCount.size(); // ID lớn nhất
-//            
-//            // Kiểm tra và điều chỉnh ID
-//            if (id < minId) {
-//                id = minId; // Gán ID nhỏ nhất
-//            } else if (id > maxId) {
-//                id = maxId; // Gán ID lớn nhất
-//            }
-
+            if(outmin){
+                id = min;
+            }
+            if(outmax){
+                id = max;
+            }
+           
             Post post = dao.getPostById(id); // Gọi hàm lấy bài viết theo ID
             
             // Kiểm tra nếu không tìm thấy bài viết

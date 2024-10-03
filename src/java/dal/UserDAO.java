@@ -536,7 +536,9 @@ public List<Image> getPictureListByProductName(String productName) {
         System.out.println(e);
     }
     return list;
-} public Post getPostById(int id) {
+}
+
+public Post getPostById(int id) {
         String sql = "SELECT [Id], [UserId], [BrandId], [CategoryId], [Title], "
                 + "[ShortContent], [FullContent], [Thumbnail], [PublishDate] "
                 + "FROM [dbo].[Post] WHERE [Id] = ?";
@@ -707,6 +709,24 @@ public List<User> getUsersByKeyword(String keyword) {
 
     return users;
 }
+public int[] getMinMaxPostId() {
+    int[] minMax = new int[2];
+    String sql = "SELECT MIN([Id]) AS minId, MAX([Id]) AS maxId FROM [dbo].[Post]";
+
+    try {
+        PreparedStatement st = connection.prepareStatement(sql);
+        ResultSet rs = st.executeQuery();
+
+        if (rs.next()) {
+            minMax[0] = rs.getInt("minId"); // Lấy id nhỏ nhất
+            minMax[1] = rs.getInt("maxId"); // Lấy id lớn nhất
+        }
+    } catch (SQLException e) {
+        System.out.println(e);
+    }
+    return minMax;
+}
+
 
 }
 //================================================================================================================
