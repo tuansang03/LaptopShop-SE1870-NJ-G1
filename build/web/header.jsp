@@ -88,7 +88,9 @@
             .suggestions li:hover {
                 background-color: #f0f0f0;
             }
-
+            i.bx.bxs-user::before{
+                height:  30px !important;
+            }
         </style>
 
 
@@ -220,12 +222,15 @@
 
 
 
-                            <ul class="navbar-nav">
+                            <ul class="navbar-nav"> 
                                 <li class="nav-item">
                                 <c:choose>
                                     <c:when test="${sessionScope.admin == null && sessionScope.user == null && sessionScope.sale == null}">
                                         <a href="login"><i class="fa fa-user"></i> Login</a>
                                     </c:when>
+                                     <c:when test="${sessionScope.user != null}">
+                                         <a href="userprofile.jsp"><i class="bx bxs-user" style="width: 30px; height: 20px;"></i></a>
+                                    </c:when>   
                                     <c:otherwise>
                                         <div class="dropdown">
                                             <button class="dropbtn"><i class="fa fa-user">
@@ -241,7 +246,7 @@
                                                 </c:if>
                                     </c:otherwise>
                                 </c:choose>
-                                                    <c:if test="${sessionScope.user !=null ||sessionScope.admin !=null || sessionScope.sale !=null}"><a href="logout">Logout</a></c:if>
+                                                    <c:if test="${sessionScope.user !=null ||sessionScope.admin !=null || sessionScope.sale !=null}"><a href="logout" class="bx bxs-log-out">Logout</a></c:if>
                                 </li>
 
                             </ul>

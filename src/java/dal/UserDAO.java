@@ -294,7 +294,6 @@ public class UserDAO extends DBContext {
         return list;
     }
 public List<Post> getNewestPostListD() {
-
     List<Post> list = new ArrayList<>();
     String sql = "SELECT TOP 5 [Id], [UserId], [BrandId], [CategoryId], [Title], [ShortContent], [FullContent], [Thumbnail], [PublishDate] "
             + "FROM [dbo].[Post] "

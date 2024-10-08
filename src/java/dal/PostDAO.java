@@ -51,6 +51,21 @@ public class PostDAO extends DBContext {
             }
         }
     }
+    public boolean deletePostById(int id){
+        PreparedStatement ps = null;
+        String sql = "DELETE FROM [dbo].[Post]\n" +
+"      WHERE Id = ?;";
+        try {
+            ps = connection.prepareStatement(sql);
+            ps.setInt(1, id);
+            ps.executeUpdate();
+            return true;
+        } catch (Exception e) {
+            System.out.println(e);
+            return false;
+        }
+    }
+
     
     public static void main(String[] args) {
         PostDAO post = new PostDAO();

@@ -57,12 +57,22 @@
                 </thead>
 
                 <tbody>
+                <style>
+                    .tede{
+                        max-height: 300px !important;
+                        width: 100% !important;
+                    }
+                    .tede img{
+                        
+                    }
+                    
+                </style>
                     <c:forEach var="p" items="${listPost}"> 
-                        <tr>
+                        <tr class="tede">
                             <td>${p.getId()}</td>
                             <td>${p.getUser().getUserName()}</td>
 
-                            <td>
+                            <td >
                                 <div class="row needToFix">
 
 
@@ -76,14 +86,23 @@
                                         .card-blog{
                                             display: flex !important;
                                         }
+                                        .dip{
+                                            padding: 0px 30px;
+                                            
+                                        }
+                                        .dip img{
+                                            height: 300px;
+                                            width: 320px;                                     
+                                        }
 
                                     </style>
-
+                                    
+                                    <h4>${mess}</h4>
                                     <div class="post tach">
                                         <div class="card card-blog">
                                             <div class="row no-gutters">
                                                 <!-- Cột hiển thị hình ảnh thumbnail -->
-                                                <div class="col-md-4">
+                                                <div class="col-md-4 dip">
                                                     <div class="card-blog__img">
                                                         <img class="card-img rounded-0" src="${p.thumbnail}" alt="${p.tittle}">
                                                     </div>
@@ -111,21 +130,22 @@
 
                             
                             <td>
-<!--                                <div class="action-buttons">
-                                     Nút Update 
+                                <div class="action-buttons">
+                                     
                                     <button class="btn btn-warning" onclick="editCategory('${c.id}');">
                                         <i class="fas fa-edit"></i> Update
                                     </button>
 
-                                     Nút Delete 
-                                    <form action="CategoryController" method="POST" style="display:inline;">
-                                        <input type="hidden" name="id" value="${c.id}">
-                                        <input type="hidden" name="service" value="deleteCategory">
+                                     
+                                    <form action="postmanage" method="POST" style="display:inline;">
+                                        <input type="hidden" name="id" value="${p.id}">
+                                        <input type="hidden" name="service" value="deletePost">
                                         <button type="submit" onclick="return confirm('Are you sure you want to delete this category?');" class="btn btn-danger">
-                                            <i class="fas fa-trash-alt"></i> Delete
+                                            <i class="fas fa-trash-alt"></i> Delete <br/>
+                                            
                                         </button>
                                     </form>
-                                </div>-->
+                                </div>
                             </td>
                         </tr>
                     </c:forEach>

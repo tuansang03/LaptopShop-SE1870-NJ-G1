@@ -32,7 +32,9 @@
                 <tbody>
                     <tr>
                         <td>
-                            <input type="text" name="name" placeholder="Enter configuration name" required class="form-control">
+                          <input type="text" name="name" placeholder="Enter configuration name" 
+       required class="form-control" maxlength="30" title="Please enter up to 30 characters.">
+
                         </td>
                     </tr>
                 </tbody>

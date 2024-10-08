@@ -21,7 +21,7 @@
         <!--================ Start Header Menu Area =================-->
 <%
     User xuser = (User) session.getAttribute("user");
-    if(xuser != null && (xuser.getId() == 1 || xuser.getId() == 2)) {
+    if(xuser != null && (xuser.getId() == 1 || xuser.getId() == 2) || xuser == null) {
         // Include the header if the user's ID is 1 or 2
         %>
         <%@include file="header.jsp" %>
@@ -658,7 +658,7 @@
         
         <%
     
-    if(xuser != null && (xuser.getId() == 1 || xuser.getId() == 2)) {
+    if(xuser != null && (xuser.getId() == 1 || xuser.getId() == 2) || xuser ==null) {
         // Include the header if the user's ID is 1 or 2
         %>
         <%@include file="footer.jsp" %>

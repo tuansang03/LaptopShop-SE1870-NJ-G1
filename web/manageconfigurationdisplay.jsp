@@ -62,11 +62,13 @@
         <!-- Ô tìm kiếm Configuration -->
 <form class="search-bar" action="ConfigurationManageController" method="GET">
     <input type="hidden" name="service" value="searchConfigulation">
-    <input type="text" name="search" placeholder="Search configuration..." value="${param.search}">
+    <input type="text" name="search" placeholder="Search configuration..." 
+           value="${param.search}" maxlength="25" pattern=".{0,25}" title="Please enter up to 25 characters.">
     <button type="submit" class="btn btn-primary">
         <i class="fas fa-search"></i> Search
     </button>
 </form>
+
 
 
         <!-- Nút Add Configuration -->
