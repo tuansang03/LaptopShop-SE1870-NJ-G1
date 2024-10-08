@@ -3,6 +3,7 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
+<<<<<<< HEAD
             <file>file:/E:/Swp391/LaptopShop1/src/java/dal/ConfigurationDAO.java</file>
             <file>file:/E:/Swp391/LaptopShop1/nbproject/project.xml</file>
             <file>file:/E:/Swp391/LaptopShop1/src/java/dal/DBContext.java</file>
@@ -29,6 +30,17 @@
             <file>file:/D:/New%20folder%20(3)/Project%20SWP_add_new/LaptopShop-SE1870-NJ-G1/web/userprofile.jsp</file>
             <file>file:/D:/New%20folder%20(3)/Project%20SWP_add_new/LaptopShop-SE1870-NJ-G1/src/java/dal/FeedbackDAOS.java</file>
             <file>file:/D:/New%20folder%20(3)/Project%20SWP_add_new/LaptopShop-SE1870-NJ-G1/web/header.jsp</file>
+=======
+            <file>file:/E:/SWP_Project/LaptopShop-SE1870-NJ-G1/src/java/dal/VoucherDAO.java</file>
+            <file>file:/E:/SWP_Project/LaptopShop-SE1870-NJ-G1/src/java/model/OrderDetail.java</file>
+            <file>file:/E:/SWP_Project/LaptopShop-SE1870-NJ-G1/web/checkout.jsp</file>
+            <file>file:/E:/SWP_Project/LaptopShop-SE1870-NJ-G1/src/java/controller/ApplyVoucher.java</file>
+            <file>file:/E:/SWP_Project/LaptopShop-SE1870-NJ-G1/web/WEB-INF/web.xml</file>
+            <file>file:/E:/SWP_Project/LaptopShop-SE1870-NJ-G1/src/java/dal/OderDAO.java</file>
+            <file>file:/E:/SWP_Project/LaptopShop-SE1870-NJ-G1/src/java/model/Voucher.java</file>
+            <file>file:/E:/SWP_Project/LaptopShop-SE1870-NJ-G1/src/java/controller/ProcessingCheckOut.java</file>
+            <file>file:/E:/SWP_Project/LaptopShop-SE1870-NJ-G1/src/java/controller/LoadInfoCheckOut.java</file>
+>>>>>>> e5f5ec937eed3809aba407608858566509d1dd8d
         </group>
     </open-files>
 </project-private>

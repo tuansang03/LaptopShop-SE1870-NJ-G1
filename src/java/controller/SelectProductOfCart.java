@@ -5,25 +5,20 @@
 package controller;
 
 import dal.CartDAOS;
-import dal.ProductDAOS;
 import java.io.IOException;
+import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import jakarta.servlet.http.HttpSession;
-import model.Cart;
-import model.CartItem;
-import model.ProductDetail;
-import model.User;
 
 /**
  *
  * @author ADMIN
  */
-@WebServlet(name = "AddToCart", urlPatterns = {"/addtocart"})
-public class AddToCart extends HttpServlet {
+@WebServlet(name = "SelectProductOfCart", urlPatterns = {"/selectProduct"})
+public class SelectProductOfCart extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -37,6 +32,17 @@ public class AddToCart extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
+        String selected = request.getParameter("selected");
+        String pid_raw = request.getParameter("pid");
+        int pid = Integer.parseInt(pid_raw);
+        CartDAOS cDAO = new CartDAOS();
+
+        if (selected == null) {
+            cDAO.selectProduct(pid, "noneChecked");
+        } else {
+            cDAO.selectProduct(pid, "checked");
+        }
+        response.sendRedirect("loadProductCart");
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
@@ -51,36 +57,7 @@ public class AddToCart extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        HttpSession session = request.getSession();
-        String pid_raw = request.getParameter("pid");
-        String colorid_raw = request.getParameter("colorid");
-        String confid_raw = request.getParameter("confid");
-        User user = (User) session.getAttribute("user");
-        ProductDAOS pDAO = new ProductDAOS();
-        CartDAOS cartDAO = new CartDAOS();
-
-        int pid = Integer.parseInt(pid_raw);
-        int colorid = Integer.parseInt(colorid_raw);
-        int confid = Integer.parseInt(confid_raw);
-        ProductDetail pDetail = pDAO.getProductDetailByProductID(pid, colorid, confid);
-        Cart cartUser = cartDAO.getCartByUserID(user.getId());
-
-        if (cartUser == null) {
-            cartDAO.addToCart(user.getId());
-            //cartUser = cartDAO.getCartByUserID(user.getId());
-        }
-        CartItem existProduct = cartDAO.getCartItemByCartIdAndProductId(cartUser.getId(), pDetail.getId());
-
-        //check if exist product in cart
-        if (existProduct != null) {
-            int newQuantity = existProduct.getQuantity() + 1;
-            cartDAO.updateCartItemQuantity(existProduct.getCart().getId(), pDetail.getId(), newQuantity);
-        } else {
-            cartDAO.addToCartItem(cartUser.getId(), pDetail.getId(), 1);
-        }
-
-        request.getRequestDispatcher("home").forward(request, response);
-
+        processRequest(request, response);
     }
 
     /**

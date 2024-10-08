@@ -5,25 +5,29 @@
 package controller;
 
 import dal.CartDAOS;
-import dal.ProductDAOS;
+import dal.ImageDAOS;
 import java.io.IOException;
+import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+import java.util.ArrayList;
+import java.util.List;
 import model.Cart;
 import model.CartItem;
-import model.ProductDetail;
+import model.Image;
 import model.User;
+import model.Voucher;
 
 /**
  *
  * @author ADMIN
  */
-@WebServlet(name = "AddToCart", urlPatterns = {"/addtocart"})
-public class AddToCart extends HttpServlet {
+@WebServlet(name = "LoadInfoCheckOut", urlPatterns = {"/loadInfoCheckout"})
+public class LoadInfoCheckOut extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -37,7 +41,36 @@ public class AddToCart extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-    }
+        HttpSession session = request.getSession();
+        User user = (User) session.getAttribute("user");
+        CartDAOS cDAO = new CartDAOS();
+
+        int cid = cDAO.getCartByUserID(user.getId()).getId();
+        List<CartItem> cartItem = cDAO.getProductSelectd(cid);
+
+        String name = user.getFullName();
+        String email = user.getEmail();
+
+        ImageDAOS iDAO = new ImageDAOS();
+        List<Image> listImages = new ArrayList<>();
+
+        for (int i = 0; i < cartItem.size(); i++) {
+            int productDetailId = cartItem.get(i).getProductdetail().getId();
+            Image image = iDAO.getOneImageByProductDetailID(productDetailId);
+            listImages.add(image); // Thêm hình ảnh vào danh sách
+        }
+
+        Voucher voucher = (Voucher)request.getAttribute("isVoucher");
+        if (voucher != null) {
+            request.setAttribute("voucher", voucher);
+        }
+
+        request.setAttribute("cartItem", cartItem);
+        request.setAttribute("name", name);
+        request.setAttribute("email", email);
+        request.setAttribute("listImages", listImages);
+        request.getRequestDispatcher("checkout.jsp").forward(request, response);
+        }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
@@ -51,36 +84,7 @@ public class AddToCart extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        HttpSession session = request.getSession();
-        String pid_raw = request.getParameter("pid");
-        String colorid_raw = request.getParameter("colorid");
-        String confid_raw = request.getParameter("confid");
-        User user = (User) session.getAttribute("user");
-        ProductDAOS pDAO = new ProductDAOS();
-        CartDAOS cartDAO = new CartDAOS();
-
-        int pid = Integer.parseInt(pid_raw);
-        int colorid = Integer.parseInt(colorid_raw);
-        int confid = Integer.parseInt(confid_raw);
-        ProductDetail pDetail = pDAO.getProductDetailByProductID(pid, colorid, confid);
-        Cart cartUser = cartDAO.getCartByUserID(user.getId());
-
-        if (cartUser == null) {
-            cartDAO.addToCart(user.getId());
-            //cartUser = cartDAO.getCartByUserID(user.getId());
-        }
-        CartItem existProduct = cartDAO.getCartItemByCartIdAndProductId(cartUser.getId(), pDetail.getId());
-
-        //check if exist product in cart
-        if (existProduct != null) {
-            int newQuantity = existProduct.getQuantity() + 1;
-            cartDAO.updateCartItemQuantity(existProduct.getCart().getId(), pDetail.getId(), newQuantity);
-        } else {
-            cartDAO.addToCartItem(cartUser.getId(), pDetail.getId(), 1);
-        }
-
-        request.getRequestDispatcher("home").forward(request, response);
-
+        processRequest(request, response);
     }
 
     /**

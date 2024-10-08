@@ -2,47 +2,63 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
  */
+
 package controller;
 
-import dal.CartDAOS;
-import dal.ProductDAOS;
+import dal.VoucherDAO;
 import java.io.IOException;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import jakarta.servlet.http.HttpSession;
-import model.Cart;
-import model.CartItem;
-import model.ProductDetail;
-import model.User;
+import java.sql.Date;
 
 /**
  *
  * @author ADMIN
  */
-@WebServlet(name = "AddToCart", urlPatterns = {"/addtocart"})
-public class AddToCart extends HttpServlet {
-
-    /**
-     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
-     * methods.
-     *
+@WebServlet(name="AddVoucher", urlPatterns={"/addVoucher"})
+public class AddVoucher extends HttpServlet {
+   
+    /** 
+     * Processes requests for both HTTP <code>GET</code> and <code>POST</code> methods.
      * @param request servlet request
      * @param response servlet response
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
+    throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-    }
+        
+        String code = request.getParameter("code");
+        String name = request.getParameter("name");
+        String discount_raw = request.getParameter("discount");
+        String quantity_raw = request.getParameter("quantity");
+        String startdate_raw = request.getParameter("startdate");
+        String enddate_raw = request.getParameter("enddate");
+        String minvalue_raw = request.getParameter("minvalue");
+        String discountcap_raw = request.getParameter("discountcap");
+        
+        VoucherDAO vDAO = new VoucherDAO();
+        int discount = Integer.parseInt(discount_raw);
+        int quantity = Integer.parseInt(quantity_raw);
+        
+        Date startdate = Date.valueOf(startdate_raw);
+        Date enddate = Date.valueOf(enddate_raw);
+        
+        int minvalue = Integer.parseInt(minvalue_raw);
+        int discountcap = Integer.parseInt(discountcap_raw);
+        
+        vDAO.addVoucher(code, name, discount, quantity, startdate, enddate, minvalue, discountcap);
+    
+        response.sendRedirect("voucherManager");
+    } 
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
-    /**
+    /** 
      * Handles the HTTP <code>GET</code> method.
-     *
      * @param request servlet request
      * @param response servlet response
      * @throws ServletException if a servlet-specific error occurs
@@ -50,42 +66,12 @@ public class AddToCart extends HttpServlet {
      */
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        HttpSession session = request.getSession();
-        String pid_raw = request.getParameter("pid");
-        String colorid_raw = request.getParameter("colorid");
-        String confid_raw = request.getParameter("confid");
-        User user = (User) session.getAttribute("user");
-        ProductDAOS pDAO = new ProductDAOS();
-        CartDAOS cartDAO = new CartDAOS();
+    throws ServletException, IOException {
+        processRequest(request, response);
+    } 
 
-        int pid = Integer.parseInt(pid_raw);
-        int colorid = Integer.parseInt(colorid_raw);
-        int confid = Integer.parseInt(confid_raw);
-        ProductDetail pDetail = pDAO.getProductDetailByProductID(pid, colorid, confid);
-        Cart cartUser = cartDAO.getCartByUserID(user.getId());
-
-        if (cartUser == null) {
-            cartDAO.addToCart(user.getId());
-            //cartUser = cartDAO.getCartByUserID(user.getId());
-        }
-        CartItem existProduct = cartDAO.getCartItemByCartIdAndProductId(cartUser.getId(), pDetail.getId());
-
-        //check if exist product in cart
-        if (existProduct != null) {
-            int newQuantity = existProduct.getQuantity() + 1;
-            cartDAO.updateCartItemQuantity(existProduct.getCart().getId(), pDetail.getId(), newQuantity);
-        } else {
-            cartDAO.addToCartItem(cartUser.getId(), pDetail.getId(), 1);
-        }
-
-        request.getRequestDispatcher("home").forward(request, response);
-
-    }
-
-    /**
+    /** 
      * Handles the HTTP <code>POST</code> method.
-     *
      * @param request servlet request
      * @param response servlet response
      * @throws ServletException if a servlet-specific error occurs
@@ -93,13 +79,12 @@ public class AddToCart extends HttpServlet {
      */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
+    throws ServletException, IOException {
         processRequest(request, response);
     }
 
-    /**
+    /** 
      * Returns a short description of the servlet.
-     *
      * @return a String containing servlet description
      */
     @Override
