@@ -45,7 +45,7 @@ public class LoadProductCart extends HttpServlet {
 
         if (cartUser == null) {
             cartDAO.addToCart(user.getId());
-            cartUser = cartDAO.getCartByUserID(user.getId());
+            //cartUser = cartDAO.getCartByUserID(user.getId());
         }
 
         List<CartItem> listCartItem = cartDAO.getAllProductOfCartItem(cartUser.getId());
@@ -59,10 +59,9 @@ public class LoadProductCart extends HttpServlet {
             Image image = iDAO.getOneImageByProductDetailID(productDetailId);
             listImages.add(image); // Thêm hình ảnh vào danh sách
         }
-        
 
         int cartID = cartUser.getId();
-        
+
         request.setAttribute("cartID", cartID);
         request.setAttribute("listImages", listImages);
         request.setAttribute("listCartItem", listCartItem);

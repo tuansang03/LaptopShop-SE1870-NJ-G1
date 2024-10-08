@@ -4,26 +4,31 @@
  */
 package controller;
 
-import dal.CartDAOS;
-import dal.ProductDAOS;
-import java.io.IOException;
+import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import jakarta.servlet.http.HttpSession;
-import model.Cart;
-import model.CartItem;
-import model.ProductDetail;
-import model.User;
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
+import com.google.zxing.BarcodeFormat;
+import com.google.zxing.EncodeHintType;
+import com.google.zxing.MultiFormatWriter;
+import com.google.zxing.WriterException;
+import com.google.zxing.client.j2se.MatrixToImageWriter;
+import com.google.zxing.common.BitMatrix;
+import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
+import java.io.File;
+import java.util.Random;
 
 /**
  *
  * @author ADMIN
  */
-@WebServlet(name = "AddToCart", urlPatterns = {"/addtocart"})
-public class AddToCart extends HttpServlet {
+@WebServlet(name = "PaymentServlet", urlPatterns = {"/payment"})
+public class PaymentServlet extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -37,6 +42,34 @@ public class AddToCart extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
+        // Lấy dữ liệu thanh toán từ yêu cầu
+        String paymentData = (String)request.getAttribute("paymentData");
+        String code = (String)request.getAttribute("code");
+        
+        // Đường dẫn lưu mã QR
+        String qrPath = getServletContext().getRealPath("/") + "qr_code.png";
+
+        // Tạo mã QR
+        try {
+            Map<EncodeHintType, ErrorCorrectionLevel> hintMap = new HashMap<>();
+            hintMap.put(EncodeHintType.ERROR_CORRECTION, ErrorCorrectionLevel.L);
+
+            BitMatrix matrix = new MultiFormatWriter().encode(
+                    new String(paymentData.getBytes("UTF-8"), "UTF-8"),
+                    BarcodeFormat.QR_CODE, 200, 200);
+
+            MatrixToImageWriter.writeToFile(matrix, "PNG", new File(qrPath));
+
+            // Chuyển hướng đến trang hiển thị mã QR
+            
+            request.setAttribute("code", code);
+            request.setAttribute("total", paymentData);
+            request.setAttribute("qrPath", "qr_code.png");
+            request.getRequestDispatcher("/showQRCode.jsp").forward(request, response);
+        } catch (WriterException e) {
+            e.printStackTrace();
+            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Error generating QR code");
+        }
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
@@ -51,36 +84,7 @@ public class AddToCart extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        HttpSession session = request.getSession();
-        String pid_raw = request.getParameter("pid");
-        String colorid_raw = request.getParameter("colorid");
-        String confid_raw = request.getParameter("confid");
-        User user = (User) session.getAttribute("user");
-        ProductDAOS pDAO = new ProductDAOS();
-        CartDAOS cartDAO = new CartDAOS();
-
-        int pid = Integer.parseInt(pid_raw);
-        int colorid = Integer.parseInt(colorid_raw);
-        int confid = Integer.parseInt(confid_raw);
-        ProductDetail pDetail = pDAO.getProductDetailByProductID(pid, colorid, confid);
-        Cart cartUser = cartDAO.getCartByUserID(user.getId());
-
-        if (cartUser == null) {
-            cartDAO.addToCart(user.getId());
-            //cartUser = cartDAO.getCartByUserID(user.getId());
-        }
-        CartItem existProduct = cartDAO.getCartItemByCartIdAndProductId(cartUser.getId(), pDetail.getId());
-
-        //check if exist product in cart
-        if (existProduct != null) {
-            int newQuantity = existProduct.getQuantity() + 1;
-            cartDAO.updateCartItemQuantity(existProduct.getCart().getId(), pDetail.getId(), newQuantity);
-        } else {
-            cartDAO.addToCartItem(cartUser.getId(), pDetail.getId(), 1);
-        }
-
-        request.getRequestDispatcher("home").forward(request, response);
-
+        processRequest(request, response);
     }
 
     /**
@@ -92,9 +96,8 @@ public class AddToCart extends HttpServlet {
      * @throws IOException if an I/O error occurs
      */
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        processRequest(request, response);
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+
     }
 
     /**

@@ -28,7 +28,7 @@ public class CartDAOS extends DBContext {
     }
 
     public void addToCartItem(int id, int pid, int quantity) {
-        String sql = "INSERT INTO [dbo].[CartItem] VALUES (?, ?, ?)";
+        String sql = "INSERT INTO [dbo].[CartItem]([CartId], [ProductDetailId], [Quantity]) VALUES (?, ?, ?)";
 
         try {
             PreparedStatement st = connection.prepareStatement(sql);
@@ -37,7 +37,7 @@ public class CartDAOS extends DBContext {
             st.setInt(3, quantity);
             st.executeUpdate();
         } catch (Exception e) {
-            
+
         }
     }
 
@@ -91,11 +91,11 @@ public class CartDAOS extends DBContext {
 
             while (rs.next()) {
                 ProductDAOS pDAO = new ProductDAOS();
-                CartItem cart = new CartItem(
-                        rs.getInt("Id"),
+                CartItem cart = new CartItem(rs.getInt("Id"),
                         getCartID(rs.getInt("CartId")),
                         pDAO.getProductDetailByID(rs.getInt("ProductDetailId")),
-                        rs.getInt("Quantity"));
+                        rs.getInt("Quantity"), 
+                        rs.getString("Status"));
                 listCartItem.add(cart);
             }
 
@@ -155,7 +155,7 @@ public class CartDAOS extends DBContext {
         } catch (Exception e) {
         }
     }
-    
+
     public void deleteAllCartItem(int cartID) {
         String sql = "DELETE FROM [CartItem] WHERE CartId = ? ";
         try {
@@ -199,9 +199,46 @@ public class CartDAOS extends DBContext {
         }
         return null;
     }
+
+    public void selectProduct(int pid, String checked) {
+        String sql = "UPDATE [dbo].[CartItem]\n"
+                + "   SET [Status] = ? \n"
+                + " WHERE ProductDetailId = ?";
+        try {
+            PreparedStatement st = connection.prepareStatement(sql);
+            st.setString(1, checked);
+            st.setInt(2, pid);
+            st.executeUpdate();
+
+        } catch (Exception e) {
+        }
+    }
     
+    public List<CartItem> getProductSelectd(int cid) {
+        String sql = "SELECT * FROM CartItem WHERE [CartId] = ? AND Status = 'checked'";
+        List<CartItem> listCart = new ArrayList<>();
+        try {
+            PreparedStatement st = connection.prepareStatement(sql);
+            st.setInt(1, cid);
+            ResultSet rs = st.executeQuery();
+            while (rs.next()) {      
+                ProductDAOS pDAO = new ProductDAOS();
+                CartItem cart = new CartItem(rs.getInt("Id"),
+                        getCartID(rs.getInt("CartId")),
+                        pDAO.getProductDetailByID(rs.getInt("ProductDetailId")),
+                        rs.getInt("Quantity"), 
+                        rs.getString("Status"));
+                listCart.add(cart);
+            }
+        } catch (Exception e) {
+        }
+        return listCart;
+    }
+
     public static void main(String[] args) {
         CartDAOS c = new CartDAOS();
+        List<CartItem> s = c.getProductSelectd(1);
+        System.out.println(s);
     }
 
 }

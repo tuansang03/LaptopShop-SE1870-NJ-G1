@@ -18,75 +18,6 @@
         <link rel="stylesheet" href="vendors/nice-select/nice-select.css">
         <link rel="stylesheet" href="vendors/nouislider/nouislider.min.css">
         <link rel="stylesheet" href="css/style.css">
-        <script>
-            // Hàm kiểm tra tất cả sản phẩm và tính tổng giá
-            function checkAll(mainCheckBox) {
-                // Lấy tất cả checkbox có class 'subCheckBox'
-                const checkBoxes = document.querySelectorAll('.subCheckBox');
-                const totalPriceElement = document.getElementById('totalPrice');
-
-                // Cập nhật trạng thái cho tất cả checkbox con
-                checkBoxes.forEach(function (check) {
-                    check.checked = mainCheckBox.checked;
-                });
-
-                // Tính tổng sau khi thay đổi trạng thái checkbox
-                calculateTotal();
-            }
-
-            // Hàm tính tổng giá của các sản phẩm đã được check
-            function calculateTotal() {
-                const checkBoxes = document.querySelectorAll('.subCheckBox');
-                const totalPriceElement = document.getElementById('totalPrice');
-                let total = 0;
-
-                checkBoxes.forEach(checkbox => {
-                    if (checkbox.checked) {
-                        // Lấy giá trị từ data-price của checkbox đã được check
-                        total += parseFloat(checkbox.getAttribute('data-price'));
-                    }
-                });
-
-                // Cập nhật giá trị tổng vào phần tử hiển thị tổng giá
-                totalPriceElement.innerText = total.toLocaleString('vi-VN') + 'đ';
-            }
-
-            // Khởi tạo sự kiện khi tài liệu đã được tải xong
-            document.addEventListener('DOMContentLoaded', function () {
-                const mainCheckBox = document.getElementById('mainCheckBox');
-                const subCheckBoxes = document.querySelectorAll('.subCheckBox');
-
-                mainCheckBox.addEventListener('change', function () {
-                    checkAll(mainCheckBox);
-                });
-
-                // Lắng nghe sự kiện thay đổi trên tất cả checkbox
-                subCheckBoxes.forEach(checkbox => {
-                    checkbox.addEventListener('change', function () {
-                        // Kiểm tra nếu tất cả checkbox con đều được checked
-                        const allChecked = Array.from(subCheckBoxes).every(cb => cb.checked);
-                        mainCheckBox.checked = allChecked; // Cập nhật trạng thái cho mainCheckBox
-                        calculateTotal(); // Tính toán tổng giá
-                    });
-                });
-
-                // Tính toán tổng giá ban đầu nếu có checkbox con được checked
-                calculateTotal();
-            });
-            
-            function doDeleteProduct(cid, pid, name) {
-                if (confirm("Do you want to delete product name: " + name)) {
-                    window.location = "deleteCart?cid=" +cid + "&&pid=" + pid;
-                }
-            }
-            
-            function doDeleteALLProduct(cid) {
-                if (confirm("Do you want to delete all product")) {
-                    window.location = "deleteAllCart?cid=" + cid;
-                }
-            }
-            
-        </script>
 
     </head>
     <body>
@@ -126,7 +57,6 @@
                             <thead>
                                 <tr>
                                     <th style="width: 2%"  scope="col">
-                                        <input checked type="checkbox" id="mainCheckBox" onclick="checkAll(this)">
                                     </th>
                                     <th style="width:45%;" scope="col">Product</th>
                                     <th style="width: 20%;" scope="col">Price</th>
@@ -139,7 +69,10 @@
                                 <c:forEach items="${requestScope.listCartItem}" var="p">
                                     <tr>
                                         <td>
-                                            <input checked type="checkbox" class="subCheckBox" data-price="${(p.getQuantity()) * (p.getProductdetail().getPrice())}">
+                                            <form action="selectProduct">
+                                                <input type="hidden" name="pid" value="${p.getProductdetail().getId()}">
+                                                <input name="selected" ${p.getStatus().equals("checked") ? 'checked': ''} onchange="this.form.submit()" type="checkbox">
+                                            </form>
                                         </td>
                                         <td>
                                             <div class="media">
@@ -153,7 +86,7 @@
                                                     </c:forEach>
                                                 </div>
                                                 <div class="media-body">
-                                                    <a href="">${p.getProductdetail().getProduct().getName()}</a>
+                                                    <a href="information?productId=${p.getProductdetail().getId()}">${p.getProductdetail().getProduct().getName()} (${p.getProductdetail().getProduct().getCategory().getName()}, ${p.getProductdetail().getProduct().getBrand().getName()}, ${p.getProductdetail().getConfiguration().getName()})</a>
                                                     <p>${p.getProductdetail().getColor().getName()}</p>
                                                     <p style="font-size: 11px;">${p.getProductdetail().getConfiguration().getName()}</p>
                                                 </div>
@@ -197,29 +130,14 @@
                                                 <fmt:formatNumber value="${(p.getQuantity()) * (p.getProductdetail().getPrice())}" type="number"/>đ
                                             </h5>
                                             <c:set value="${(p.getQuantity()) * (p.getProductdetail().getPrice())}" var="price"/>
-                                            <c:set value="${price + total}" var="total"/>
+                                            <c:if test="${p.getStatus() == 'checked'}">
+                                                <c:set value="${price + total}" var="total"/>
+                                            </c:if>
                                         </td>
                                     </tr>
                                 </c:forEach>
 
-                                <tr class="bottom_button">
-                                    <td>
-                                        <a class="button" href="#">Update Cart</a>
-                                    </td>
-                                    <td>
-
-                                    </td>
-                                    <td>
-
-                                    </td>
-                                    <td>
-                                        <div class="cupon_text d-flex align-items-center">
-                                            <input type="text" placeholder="Coupon Code">
-                                            <a class="primary-btn" href="#">Apply</a>
-                                            <a class="button" href="#">Have a Coupon?</a>
-                                        </div>
-                                    </td>
-                                </tr>
+                                
                                 <tr>
                                     <td>
 
@@ -232,44 +150,8 @@
                                     </td>
                                     <td>
                                         <h5>
-                                            <span id="totalPrice">
-                                                <fmt:formatNumber value="${total}" type="number"/>đ
-                                            </span>
+                                            <fmt:formatNumber value="${total}" type="number"/>đ
                                         </h5>
-                                    </td>
-                                </tr>
-                                <tr class="shipping_area">
-                                    <td class="d-none d-md-block">
-
-                                    </td>
-                                    <td>
-
-                                    </td>
-                                    <td>
-                                        <h5>Shipping</h5>
-                                    </td>
-                                    <td>
-                                        <div class="shipping_box">
-                                            <ul class="list">
-                                                <li><a href="#">Flat Rate: $5.00</a></li>
-                                                <li><a href="#">Free Shipping</a></li>
-                                                <li><a href="#">Flat Rate: $10.00</a></li>
-                                                <li class="active"><a href="#">Local Delivery: $2.00</a></li>
-                                            </ul>
-                                            <h6>Calculate Shipping <i class="fa fa-caret-down" aria-hidden="true"></i></h6>
-                                            <select class="shipping_select">
-                                                <option value="1">Bangladesh</option>
-                                                <option value="2">India</option>
-                                                <option value="4">Pakistan</option>
-                                            </select>
-                                            <select class="shipping_select">
-                                                <option value="1">Select a State</option>
-                                                <option value="2">Select a State</option>
-                                                <option value="4">Select a State</option>
-                                            </select>
-                                            <input type="text" placeholder="Postcode/Zipcode">
-                                            <a class="gray_btn" href="#">Update Details</a>
-                                        </div>
                                     </td>
                                 </tr>
                                 <tr class="out_button_area">
@@ -285,7 +167,7 @@
                                     <td>
                                         <div class="checkout_btn_inner d-flex align-items-center">
                                             <a class="gray_btn" href="#">Continue Shopping</a>
-                                            <a class="primary-btn ml-2" href="#">Proceed to checkout</a>
+                                            <a class="primary-btn ml-2" href="loadInfoCheckout">Proceed to checkout</a>
                                         </div>
                                     </td>
                                 </tr>

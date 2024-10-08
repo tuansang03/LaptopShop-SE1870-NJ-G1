@@ -13,7 +13,8 @@ public class CartItem {
     private Cart cart;
     private ProductDetail productdetail;
     private int quantity;
-
+    private String status;
+    
     public CartItem() {
     }
 
@@ -24,6 +25,16 @@ public class CartItem {
         this.quantity = quantity;
     }
 
+    public CartItem(int id, Cart cart, ProductDetail productdetail, int quantity, String status) {
+        this.id = id;
+        this.cart = cart;
+        this.productdetail = productdetail;
+        this.quantity = quantity;
+        this.status = status;
+    }
+
+    
+    
     public int getId() {
         return id;
     }
@@ -56,9 +67,18 @@ public class CartItem {
         this.quantity = quantity;
     }
 
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    
     @Override
     public String toString() {
-        return "CartItem{" + "id=" + id + ", cart=" + cart + ", productdetail=" + productdetail + ", quantity=" + quantity + '}';
+        return "CartItem{" + "id=" + id + ", cart=" + cart + ", productdetail=" + productdetail + ", quantity=" + quantity + ", status=" + status + '}';
     }
             
     
