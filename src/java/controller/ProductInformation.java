@@ -16,7 +16,6 @@ import model.*;
 import java.util.List;
 import java.text.DecimalFormat;
 
-
 /**
  *
  * @author PHONG
@@ -64,24 +63,24 @@ public class ProductInformation extends HttpServlet {
             throws ServletException, IOException {
         ProductDAO d = new ProductDAO();
 
-
         int id = Integer.parseInt(request.getParameter("productId"));
         List<Image> list = d.getImageById(id);
         ProductDetail pd = d.getProductDetail(id);
-        List<Configuration> con = d.listConfigurationById(id);
+        
         List<ProductAttribute> pa = d.getAttributeById(id);
-        int selectedConfigId = pd.getConfiguration().getId();
-        int selectedColorId = pd.getColor().getId();
-        List<Color> col = d.listColorById(id, selectedConfigId);
+        
+        List<Configuration> con = d.listConfigurationById(id);
+        List<Color> col = d.listColorById(id, pd.getConfiguration().getId());
+        
         List<ProductList> listproduct = d.listProduct("'" + pd.getProduct().getCategory().getName() + "'", null, null, null);
         String price = formatCurrency(d.getProductDetail(id).getPrice());
+        
         request.setAttribute("co", pd.getConfiguration().getName());
         request.setAttribute("col", pd.getColor().getName());
         request.setAttribute("detail", pd);
         request.setAttribute("attribute", pa);
         request.setAttribute("config", con);
-        request.setAttribute("selectedConfigId", selectedConfigId);
-        request.setAttribute("selectedColorId", selectedColorId);
+
         request.setAttribute("image", list);
         request.setAttribute("color", col);
         request.setAttribute("price", price);

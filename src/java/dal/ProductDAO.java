@@ -58,7 +58,6 @@ public class ProductDAO extends DBContext {
 
             ResultSet rs = pre.executeQuery();
 
-
             while (rs.next()) {
                 Product p = new Product();
                 p.setId(rs.getInt("Id"));  // Lấy ID của sản phẩm
@@ -91,7 +90,6 @@ public class ProductDAO extends DBContext {
         }
         return null;
     }
-
 
     public int insertProduct(int brandId, int categoryId, String name) {
         String sql = "INSERT INTO [dbo].[Product] (BrandId, CategoryId, Name) VALUES (?, ?, ?)";
@@ -257,14 +255,14 @@ public class ProductDAO extends DBContext {
         DecimalFormat formatter = new DecimalFormat("#,###");
         return formatter.format(amount) + " VNĐ";
     }
-    
+
     public List<Image> getImageById(int id) {
         List<Image> list = new ArrayList<>();
         String sql = "select p.Id as product, pd.Id, i.FeedbackId, i.Image\n"
-                + "from Image i\n"
-                + "join ProductDetail pd on pd.Id=i.ProductDetailId\n"
-                + "join Product p on p.Id=pd.ProductId\n"
-                + "and pd.Id=" + id;
+                + "from Product p\n"
+                + "join ProductDetail pd on pd.ProductId=p.Id\n"
+                + "join Image i on i.ProductDetailId=pd.Id\n"
+                + "and p.Id=(select ProductId from ProductDetail where Id=" + id + ")";
         try {
             PreparedStatement st = connection.prepareStatement(sql);
             ResultSet re = st.executeQuery();
@@ -282,7 +280,7 @@ public class ProductDAO extends DBContext {
 
         return list;
     }
-    
+
     public ProductDetail getProductDetail(int id) {
         String sql = "SELECT * FROM ProductDetail WHERE id = ?";
         try (PreparedStatement st = connection.prepareStatement(sql)) {
@@ -309,8 +307,8 @@ public class ProductDAO extends DBContext {
 
         return null;
     }
-    
-     public Configuration getConfigurationById(int id) {
+
+    public Configuration getConfigurationById(int id) {
         String sql = "SELECT * FROM Configuration WHERE id = ?";
         try (PreparedStatement st = connection.prepareStatement(sql)) {
             st.setInt(1, id);  // Truyền tham số vào câu lệnh SQL
@@ -326,8 +324,8 @@ public class ProductDAO extends DBContext {
 
         return null;
     }
-    
-     public Color getColorById(int id) {
+
+    public Color getColorById(int id) {
         String sql = "SELECT * FROM Color WHERE id = ?";
         try (PreparedStatement st = connection.prepareStatement(sql)) {
             st.setInt(1, id);  // Truyền tham số vào câu lệnh SQL
@@ -343,7 +341,7 @@ public class ProductDAO extends DBContext {
 
         return null;
     }
-    
+
     public Product getProductById(int id) {
         String sql = "SELECT * FROM Product WHERE id = ?";
         try (PreparedStatement st = connection.prepareStatement(sql)) {
@@ -366,8 +364,8 @@ public class ProductDAO extends DBContext {
 
         return null;
     }
-    
-     public Brand getBrandById(int id) {
+
+    public Brand getBrandById(int id) {
         String sql = "SELECT * FROM Brand WHERE id = ?";
         try (PreparedStatement st = connection.prepareStatement(sql)) {
             st.setInt(1, id);  // Truyền tham số vào câu lệnh SQL
@@ -400,22 +398,27 @@ public class ProductDAO extends DBContext {
 
         return null;
     }
-      public List<ProductAttribute> getAttributeById(int id) {
+
+    public List<ProductAttribute> getAttributeById(int id) {
         List<ProductAttribute> list = new ArrayList<>();
-        String sql = "select * from Product_Attribute where ProductDetailId = " + id + " order by AttributeId";
-        try {
-            PreparedStatement st = connection.prepareStatement(sql);
-            ResultSet re = st.executeQuery();
-            while (re.next()) {
-                ProductAttribute p = new ProductAttribute(
-                        re.getInt("id"),
-                        getProductDetail(re.getInt("productdetailid")),
-                        getAttribute(re.getInt("attributeid")),
-                        re.getString("value"));
-                list.add(p);
+        String sql = "SELECT * FROM Product_Attribute WHERE ProductDetailId = ? ORDER BY AttributeId";
+
+        try (PreparedStatement st = connection.prepareStatement(sql)) {
+            st.setInt(1, id);
+
+            try (ResultSet re = st.executeQuery()) {
+                while (re.next()) {
+                    ProductAttribute p = new ProductAttribute(
+                            re.getInt("id"),
+                            getProductDetail(re.getInt("productdetailid")),
+                            getAttribute(re.getInt("attributeid")),
+                            re.getString("value")
+                    );
+                    list.add(p);
+                }
             }
         } catch (SQLException e) {
-            System.out.println(e);
+            System.err.println("Error while fetching product attributes: " + e.getMessage());
         }
 
         return list;
@@ -485,32 +488,98 @@ public class ProductDAO extends DBContext {
 
         return list;
     }
-     
-     
-public List<Product> getProductsByBrand(int bid) {
-    PreparedStatement stm = null;
-    ResultSet rs = null;
-    List<Product> products = new ArrayList<>();
-    String sql = "SELECT * FROM [product] WHERE brand_id = ?";
-    try {
-        stm = connection.prepareStatement(sql);
-        stm.setInt(1, bid);
-        rs = stm.executeQuery();
-        while (rs.next()) {
-            int id = rs.getInt("id");
-            String name = rs.getString("name");
 
-            // Tạo sản phẩm với các trường cần thiết
-            products.add(new Product(id, name));
+    public List<Product> getProductsByBrand(int bid) {
+        PreparedStatement stm = null;
+        ResultSet rs = null;
+        List<Product> products = new ArrayList<>();
+        String sql = "SELECT * FROM [product] WHERE brand_id = ?";
+        try {
+            stm = connection.prepareStatement(sql);
+            stm.setInt(1, bid);
+            rs = stm.executeQuery();
+            while (rs.next()) {
+                int id = rs.getInt("id");
+                String name = rs.getString("name");
+
+                products.add(new Product(id, name));
+            }
+            return products;
+        } catch (SQLException ex) {
+            Logger.getLogger(ProductDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
-        return products;
-    } catch (SQLException ex) {
-        Logger.getLogger(ProductDAO.class.getName()).log(Level.SEVERE, null, ex);
+        return null;
     }
-    return null;
-}
+
+    public Image getImage(int id) {
+        String sql = "SELECT top 1 * FROM Image WHERE ProductDetailId = ?";
+        try (PreparedStatement st = connection.prepareStatement(sql)) {
+            st.setInt(1, id);  // Truyền tham số vào câu lệnh SQL
+            try (ResultSet re = st.executeQuery()) {
+                if (re.next()) {
+                    Image i = new Image(
+                            re.getInt("id"),
+                            getProductDetail(id),
+                            null,
+                            re.getString("image"));
+                    return i;
+                }
+            }
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
+
+        return null;
+    }
+
+    public List<Image> getImageList(String category, String brand, String price, String name) {
+        PreparedStatement stm = null;
+        ResultSet rs = null;
+        List<Image> list = new ArrayList<>();
+        String sql = "WITH RankedImages AS (\n"
+                + "    SELECT \n"
+                + "        i.Id, \n"
+                + "        i.ProductDetailId, \n"
+                + "        i.FeedbackId, \n"
+                + "        i.Image,\n"
+                + "        ROW_NUMBER() OVER (PARTITION BY p.Id ORDER BY i.Id) AS rn\n"
+                + "    FROM Image i\n"
+                + "    JOIN ProductDetail pd ON pd.Id = i.ProductDetailId\n"
+                + "    JOIN Product p ON p.Id = pd.ProductId\n"
+                + "    JOIN Brand b ON b.Id = p.BrandId\n"
+                + "    JOIN Category c ON c.Id = p.CategoryId\n"
+                + "	AND b.Name = 'asus'\n"
+                + ")\n"
+                + "SELECT \n"
+                + "    Id, \n"
+                + "    ProductDetailId, \n"
+                + "    FeedbackId, \n"
+                + "    Image\n"
+                + "FROM \n"
+                + "    RankedImages\n"
+                + "WHERE \n"
+                + "    rn = 1";
+        try {
+            PreparedStatement st = connection.prepareStatement(sql);
+            ResultSet re = st.executeQuery();
+            while (re.next()) {
+                Image i = new Image(
+                        re.getInt("id"),
+                        getProductDetail(re.getInt("productDetail")),
+                        null,
+                        re.getString("name"));
+                list.add(i);
+            }
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
+        return list;
+    }
+
     public static void main(String[] args) {
-        ProductDAO p = new ProductDAO();
+        ProductDAO d = new ProductDAO();
+        List<ProductAttribute> list = d.getAttributeById(5);
+        System.out.println(list.get(0).getAttribute().getName());
 
     }
 }
