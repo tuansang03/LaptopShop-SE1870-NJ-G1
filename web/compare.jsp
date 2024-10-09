@@ -6,6 +6,7 @@
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <!DOCTYPE html>
 <html>
     <head>
@@ -60,7 +61,7 @@
                                     <h5>${img1.productDetail.product.name}</h5>
 
                                     <!-- Hiển thị giá tiền -->
-                                    <p>Giá: ${img1.productDetail.price}</p>
+                                    <fmt:formatNumber value="${img1.productDetail.price}" type="number"/>đ
 
                                 </a>
                             </div>
@@ -83,7 +84,7 @@
                                         <h5>${img2.productDetail.product.name}</h5>
 
                                         <!-- Hiển thị giá tiền -->
-                                        <p>Giá: ${img2.productDetail.price}</p>
+                                        <fmt:formatNumber value="${img2.productDetail.price}" type="number"/>đ
 
                                     </a>
                                 </div>
@@ -91,23 +92,29 @@
 
                         </th>
                         <th>
-                            <div style="height: 100%; display: flex; flex-direction: column; justify-content: space-between;" >
-                                <a href="information?productId=${img3.productDetail.id}" class="product-link" style="display: block; height: 100%; text-decoration: none; color: inherit;">
+                            <c:if test="${empty img3}">
+                                <button id="openModal">Mở Modal</button>
+                            </c:if>
+                            <c:if test="${!empty img3}">
+                                <div style="height: 100%; display: flex; flex-direction: column; justify-content: space-between;" >
+                                    <a href="information?productId=${img3.productDetail.id}" class="product-link" style="display: block; height: 100%; text-decoration: none; color: inherit;">
 
-                                    <!-- Hiển thị ảnh sản phẩm -->
-                                    <img src="${img3.image}" style="max-width: 100%; height: auto;">
+                                        <!-- Hiển thị ảnh sản phẩm -->
+                                        <img src="${img3.image}" style="max-width: 100%; height: auto;">
 
-                                    <!-- Hiển thị thương hiệu -->
-                                    <div class="brand">${img3.productDetail.product.brand.name}</div>
+                                        <!-- Hiển thị thương hiệu -->
+                                        <div class="brand">${img3.productDetail.product.brand.name}</div>
 
-                                    <!-- Hiển thị tên sản phẩm -->
-                                    <h5>${img3.productDetail.product.name}</h5>
+                                        <!-- Hiển thị tên sản phẩm -->
+                                        <h5>${img3.productDetail.product.name}</h5>
 
-                                    <!-- Hiển thị giá tiền -->
-                                    <p>Giá: ${img3.productDetail.price}</p>
+                                        <!-- Hiển thị giá tiền -->
+                                        <fmt:formatNumber value="${img3.productDetail.price}" type="number"/>đ
 
-                                </a>
-                            </div>
+                                    </a>
+                                </div>  
+                            </c:if>
+
                         </th>
                     </tr>
                 </thead>
@@ -184,11 +191,29 @@
         <div id="myModal" class="modal">
             <div class="modal-content">
                 <span class="close">&times;</span>
-                <h2>Chọn sản phẩm</h2>
-                <div class="row">
-                    <input type="text" name="name" placeholder="Search" class="col-md-4">
-                    <div class="col-md-6">
 
+                <div class="row">
+                    <div class="col-md-2">   
+                    </div>
+                    <div class="col-md-2">
+                        <h2>Chọn sản phẩm</h2>
+                        <input type="text" name="name" placeholder="Search" >    
+                    </div>
+
+                    <div class="col-md-8">
+                        <c:forEach items="${mlist}" var="i">
+                            <a class="image-link" href="compare?productid=${img1.productDetail.id}&&productid2=${i.productDetail.id}&&productid3=">
+                                <img src="${i.image}" alt="Product Image" />
+                                <label>
+                                    ${i.productDetail.product.name}<br>
+                                    ${i.productDetail.product.brand.name}<br>
+                                    ${i.productDetail.configuration.name}<br>
+                                    <fmt:formatNumber value="${i.productDetail.price}" type="number"/>đ
+                                </label>
+                            </a>
+
+                            <br>
+                        </c:forEach>
 
                     </div>
 
@@ -223,6 +248,7 @@
                     modal.style.display = "none";
                 }
             }
+
         </script>
 
 
@@ -267,6 +293,30 @@
             .close:focus {
                 color: black;
             }
+            .image-link {
+                display: flex;                  /* Sử dụng flexbox để sắp xếp nội dung */
+                align-items: center;           /* Căn giữa nội dung theo chiều dọc */
+                width: 600px;                  /* Chiều rộng của khung, điều chỉnh theo nhu cầu */
+                height: 200px;                 /* Chiều cao của khung, điều chỉnh theo nhu cầu */
+                border: 1px solid #ccc;        /* Đường viền để dễ thấy khung */
+                border-radius: 5px;           /* Bo góc khung (nếu cần) */
+                text-decoration: none;         /* Bỏ gạch chân ở liên kết */
+                overflow: hidden;              /* Ẩn phần nội dung bị tràn */
+            }
+
+            .image-link img {
+                max-width: 200px;              /* Đảm bảo ảnh có chiều rộng tối đa, điều chỉnh theo nhu cầu */
+                max-height: 100%;              /* Đảm bảo ảnh không vượt quá chiều cao khung */
+                object-fit: cover;             /* Cắt ảnh theo tỉ lệ mà không làm méo */
+                margin-right: 10px;            /* Khoảng cách giữa ảnh và label */
+            }
+
+            .image-link label {
+                flex: 1;                       /* Chiếm không gian còn lại */
+                font-size: 14px;              /* Kích thước font cho label */
+                color: #333;                  /* Màu chữ */
+            }
+
 
         </style>
 

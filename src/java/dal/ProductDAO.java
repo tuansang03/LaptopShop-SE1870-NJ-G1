@@ -258,24 +258,26 @@ public class ProductDAO extends DBContext {
 
     public List<Image> getImageById(int id) {
         List<Image> list = new ArrayList<>();
-        String sql = "select p.Id as product, pd.Id, i.FeedbackId, i.Image\n"
-                + "from Product p\n"
-                + "join ProductDetail pd on pd.ProductId=p.Id\n"
-                + "join Image i on i.ProductDetailId=pd.Id\n"
-                + "and p.Id=(select ProductId from ProductDetail where Id=" + id + ")";
-        try {
-            PreparedStatement st = connection.prepareStatement(sql);
-            ResultSet re = st.executeQuery();
-            while (re.next()) {
-                Image i = new Image(
-                        re.getInt("id"),
-                        null,
-                        null,
-                        re.getString("image"));
-                list.add(i);
+        String sql = "SELECT p.Id AS product, pd.Id, i.FeedbackId, i.Image "
+                + "FROM Product p "
+                + "JOIN ProductDetail pd ON pd.ProductId = p.Id "
+                + "JOIN Image i ON i.ProductDetailId = pd.Id "
+                + "WHERE p.Id = (SELECT ProductId FROM ProductDetail WHERE Id = ?)";
+
+        try (PreparedStatement st = connection.prepareStatement(sql)) {
+            st.setInt(1, id);
+            try (ResultSet re = st.executeQuery()) {
+                while (re.next()) {
+                    Image i = new Image(
+                            re.getInt("id"),
+                            null,
+                            null,
+                            re.getString("image"));
+                    list.add(i);
+                }
             }
         } catch (SQLException e) {
-            System.out.println(e);
+            System.out.println(e.getMessage());
         }
 
         return list;
@@ -532,54 +534,61 @@ public class ProductDAO extends DBContext {
         return null;
     }
 
-    public List<Image> getImageList(String category, String brand, String price, String name) {
-        PreparedStatement stm = null;
-        ResultSet rs = null;
+    public List<Image> getMiniImage(int id, int id2, int id3, String name) {
         List<Image> list = new ArrayList<>();
-        String sql = "WITH RankedImages AS (\n"
-                + "    SELECT \n"
-                + "        i.Id, \n"
-                + "        i.ProductDetailId, \n"
-                + "        i.FeedbackId, \n"
-                + "        i.Image,\n"
-                + "        ROW_NUMBER() OVER (PARTITION BY p.Id ORDER BY i.Id) AS rn\n"
-                + "    FROM Image i\n"
-                + "    JOIN ProductDetail pd ON pd.Id = i.ProductDetailId\n"
-                + "    JOIN Product p ON p.Id = pd.ProductId\n"
-                + "    JOIN Brand b ON b.Id = p.BrandId\n"
-                + "    JOIN Category c ON c.Id = p.CategoryId\n"
-                + "	AND b.Name = 'asus'\n"
-                + ")\n"
-                + "SELECT \n"
-                + "    Id, \n"
-                + "    ProductDetailId, \n"
-                + "    FeedbackId, \n"
-                + "    Image\n"
-                + "FROM \n"
-                + "    RankedImages\n"
-                + "WHERE \n"
-                + "    rn = 1";
-        try {
-            PreparedStatement st = connection.prepareStatement(sql);
-            ResultSet re = st.executeQuery();
-            while (re.next()) {
-                Image i = new Image(
-                        re.getInt("id"),
-                        getProductDetail(re.getInt("productDetail")),
-                        null,
-                        re.getString("name"));
-                list.add(i);
+        StringBuilder sql = new StringBuilder();
+
+        // Khởi tạo câu lệnh SQL
+        sql.append("SELECT MIN(i.Id) AS Id, i.ProductDetailId, MIN(i.FeedbackId) AS FeedbackId, MIN(i.Image) AS Image ")
+                .append("FROM Image i ")
+                .append("JOIN ProductDetail pd ON pd.Id = i.ProductDetailId ")
+                .append("JOIN Product p ON p.Id = pd.ProductId ");
+
+        // Thêm điều kiện WHERE nếu cần
+        List<String> conditions = new ArrayList<>();
+        if (name != null) {
+            conditions.add("p.Name LIKE N'%" + name + "%'");
+        }
+        // Thêm điều kiện để loại trừ id, id2, id3
+        if (id > 0) {
+            conditions.add("i.ProductDetailId <> " + id);
+        }
+        if (id2 > 0) {
+            conditions.add("i.ProductDetailId <> " + id2);
+        }
+        if (id3 > 0) {
+            conditions.add("i.ProductDetailId <> " + id3);
+        }
+
+        // Nếu có điều kiện, thêm chúng vào câu lệnh
+        if (!conditions.isEmpty()) {
+            sql.append("WHERE ").append(String.join(" AND ", conditions));
+        }
+
+        sql.append(" GROUP BY i.ProductDetailId");
+
+        try (PreparedStatement st = connection.prepareStatement(sql.toString())) {
+            try (ResultSet re = st.executeQuery()) {
+                while (re.next()) {
+                    Image i = new Image(
+                            re.getInt("Id"), // Đúng tên trường
+                            getProductDetail(re.getInt("ProductDetailId")), // Chỉnh sửa
+                            null,
+                            re.getString("Image"));
+                    list.add(i);
+                }
             }
         } catch (SQLException e) {
-            System.out.println(e);
+            System.out.println(e.getMessage());
         }
+
         return list;
     }
 
     public static void main(String[] args) {
         ProductDAO d = new ProductDAO();
-        List<ProductAttribute> list = d.getAttributeById(5);
-        System.out.println(list.get(0).getAttribute().getName());
+        List<Image> list = d.getMiniImage(1, 5, 9, null);
+        System.out.println(list.size());
 
     }
 }

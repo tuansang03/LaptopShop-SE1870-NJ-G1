@@ -50,7 +50,11 @@ public class Comparison extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         ProductDAO d = new ProductDAO();
-        int id1, id2, id3;
+        int id1=-1;
+        int id2=-1;
+        int id3=-1;
+        
+
         List<ProductAttribute> list1 = null;
         List<ProductAttribute> list2 = null;
         List<ProductAttribute> list3 = null;
@@ -63,17 +67,38 @@ public class Comparison extends HttpServlet {
             list1 = d.getAttributeById(id1);
             img1 = d.getImage(id1);
 
+        } catch (Exception e) {
+        }
+
+        try {
             id2 = Integer.parseInt(request.getParameter("productid2"));
             list2 = d.getAttributeById(id2);
             img2 = d.getImage(id2);
-
-            id3 = 9;
+        } catch (Exception e) {
+        }
+        
+        try {
+            id3 = Integer.parseInt(request.getParameter("productid3"));
             list3 = d.getAttributeById(id3);
             img3 = d.getImage(id3);
-
         } catch (Exception e) {
-
         }
+        
+        if(img2==null){
+            img2=img3;
+            list2=list3;
+            img3=null;
+            list3=null;
+        }
+
+        String name = null;
+        try {
+            name = request.getParameter("name");
+        } catch (Exception e) {
+        }
+        List<Image> mlist = d.getMiniImage(id1, id2, id3, name);
+        request.setAttribute("mlist", mlist);
+        
         List<ProductList> list = d.listProduct(null, null, null, null);
         request.setAttribute("list", list);
 
