@@ -114,7 +114,7 @@
                                        aria-expanded="false">Shop</a>
                                     <ul class="dropdown-menu">
                                         <li class="nav-item"><a class="nav-link" href="listproduct">Shop Category</a></li>
-                                        <li class="nav-item"><a class="nav-link" href="single-product.jsp">Product Details</a></li>
+                                        <!--<li class="nav-item"><a class="nav-link" href="single-product.jsp">Product Details</a></li>-->
                                         <li class="nav-item"><a class="nav-link" href="checkout.jsp">Product Checkout</a></li>
                                         <li class="nav-item"><a class="nav-link" href="confirmation.jsp">Confirmation</a></li>
                                         <li class="nav-item"><a class="nav-link" href="cart.jsp">Shopping Cart</a></li>
