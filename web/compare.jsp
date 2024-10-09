@@ -112,7 +112,7 @@
                                             <h5 href="information?productId=${img3.productDetail.id}">${img3.productDetail.product.name}</h5>
 
                                             <!-- Hiển thị giá tiền -->
-                                            <fmt:formatNumber value="${img3.productDetail.price}" type="number"/>đ${img3.id}
+                                            <fmt:formatNumber value="${img3.productDetail.price}" type="number"/>đ
 
                                         </a>
                                     </div>  
@@ -197,19 +197,19 @@
 
         <div id="myModal" class="modal">
             <div class="modal-content">
-                <span class="close">&times;</span>
+                <a style="text-align: right; font-size: 40px;" class="close">&times;</a>
 
                 <div class="row">
-                    <div class="col-md-2">   
-                    </div>
+                    <div class="col-md-2"></div>
                     <div class="col-md-2">
                         <h2>Chọn sản phẩm</h2>
-                        <input type="text" name="name" placeholder="Search" >    
+                        <input type="text" id="searchInput" oninput="filterProducts()" placeholder="Nhập từ khóa...">
                     </div>
 
-                    <div class="col-md-8">
+                    <div class="col-md-8" id="productList"> <!-- Thêm ID cho div chứa danh sách sản phẩm -->
                         <c:forEach items="${mlist}" var="i">
                             <a class="image-link" 
+                               data-name="${i.productDetail.product.name}" 
                                <c:choose>
                                    <c:when test="${empty img2}">
                                        href="compare?productid=${img1.productDetail.id}&&productid2=${i.productDetail.id}"
@@ -224,20 +224,16 @@
                                     ${i.productDetail.product.name}<br>
                                     ${i.productDetail.product.brand.name}<br>
                                     ${i.productDetail.configuration.name}<br>
-                                    <fmt:formatNumber value="${i.productDetail.price}" type="number"/>đ${i.id}
+                                    <fmt:formatNumber value="${i.productDetail.price}" type="number"/>đ
                                 </label>
                             </a>
-
-
                             <br>
                         </c:forEach>
-
                     </div>
-
-
                 </div>
             </div>
         </div>
+
 
         <script>
 // Lấy phần tử modal
@@ -266,12 +262,29 @@
                 }
             }
 
+            function filterProducts() {
+                // Lấy giá trị từ ô tìm kiếm
+                const searchInput = document.getElementById("searchInput").value.toLowerCase();
+                const productList = document.getElementById("productList");
+                const products = productList.getElementsByTagName("a"); // Lấy tất cả các thẻ <a> sản phẩm
+
+                // Duyệt qua tất cả các sản phẩm
+                for (let i = 0; i < products.length; i++) {
+                    const productName = products[i].getAttribute("data-name").toLowerCase(); // Lấy tên sản phẩm từ thuộc tính data-name
+
+                    // Kiểm tra xem tên sản phẩm có chứa chuỗi tìm kiếm không
+                    if (productName.includes(searchInput)) {
+                        products[i].style.display = ""; // Hiện sản phẩm nếu tên chứa chuỗi tìm kiếm
+                    } else {
+                        products[i].style.display = "none"; // Ẩn sản phẩm nếu không chứa
+                    }
+                }
+            }
+
         </script>
 
 
         <style>
-            /* Mã CSS cho Modal */
-
             /* Ẩn modal theo mặc định */
             .modal {
                 display: none;
@@ -296,6 +309,7 @@
                 border-radius: 10px; /* Bo góc */
                 overflow-y: auto; /* Tự động cuộn nếu nội dung vượt quá khung */
             }
+
 
             /* Nút đóng modal */
             .close {

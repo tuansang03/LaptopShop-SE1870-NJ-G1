@@ -50,10 +50,9 @@ public class Comparison extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         ProductDAO d = new ProductDAO();
-        int id1=-1;
-        int id2=-1;
-        int id3=-1;
-        
+        int id1 = -1;
+        int id2 = -1;
+        int id3 = -1;
 
         List<ProductAttribute> list1 = null;
         List<ProductAttribute> list2 = null;
@@ -76,19 +75,19 @@ public class Comparison extends HttpServlet {
             img2 = d.getImage(id2);
         } catch (Exception e) {
         }
-        
+
         try {
             id3 = Integer.parseInt(request.getParameter("productid3"));
             list3 = d.getAttributeById(id3);
             img3 = d.getImage(id3);
         } catch (Exception e) {
         }
-        
-        if(img2==null){
-            img2=img3;
-            list2=list3;
-            img3=null;
-            list3=null;
+
+        if (img2 == null) {
+            img2 = img3;
+            list2 = list3;
+            img3 = null;
+            list3 = null;
         }
 
         String name = null;
@@ -96,9 +95,11 @@ public class Comparison extends HttpServlet {
             name = request.getParameter("name");
         } catch (Exception e) {
         }
+
         List<Image> mlist = d.getMiniImage(id1, id2, id3, name);
+
         request.setAttribute("mlist", mlist);
-        
+
         List<ProductList> list = d.listProduct(null, null, null, null);
         request.setAttribute("list", list);
 
@@ -108,9 +109,7 @@ public class Comparison extends HttpServlet {
         request.setAttribute("img2", img2);
         request.setAttribute("list3", list3);
         request.setAttribute("img3", img3);
-        
-        
-        
+
         request.getRequestDispatcher("compare.jsp").forward(request, response);
 
     }
