@@ -214,6 +214,27 @@ public void updateProductDetailAttribute(ProductAttribute productAttribute) {
 public void deletePDAfterUpdate(int id){
     
 }
+
+public int getProductIdByProductDetailId(int productdetailId){
+    String sql = "SELECT ProductId\n" +
+"FROM ProductDetail\n" +
+"WHERE Id = ?; ";
+    int productId = 0;
+        try {
+            PreparedStatement pre = connection.prepareStatement(sql);
+            pre.setInt(1, productdetailId);
+            ResultSet rs = pre.executeQuery();
+            if(rs.next()){
+               productId = rs.getInt("ProductId");
+               return productId;
+            }
+            
+        } catch (SQLException ex) {
+            Logger.getLogger(ProductDetailDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return 0;
+    
+}
     public static void main(String[] args) {
         ProductDetailDAO dao = new ProductDetailDAO();
         ArrayList<ProductDetail> pDList = dao.getAllProductDetailById(138);

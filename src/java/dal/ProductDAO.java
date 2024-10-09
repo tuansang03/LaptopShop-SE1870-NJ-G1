@@ -32,7 +32,67 @@ import java.text.DecimalFormat;
  * @author ADMIN
  */
 public class ProductDAO extends DBContext {
+public ArrayList<Product> searchProductByName(String name, int pageNumber, int rowsPerPage) {
+    ArrayList<Product> pList = new ArrayList<>();
+    String sql = "WITH ProductCTE AS ( "
+            + "    SELECT p.Id, p.Name, p.BrandId, p.CategoryId, b.Name AS BrandName, c.Name AS CategoryName, "
+            + "           ROW_NUMBER() OVER (ORDER BY p.Id) AS RowNum "
+            + "    FROM product p "
+            + "    JOIN brand b ON p.BrandId = b.Id "
+            + "    JOIN category c ON p.CategoryId = c.Id "
+            + "    WHERE p.Name LIKE ? "
+            + ") "
+            + "SELECT * "
+            + "FROM ProductCTE "
+            + "WHERE RowNum BETWEEN ? AND ?;";
+    try {
+        PreparedStatement pre = connection.prepareStatement(sql);
+        pre.setString(1, "%" + name + "%"); // Thêm điều kiện tìm kiếm theo tên
 
+        // Tính toán giá trị cho tham số phân trang
+        int startRow = (pageNumber - 1) * rowsPerPage + 1;
+        int endRow = pageNumber * rowsPerPage;
+
+        // Set giá trị cho các tham số trong câu truy vấn
+        pre.setInt(2, startRow);  // Giá trị bắt đầu
+        pre.setInt(3, endRow);    // Giá trị kết thúc
+
+        ResultSet rs = pre.executeQuery();
+
+        while (rs.next()) {
+            Product p = new Product();
+            p.setId(rs.getInt("Id"));
+            p.setName(rs.getString("Name"));
+
+            // Tạo đối tượng Brand
+            Brand b = new Brand();
+            b.setId(rs.getInt("BrandId"));
+            b.setName(rs.getString("BrandName"));
+            p.setBrand(b);
+
+            // Tạo đối tượng Category
+            Category c = new Category();
+            c.setId(rs.getInt("CategoryId"));
+            c.setName(rs.getString("CategoryName"));
+            p.setCategory(c);
+
+            // Thêm sản phẩm vào danh sách
+            pList.add(p);
+        }
+
+        // Đóng ResultSet và PreparedStatement
+        rs.close();
+        pre.close();
+
+        return pList;
+
+    } catch (SQLException ex) {
+        Logger.getLogger(ProductDAO.class.getName()).log(Level.SEVERE, null, ex);
+    }
+    return null;
+}
+    
+    
     public ArrayList<Product> readProduct(int pageNumber, int rowsPerPage) {
         ArrayList<Product> pList = new ArrayList<>();
         String sql = "WITH ProductCTE AS ( "
@@ -92,7 +152,40 @@ public class ProductDAO extends DBContext {
         return null;
     }
 
+public ArrayList<Product> getAllProduct(){
+    ArrayList<Product> pList = new ArrayList<>();
+    String sql = "select * from Product";
+        try {
+            PreparedStatement pre = connection.prepareStatement(sql);
+            ResultSet rs = pre.executeQuery();
 
+
+            while (rs.next()) {
+                Product p = new Product();
+                p.setId(rs.getInt("Id"));  // Lấy ID của sản phẩm
+                p.setName(rs.getString("Name"));  // Lấy tên sản phẩm
+
+                // Tạo đối tượng Brand
+                Brand b = new Brand();
+                b.setId(rs.getInt("BrandId"));  // Lấy ID của brand
+                 // Lấy tên của brand
+                p.setBrand(b);
+
+                // Tạo đối tượng Category
+                Category c = new Category();
+                c.setId(rs.getInt("CategoryId"));  // Lấy ID của category
+                  // Lấy tên của category
+                p.setCategory(c);
+
+                // Thêm sản phẩm vào danh sách
+                pList.add(p);
+            }
+            return pList;
+        } catch (SQLException ex) {
+            Logger.getLogger(ProductDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
+}
     public int insertProduct(int brandId, int categoryId, String name) {
         String sql = "INSERT INTO [dbo].[Product] (BrandId, CategoryId, Name) VALUES (?, ?, ?)";
         int generatedId = -1;  // Khởi tạo giá trị mặc định cho ID sinh ra
@@ -152,6 +245,31 @@ public class ProductDAO extends DBContext {
         return 0; // Trả về 0 nếu có lỗi
     }
 
+    public int countProductByName(String name) {
+    // Câu lệnh SQL để đếm sản phẩm theo tên
+    String sql = "SELECT COUNT(*) FROM product WHERE Name LIKE ?";
+    
+    try {
+        // Chuẩn bị câu lệnh với điều kiện tìm kiếm
+        PreparedStatement pre = connection.prepareStatement(sql);
+        
+        // Gán giá trị cho tham số tên sản phẩm, sử dụng ký tự '%' cho tìm kiếm LIKE
+        pre.setString(1, "%" + name + "%");
+        
+        // Thực thi câu lệnh và nhận kết quả
+        ResultSet rs = pre.executeQuery();
+
+        // Kiểm tra nếu có kết quả, trả về tổng số sản phẩm
+        if (rs.next()) {
+            return rs.getInt(1); // Lấy giá trị đếm được từ cột đầu tiên
+        }
+    } catch (SQLException ex) {
+        Logger.getLogger(ProductDAO.class.getName()).log(Level.SEVERE, null, ex);
+    }
+    
+    // Trả về 0 nếu có lỗi hoặc không có kết quả
+    return 0;
+}
     public List<Brand> listBrand() {
         List<Brand> list = new ArrayList<>();
         String sql = "select * from Brand";
@@ -509,8 +627,11 @@ public List<Product> getProductsByBrand(int bid) {
     }
     return null;
 }
+
+
     public static void main(String[] args) {
         ProductDAO p = new ProductDAO();
-
+ArrayList pList = p.getAllProduct();
+        System.out.println(pList);
     }
 }
