@@ -108,6 +108,9 @@ public class Comparison extends HttpServlet {
         request.setAttribute("img2", img2);
         request.setAttribute("list3", list3);
         request.setAttribute("img3", img3);
+        
+        
+        
         request.getRequestDispatcher("compare.jsp").forward(request, response);
 
     }

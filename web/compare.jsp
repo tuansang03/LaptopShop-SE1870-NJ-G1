@@ -68,9 +68,10 @@
                         </th>
                         <th>
                             <c:if test="${empty img2}">
-                                <button id="openModal">Mở Modal</button>
+                                <button id="openModal">Thêm sản phẩm</button>
                             </c:if>
                             <c:if test="${!empty img2}">
+                                <a style="float: right; font-size: 30px;" href="compare?productid=${img1.productDetail.id}&&productid3=${img3.productDetail.id}" >&times;</a>
                                 <div style="height: 100%; display: flex; flex-direction: column; justify-content: space-between;" >
                                     <a href="information?productId=${img2.productDetail.id}" class="product-link" style="display: block; height: 100%; text-decoration: none; color: inherit;">
 
@@ -92,28 +93,34 @@
 
                         </th>
                         <th>
-                            <c:if test="${empty img3}">
-                                <button id="openModal">Mở Modal</button>
+                            <c:if test="${!empty img2}">
+                                <c:if test="${empty img3}">
+                                    <button id="openModal">Thêm sản phẩm</button>
+                                </c:if> 
+                                <c:if test="${!empty img3}">
+                                    <a style="float: right; font-size: 30px;" href="compare?productid=${img1.productDetail.id}&&productid2=${img2.productDetail.id}" >&times;</a>
+                                    <div style="height: 100%; display: flex; flex-direction: column; justify-content: space-between;" >
+                                        <a  class="product-link" style="display: block; height: 100%; text-decoration: none; color: inherit;">
+
+                                            <!-- Hiển thị ảnh sản phẩm -->
+                                            <img src="${img3.image}" style="max-width: 100%; height: auto;">
+
+                                            <!-- Hiển thị thương hiệu -->
+                                            <div class="brand">${img3.productDetail.product.brand.name}</div>
+
+                                            <!-- Hiển thị tên sản phẩm -->
+                                            <h5 href="information?productId=${img3.productDetail.id}">${img3.productDetail.product.name}</h5>
+
+                                            <!-- Hiển thị giá tiền -->
+                                            <fmt:formatNumber value="${img3.productDetail.price}" type="number"/>đ${img3.id}
+
+                                        </a>
+                                    </div>  
+                                </c:if>
                             </c:if>
-                            <c:if test="${!empty img3}">
-                                <div style="height: 100%; display: flex; flex-direction: column; justify-content: space-between;" >
-                                    <a href="information?productId=${img3.productDetail.id}" class="product-link" style="display: block; height: 100%; text-decoration: none; color: inherit;">
 
-                                        <!-- Hiển thị ảnh sản phẩm -->
-                                        <img src="${img3.image}" style="max-width: 100%; height: auto;">
 
-                                        <!-- Hiển thị thương hiệu -->
-                                        <div class="brand">${img3.productDetail.product.brand.name}</div>
 
-                                        <!-- Hiển thị tên sản phẩm -->
-                                        <h5>${img3.productDetail.product.name}</h5>
-
-                                        <!-- Hiển thị giá tiền -->
-                                        <fmt:formatNumber value="${img3.productDetail.price}" type="number"/>đ
-
-                                    </a>
-                                </div>  
-                            </c:if>
 
                         </th>
                     </tr>
@@ -202,15 +209,25 @@
 
                     <div class="col-md-8">
                         <c:forEach items="${mlist}" var="i">
-                            <a class="image-link" href="compare?productid=${img1.productDetail.id}&&productid2=${i.productDetail.id}&&productid3=">
+                            <a class="image-link" 
+                               <c:choose>
+                                   <c:when test="${empty img2}">
+                                       href="compare?productid=${img1.productDetail.id}&&productid2=${i.productDetail.id}"
+                                   </c:when>
+                                   <c:otherwise>
+                                       href="compare?productid=${img1.productDetail.id}&&productid2=${img2.productDetail.id}&&productid3=${i.productDetail.id}"
+                                   </c:otherwise>
+                               </c:choose>
+                               >
                                 <img src="${i.image}" alt="Product Image" />
                                 <label>
                                     ${i.productDetail.product.name}<br>
                                     ${i.productDetail.product.brand.name}<br>
                                     ${i.productDetail.configuration.name}<br>
-                                    <fmt:formatNumber value="${i.productDetail.price}" type="number"/>đ
+                                    <fmt:formatNumber value="${i.productDetail.price}" type="number"/>đ${i.id}
                                 </label>
                             </a>
+
 
                             <br>
                         </c:forEach>
@@ -297,7 +314,7 @@
                 display: flex;                  /* Sử dụng flexbox để sắp xếp nội dung */
                 align-items: center;           /* Căn giữa nội dung theo chiều dọc */
                 width: 600px;                  /* Chiều rộng của khung, điều chỉnh theo nhu cầu */
-                height: 200px;                 /* Chiều cao của khung, điều chỉnh theo nhu cầu */
+                height: 160px;                 /* Chiều cao của khung, điều chỉnh theo nhu cầu */
                 border: 1px solid #ccc;        /* Đường viền để dễ thấy khung */
                 border-radius: 5px;           /* Bo góc khung (nếu cần) */
                 text-decoration: none;         /* Bỏ gạch chân ở liên kết */
