@@ -12,6 +12,7 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import java.util.Date;
 import model.Voucher;
 
 /**
@@ -35,17 +36,29 @@ public class ApplyVoucher extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
 
         String voucher = request.getParameter("voucher");
+        String totalPriceBefore_raw = request.getParameter("totalBefore");
+        int totalPriceBefore = Integer.parseInt(totalPriceBefore_raw);
 
         VoucherDAO vDAO = new VoucherDAO();
 
         Voucher isVoucher = vDAO.checkVoucher(voucher);
 
-        if (isVoucher == null) {
+        if (isVoucher == null || isVoucher.getQuantity() == 0) {
             request.setAttribute("error", "Not available ");
         } else {
-            int discount = isVoucher.getDiscountPercent();
-            request.setAttribute("success", "You get " + discount + "% discount");
-            request.setAttribute("isVoucher", isVoucher);
+            if (isVoucher.getMinValue() > totalPriceBefore) {
+                request.setAttribute("error", "Your total order value is too low");
+            } else if (isVoucher.getMinValue() <= totalPriceBefore) {
+                Date curentDate = new Date();
+                if (!(isVoucher.getStartDate().compareTo(curentDate) < 0
+                        && isVoucher.getEndDate().compareTo(curentDate) > 0)) {
+                    request.setAttribute("error", "Your voucher is not included in the time offer");
+                } else {
+                    int discount = isVoucher.getDiscountPercent();
+                    request.setAttribute("success", "You get " + discount + "% discount");
+                    request.setAttribute("isVoucher", isVoucher);
+                }
+            }
         }
         request.setAttribute("voucherInput", voucher);
         request.getRequestDispatcher("loadInfoCheckout").forward(request, response);

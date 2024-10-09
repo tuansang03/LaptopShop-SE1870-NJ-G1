@@ -101,10 +101,6 @@
                                                 <input type="number" name="minvalue" placeholder="Enter min value" required class="form-control">
                                             </div>
 
-                                            <div>
-                                                <label>DiscountCap</label>
-                                                <input type="text" name="discountcap" placeholder="Enter discount cap" required class="form-control">
-                                            </div>
                                         </div>
                                     </div>
                                 </div>

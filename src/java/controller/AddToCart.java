@@ -67,7 +67,7 @@ public class AddToCart extends HttpServlet {
 
         if (cartUser == null) {
             cartDAO.addToCart(user.getId());
-            //cartUser = cartDAO.getCartByUserID(user.getId());
+            cartUser = cartDAO.getCartByUserID(user.getId());
         }
         CartItem existProduct = cartDAO.getCartItemByCartIdAndProductId(cartUser.getId(), pDetail.getId());
 

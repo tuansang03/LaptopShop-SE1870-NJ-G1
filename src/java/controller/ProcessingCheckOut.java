@@ -26,7 +26,7 @@ import model.Voucher;
  *
  * @author ADMIN
  */
-@WebServlet(name = "ProcessingCheckOut", urlPatterns = {"/processingCheckOut"})
+//@WebServlet(name = "ProcessingCheckOut", urlPatterns = {"/processingCheckOut"})
 public class ProcessingCheckOut extends HttpServlet {
 
     /**
@@ -49,6 +49,7 @@ public class ProcessingCheckOut extends HttpServlet {
         String email = request.getParameter("email");
         String totalPriceBeforeDiscount_raw = request.getParameter("totalPriceBeforeDiscount");
         int totalBeforeDiscount = Integer.parseInt(totalPriceBeforeDiscount_raw);
+        String message = request.getParameter("message");
         String paymentMethod = request.getParameter("selector");
 
         CartDAOS cDAO = new CartDAOS();
@@ -72,28 +73,35 @@ public class ProcessingCheckOut extends HttpServlet {
         LocalDateTime dateTimeLocal = LocalDateTime.now();
         int totalAfterDiscount = 0;
 
+        
         String voucherID_raw = request.getParameter("voucherID");
         if (voucherID_raw != null) {
             VoucherDAO vDAO = new VoucherDAO();
             Voucher voucher = vDAO.getVoucherByID(Integer.parseInt(voucherID_raw));
+            
+            //xử lý giá sau khi app dụng voucher
             int discount = voucher.getDiscountPercent();
-
            double totalAfterDiscountDouble =  totalBeforeDiscount - (totalBeforeDiscount * (double)discount/100);
            totalAfterDiscount = (int)totalAfterDiscountDouble;
+           
+           //giảm số lượng của voucher khi được sử dụng
+           int quantityVoucher = voucher.getQuantity();
+           vDAO.updateQuantityVoucher((quantityVoucher - 1), Integer.parseInt(voucherID_raw));
+           
         }
 
         OderDAO oDAO = new OderDAO();
         if (paymentMethod.equals("Nhan Hang Thanh Toan")) {
             if (voucherID_raw == null) {
-                oDAO.insertOrderOfCODNoVoucher(user.getId(), name, address, phone, dateTimeLocal, totalBeforeDiscount, totalAfterDiscount, paymentMethod);
+                oDAO.insertOrderOfCODNoVoucher(user.getId(), name, address, phone, dateTimeLocal, totalBeforeDiscount, (totalAfterDiscount == 0) ?  totalBeforeDiscount:totalBeforeDiscount, paymentMethod, message == null ? null:message);
             } else {
-                int discountAmount = (totalAfterDiscount - totalBeforeDiscount);
-
+                int discountAmount = (totalBeforeDiscount - totalAfterDiscount);
                 int voucherID = Integer.parseInt(voucherID_raw);
-                oDAO.insertOrderOfCOD(user.getId(), name, address, phone, dateTimeLocal, voucherID, totalBeforeDiscount, discountAmount, totalAfterDiscount, paymentMethod);
+                
+                oDAO.insertOrderOfCOD(user.getId(), name, address, phone, dateTimeLocal, voucherID, totalBeforeDiscount, discountAmount, totalAfterDiscount, paymentMethod, message == null ? null:message);
             }
 
-            //insert oderDatail
+            //insert oderDetail
             int oid = oDAO.getIdOfOrderNewest();
             for (int i = 0; i < cartItem.size(); i++) {
                 oDAO.insertOrderDetail(oid, pid[i], qlt[i], unitPrice[i]);
@@ -113,20 +121,24 @@ public class ProcessingCheckOut extends HttpServlet {
             }
 
             if (voucherID_raw == null) {
-                oDAO.insertOrderOfPaymentNoVoucher(user.getId(), name, address, phone, dateTimeLocal, totalBeforeDiscount, totalAfterDiscount, paymentMethod, code);
+                oDAO.insertOrderOfPaymentNoVoucher(user.getId(), name, address, phone, dateTimeLocal, totalBeforeDiscount, (totalAfterDiscount == 0) ?  totalBeforeDiscount:totalBeforeDiscount, paymentMethod, code, message == null ? null:message);
             } else {
                 int voucherID = Integer.parseInt(voucherID_raw);
-                int discountAmount = (totalAfterDiscount - totalBeforeDiscount);
-                oDAO.insertOrderOfPayment(user.getId(), name, address, phone, dateTimeLocal, voucherID, totalBeforeDiscount, discountAmount, totalAfterDiscount, paymentMethod, code);
+                int discountAmount = (totalBeforeDiscount - totalAfterDiscount);
+                oDAO.insertOrderOfPayment(user.getId(), name, address, phone, dateTimeLocal, voucherID, totalBeforeDiscount, discountAmount, totalAfterDiscount, paymentMethod, code, message == null ? null:message);
             }
 
-            //insert oderDatail
+            //insert oderDetail
             int oid = oDAO.getIdOfOrderNewest();
             for (int i = 0; i < cartItem.size(); i++) {
                 oDAO.insertOrderDetail(oid, pid[i], qlt[i], unitPrice[i]);
             }
 
             request.setAttribute("code", code);
+            
+            if (totalAfterDiscount == 0) {
+                totalAfterDiscount = totalBeforeDiscount;
+            }
             String totalDiscountStr = String.valueOf(totalAfterDiscount);
             request.setAttribute("paymentData", totalDiscountStr);
             request.getRequestDispatcher("payment").forward(request, response);

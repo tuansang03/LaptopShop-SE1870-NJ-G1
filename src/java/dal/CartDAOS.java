@@ -237,7 +237,7 @@ public class CartDAOS extends DBContext {
 
     public static void main(String[] args) {
         CartDAOS c = new CartDAOS();
-        List<CartItem> s = c.getProductSelectd(1);
+        Cart s = c.getCartByUserID(5);
         System.out.println(s);
     }
 

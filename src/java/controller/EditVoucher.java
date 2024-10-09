@@ -76,7 +76,6 @@ public class EditVoucher extends HttpServlet {
         String startdate_raw = request.getParameter("startdate");
         String enddate_raw = request.getParameter("enddate");
         String minvalue_raw = request.getParameter("minvalue");
-        String discountcap_raw = request.getParameter("discountcap");
         String status = request.getParameter("status");
     
         VoucherDAO vDAO = new VoucherDAO();
@@ -86,10 +85,9 @@ public class EditVoucher extends HttpServlet {
         Date startDate = Date.valueOf(startdate_raw);
         Date endDate = Date.valueOf(enddate_raw);
         int minvalue = Integer.parseInt(minvalue_raw);
-        int discountCap = Integer.parseInt(discountcap_raw);
         
         vDAO.editVoucher(id, code, name, discount, quantity, 
-                startDate, endDate, minvalue, discountCap, status);
+                startDate, endDate, minvalue, status);
     response.sendRedirect("voucherManager");
     }
 

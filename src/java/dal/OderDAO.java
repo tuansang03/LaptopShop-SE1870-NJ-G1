@@ -7,6 +7,8 @@ package dal;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.time.LocalDateTime;
+import java.util.Date;
+import model.Order;
 
 /**
  *
@@ -15,7 +17,7 @@ import java.time.LocalDateTime;
 public class OderDAO extends DBContext {
 
     public void insertOrderOfCODNoVoucher(int uid, String name, String address, String phone,
-            LocalDateTime odate, int totalAmountBeFore, int totalAmountAfter, String paymentMethod) {
+            LocalDateTime odate, int totalAmountBeFore, int totalAmountAfter, String paymentMethod, String note) {
         String sql = "INSERT INTO [dbo].[Order]\n"
                 + "           ([UserId]\n"
                 + "           ,[Name]\n"
@@ -25,9 +27,10 @@ public class OderDAO extends DBContext {
                 + "           ,[TotalAmountBefore]\n"
                 + "           ,[TotalAmountAfter]\n"
                 + "           ,[PaymentMethod]\n"
-                + "           ,[OrderStatus])\n"
+                + "           ,[OrderStatus]\n"
+                + "           ,[Note])\n"
                 + "     VALUES\n"
-                + "           (?, ?, ?, ?, ?, ?, ?, ?, 'wait')";
+                + "           (?, ?, ?, ?, ?, ?, ?, ?, 'wait', ?)";
         try {
             PreparedStatement st = connection.prepareStatement(sql);
             st.setInt(1, uid);
@@ -38,6 +41,7 @@ public class OderDAO extends DBContext {
             st.setInt(6, totalAmountBeFore);
             st.setInt(7, totalAmountAfter);
             st.setString(8, paymentMethod);
+            st.setString(9, note);
             st.executeUpdate();
 
         } catch (Exception e) {
@@ -46,7 +50,7 @@ public class OderDAO extends DBContext {
 
     public void insertOrderOfCOD(int uid, String name, String address, String phone,
             LocalDateTime odate, int voucherID, int totalAmountBeFore, int discountAmount,
-            int totalAmountAfter, String paymentMethod) {
+            int totalAmountAfter, String paymentMethod, String note) {
         String sql = "INSERT INTO [dbo].[Order]\n"
                 + "           ([UserId]\n"
                 + "           ,[Name]\n"
@@ -58,9 +62,10 @@ public class OderDAO extends DBContext {
                 + "           ,[DiscountAmount]\n"
                 + "           ,[TotalAmountAfter]\n"
                 + "           ,[PaymentMethod]\n"
-                + "           ,[OrderStatus])\n"
+                + "           ,[OrderStatus]\n"
+                + "           ,[Note])\n"
                 + "     VALUES\n"
-                + "           (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'wait')";
+                + "           (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'wait', ?)";
         try {
             PreparedStatement st = connection.prepareStatement(sql);
             st.setInt(1, uid);
@@ -73,6 +78,7 @@ public class OderDAO extends DBContext {
             st.setInt(8, discountAmount);
             st.setInt(9, totalAmountAfter);
             st.setString(10, paymentMethod);
+            st.setString(11, note);
             st.executeUpdate();
 
         } catch (Exception e) {
@@ -81,7 +87,7 @@ public class OderDAO extends DBContext {
 
     public void insertOrderOfPaymentNoVoucher(int uid, String name, String address, String phone,
             LocalDateTime odate, int totalAmountBeFore, int totalAmountAfter,
-            String paymentMethod, String VnPayId) {
+            String paymentMethod, String VnPayId, String note) {
         String sql = "INSERT INTO [dbo].[Order]\n"
                 + "           ([UserId]\n"
                 + "           ,[Name]\n"
@@ -93,9 +99,10 @@ public class OderDAO extends DBContext {
                 + "           ,[PaymentMethod]\n"
                 + "           ,[PaymentStatus]\n"
                 + "           ,[VnPayTransactionId]\n"
-                + "           ,[OrderStatus])\n"
+                + "           ,[OrderStatus]\n"
+                + "           ,[Note])\n"
                 + "     VALUES\n"
-                + "           (?, ?, ?, ?, ?, ?, ?, ?, 'pending', ?,'wait')";
+                + "           (?, ?, ?, ?, ?, ?, ?, ?, 'pending', ?,'wait', ?)";
         try {
             PreparedStatement st = connection.prepareStatement(sql);
             st.setInt(1, uid);
@@ -107,6 +114,7 @@ public class OderDAO extends DBContext {
             st.setInt(7, totalAmountAfter);
             st.setString(8, paymentMethod);
             st.setString(9, VnPayId);
+            st.setString(10, note);
             st.executeUpdate();
 
         } catch (Exception e) {
@@ -116,7 +124,7 @@ public class OderDAO extends DBContext {
     public void insertOrderOfPayment(int uid, String name, String address, String phone,
             LocalDateTime odate, int voucherID, int totalAmountBeFore,
             int discountAmount, int totalAmountAfter,
-            String paymentMethod, String VnPayId) {
+            String paymentMethod, String VnPayId, String note) {
         String sql = "INSERT INTO [dbo].[Order]\n"
                 + "           ([UserId]\n"
                 + "           ,[Name]\n"
@@ -130,9 +138,10 @@ public class OderDAO extends DBContext {
                 + "           ,[PaymentMethod]\n"
                 + "           ,[PaymentStatus]\n"
                 + "           ,[VnPayTransactionId]\n"
-                + "           ,[OrderStatus])\n"
+                + "           ,[OrderStatus]\n"
+                + "           ,[Note])\n"
                 + "     VALUES\n"
-                + "           (?, ?, ?, ?, ?, ?, ?, ?, 'pending', ?,'wait')";
+                + "           (?, ?, ?, ?, ?, ?, ?, ?, ?, ?,'pending', ?,'wait', ?)";
         try {
             PreparedStatement st = connection.prepareStatement(sql);
             st.setInt(1, uid);
@@ -146,6 +155,7 @@ public class OderDAO extends DBContext {
             st.setInt(9, totalAmountAfter);
             st.setString(10, paymentMethod);
             st.setString(11, VnPayId);
+            st.setString(12, note);
             st.executeUpdate();
 
         } catch (Exception e) {
@@ -187,9 +197,47 @@ public class OderDAO extends DBContext {
         }
     }
 
+    public Order getOneOrderNewest(int uid) {
+        String sql = "SELECT TOP(1) * FROM [Order] WHERE UserId = ? ORDER BY Id DESC";
+
+        try {
+            PreparedStatement st = connection.prepareStatement(sql);
+            st.setInt(1, uid);
+            ResultSet rs = st.executeQuery();
+            if (rs.next()) {
+                UserDAO uDAO = new UserDAO();
+                VoucherDAO vDAO = new VoucherDAO();
+                LocalDateTime endDate = rs.getTimestamp("EndDate") != null ? rs.getTimestamp("EndDate").toLocalDateTime() : null;
+                Order o = new Order(rs.getInt("Id"),
+                        uDAO.getUserByIdD(rs.getInt("UserID")),
+                        rs.getString("Name"),
+                        rs.getString("Address"),
+                        rs.getString("Phone"),
+                        rs.getTimestamp("OrderDate").toLocalDateTime(),
+                        vDAO.getVoucherByID(rs.getInt("VoucherID")),
+                        rs.getInt("TotalAmountBefore"),
+                        rs.getInt("DiscountAmount"),
+                        rs.getInt("TotalAmountAfter"),
+                        rs.getString("PaymentMethod"),
+                        rs.getString("PaymentStatus"),
+                        rs.getString("VnPayTransactionId"),
+                        endDate,
+                        rs.getString("OrderStatus"));
+                return o;
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
     public static void main(String[] args) {
         OderDAO o = new OderDAO();
-        o.insertOrderDetail(1, 10, 2, 222);
-        //o.insertOrder(5, "ss", "ss", "123", LocalDateTime.MAX, 0, 0, "hehe");
+        LocalDateTime date = LocalDateTime.now();
+        o.insertOrderOfCOD(5, "111", "222", "333",
+                date, 1, 123, 123,
+                123, "12312", "12342");
+//o.insertOrder(5, "ss", "ss", "123", LocalDateTime.MAX, 0, 0, "hehe");
     }
 }
