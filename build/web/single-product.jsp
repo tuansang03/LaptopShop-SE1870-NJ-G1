@@ -329,17 +329,16 @@
                                 ${sale}đ
                             </h5>
                             <p>${detail.shortDescription}</p>
-                            <div class="product_count">
-                                <a class="button primary-btn" href="addtocart?pid=${detail.product.id}&&colorid=${detail.color.id}&&confid=${detail.configuration.id}">Add to Cart</a>               
+                            <div class="card_area d-flex align-items-center">
+                                <a class="button primary-btn" href="addtocart?pid=${detail.product.id}&&colorid=${detail.color.id}&&confid=${detail.configuration.id}">Add to Cart</a>
+                                <a class="icon_btn" href="addtowishlist?pid=${detail.id}&&uid=${user.id}"><i class="lnr lnr lnr-heart"></i></a>
                             </div>
 
                             
 
 
                             <div class="card_area d-flex align-items-center">
-                                <a class="button primary-btn" href="compare?productid=${detail.id}">Compare Product</a>               
-                                <a class="icon_btn" href="#"><i class="lnr lnr lnr-diamond"></i></a>
-                                <a class="icon_btn" href="#"><i class="lnr lnr lnr-heart"></i></a>
+                                <a class="button primary-btn" href="compare?productid=${detail.id}">Compare Product</a>
                             </div>
 
                         </div>

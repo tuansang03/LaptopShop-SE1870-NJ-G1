@@ -585,10 +585,134 @@ public class ProductDAO extends DBContext {
         return list;
     }
 
+    public Role getRole(int id) {
+        String sql = "SELECT * FROM Role WHERE Id = ?";
+        try (PreparedStatement st = connection.prepareStatement(sql)) {
+            st.setInt(1, id);  // Truyền tham số vào câu lệnh SQL
+            try (ResultSet re = st.executeQuery()) {
+                if (re.next()) {
+                    Role i = new Role(
+                            re.getInt("id"),
+                            re.getString("name"));
+                    return i;
+                }
+            }
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
+
+        return null;
+    }
+
+    public User getUser(int id) {
+        String sql = "SELECT * FROM [User] WHERE Id = ?";
+        try (PreparedStatement st = connection.prepareStatement(sql)) {
+            st.setInt(1, id);  // Truyền tham số vào câu lệnh SQL
+            try (ResultSet re = st.executeQuery()) {
+                if (re.next()) {
+                    User i = new User(
+                            re.getInt("id"),
+                            re.getString("username"),
+                            re.getString("password"),
+                            re.getString("fullname"),
+                            re.getString("email"),
+                            getRole(re.getByte("roleid")),
+                            re.getString("status"));
+                    return i;
+                }
+            }
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
+
+        return null;
+    }
+
+    public List<Favorite> listFavorite(int uid) {
+        List<Favorite> list = new ArrayList<>();
+        String sql = "SELECT * FROM Favorite WHERE Userid = ?";
+
+        try (PreparedStatement st = connection.prepareStatement(sql)) {
+            st.setInt(1, uid);
+            try (ResultSet re = st.executeQuery()) {
+                while (re.next()) {
+                    Favorite c = new Favorite(
+                            re.getInt("id"),
+                            getProductDetail(re.getInt("productdetailid")),
+                            getUser(re.getInt("userid"))
+                    );
+                    list.add(c);
+                }
+            }
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+        return list;
+    }
+
+    public List<Image> listWish(int uid) {
+        List<Image> list = new ArrayList<>();
+        String sql = "WITH RankedImages AS (\n"
+                + "    SELECT \n"
+                + "        i.Id,\n"
+                + "        i.ProductDetailId,\n"
+                + "        i.FeedbackId,\n"
+                + "        i.Image,\n"
+                + "        ROW_NUMBER() OVER (PARTITION BY i.ProductDetailId ORDER BY i.Id) AS RowNum\n"
+                + "    FROM Image i\n"
+                + "	JOIN ProductDetail pd ON pd.Id = i.ProductDetailId\n"
+                + "    JOIN Favorite f ON f.ProductDetailId = pd.Id\n"
+                + "    WHERE f.UserId = ?\n"
+                + ")\n"
+                + "SELECT Id, ProductDetailId, FeedbackId, Image\n"
+                + "FROM RankedImages\n"
+                + "WHERE RowNum = 1";
+
+        try (PreparedStatement st = connection.prepareStatement(sql)) {
+            st.setInt(1, uid);
+            try (ResultSet re = st.executeQuery()) {
+                while (re.next()) {
+                    Image c = new Image(
+                            re.getInt("id"),
+                            getProductDetail(re.getInt("productdetailid")),
+                            null,
+                            re.getString("image"));
+                    list.add(c);
+                }
+            }
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+        return list;
+    }
+
+    public void addWishlist(int uid, int pid) {
+        String sql = "insert into Favorite (ProductDetailId, UserId) values (?,?)";
+        try {
+            PreparedStatement pre = connection.prepareStatement(sql);
+            pre.setInt(1, pid);
+            pre.setInt(2, uid);
+            pre.executeQuery();
+        } catch (SQLException ex) {
+            Logger.getLogger(UserDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    public void deleteFromWishlist(int uid, int pid) {
+        String sql = "delete from Favorite where UserId=? and ProductDetailId=?";
+        try {
+            PreparedStatement pre = connection.prepareStatement(sql);
+            pre.setInt(1, uid);
+            pre.setInt(2, pid);
+            pre.executeUpdate();
+        } catch (SQLException ex) {
+            Logger.getLogger(UserDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
     public static void main(String[] args) {
         ProductDAO d = new ProductDAO();
-        List<Image> list = d.getMiniImage(1, 5, 9, null);
-        System.out.println(list.size());
+        d.deleteFromWishlist(1, 2);
 
     }
 }

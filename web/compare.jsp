@@ -13,6 +13,57 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Aroma Shop - Compare Laptop</title>
         <link rel="icon" href="img/Fevicon.png" type="image/png">
+        <link rel="stylesheet" href="vendors/themify-icons/themify-icons.css">
+        <style>
+            .image-container {
+                position: relative;
+                width: 100%; /* Chiều rộng theo nhu cầu */
+            }
+
+            .image-container img {
+                display: block;
+                width: 100%; /* Đảm bảo ảnh chiếm hết khung */
+                height: auto;
+            }
+
+            .image-container .overlay {
+                position: absolute;
+                top: 0;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                background-color: rgba(0, 0, 0, 0.3); /* Màu nền trong suốt cho overlay */
+                color: white;
+                display: flex;
+                justify-content: center; /* Căn giữa theo chiều ngang */
+                align-items: center; /* Căn giữa theo chiều dọc */
+                opacity: 0; /* Ẩn overlay ban đầu */
+                transition: opacity 0.3s ease; /* Hiệu ứng chuyển đổi mượt mà */
+            }
+
+            .image-container:hover .overlay {
+                opacity: 1; /* Hiện overlay khi di chuột */
+            }
+
+            .icon-container {
+                display: flex; /* Sử dụng Flexbox để căn giữa */
+                justify-content: space-around; /* Tạo khoảng cách đều giữa các biểu tượng */
+                width: 50%; /* Chiếm 50% chiều rộng */
+            }
+
+            .icon-container a {
+                font-size: 25px; /* Kích thước biểu tượng lớn hơn */
+                color: white; /* Màu mặc định của biểu tượng */
+                transition: color 0.3s ease; /* Hiệu ứng chuyển đổi màu */
+            }
+
+            .icon-container a:hover {
+                color: #00BFFF; /* Màu xanh da trời khi di chuột vào từng biểu tượng */
+            }
+        </style>
+
+
+
     </head>
     <body>
         <!--================ Start Header Menu Area =================-->
@@ -49,10 +100,20 @@
                         </th>
                         <th>
                             <div style="height: 100%; display: flex; flex-direction: column; justify-content: space-between;" >
-                                <a href="information?productId=${img1.productDetail.id}" class="product-link" style="display: block; height: 100%; text-decoration: none; color: inherit;">
+                                <a class="product-link" style="display: block; height: 100%; text-decoration: none; color: inherit;">
 
                                     <!-- Hiển thị ảnh sản phẩm -->
-                                    <img src="${img1.image}" style="max-width: 100%; height: auto;">
+                                    <div class="image-container">
+                                        <img src="${img1.image}" alt="Product Image" style="max-width: 100%; height: auto;">
+                                        <div class="overlay">
+                                            <div class="icon-container">
+                                                <a href="information?productId=${img1.productDetail.id}" class="ti-search"></a>
+                                                <a href="addtocart?pid=${img1.productDetail.product.id}&&colorid=${img1.productDetail.color.id}&&confid=${img1.productDetail.configuration.id}" class="ti-shopping-cart" ></a>
+                                                <a href="#" class="ti-heart"></a>
+                                            </div>
+                                        </div>
+                                    </div>
+
 
                                     <!-- Hiển thị thương hiệu -->
                                     <div class="brand">${img1.productDetail.product.brand.name}</div>

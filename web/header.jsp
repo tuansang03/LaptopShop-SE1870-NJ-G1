@@ -4,8 +4,10 @@
 <%@ page import="java.util.List" %>
 <%@ page import="model.User" %>
 <%@ page import="dal.CartDAOS" %>
+<%@ page import="dal.ProductDAO" %>
 <%@ page import="model.Cart" %>
 <%@ page import="model.CartItem" %>
+<%@ page import="model.Favorite" %>
 <!DOCTYPE html>
 <html>
     <head>
@@ -125,7 +127,7 @@
                                        aria-expanded="false">Blog</a>    
                                     <ul class="dropdown-menu">
                                         <li class="nav-item"><a class="nav-link" href="postlist">See All Post</a></li>
-                                        
+
                                     </ul>
                                 </li>
                                 <li class="nav-item submenu dropdown">
@@ -157,7 +159,7 @@
                                     quantity = listCart.size();
                                 }
                             %>
-                            
+
                             <ul class="nav-shop">
 
                                 <li class="nav-item"></li>
@@ -192,7 +194,7 @@
                                     });
 
                                 </script>
-                                
+
                                 <li class="nav-item">
                                     <!--                                    da edit o day-->
                                     <a href="loadProductCart">
@@ -202,18 +204,37 @@
                                         </button>
                                     </a>
                                 </li>
+                                <%
+                                List<Favorite> list = null;
+                                ProductDAO d = new ProductDAO();
+                                    if (user!=null){
+                                    list = d.listFavorite(user.getId());
+                                    }
 
- 
+                                int number = 0;
+                                if (list != null) {
+                                    number = list.size();
+                                }
+                                %>
+                                <li class="nav-item">
+                                    <a href="showwishlist?uid=${user.getId()}">
+                                        <button>
+                                            <i class="ti-heart"></i><span class="nav-shop__circle"><%= number%></span>
+                                        </button>
+                                    </a>
+                                </li>
 
 
-                                
+
+
+
                                 <li class="nav-item">
                                     <a href="loadProductCart">
-                       
+
                                     </a>
-                                        
+
                                 </li>
-                                
+
 
                             </ul>
                             <!-- Thêm nút đăng nhập và đăng ký -->
@@ -222,26 +243,26 @@
 
                             <ul class="navbar-nav">
                                 <li class="nav-item">
-                                <c:choose>
-                                    <c:when test="${sessionScope.admin == null && sessionScope.user == null && sessionScope.sale == null}">
-                                        <a href="login"><i class="fa fa-user"></i> Login</a>
-                                    </c:when>
-                                    <c:otherwise>
-                                        <div class="dropdown">
-                                            <button class="dropbtn"><i class="fa fa-user">
+                                    <c:choose>
+                                        <c:when test="${sessionScope.admin == null && sessionScope.user == null && sessionScope.sale == null}">
+                                            <a href="login"><i class="fa fa-user"></i> Login</a>
+                                        </c:when>
+                                        <c:otherwise>
+                                            <div class="dropdown">
+                                                <button class="dropbtn"><i class="fa fa-user">
 
-                                                    <c:if test="${sessionScope.user != null}">
-                                                    </i> ${user.fullName}</button>
-                                                </c:if>
-                                            <c:if test="${sessionScope.sale != null}">
+                                                        <c:if test="${sessionScope.user != null}">
+                                                        </i> ${user.fullName}</button>
+                                                    </c:if>
+                                                    <c:if test="${sessionScope.sale != null}">
                                                     </i> ${sale.fullName}</button>
                                                 </c:if>
-                                    <c:if test="${sessionScope.admin != null}">
+                                                <c:if test="${sessionScope.admin != null}">
                                                     </i> ${admin.fullName}</button>
                                                 </c:if>
-                                    </c:otherwise>
-                                </c:choose>
-                                                    <c:if test="${sessionScope.user !=null ||sessionScope.admin !=null || sessionScope.sale !=null}"><a href="logout">Logout</a></c:if>
+                                            </c:otherwise>
+                                        </c:choose>
+                                        <c:if test="${sessionScope.user !=null ||sessionScope.admin !=null || sessionScope.sale !=null}"><a href="logout">Logout</a></c:if>
                                 </li>
 
                             </ul>
