@@ -4,22 +4,21 @@
  */
 package controller;
 
-import dal.VoucherDAO;
+import dal.OderDAO;
 import java.io.IOException;
+import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import java.sql.Date;
-import model.Voucher;
 
 /**
  *
  * @author ADMIN
  */
-@WebServlet(name = "AddVoucher", urlPatterns = {"/addVoucher"})
-public class AddVoucher extends HttpServlet {
+@WebServlet(name = "ChangeStatusOrder", urlPatterns = {"/changeStatusOrder"})
+public class ChangeStatusOrder extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -33,39 +32,6 @@ public class AddVoucher extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-
-        String code = request.getParameter("code");
-        String name = request.getParameter("name");
-        String discount_raw = request.getParameter("discount");
-        String quantity_raw = request.getParameter("quantity");
-        String startdate_raw = request.getParameter("startdate");
-        String enddate_raw = request.getParameter("enddate");
-        String minvalue_raw = request.getParameter("minvalue");
-
-        VoucherDAO vDAO = new VoucherDAO();
-        int discount = Integer.parseInt(discount_raw);
-        int quantity = Integer.parseInt(quantity_raw);
-
-        Date startdate = Date.valueOf(startdate_raw);
-        Date enddate = Date.valueOf(enddate_raw);
-        int minvalue = Integer.parseInt(minvalue_raw);
-
-        Voucher voucher = vDAO.checkCodeVoucherDuplicate(code);
-
-        if (voucher != null) {
-            request.setAttribute("error", "Code Duplicate");
-            request.setAttribute("code", code);
-            request.setAttribute("name", name);
-            request.setAttribute("discount", discount);
-            request.setAttribute("quantity", quantity);
-            request.setAttribute("startdate", startdate);
-            request.setAttribute("enddate", enddate);
-            request.setAttribute("minvalue", minvalue);
-            request.getRequestDispatcher("insertVoucherDisplay.jsp").forward(request, response);
-        } else {
-            vDAO.addVoucher(code, name, discount, quantity, startdate, enddate, minvalue);
-            response.sendRedirect("voucherManager");
-        }
 
     }
 
@@ -81,7 +47,14 @@ public class AddVoucher extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        String opPaymentStatus = request.getParameter("opPaymentStatus");
+        String oid_raw = request.getParameter("oid");
+        int oid = Integer.parseInt(oid_raw);
+
+        OderDAO oDAO = new OderDAO();
+
+        oDAO.changePaymentStatus(opPaymentStatus, oid);
+        response.sendRedirect("managerOrder");
     }
 
     /**
@@ -95,7 +68,14 @@ public class AddVoucher extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        String opOrderStatus = request.getParameter("opOrderStatus");
+        String oid_raw = request.getParameter("oid");
+        int oid = Integer.parseInt(oid_raw);
+
+        OderDAO oDAO = new OderDAO();
+
+        oDAO.changeOrderStatus(opOrderStatus, oid);
+        response.sendRedirect("managerOrder");
     }
 
     /**

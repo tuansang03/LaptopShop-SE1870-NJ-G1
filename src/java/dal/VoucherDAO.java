@@ -7,9 +7,7 @@ package dal;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Date;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
 import model.Voucher;
 
@@ -56,8 +54,7 @@ public class VoucherDAO extends DBContext {
             ResultSet rs = st.executeQuery();
 
             while (rs.next()) {
-               
-                
+
                 Voucher v = new Voucher(rs.getInt("Id"),
                         rs.getString("Code"),
                         rs.getString("Name"),
@@ -161,28 +158,99 @@ public class VoucherDAO extends DBContext {
         }
         return null;
     }
-    
+
     public void updateQuantityVoucher(int quantity, int idVoucher) {
         String sql = "UPDATE [dbo].[Voucher] SET [Quantity] =  ? WHERE Id = ?";
-        
+
         try {
             PreparedStatement st = connection.prepareStatement(sql);
             st.setInt(1, quantity);
-            st.setInt(2,idVoucher);
+            st.setInt(2, idVoucher);
             st.executeUpdate();
-            
+
         } catch (Exception e) {
         }
-        
+
+    }
+
+    public Voucher checkCodeVoucherDuplicate(String code) {
+        String sql = "SELECT * FROM Voucher WHERE [Code] = ?";
+
+        try {
+            PreparedStatement st = connection.prepareStatement(sql);
+            st.setString(1, code);
+            ResultSet rs = st.executeQuery();
+            if (rs.next()) {
+                Voucher v = new Voucher(rs.getInt("Id"),
+                        rs.getString("Code"),
+                        rs.getString("Name"),
+                        rs.getInt("DiscountPercent"),
+                        rs.getInt("Quantity"),
+                        rs.getDate("StartDate"),
+                        rs.getDate("EndDate"),
+                        rs.getInt("MinValue"),
+                        rs.getString("Status"));
+                return v;
+            }
+        } catch (Exception e) {
+        }
+        return null;
+    }
+
+    public List<Voucher> searchVoucherByName(String name, String status, String op) {
+        String sql = "SELECT * FROM Voucher WHERE [Name] LIKE ?";
+        List<Voucher> listVoucher = new ArrayList<>();
+        try {
+
+            if ((op.equals("active") || op.equals("expired")) && !(name.equals("noName"))) {
+                sql += " AND Status = ?";
+            } else if (name.equals("noName")) {
+                sql = "SELECT * FROM Voucher WHERE [Status] = ?";
+            }
+
+            PreparedStatement st = connection.prepareStatement(sql);
+
+            if ((!(name.equals("noName")) && (op.equals("active") || op.equals("expired")))) {
+                //search name + status
+                st.setString(1, "%" + name + "%");
+                st.setString(2, status);
+            } else if (name.equals("noName")) {
+                //search status
+                st.setString(1, status);
+            } else {
+                //search name
+                st.setString(1, "%" + name + "%");
+            }
+
+            ResultSet rs = st.executeQuery();
+
+            while (rs.next()) {
+                Voucher v = new Voucher(rs.getInt("Id"),
+                        rs.getString("Code"),
+                        rs.getString("Name"),
+                        rs.getInt("DiscountPercent"),
+                        rs.getInt("Quantity"),
+                        rs.getDate("StartDate"),
+                        rs.getDate("EndDate"),
+                        rs.getInt("MinValue"),
+                        rs.getString("Status"));
+                listVoucher.add(v);
+            }
+        } catch (Exception e) {
+        }
+        return listVoucher;
     }
 
     public static void main(String[] args) {
         VoucherDAO v = new VoucherDAO();
 
         //v.addVoucher("FE3424d", "VoucherTest 1", 70, 20, startDate, endDate, 2, 2);
-        Date startDate = Date.valueOf("2024-10-07");
-        Date endDate = Date.valueOf("2024-10-10");
-
-        v.editVoucher(5, "123hihi", "test22", 12, 12, startDate, endDate,  12, "0");
+        //Date startDate = Date.valueOf("2024-10-07");
+        //Date endDate = Date.valueOf("2024-10-10");
+        //v.editVoucher(5, "123hihi", "test22", 12, 12, startDate, endDate,  12, "0");
+        
+    List<Voucher> list = v.searchVoucherByName("u", "1", "active");
+   // List<Voucher> list = v.searchVoucherByName("noName", "1", "active");
+        System.out.println(list);
     }
 }

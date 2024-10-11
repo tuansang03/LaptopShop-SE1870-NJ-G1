@@ -5,7 +5,7 @@
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Manage Post</title>
+        <title>Manage Voucher</title>
         <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
         <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet">
         <link rel="shortcut icon" href="assets/img/logo/favicon.svg">
@@ -25,11 +25,33 @@
             <h2>Manage Voucher</h2>
 
             <!-- Form tìm kiếm danh mục -->
-            <form action="" class="form-inline mb-3">
-                <input type="text" name="search" class="form-control mr-2" placeholder="Search Voucher">
-                <input type="hidden" name="service" value="searchPost">
-                <button type="submit" class="btn btn-primary">Search</button>
-            </form>
+            <div style="display: flex; align-items: center">
+                <form style="width: 100%;" action="searchVoucher" class="form-inline mb-3">
+                    <input type="text" name="search" value="${search}" class="form-control mr-2" placeholder="Search Voucher">
+                    <button type="submit" class="btn btn-primary">Search</button>
+
+                    <select name="op" style="
+                            margin-left: 10px;
+                            text-align: center;
+                            height: 48px;
+                            width: 10%;
+                            color: black;
+                            border: 2px solid #28a745;
+                            background-color: white;
+                            border-radius: 4px;
+                            padding: 5px;
+                            font-size: 16px;
+                            cursor: pointer;
+                            outline: none;
+                            ">
+                        <option ${op.equals('all') ? 'selected':''} value="all">All</option>
+                        <option ${op.equals('active') ? 'selected':''} value="active">Active</option>
+                        <option ${op.equals('expired') ? 'selected':''} value="expired">Expired</option>
+                    </select>
+
+                </form>
+
+            </div>
             <!-- Nút Add Category -->
             <form action="insertVoucherDisplay.jsp" method="POST" class="form-inline mb-3">
                 <input type="hidden" name="service" value="addPostRequest">

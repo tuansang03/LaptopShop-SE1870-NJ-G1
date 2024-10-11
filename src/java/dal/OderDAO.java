@@ -7,8 +7,11 @@ package dal;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import model.Order;
+import model.OrderDetail;
 
 /**
  *
@@ -232,12 +235,129 @@ public class OderDAO extends DBContext {
         return null;
     }
 
+    public List<Order> getAllOrder() {
+        String sql = "SELECT * FROM [Order]";
+        List<Order> listOrder = new ArrayList<>();
+
+        try {
+            PreparedStatement st = connection.prepareStatement(sql);
+            ResultSet rs = st.executeQuery();
+
+            while (rs.next()) {
+                UserDAO uDAO = new UserDAO();
+                VoucherDAO vDAO = new VoucherDAO();
+                LocalDateTime endDate = rs.getTimestamp("EndDate") != null ? rs.getTimestamp("EndDate").toLocalDateTime() : null;
+                Order o = new Order(rs.getInt("Id"),
+                        uDAO.getUserByIdD(rs.getInt("UserID")),
+                        rs.getString("Name"),
+                        rs.getString("Address"),
+                        rs.getString("Phone"),
+                        rs.getTimestamp("OrderDate").toLocalDateTime(),
+                        vDAO.getVoucherByID(rs.getInt("VoucherID")),
+                        rs.getInt("TotalAmountBefore"),
+                        rs.getInt("DiscountAmount"),
+                        rs.getInt("TotalAmountAfter"),
+                        rs.getString("PaymentMethod"),
+                        rs.getString("PaymentStatus"),
+                        rs.getString("VnPayTransactionId"),
+                        endDate,
+                        rs.getString("OrderStatus"),
+                        rs.getString("Note"));
+                listOrder.add(o);
+            }
+
+        } catch (Exception e) {
+        }
+        return listOrder;
+    }
+
+    public void changePaymentStatus(String op, int id) {
+        String sql = "UPDATE [dbo].[Order] SET[PaymentStatus] = ? WHERE Id = ?";
+        try {
+            PreparedStatement st = connection.prepareStatement(sql);
+            st.setString(1, op);
+            st.setInt(2, id);
+            st.executeUpdate();
+        } catch (Exception e) {
+        }
+    }
+
+    public void changeOrderStatus(String op, int id) {
+        String sql = "UPDATE [dbo].[Order] SET[OrderStatus] = ? WHERE Id = ?";
+        try {
+            PreparedStatement st = connection.prepareStatement(sql);
+            st.setString(1, op);
+            st.setInt(2, id);
+            st.executeUpdate();
+        } catch (Exception e) {
+        }
+    }
+
+    public Order getOrderByID(int id) {
+        String sql = "SELECT * FROM [Order] WHERE Id = ?";
+
+        try {
+            PreparedStatement st = connection.prepareStatement(sql);
+            st.setInt(1, id);
+            ResultSet rs = st.executeQuery();
+
+            if (rs.next()) {
+                UserDAO uDAO = new UserDAO();
+                VoucherDAO vDAO = new VoucherDAO();
+                LocalDateTime endDate = rs.getTimestamp("EndDate") != null ? rs.getTimestamp("EndDate").toLocalDateTime() : null;
+                Order o = new Order(rs.getInt("Id"),
+                        uDAO.getUserByIdD(rs.getInt("UserID")),
+                        rs.getString("Name"),
+                        rs.getString("Address"),
+                        rs.getString("Phone"),
+                        rs.getTimestamp("OrderDate").toLocalDateTime(),
+                        vDAO.getVoucherByID(rs.getInt("VoucherID")),
+                        rs.getInt("TotalAmountBefore"),
+                        rs.getInt("DiscountAmount"),
+                        rs.getInt("TotalAmountAfter"),
+                        rs.getString("PaymentMethod"),
+                        rs.getString("PaymentStatus"),
+                        rs.getString("VnPayTransactionId"),
+                        endDate,
+                        rs.getString("OrderStatus"),
+                        rs.getString("Note"));
+                return o;
+            }
+        } catch (Exception e) {
+        }
+        return null;
+    }
+
+    public List<OrderDetail> getAllOrdetailByID(int id) {
+        String sql = "SELECT * FROM OrderDetail WHERE OrderId = ?";
+        List<OrderDetail> listODetail = new ArrayList<>();
+
+        try {
+            PreparedStatement st = connection.prepareStatement(sql);
+            st.setInt(1, id);
+            ResultSet rs = st.executeQuery();
+
+            while (rs.next()) {
+                OderDAO oDAO = new OderDAO();
+                ProductDAOS pDAO = new ProductDAOS();
+                OrderDetail odt = new OrderDetail(
+                        rs.getInt("Id"),
+                        oDAO.getOrderByID(rs.getInt("OrderID")),
+                        pDAO.getProductDetailByID(rs.getInt("ProductDetailID")),
+                        rs.getInt("Quantity"),
+                        rs.getInt("UnitPrice"));
+                listODetail.add(odt);
+            }
+        } catch (Exception e) {
+        }
+        return listODetail;
+    }
+
     public static void main(String[] args) {
         OderDAO o = new OderDAO();
-        LocalDateTime date = LocalDateTime.now();
-        o.insertOrderOfCOD(5, "111", "222", "333",
-                date, 1, 123, 123,
-                123, "12312", "12342");
-//o.insertOrder(5, "ss", "ss", "123", LocalDateTime.MAX, 0, 0, "hehe");
+
+        List<OrderDetail> l = o.getAllOrdetailByID(1);
+        System.out.println(l);
+
     }
 }

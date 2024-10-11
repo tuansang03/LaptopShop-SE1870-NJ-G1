@@ -65,27 +65,27 @@
                                     <div class="left div div div div label">
                                         <div class="div input">
                                             <label>ID</label>
-                                            <input value="${voucher.getId()}" type="text" name="id" placeholder="Enter code" readonly class="form-control">
+                                            <input value="${voucher.getId()}${id}" type="text" name="id" readonly placeholder="Enter code" class="form-control">
                                         </div>
                                         
                                         <div class="div input">
                                             <label>Code</label>
-                                            <input value="${voucher.getCode()}" type="text" name="code" placeholder="Enter code" required class="form-control">
+                                            <input value="${voucher.getCode()}${code}" type="text" name="code" placeholder="Enter code" required class="form-control">
                                         </div>
                                         
                                         <div>
                                             <label>Name</label>
-                                            <input value="${voucher.getName()}" type="text" name="name" placeholder="Enter name voucher" required class="form-control">
+                                            <input value="${voucher.getName()}${name}" type="text" name="name" placeholder="Enter name voucher" required class="form-control">
                                         </div>
 
                                         <div>
                                             <label>DiscountPercent</label>
-                                            <input value="${voucher.getDiscountPercent()}" type="number" name="discount" placeholder="Enter discount percent" required class="form-control">
+                                            <input value="${voucher.getDiscountPercent()}${discount}" type="number" name="discount" placeholder="Enter discount percent" required class="form-control">
                                         </div>
 
                                         <div>
                                             <label>Quantity</label>
-                                            <input value="${voucher.getQuantity()}" type="number" name="quantity" placeholder="Enter quantity voucher" required class="form-control">
+                                            <input value="${voucher.getQuantity()}${quantity}" type="number" name="quantity" placeholder="Enter quantity voucher" required class="form-control">
                                         </div>
 
                                     </div>
@@ -93,17 +93,17 @@
                                         <div>
                                             <div>
                                                 <label>StartDate</label>
-                                                <input value="${voucher.getStartDate()}" type="date" name="startdate" placeholder="Enter start date" required class="form-control">
+                                                <input value="${voucher.getStartDate()}${startdate}" type="date" name="startdate" placeholder="Enter start date" required class="form-control">
                                             </div>
 
                                             <div>
                                                 <label>EndDate</label>
-                                                <input value="${voucher.getEndDate()}" type="date" name="enddate" placeholder="Enter end date" required class="form-control">
+                                                <input value="${voucher.getEndDate()}${enddate}" type="date" name="enddate" placeholder="Enter end date" required class="form-control">
                                             </div>
 
                                             <div>
                                                 <label>MinValue</label>
-                                                <input value="${voucher.getMinValue()}" type="number" name="minvalue" placeholder="Enter min value" required class="form-control">
+                                                <input value="${voucher.getMinValue()}${minvalue}" type="number" name="minvalue" placeholder="Enter min value" required class="form-control">
                                             </div>
 
                                             <div>
@@ -113,6 +113,11 @@
                                                     <option ${voucher.getStatus() == 0 ? 'selected': ''} value="0" >Expired</option>
                                                 </select>
                                             </div>
+                                             
+                                            <div>
+                                                <p></p>
+                                                <p style="color: red; font-size: 18px">${error}</p>
+                                            </div>    
                                         </div>
                                     </div>
                                 </div>

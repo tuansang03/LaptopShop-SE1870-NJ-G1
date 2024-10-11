@@ -2,7 +2,6 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
  */
-
 package controller;
 
 import dal.VoucherDAO;
@@ -13,40 +12,47 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.sql.Date;
+import java.util.List;
 import model.Voucher;
 
 /**
  *
  * @author ADMIN
  */
-@WebServlet(name="EditVoucher", urlPatterns={"/editVoucher"})
+@WebServlet(name = "EditVoucher", urlPatterns = {"/editVoucher"})
 public class EditVoucher extends HttpServlet {
-   
-    /** 
-     * Processes requests for both HTTP <code>GET</code> and <code>POST</code> methods.
+
+    /**
+     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
+     * methods.
+     *
      * @param request servlet request
      * @param response servlet response
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
      */
+    private String codeBefore;
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-    throws ServletException, IOException {
+            throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        
+
         String id_raw = request.getParameter("id");
         int id = Integer.parseInt(id_raw);
-        
+
         VoucherDAO vDAO = new VoucherDAO();
-        
+
         Voucher voucher = vDAO.getVoucherByID(id);
+
+        codeBefore = voucher.getCode();
         
         request.setAttribute("voucher", voucher);
         request.getRequestDispatcher("editVoucherDisplay.jsp").forward(request, response);
-    } 
+    }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
-    /** 
+    /**
      * Handles the HTTP <code>GET</code> method.
+     *
      * @param request servlet request
      * @param response servlet response
      * @throws ServletException if a servlet-specific error occurs
@@ -54,12 +60,13 @@ public class EditVoucher extends HttpServlet {
      */
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
-    throws ServletException, IOException {
+            throws ServletException, IOException {
         processRequest(request, response);
-    } 
+    }
 
-    /** 
+    /**
      * Handles the HTTP <code>POST</code> method.
+     *
      * @param request servlet request
      * @param response servlet response
      * @throws ServletException if a servlet-specific error occurs
@@ -67,7 +74,7 @@ public class EditVoucher extends HttpServlet {
      */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
-    throws ServletException, IOException {
+            throws ServletException, IOException {
         String id_raw = request.getParameter("id");
         String code = request.getParameter("code");
         String name = request.getParameter("name");
@@ -77,7 +84,7 @@ public class EditVoucher extends HttpServlet {
         String enddate_raw = request.getParameter("enddate");
         String minvalue_raw = request.getParameter("minvalue");
         String status = request.getParameter("status");
-    
+
         VoucherDAO vDAO = new VoucherDAO();
         int id = Integer.parseInt(id_raw);
         int discount = Integer.parseInt(discount_raw);
@@ -85,14 +92,36 @@ public class EditVoucher extends HttpServlet {
         Date startDate = Date.valueOf(startdate_raw);
         Date endDate = Date.valueOf(enddate_raw);
         int minvalue = Integer.parseInt(minvalue_raw);
-        
-        vDAO.editVoucher(id, code, name, discount, quantity, 
-                startDate, endDate, minvalue, status);
-    response.sendRedirect("voucherManager");
+
+        Voucher voucher = vDAO.checkCodeVoucherDuplicate(code);
+
+        if (voucher != null) {
+            if (code.equals(codeBefore)) {
+                vDAO.editVoucher(id, code, name, discount, quantity,
+                        startDate, endDate, minvalue, status);
+                response.sendRedirect("voucherManager");
+            } else {
+                request.setAttribute("error", "Code Duplicate");
+                request.setAttribute("code", code);
+                request.setAttribute("id", id);
+                request.setAttribute("name", name);
+                request.setAttribute("discount", discount);
+                request.setAttribute("quantity", quantity);
+                request.setAttribute("startdate", startdate_raw);
+                request.setAttribute("enddate", enddate_raw);
+                request.setAttribute("minvalue", minvalue);
+                request.getRequestDispatcher("editVoucherDisplay.jsp").forward(request, response);
+            }
+        } else{
+            vDAO.editVoucher(id, code, name, discount, quantity,
+                    startDate, endDate, minvalue, status);
+            response.sendRedirect("voucherManager");
+        }
     }
 
-    /** 
+    /**
      * Returns a short description of the servlet.
+     *
      * @return a String containing servlet description
      */
     @Override

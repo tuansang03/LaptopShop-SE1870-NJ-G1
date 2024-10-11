@@ -26,7 +26,7 @@ import model.Voucher;
  *
  * @author ADMIN
  */
-//@WebServlet(name = "ProcessingCheckOut", urlPatterns = {"/processingCheckOut"})
+@WebServlet(name = "ProcessingCheckOut", urlPatterns = {"/processingCheckOut"})
 public class ProcessingCheckOut extends HttpServlet {
 
     /**
@@ -94,11 +94,13 @@ public class ProcessingCheckOut extends HttpServlet {
         if (paymentMethod.equals("Nhan Hang Thanh Toan")) {
             if (voucherID_raw == null) {
                 oDAO.insertOrderOfCODNoVoucher(user.getId(), name, address, phone, dateTimeLocal, totalBeforeDiscount, (totalAfterDiscount == 0) ?  totalBeforeDiscount:totalBeforeDiscount, paymentMethod, message == null ? null:message);
+                cDAO.deleteProductAfterCheckOut(cid);
             } else {
                 int discountAmount = (totalBeforeDiscount - totalAfterDiscount);
                 int voucherID = Integer.parseInt(voucherID_raw);
                 
                 oDAO.insertOrderOfCOD(user.getId(), name, address, phone, dateTimeLocal, voucherID, totalBeforeDiscount, discountAmount, totalAfterDiscount, paymentMethod, message == null ? null:message);
+                cDAO.deleteProductAfterCheckOut(cid);
             }
 
             //insert oderDetail
@@ -122,10 +124,13 @@ public class ProcessingCheckOut extends HttpServlet {
 
             if (voucherID_raw == null) {
                 oDAO.insertOrderOfPaymentNoVoucher(user.getId(), name, address, phone, dateTimeLocal, totalBeforeDiscount, (totalAfterDiscount == 0) ?  totalBeforeDiscount:totalBeforeDiscount, paymentMethod, code, message == null ? null:message);
+                cDAO.deleteProductAfterCheckOut(cid);
             } else {
                 int voucherID = Integer.parseInt(voucherID_raw);
                 int discountAmount = (totalBeforeDiscount - totalAfterDiscount);
+                
                 oDAO.insertOrderOfPayment(user.getId(), name, address, phone, dateTimeLocal, voucherID, totalBeforeDiscount, discountAmount, totalAfterDiscount, paymentMethod, code, message == null ? null:message);
+                cDAO.deleteProductAfterCheckOut(cid);
             }
 
             //insert oderDetail

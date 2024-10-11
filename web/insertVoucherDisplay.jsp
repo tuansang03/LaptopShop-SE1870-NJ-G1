@@ -65,22 +65,22 @@
                                     <div class="left div div div div label">
                                         <div class="div input">
                                             <label>Code</label>
-                                            <input type="text" name="code" placeholder="Enter code" required class="form-control">
+                                            <input type="text" name="code" value="${code}" placeholder="Enter code" required class="form-control">
                                         </div>
 
                                         <div>
                                             <label>Name</label>
-                                            <input type="text" name="name" placeholder="Enter name voucher" required class="form-control">
+                                            <input type="text" name="name" value="${name}" placeholder="Enter name voucher" required class="form-control">
                                         </div>
 
                                         <div>
                                             <label>DiscountPercent</label>
-                                            <input type="number" name="discount" placeholder="Enter discount percent" required class="form-control">
+                                            <input type="number" name="discount" value="${discount}" placeholder="Enter discount percent" required class="form-control">
                                         </div>
 
                                         <div>
                                             <label>Quantity</label>
-                                            <input type="number" name="quantity" placeholder="Enter quantity voucher" required class="form-control">
+                                            <input type="number" name="quantity" value="${quantity}" placeholder="Enter quantity voucher" required class="form-control">
                                         </div>
 
                                     </div>
@@ -88,19 +88,23 @@
                                         <div>
                                             <div>
                                                 <label>StartDate</label>
-                                                <input type="date" name="startdate" placeholder="Enter start date" required class="form-control">
+                                                <input type="date" name="startdate" value="${startdate}" placeholder="Enter start date" required class="form-control">
                                             </div>
 
                                             <div>
                                                 <label>EndDate</label>
-                                                <input type="date" name="enddate" placeholder="Enter end date" required class="form-control">
+                                                <input type="date" name="enddate" value="${enddate}" placeholder="Enter end date" required class="form-control">
                                             </div>
 
                                             <div>
                                                 <label>MinValue</label>
-                                                <input type="number" name="minvalue" placeholder="Enter min value" required class="form-control">
+                                                <input type="number" name="minvalue" value="${minvalue}" placeholder="Enter min value" required class="form-control">
                                             </div>
 
+                                            <div>
+                                                <p></p>
+                                                <p style="color: red; font-size: 18px">${error}</p>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>

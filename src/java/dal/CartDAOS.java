@@ -235,6 +235,16 @@ public class CartDAOS extends DBContext {
         return listCart;
     }
 
+    public void deleteProductAfterCheckOut(int cid) {
+        String sql = "DELETE FROM [dbo].[CartItem] WHERE CartId = ? AND [Status] = 'checked'";
+        try {
+            PreparedStatement st = connection.prepareStatement(sql);
+            st.setInt(1, cid);
+            st.executeUpdate();
+        } catch (Exception e) {
+        }
+    }
+    
     public static void main(String[] args) {
         CartDAOS c = new CartDAOS();
         Cart s = c.getCartByUserID(5);
