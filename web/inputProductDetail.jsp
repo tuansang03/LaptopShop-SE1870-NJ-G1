@@ -4,62 +4,72 @@
 <!DOCTYPE html>
 <html lang="en">
     <head>
-    
-
-
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Product Variants</title>
         <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+       <style>
+    .img-preview {
+        width: 80px;
+        height: 80px;
+        object-fit: cover; /* Để hình ảnh vừa khít, không bị méo */
+        border: 1px solid #ddd; /* Đường viền xám nhạt */
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Hiệu ứng đổ bóng */
+        margin: 5px; /* Khoảng cách giữa các hình ảnh */
+        border-radius: 8px; /* Bo góc ảnh cho đẹp */
+    }
+    
+    .preview-container {
+        display: flex;
+        flex-wrap: wrap; /* Sắp xếp ảnh theo dạng lưới */
+        gap: 10px; /* Khoảng cách giữa các ảnh */
+    }
+</style>
         <script>
-            function addImageUrl(containerId, productDetailId) {
-                const imageContainer = document.getElementById(containerId);
+           
 
-                // Tạo một div mới để chứa input và nút xóa
-                const newDiv = document.createElement("div");
-                newDiv.className = "form-group mt-2"; // Thêm lớp để định dạng
+              function previewImage(input, productId) {
+        const imageContainer = document.getElementById('imageFileContainer-' + productId);
 
-                // Tạo input cho URL
-                const newInput = document.createElement("input");
-                newInput.type = "text";
-                newInput.name = "imageUrls_" + productDetailId + "[]";
-                newInput.className = "form-control";
-                newInput.placeholder = "Enter image URL";
+        // Xóa toàn bộ ảnh preview cũ (nếu có)
+        const oldPreviews = imageContainer.getElementsByClassName('img-preview');
+        while (oldPreviews.length > 0) {
+            oldPreviews[0].parentNode.removeChild(oldPreviews[0]);
+        }
 
-                // Tạo nút xóa
-                const deleteButton = document.createElement("button");
-                deleteButton.type = "button";
-                deleteButton.className = "btn btn-danger mt-2";
-                deleteButton.innerHTML = '<i class="bi bi-trash"></i>';
-                deleteButton.onclick = function () {
-                    newDiv.remove(); // Xóa div chứa input và nút xóa
+        // Hiển thị ảnh mới từ file input
+        if (input.files) {
+            const previewContainer = document.createElement('div');
+            previewContainer.className = 'preview-container'; // Container chứa các ảnh
+
+            Array.from(input.files).forEach(file => {
+                var reader = new FileReader();
+                reader.onload = function (e) {
+                    const img = document.createElement("img");
+                    img.className = 'img-preview';
+                    img.src = e.target.result;
+                    previewContainer.appendChild(img); // Thêm ảnh vào container
                 };
+                reader.readAsDataURL(file);
+            });
 
-                // Thêm input và nút xóa vào div mới
-                newDiv.appendChild(newInput);
-                newDiv.appendChild(deleteButton);
-
-                // Thêm div mới vào container
-                imageContainer.appendChild(newDiv);
-            }
-
-
-
+            // Thêm container chứa ảnh vào form-group
+            imageContainer.appendChild(previewContainer);
+        }
+    }
         </script>
     </head>
     <body>
-      
-
         <div class="container-fluid mt-5">
             <h2>Product Variants</h2>
             <% String errorMessage = (String) session.getAttribute("errorMessage");
    if (errorMessage != null) { %>
-   <div class="alert alert-danger">
-       <%= errorMessage %>
-   </div>
-<% session.removeAttribute("errorMessage"); } %>
+            <div class="alert alert-danger">
+                <%= errorMessage %>
+            </div>
+            <% session.removeAttribute("errorMessage"); } %>
 
-            <form action="inputProductDetail" method="post">
+            <form action="inputProductDetail" method="post" enctype="multipart/form-data">
                 <div class="row justify-content-center">
                     <div class="col-md-12">
                         <div class="card">
@@ -69,7 +79,7 @@
                                     <!-- 1 Product -->
                                     <h5>Product Detail for ${p.product.name}</h5>
                                     <table class="table table-bordered">
-                                        
+
                                         <thead>
                                             <tr>
                                                 <th>Product Detail</th>
@@ -78,18 +88,14 @@
                                                 <th>Attributes</th>
                                                 <th>Short Description</th>
                                                 <th>Images</th>
-                                                <th>Action</th> <!-- Thêm cột Action -->
+                                                <th>Action</th>
                                             </tr>
                                         </thead>
-                                        <tbody id="productDetail_${p.id}"> <!-- Thêm ID cho tbody -->
+                                        <tbody id="productDetail_${p.id}">
                                             <tr>
                                                 <td>${p.product.name} - ${p.color.name} - ${p.configuration.name}</td>
-                                                <!-- Price -->
                                                 <td><input type="number" name="price_${p.id}" class="form-control" value="${p.price}" required></td>
-                                                <!-- Quantity -->
                                                 <td><input type="number" name="quantity_${p.id}" class="form-control" value="${p.quantity}" required></td>
-
-                                                <!-- Attributes -->
                                                 <td>
                                                     <table class="table table-sm">
                                                         <thead>
@@ -109,39 +115,20 @@
                                                         </tbody>
                                                     </table>
                                                 </td>
-
-                                                <!-- Short Description -->
                                                 <td><input type="text" name="shortDescription_${p.id}" class="form-control" value="${p.shortDescription}" required></td>
-
-                                                <!-- Image URLs -->
                                                 <td>
-                                                    <div id="imageUrlContainer-${p.id}" class="form-group">
-                                                        <input type="text" name="imageUrls_${p.id}[]" class="form-control" placeholder="Enter image URL" required>
+                                                    <div id="imageFileContainer-${p.id}" class="form-group">
+                                                        <input type="file" multiple id="fileInput-${p.id}" name="imageFiles_${p.id}[]" accept="image/*" onchange="previewImage(this, ${p.id})" required>
                                                     </div>
-                                                    <button type="button" class="btn btn-secondary" onclick="addImageUrl('imageUrlContainer-${p.id}', '${p.id}')">Add Another Image URL</button>
+                                                 
                                                 </td>
-
-                                                <!-- Action Column: Nút xóa -->
                                                 <td>
                                                     <button type="button" class="btn btn-danger" onclick="confirmDelete(${p.id})"> <i class="bi bi-trash"></i></button>
-                                                   
                                                 </td>
-
-                                        <script>
-                                            function confirmDelete(productId) {
-                                                const confirmation = confirm("Are you sure you want to delete this product?");
-                                                if (confirmation) {
-                                                    // Nếu người dùng xác nhận, điều hướng đến URL xóa
-                                                    window.location.href = "deletePDBeforeUpdate?id=" + productId;
-                                                }
-                                            }
-                                        </script>
-                                        </tr>
+                                            </tr>
                                         </tbody>
                                     </table>
                                 </c:forEach>
-
-                                <!-- Submit tất cả sản phẩm -->
                                 <button type="submit" class="btn btn-success">Add All Products</button>
                             </div>
                         </div>
@@ -149,7 +136,6 @@
                 </div>
             </form>
         </div>
-
         <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     </body>

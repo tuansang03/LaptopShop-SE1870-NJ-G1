@@ -21,78 +21,7 @@
         <%@include file="sidebar.jsp" %>
 
 
-    <div class="col-md-10 content">
-        <h2>Quản Lý Sản Phẩm</h2>
-        <table>
-            <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>Hình Ảnh</th>
-                    <th>Tên</th>
-                    <th>Mô Tả</th>
-                    <th>Giá</th>
-                    <th>Tồn Kho</th>
-                    <th>Danh Mục</th>
-                    <th>Hành Động</th>
-                </tr>
-            </thead>
-
-            <tbody>
-                
-            </tbody>
-        </table>
-        <div>
-
-
-
-            <div class="list-page">
-                <div class="item">
-                    <c:if test="${tag > 1}">
-                        <a href="manageProduct?index=${tag - 1}"><i class="fa fa-long-arrow-left"></i><-</a>
-                    </c:if>
-                    <c:forEach begin="1" end="${endPage}" var="i">
-                        <a class="${tag == i ? 'active' : ''}" href="manageProduct?index=${i}">${i}</a>
-                    </c:forEach>
-                    <c:if test="${tag < endPage}">
-                        <a href="manageProduct?index=${tag + 1}"><i class="fa fa-long-arrow-right">-></i></a>
-                    </c:if>
-                </div>
-            </div>
-
-        </div>
-        <style>
-            .list-page {
-                display: flex;
-                justify-content: center;
-                margin-top: 20px;
-            }
-
-            .list-page .item {
-                display: flex;
-                align-items: center;
-            }
-
-            .list-page .item a {
-                text-decoration: none;
-                color: #333;
-                padding: 5px 10px;
-                margin: 0 2px;
-                border: 1px solid #ccc;
-                border-radius: 3px;
-            }
-
-            .list-page .item a.active {
-                background-color: #007bff;
-                color: #fff;
-                border-color: #007bff;
-            }
-
-            .list-page .item a:hover {
-                background-color: #f0f0f0;
-            }
-
-        </style>
-    </div>
+    
 
 </body>
 </html>

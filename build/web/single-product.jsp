@@ -1,5 +1,8 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -46,6 +49,18 @@
         <div class="product_image_area">
             <div class="container">
                 <div class="row s_product_inner">
+                    <div class="col-md-12">
+                        <c:if test="${msg != null}">
+                            <div class="alert alert-danger" role="alert">
+                                <strong>Error:</strong> ${msg}
+                            </div>
+                        </c:if>
+                        <c:if test="${success != null}">
+                            <div class="alert alert-success" role="alert">
+                                <strong>Success:</strong> ${success}
+                            </div>
+                        </c:if>
+                    </div>
                     <div class="col-lg-6">
                         <head>
                             <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.carousel.min.css">
@@ -235,6 +250,7 @@
                             </style>
                         </head>
 
+
                         <body>
                             <div class="main-image">
                                 <div class="owl-carousel owl-theme s_Product_carousel">
@@ -328,7 +344,7 @@
                             <br>
                             <h2>${price}</h2>
                             <h5 style="text-decoration: line-through; font-size: 16px; color: #a19c9c; padding-left: 16px ">
-                                ${sale}đ
+                                ${sale}
                             </h5>
                             <p>${detail.shortDescription}</p>
                             <div class="product_count">
@@ -395,256 +411,128 @@
                                             <div class="row">
                                                 <div class="col-lg-6">
                                                     <div class="comment_list">
-                                                        <div class="review_item">
-                                                            <div class="media">
-                                                                <div class="d-flex">
-                                                                    <img src="img/product/review-1.png" alt="">
+                                                        <!-- Vòng lặp để duyệt qua danh sách bình luận -->
+                                                        <c:forEach items="${commentList}" var="comment">
+                                                            <!-- Kiểm tra nếu RepplyCommentId là NULL (bình luận chính) -->
+                                                            <c:if test="${comment.repplyCommentId == null}">
+                                                                <div class="review_item">
+                                                                    <div class="media">
+                                                                        <div class="media-body">
+                                                                            <!-- Tên người dùng -->
+                                                                            <h4>${comment.user.fullName} <c:if test="${comment.user.role.id == 2}">(Saler)</c:if></h4>
+                                                                            <!-- Ngày bình luận -->
+                                                                            <h5>
+                                                                                <fmt:formatDate value="${comment.commentDate}" pattern="dd/MM/yyyy HH:mm" />
+                                                                               
+                                                                            </h5>
+                                                                        </div>
+                                                                    </div>
+                                                                    <!-- Nội dung bình luận -->
+                                                                    <p>${comment.commentContent}</p>
                                                                 </div>
-                                                                <div class="media-body">
-                                                                    <h4>Blake Ruiz</h4>
-                                                                    <h5>12th Feb, 2018 at 05:56 pm</h5>
-                                                                    <a class="reply_btn" href="#">Reply</a>
+
+                                                                <!-- Vòng lặp lồng kiểm tra các phản hồi cho bình luận chính này -->
+                                                                <div class="replies">
+                                                                    <c:forEach items="${commentList}" var="reply">
+                                                                        <!-- Kiểm tra nếu RepplyCommentId của bình luận này trùng với Id của bình luận chính -->
+                                                                        <c:if test="${reply.repplyCommentId == comment.id}">
+                                                                            <div class="review_item reply">
+                                                                                <div class="media">
+                                                                                    <div class="media-body">
+                                                                                        <!-- Hiển thị thêm nhãn "Reply" -->
+                                                                                        <h4>${reply.user.fullName}<c:if test="${reply.user.role.id == 2}">(Saler)</c:if> <span style="font-size: 12px; color: #007bff;">(Reply)</span></h4>
+                                                                                        <h5><fmt:formatDate value="${reply.commentDate}" pattern="dd/MM/yyyy HH:mm" /></h5>
+                                                                                    </div>
+                                                                                </div>
+                                                                                <p>${reply.commentContent}</p>
+                                                                            </div>
+                                                                        </c:if>
+                                                                    </c:forEach>
                                                                 </div>
-                                                            </div>
-                                                            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et
-                                                                dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea
-                                                                commodo</p>
-                                                        </div>
-                                                        <div class="review_item reply">
-                                                            <div class="media">
-                                                                <div class="d-flex">
-                                                                    <img src="img/product/review-2.png" alt="">
-                                                                </div>
-                                                                <div class="media-body">
-                                                                    <h4>Blake Ruiz</h4>
-                                                                    <h5>12th Feb, 2018 at 05:56 pm</h5>
-                                                                    <a class="reply_btn" href="#">Reply</a>
-                                                                </div>
-                                                            </div>
-                                                            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et
-                                                                dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea
-                                                                commodo</p>
-                                                        </div>
-                                                        <div class="review_item">
-                                                            <div class="media">
-                                                                <div class="d-flex">
-                                                                    <img src="img/product/review-3.png" alt="">
-                                                                </div>
-                                                                <div class="media-body">
-                                                                    <h4>Blake Ruiz</h4>
-                                                                    <h5>12th Feb, 2018 at 05:56 pm</h5>
-                                                                    <a class="reply_btn" href="#">Reply</a>
-                                                                </div>
-                                                            </div>
-                                                            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et
-                                                                dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea
-                                                                commodo</p>
-                                                        </div>
+                                                                <hr><!-- Phân cách giữa các comment -->
+                                                            </c:if>
+                                                        </c:forEach>
                                                     </div>
+
+
+
+
                                                 </div>
+
                                                 <div class="col-lg-6">
-                                                    <div class="review_box">
-                                                        <h4>Post a comment</h4>
-                                                        <form class="row contact_form" action="contact_process.php" method="post" id="contactForm" novalidate="novalidate">
-                                                            <div class="col-md-12">
-                                                                <div class="form-group">
-                                                                    <input type="text" class="form-control" id="name" name="name" placeholder="Your Full name">
-                                                                </div>
+                                                    <div class="review_box p-4 shadow-sm border rounded">
+                                                        <h4 class="mb-4">Post a Comment</h4>
+                                                        <form action="submitComment" method="post">
+                                                            <!-- Comment Content -->
+                                                            <div class="form-group mb-3">
+                                                                <label for="commentContent" class="form-label">Comment</label>
+                                                                <textarea class="form-control" id="commentContent" name="commentContent" rows="4" placeholder="Write your comment here..." required></textarea>
                                                             </div>
-                                                            <div class="col-md-12">
-                                                                <div class="form-group">
-                                                                    <input type="email" class="form-control" id="email" name="email" placeholder="Email Address">
-                                                                </div>
-                                                            </div>
-                                                            <div class="col-md-12">
-                                                                <div class="form-group">
-                                                                    <input type="text" class="form-control" id="number" name="number" placeholder="Phone Number">
-                                                                </div>
-                                                            </div>
-                                                            <div class="col-md-12">
-                                                                <div class="form-group">
-                                                                    <textarea class="form-control" name="message" id="message" rows="1" placeholder="Message"></textarea>
-                                                                </div>
-                                                            </div>
-                                                            <div class="col-md-12 text-right">
-                                                                <button type="submit" value="submit" class="btn primary-btn">Submit Now</button>
+
+                                                            <!-- Submit Button -->
+                                                            <div class="text-end">
+                                                                <button type="submit" class="btn btn-primary">Submit</button>
                                                             </div>
                                                         </form>
                                                     </div>
                                                 </div>
-                                            </div>
-                                        </div>
-                                        <div class="tab-pane fade" id="review" role="tabpanel" aria-labelledby="review-tab">
-                                            <div class="row">
-                                                <div class="col-lg-6">
-                                                    <div class="row total_rate">
-                                                        <div class="col-6">
-                                                            <div class="box_total">
-                                                                <h5>Overall</h5>
-                                                                <h4>4.0</h4>
-                                                                <h6>(03 Reviews)</h6>
-                                                            </div>
-                                                        </div>
-                                                        <div class="col-6">
-                                                            <div class="rating_list">
-                                                                <h3>Based on 3 Reviews</h3>
-                                                                <ul class="list">
-                                                                    <li><a href="#">5 Star <i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i><i
-                                                                                class="fa fa-star"></i><i class="fa fa-star"></i> 01</a></li>
-                                                                    <li><a href="#">4 Star <i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i><i
-                                                                                class="fa fa-star"></i><i class="fa fa-star"></i> 01</a></li>
-                                                                    <li><a href="#">3 Star <i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i><i
-                                                                                class="fa fa-star"></i><i class="fa fa-star"></i> 01</a></li>
-                                                                    <li><a href="#">2 Star <i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i><i
-                                                                                class="fa fa-star"></i><i class="fa fa-star"></i> 01</a></li>
-                                                                    <li><a href="#">1 Star <i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i><i
-                                                                                class="fa fa-star"></i><i class="fa fa-star"></i> 01</a></li>
-                                                                </ul>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="review_list">
-                                                        <div class="review_item">
-                                                            <div class="media">
-                                                                <div class="d-flex">
-                                                                    <img src="img/product/review-1.png" alt="">
-                                                                </div>
-                                                                <div class="media-body">
-                                                                    <h4>Blake Ruiz</h4>
-                                                                    <i class="fa fa-star"></i>
-                                                                    <i class="fa fa-star"></i>
-                                                                    <i class="fa fa-star"></i>
-                                                                    <i class="fa fa-star"></i>
-                                                                    <i class="fa fa-star"></i>
-                                                                </div>
-                                                            </div>
-                                                            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et
-                                                                dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea
-                                                                commodo</p>
-                                                        </div>
-                                                        <div class="review_item">
-                                                            <div class="media">
-                                                                <div class="d-flex">
-                                                                    <img src="img/product/review-2.png" alt="">
-                                                                </div>
-                                                                <div class="media-body">
-                                                                    <h4>Blake Ruiz</h4>
-                                                                    <i class="fa fa-star"></i>
-                                                                    <i class="fa fa-star"></i>
-                                                                    <i class="fa fa-star"></i>
-                                                                    <i class="fa fa-star"></i>
-                                                                    <i class="fa fa-star"></i>
-                                                                </div>
-                                                            </div>
-                                                            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et
-                                                                dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea
-                                                                commodo</p>
-                                                        </div>
-                                                        <div class="review_item">
-                                                            <div class="media">
-                                                                <div class="d-flex">
-                                                                    <img src="img/product/review-3.png" alt="">
-                                                                </div>
-                                                                <div class="media-body">
-                                                                    <h4>Blake Ruiz</h4>
-                                                                    <i class="fa fa-star"></i>
-                                                                    <i class="fa fa-star"></i>
-                                                                    <i class="fa fa-star"></i>
-                                                                    <i class="fa fa-star"></i>
-                                                                    <i class="fa fa-star"></i>
-                                                                </div>
-                                                            </div>
-                                                            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et
-                                                                dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea
-                                                                commodo</p>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="col-lg-6">
-                                                    <div class="review_box">
-                                                        <h4>Add a Review</h4>
-                                                        <p>Your Rating:</p>
-                                                        <ul class="list">
-                                                            <li><a href="#"><i class="fa fa-star"></i></a></li>
-                                                            <li><a href="#"><i class="fa fa-star"></i></a></li>
-                                                            <li><a href="#"><i class="fa fa-star"></i></a></li>
-                                                            <li><a href="#"><i class="fa fa-star"></i></a></li>
-                                                            <li><a href="#"><i class="fa fa-star"></i></a></li>
-                                                        </ul>
-                                                        <p>Outstanding</p>
-                                                        <form action="#/" class="form-contact form-review mt-3">
-                                                            <div class="form-group">
-                                                                <input class="form-control" name="name" type="text" placeholder="Enter your name" required>
-                                                            </div>
-                                                            <div class="form-group">
-                                                                <input class="form-control" name="email" type="email" placeholder="Enter email address" required>
-                                                            </div>
-                                                            <div class="form-group">
-                                                                <input class="form-control" name="subject" type="text" placeholder="Enter Subject">
-                                                            </div>
-                                                            <div class="form-group">
-                                                                <textarea class="form-control different-control w-100" name="textarea" id="textarea" cols="30" rows="5" placeholder="Enter Message"></textarea>
-                                                            </div>
-                                                            <div class="form-group text-center text-md-right mt-3">
-                                                                <button type="submit" class="button button--active button-review">Submit Now</button>
-                                                            </div>
-                                                        </form>
-                                                    </div>
-                                                </div>
+
                                             </div>
                                         </div>
                                     </div>
-                                </div>
-                            </section>
-                            <!--================End Product Description Area =================-->
-
-                            <!--================ Start related Product area =================-->  
-                            <section class="related-product-area section-margin--small mt-0">
-                                <div class="container">
-                                    <div class="section-intro pb-60px">
-                                        <h2><span class="section-intro__style">Related Product</span></h2>
-                                    </div>
-                                    <div class="product-carousel-container">
-                                        <!-- Nút mũi tên để trượt sang trái -->
-                                        <button class="carousel-prev" onclick="scrollLeft()">❮</button>
-
-                                        <div class="product-carousel">
-                                            <c:forEach var="p" items="${listproduct}">
-                                                <a href="information?productId=${p.detail}" class="product-link">
-                                                    <div class="product-item">
-                                                        <img src="${p.img}" alt="${p.name}">
-                                                        <div class="brand">${p.brand}</div>
-                                                        <h4>${p.name}</h4>
-                                                        <p>Giá: ${p.price}</p>
-                                                    </div>
-                                                </a>
-                                            </c:forEach>
-                                            <c:if test="${empty listproduct}">
-                                                <p>Không có sản phẩm nào để hiển thị.</p>
-                                            </c:if>
-                                        </div>
-
-                                        <!-- Nút mũi tên để trượt sang phải -->
-                                        <button class="carousel-next" onclick="scrollRight()">❯</button>
-                                    </div>
 
                                 </div>
-                            </section>
-                            <!--================ end related Product area =================-->  	
+                        </div>
+                        </section>
+                        <!--================End Product Description Area =================-->
 
-                            <!--================ Start footer Area  =================-->	
-                            <%@include file="footer.jsp" %>
-                            <!--================ End footer Area  =================-->
+                        <!--================ Start related Product area =================-->  
+                        <section class="related-product-area section-margin--small mt-0">
+                            <div class="container">
+                                <div class="section-intro pb-60px">
+                                    <h2><span class="section-intro__style">Related Product</span></h2>
+                                </div>
+                                <div class="product-carousel-container">
+                                    <!-- Nút mũi tên để trượt sang trái -->
+                                    <button class="carousel-prev" onclick="scrollLeft()">❮</button>
+
+                                    <div class="product-carousel">
+                                        <c:forEach var="p" items="${listproduct}">
+                                            <a href="information?productId=${p.detail}" class="product-link">
+                                                <div class="product-item">
+                                                    <img src="${p.img}" alt="${p.name}">
+                                                    <div class="brand">${p.brand}</div>
+                                                    <h4>${p.name}</h4>
+                                                    <p>Giá: ${p.price}</p>
+                                                </div>
+                                            </a>
+                                        </c:forEach>
+                                        <c:if test="${empty listproduct}">
+                                            <p>Không có sản phẩm nào để hiển thị.</p>
+                                        </c:if>
+                                    </div>
+
+                                    <!-- Nút mũi tên để trượt sang phải -->
+                                    <button class="carousel-next" onclick="scrollRight()">❯</button>
+                                </div>
+
+                            </div>
+                        </section>
+                        <!--================ end related Product area =================-->  	
+
+                        <!--================ Start footer Area  =================-->	
+                        <%@include file="footer.jsp" %>
+                        <!--================ End footer Area  =================-->
 
 
 
-                            <script src="vendors/jquery/jquery-3.2.1.min.js"></script>
-                            <script src="vendors/bootstrap/bootstrap.bundle.min.js"></script>
-                            <script src="vendors/skrollr.min.js"></script>
-                            <script src="vendors/owl-carousel/owl.carousel.min.js"></script>
-                            <script src="vendors/nice-select/jquery.nice-select.min.js"></script>
-                            <script src="vendors/jquery.ajaxchimp.min.js"></script>
-                            <script src="vendors/mail-script.js"></script>
-                            <script src="js/main.js"></script>
-                            </body>
-                            </html>
+                        <script src="vendors/jquery/jquery-3.2.1.min.js"></script>
+                        <script src="vendors/bootstrap/bootstrap.bundle.min.js"></script>
+                        <script src="vendors/skrollr.min.js"></script>
+                        <script src="vendors/owl-carousel/owl.carousel.min.js"></script>
+                        <script src="vendors/nice-select/jquery.nice-select.min.js"></script>
+                        <script src="vendors/jquery.ajaxchimp.min.js"></script>
+                        <script src="vendors/mail-script.js"></script>
+                        <script src="js/main.js"></script>
+                        </body>
+                        </html>

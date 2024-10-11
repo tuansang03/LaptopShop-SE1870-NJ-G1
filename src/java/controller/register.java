@@ -4,7 +4,6 @@
  */
 package controller;
 
-
 import dal.UserDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -76,7 +75,7 @@ public class register extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        String name = request.getParameter("name");
+       String name = request.getParameter("name");
         String firstName = request.getParameter("firstName");
         String lastName= request.getParameter("lastName");
         String fullname=firstName +" "+lastName;
@@ -126,7 +125,8 @@ public class register extends HttpServlet {
 public String generateOTP() {
     int otp = (int) (Math.random() * 900000) + 100000; // Tạo số ngẫu nhiên từ 100000 đến 999999
     return String.valueOf(otp);
-}
+
+    }
 
     /**
      * Returns a short description of the servlet.

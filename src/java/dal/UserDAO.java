@@ -27,19 +27,71 @@ import model.Role;
  * @author ADMIN
  */
 public class UserDAO extends DBContext {
-    public void insertUser(User user){
-        String sql="INSERT INTO [dbo].[User]\n" +
-"           ([Username]\n" +
-"          ,[Password]\n" +
-"          ,[Fullname]\n" +
-"           \n" +
-"           ,[Email]\n" +
-"           \n" +
-"           ,[RoleId],\n" +
-"		   [Status]\n" +
-"           )\n" +
-"    VALUES\n" +
-"          (?,?,?,?,3,'active')";
+
+    public void updatePassword(String username, String newPassword) {
+        String sql = "UPDATE [User] SET password = ? WHERE userName = ?";
+        try {
+            PreparedStatement pre = connection.prepareStatement(sql);
+            pre.setString(1, newPassword); // Gán mật khẩu mới (nên mã hóa trước khi lưu)
+            pre.setString(2, username); // Gán tên người dùng
+
+            pre.executeUpdate(); // Thực thi câu lệnh UPDATE
+
+        } catch (SQLException ex) {
+            Logger.getLogger(UserDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    public boolean checkPassword(String username, String password) {
+        String sql = "SELECT COUNT(Id) FROM [User] WHERE Username = ? AND [Password] = ?";
+        try {
+            PreparedStatement pre = connection.prepareStatement(sql);
+            pre.setString(1, username);
+            pre.setString(2, password); // Bạn nên mã hóa mật khẩu ở đây trước khi so sánh!
+
+            ResultSet rs = pre.executeQuery();
+            if (rs.next()) {
+                // Nếu có ít nhất 1 dòng được trả về, mật khẩu là đúng
+                return rs.getInt(1) > 0;
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(UserDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return false; // Nếu không tìm thấy hoặc có lỗi xảy ra
+    }
+
+    public boolean updateUser(User u) {
+        String sql = "UPDATE [User] SET fullName = ?, email = ? WHERE id = ?";
+        boolean isUpdated = false;
+
+        try {
+            PreparedStatement pre = connection.prepareStatement(sql);
+            pre.setString(1, u.getFullName()); // Cập nhật fullName
+            pre.setString(2, u.getEmail());     // Cập nhật email
+            pre.setInt(3, u.getId());  // Sử dụng username làm điều kiện để cập nhật
+
+            int rowsAffected = pre.executeUpdate();
+            isUpdated = (rowsAffected > 0); // Nếu có ít nhất 1 hàng bị ảnh hưởng thì cập nhật thành công
+        } catch (SQLException ex) {
+            Logger.getLogger(UserDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        return isUpdated; // Trả về kết quả cập nhật
+    }
+
+    public void insertUser(User user) {
+        String sql = "INSERT INTO [dbo].[User]\n"
+                + "           ([Username]\n"
+                + "          ,[Password]\n"
+                + "          ,[Fullname]\n"
+                + "           \n"
+                + "           ,[Email]\n"
+                + "           \n"
+                + "           ,[RoleId],\n"
+                + "		   [Status]\n"
+                + "           )\n"
+                + "    VALUES\n"
+                + "          (?,?,?,?,3,'active')";
         try {
             PreparedStatement pre = connection.prepareStatement(sql);
             pre.setString(1, user.getUserName());
@@ -57,6 +109,24 @@ public class UserDAO extends DBContext {
         try {
             PreparedStatement pre = connection.prepareStatement(sql);
             pre.setString(1, user.getEmail());
+            ResultSet rs = pre.executeQuery();
+            if (rs.next()) {
+                int count = rs.getInt(1);
+                if (count == 0) {
+                    return false;
+                }
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(UserDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return true;
+    }
+
+    public boolean isMailDuplicate2(String email) {
+        String sql = "SELECT COUNT(*) FROM [User] WHERE email = ?";
+        try {
+            PreparedStatement pre = connection.prepareStatement(sql);
+            pre.setString(1, email);
             ResultSet rs = pre.executeQuery();
             if (rs.next()) {
                 int count = rs.getInt(1);
@@ -102,7 +172,7 @@ public class UserDAO extends DBContext {
                 u.setPassword(rs.getString(3));
                 u.setFullName(rs.getString(4));
                 u.setEmail(rs.getString(5));
-                Role role =new Role();
+                Role role = new Role();
                 role.setId(rs.getInt(6));
                 u.setRole(role);
                 u.setStatus(rs.getString(7));
@@ -293,38 +363,39 @@ public class UserDAO extends DBContext {
         }
         return list;
     }
-public List<Post> getNewestPostListD() {
-    List<Post> list = new ArrayList<>();
-    String sql = "SELECT TOP 5 [Id], [UserId], [BrandId], [CategoryId], [Title], [ShortContent], [FullContent], [Thumbnail], [PublishDate] "
-            + "FROM [dbo].[Post] "
-            + "ORDER BY [PublishDate] DESC"; // Sắp xếp theo PublishDate
 
-    try {
-        PreparedStatement st = connection.prepareStatement(sql);
-        ResultSet rs = st.executeQuery();
-        while (rs.next()) {
-            Post p = new Post();
-            p.setId(rs.getInt("Id"));
-            User u = getUserByIdD(rs.getInt("UserId"));
-            p.setUser(u);
-            Brand b = getBrandByIdD(rs.getInt("BrandId"));
-            p.setBrand(b);
-            Category c = getCategoryByIdD(rs.getInt("CategoryId"));
-            p.setCategory(c);
-            p.setTittle(rs.getString("Title"));
-            p.setShortContent(rs.getString("ShortContent"));
-            p.setFullContent(rs.getString("FullContent"));
-            p.setThumbnail(rs.getString("Thumbnail"));
-            p.setPublishDate(rs.getDate("PublishDate"));
-            list.add(p);
+
+    public List<Post> getNewestPostListD() {
+
+        List<Post> list = new ArrayList<>();
+        String sql = "SELECT TOP 5 [Id], [UserId], [BrandId], [CategoryId], [Title], [ShortContent], [FullContent], [Thumbnail], [PublishDate] "
+                + "FROM [dbo].[Post] "
+                + "ORDER BY [PublishDate] DESC"; // Sắp xếp theo PublishDate
+
+        try {
+            PreparedStatement st = connection.prepareStatement(sql);
+            ResultSet rs = st.executeQuery();
+            while (rs.next()) {
+                Post p = new Post();
+                p.setId(rs.getInt("Id"));
+                User u = getUserByIdD(rs.getInt("UserId"));
+                p.setUser(u);
+                Brand b = getBrandByIdD(rs.getInt("BrandId"));
+                p.setBrand(b);
+                Category c = getCategoryByIdD(rs.getInt("CategoryId"));
+                p.setCategory(c);
+                p.setTittle(rs.getString("Title"));
+                p.setShortContent(rs.getString("ShortContent"));
+                p.setFullContent(rs.getString("FullContent"));
+                p.setThumbnail(rs.getString("Thumbnail"));
+                p.setPublishDate(rs.getDate("PublishDate"));
+                list.add(p);
+            }
+        } catch (SQLException e) {
+            System.out.println(e);
         }
-    } catch (SQLException e) {
-        System.out.println(e);
+        return list;
     }
-    return list;
-}
-
-        
 
     public List<Post> getAllPostListD() {
 
@@ -392,8 +463,6 @@ public List<Post> getNewestPostListD() {
         return null;
     }
 
-   
-
     public List<ProductDetail> getListProductDetailD() {
         List<ProductDetail> list = new ArrayList<>();
         String sql = "SELECT [Id],\n"
@@ -434,110 +503,112 @@ public List<Post> getNewestPostListD() {
         }
         return list;
     }
+
     public ProductDetail getProductDetailById(int id) {
-    ProductDetail newProduct = null;
-    String sql = "SELECT [Id],\n"
-            + "      [ProductId],\n"
-            + "      [ColorId],\n"
-            + "      [ConfigurationId],\n"
-            + "      [Price],\n"
-            + "      [Quantity],\n"
-            + "      [ShortDescription],\n"
-            + "      [Description],\n"
-            + "      [Status]\n"
-            + "  FROM [dbo].[ProductDetail] WHERE [Id] = ?"; // Thêm điều kiện WHERE
+        ProductDetail newProduct = null;
+        String sql = "SELECT [Id],\n"
+                + "      [ProductId],\n"
+                + "      [ColorId],\n"
+                + "      [ConfigurationId],\n"
+                + "      [Price],\n"
+                + "      [Quantity],\n"
+                + "      [ShortDescription],\n"
+                + "      [Description],\n"
+                + "      [Status]\n"
+                + "  FROM [dbo].[ProductDetail] WHERE [Id] = ?"; // Thêm điều kiện WHERE
 
-    try {
-        PreparedStatement st = connection.prepareStatement(sql);
-        st.setInt(1, id); // Thiết lập giá trị cho tham số `id`
-        ResultSet rs = st.executeQuery();
+        try {
+            PreparedStatement st = connection.prepareStatement(sql);
+            st.setInt(1, id); // Thiết lập giá trị cho tham số `id`
+            ResultSet rs = st.executeQuery();
 
-        // Nếu có kết quả từ ResultSet
-        if (rs.next()) {
-            newProduct = new ProductDetail();
-            newProduct.setId(rs.getInt("Id"));
-            Product product = getProductByIdD(rs.getInt("ProductId"));
-            newProduct.setProduct(product);
-            Color c = getColorById(rs.getInt("ColorId"));
-            newProduct.setColor(c);
-            Configuration c1 = getConfigurationById(rs.getInt("ConfigurationId"));
-            newProduct.setConfiguration(c1);
+            // Nếu có kết quả từ ResultSet
+            if (rs.next()) {
+                newProduct = new ProductDetail();
+                newProduct.setId(rs.getInt("Id"));
+                Product product = getProductByIdD(rs.getInt("ProductId"));
+                newProduct.setProduct(product);
+                Color c = getColorById(rs.getInt("ColorId"));
+                newProduct.setColor(c);
+                Configuration c1 = getConfigurationById(rs.getInt("ConfigurationId"));
+                newProduct.setConfiguration(c1);
 
-            // Đặt giá trị cho Price và Quantity
-            newProduct.setPrice(rs.getInt("Price"));
-            newProduct.setQuantity(rs.getInt("Quantity"));
+                // Đặt giá trị cho Price và Quantity
+                newProduct.setPrice(rs.getInt("Price"));
+                newProduct.setQuantity(rs.getInt("Quantity"));
 
-            newProduct.setShortDescription(rs.getString("ShortDescription"));
-            newProduct.setDescription(rs.getString("Description"));
-            newProduct.setStatus(rs.getString("Status"));
+                newProduct.setShortDescription(rs.getString("ShortDescription"));
+                newProduct.setDescription(rs.getString("Description"));
+                newProduct.setStatus(rs.getString("Status"));
+            }
+        } catch (SQLException e) {
+            System.out.println(e);
         }
-    } catch (SQLException e) {
-        System.out.println(e);
+        return newProduct;
     }
-    return newProduct;
-}
 
+    public List<Image> getPictureList() {
+        List<Image> list = new ArrayList<>();
+        String sql = "SELECT [Id]\n"
+                + "      ,[ProductDetailId]\n"
+                + "      ,[Image]\n"
+                + "  FROM [dbo].[Image]";
+        try {
+            PreparedStatement st = connection.prepareStatement(sql);
+            ResultSet rs = st.executeQuery();
+            while (rs.next()) {
+                Image image = new Image();
+                image.setId(rs.getInt("Id"));
 
-public List<Image> getPictureList() {
-    List<Image> list = new ArrayList<>();
-    String sql = "SELECT [Id]\n"
-            + "      ,[ProductDetailId]\n"
-            + "      ,[Image]\n"
-            + "  FROM [dbo].[Image]";
-    try {
-        PreparedStatement st = connection.prepareStatement(sql);
-        ResultSet rs = st.executeQuery();
-        while (rs.next()) {
-            Image image = new Image();
-            image.setId(rs.getInt("Id"));
-            
-            // Lấy ProductDetail từ ProductDetailId
-            ProductDetail productDetail = getProductDetailById(rs.getInt("ProductDetailId"));
-            image.setProductDetail(productDetail);
-            
-            // Đặt giá trị cho trường Image
-            image.setImage(rs.getString("Image"));
-            
-            // Thêm đối tượng Image vào danh sách
-            list.add(image);  // Bạn đã bỏ qua dòng này
+                // Lấy ProductDetail từ ProductDetailId
+                ProductDetail productDetail = getProductDetailById(rs.getInt("ProductDetailId"));
+                image.setProductDetail(productDetail);
+
+                // Đặt giá trị cho trường Image
+                image.setImage(rs.getString("Image"));
+
+                // Thêm đối tượng Image vào danh sách
+                list.add(image);  // Bạn đã bỏ qua dòng này
+            }
+        } catch (SQLException e) {
+            System.out.println(e);
         }
-    } catch (SQLException e) {
-        System.out.println(e);
+        return list;
     }
-    return list;
-}
-public List<Image> getPictureListByProductName(String productName) {
-    List<Image> list = new ArrayList<>();
-    String sql = "SELECT i.Id, i.ProductDetailId, i.Image " +
-                 "FROM Image i " +
-                 "JOIN ProductDetail pd ON i.ProductDetailId = pd.Id " +
-                 "JOIN Product p ON pd.ProductId = p.Id " +
-                 "WHERE p.Name LIKE ?";
-    try {
-        PreparedStatement st = connection.prepareStatement(sql);
-        st.setString(1, "%" + productName + "%"); // Tìm kiếm theo tên sản phẩm
-        ResultSet rs = st.executeQuery();
-        while (rs.next()) {
-            Image image = new Image();
-            image.setId(rs.getInt("Id"));
-            
-            // Lấy ProductDetail từ ProductDetailId
-            ProductDetail productDetail = getProductDetailById(rs.getInt("ProductDetailId"));
-            image.setProductDetail(productDetail);
-            
-            // Đặt giá trị cho trường Image
-            image.setImage(rs.getString("Image"));
-            
-            // Thêm đối tượng Image vào danh sách
-            list.add(image);
-        }
-    } catch (SQLException e) {
-        System.out.println(e);
-    }
-    return list;
-}
 
+    public List<Image> getPictureListByProductName(String productName) {
+        List<Image> list = new ArrayList<>();
+        String sql = "SELECT i.Id, i.ProductDetailId, i.Image "
+                + "FROM Image i "
+                + "JOIN ProductDetail pd ON i.ProductDetailId = pd.Id "
+                + "JOIN Product p ON pd.ProductId = p.Id "
+                + "WHERE p.Name LIKE ?";
+        try {
+            PreparedStatement st = connection.prepareStatement(sql);
+            st.setString(1, "%" + productName + "%"); // Tìm kiếm theo tên sản phẩm
+            ResultSet rs = st.executeQuery();
+            while (rs.next()) {
+                Image image = new Image();
+                image.setId(rs.getInt("Id"));
+
+                // Lấy ProductDetail từ ProductDetailId
+                ProductDetail productDetail = getProductDetailById(rs.getInt("ProductDetailId"));
+                image.setProductDetail(productDetail);
+
+                // Đặt giá trị cho trường Image
+                image.setImage(rs.getString("Image"));
+
+                // Thêm đối tượng Image vào danh sách
+                list.add(image);
+            }
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
+        return list;
+    }
+    
 public Post getPostById(int id) {
+
         String sql = "SELECT [Id], [UserId], [BrandId], [CategoryId], [Title], "
                 + "[ShortContent], [FullContent], [Thumbnail], [PublishDate] "
                 + "FROM [dbo].[Post] WHERE [Id] = ?";
@@ -566,145 +637,158 @@ public Post getPostById(int id) {
         }
         return null; // Trả về null nếu không tìm thấy
     }
-public List<Post> getPostsByTitleOrContent(String searchString) {
-    List<Post> postList = new ArrayList<>();
-    String sql = "SELECT [Id], [UserId], [BrandId], [CategoryId], [Title], "
-               + "[ShortContent], [FullContent], [Thumbnail], [PublishDate] "
-               + "FROM [dbo].[Post] "
-               + "WHERE [Title] LIKE ? OR [ShortContent] LIKE ?"; // So sánh tiêu đề hoặc nội dung ngắn
 
-    try {
-        PreparedStatement st = connection.prepareStatement(sql);
-        String searchPattern = "%" + searchString + "%"; // Tạo mẫu tìm kiếm
-        st.setString(1, searchPattern);
-        st.setString(2, searchPattern);
-        
-        ResultSet rs = st.executeQuery();
-        while (rs.next()) {
-            Post p = new Post();
-            p.setId(rs.getInt("Id"));
-            
-            User u = getUserByIdD(rs.getInt("UserId"));  // Lấy thông tin người dùng
-            p.setUser(u);
-            
-            Brand b = getBrandByIdD(rs.getInt("BrandId")); // Lấy thông tin thương hiệu
-            p.setBrand(b);
-            
-            Category c = getCategoryByIdD(rs.getInt("CategoryId")); // Lấy thông tin danh mục
-            p.setCategory(c);
-            
-            p.setTittle(rs.getString("Title")); // Đặt tiêu đề
-            p.setShortContent(rs.getString("ShortContent")); // Đặt nội dung ngắn
-            p.setFullContent(rs.getString("FullContent")); // Đặt nội dung đầy đủ
-            p.setThumbnail(rs.getString("Thumbnail")); // Đặt thumbnail
-            p.setPublishDate(rs.getDate("PublishDate")); // Đặt ngày xuất bản
-            
-            postList.add(p); // Thêm bài viết vào danh sách
-        }
-    } catch (SQLException e) {
-        System.out.println(e);
-    }
-    return postList; // Trả về danh sách bài viết tìm thấy
-}
+    public List<Post> getPostsByTitleOrContent(String searchString) {
+        List<Post> postList = new ArrayList<>();
+        String sql = "SELECT [Id], [UserId], [BrandId], [CategoryId], [Title], "
+                + "[ShortContent], [FullContent], [Thumbnail], [PublishDate] "
+                + "FROM [dbo].[Post] "
+                + "WHERE [Title] LIKE ? OR [ShortContent] LIKE ?"; // So sánh tiêu đề hoặc nội dung ngắn
 
-public List<User> getAll() {
-    PreparedStatement stm = null;
-    ResultSet rs = null;
-    List<User> users = new ArrayList<>();
-    String sql = "SELECT u.Id, u.Username, u.Password, u.Fullname, u.Email, u.RoleId, u.Status " +
-                 "FROM [User] u";
-
-    try {
-        stm = connection.prepareStatement(sql);
-        rs = stm.executeQuery();
-
-        while (rs.next()) {
-            int id = rs.getInt("Id");
-            String username = rs.getString("Username");
-            String password = rs.getString("Password");
-            String fullname = rs.getString("Fullname");
-            String email = rs.getString("Email");
-//            int roleId = rs.getInt("RoleId");
-            String status = rs.getString("Status");
-
-            // Tạo đối tượng User và thêm vào danh sách
-            User user = new User(id, username, password, fullname, email, status);
-            users.add(user);
-        }
-        return users;
-
-    } catch (SQLException ex) {
-        Logger.getLogger(UserDAO.class.getName()).log(Level.SEVERE, null, ex);
-    } finally {
-        // Đóng các tài nguyên
-        if (rs != null) try { rs.close(); } catch (SQLException e) { e.printStackTrace(); }
-        if (stm != null) try { stm.close(); } catch (SQLException e) { e.printStackTrace(); }
-    }
-    return users;
-}
-
- public void banAnUser(int userId) {
-    PreparedStatement stm = null;
-
-    String sql = "UPDATE [dbo].[user] SET [status] = 'ban' WHERE id = ?";
-    try {
-        stm = connection.prepareStatement(sql);
-        stm.setInt(1, userId);
-        stm.executeUpdate();
-
-    } catch (SQLException ex) {
-        Logger.getLogger(UserDAO.class.getName()).log(Level.SEVERE, null, ex);
-    } finally {
         try {
-            if (stm != null) {
-                stm.close(); // Đóng PreparedStatement
+            PreparedStatement st = connection.prepareStatement(sql);
+            String searchPattern = "%" + searchString + "%"; // Tạo mẫu tìm kiếm
+            st.setString(1, searchPattern);
+            st.setString(2, searchPattern);
+
+            ResultSet rs = st.executeQuery();
+            while (rs.next()) {
+                Post p = new Post();
+                p.setId(rs.getInt("Id"));
+
+                User u = getUserByIdD(rs.getInt("UserId"));  // Lấy thông tin người dùng
+                p.setUser(u);
+
+                Brand b = getBrandByIdD(rs.getInt("BrandId")); // Lấy thông tin thương hiệu
+                p.setBrand(b);
+
+                Category c = getCategoryByIdD(rs.getInt("CategoryId")); // Lấy thông tin danh mục
+                p.setCategory(c);
+
+                p.setTittle(rs.getString("Title")); // Đặt tiêu đề
+                p.setShortContent(rs.getString("ShortContent")); // Đặt nội dung ngắn
+                p.setFullContent(rs.getString("FullContent")); // Đặt nội dung đầy đủ
+                p.setThumbnail(rs.getString("Thumbnail")); // Đặt thumbnail
+                p.setPublishDate(rs.getDate("PublishDate")); // Đặt ngày xuất bản
+
+                postList.add(p); // Thêm bài viết vào danh sách
             }
-            // Không đóng connection ở đây
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
+        return postList; // Trả về danh sách bài viết tìm thấy
+    }
+
+    public List<User> getAll() {
+        PreparedStatement stm = null;
+        ResultSet rs = null;
+        List<User> users = new ArrayList<>();
+        String sql = "SELECT u.Id, u.Username, u.Password, u.Fullname, u.Email, u.RoleId, u.Status "
+                + "FROM [User] u";
+
+        try {
+            stm = connection.prepareStatement(sql);
+            rs = stm.executeQuery();
+
+            while (rs.next()) {
+                int id = rs.getInt("Id");
+                String username = rs.getString("Username");
+                String password = rs.getString("Password");
+                String fullname = rs.getString("Fullname");
+                String email = rs.getString("Email");
+//            int roleId = rs.getInt("RoleId");
+                String status = rs.getString("Status");
+
+                // Tạo đối tượng User và thêm vào danh sách
+                User user = new User(id, username, password, fullname, email, status);
+                users.add(user);
+            }
+            return users;
+
         } catch (SQLException ex) {
             Logger.getLogger(UserDAO.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            // Đóng các tài nguyên
+            if (rs != null) try {
+                rs.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+            if (stm != null) try {
+                stm.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        return users;
+    }
+
+    public void banAnUser(int userId) {
+        PreparedStatement stm = null;
+
+        String sql = "UPDATE [dbo].[user] SET [status] = 'ban' WHERE id = ?";
+        try {
+            stm = connection.prepareStatement(sql);
+            stm.setInt(1, userId);
+            stm.executeUpdate();
+
+        } catch (SQLException ex) {
+            Logger.getLogger(UserDAO.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            try {
+                if (stm != null) {
+                    stm.close(); // Đóng PreparedStatement
+                }
+                // Không đóng connection ở đây
+            } catch (SQLException ex) {
+                Logger.getLogger(UserDAO.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
     }
-}
 // private Connection connection; // Biến kết nối tới database
 
     // Hàm tìm kiếm user theo từ khóa
-public List<User> getUsersByKeyword(String keyword) {
-    List<User> users = new ArrayList<>();
-    PreparedStatement stm = null;
-    ResultSet rs = null;
+    public List<User> getUsersByKeyword(String keyword) {
+        List<User> users = new ArrayList<>();
+        PreparedStatement stm = null;
+        ResultSet rs = null;
 
-    // Sử dụng tên bảng đầy đủ với schema nếu cần (ví dụ: dbo.User)
-    String sql = "SELECT * FROM dbo.[User]  WHERE userName LIKE ? OR email LIKE ?";
+        // Sử dụng tên bảng đầy đủ với schema nếu cần (ví dụ: dbo.User)
+        String sql = "SELECT * FROM dbo.[User]  WHERE userName LIKE ? OR email LIKE ?";
 
-    try {
-        stm = connection.prepareStatement(sql);
-        String searchPattern = "%" + keyword + "%";  // Sử dụng wildcard cho tìm kiếm
-        stm.setString(1, searchPattern);
-        stm.setString(2, searchPattern);
-        rs = stm.executeQuery();
-
-        while (rs.next()) {
-            User user = new User();
-            user.setId(rs.getInt("id"));
-            user.setUserName(rs.getString("userName"));
-            user.setFullName(rs.getString("fullName"));
-            user.setEmail(rs.getString("email"));
-            user.setStatus(rs.getString("status"));
-            // Thêm user vào danh sách
-            users.add(user);
-        }
-
-    } catch (SQLException ex) {
-        ex.printStackTrace();
-    } finally {
         try {
-            if (rs != null) rs.close();
-            if (stm != null) stm.close();
-            // Không đóng connection ở đây
+            stm = connection.prepareStatement(sql);
+            String searchPattern = "%" + keyword + "%";  // Sử dụng wildcard cho tìm kiếm
+            stm.setString(1, searchPattern);
+            stm.setString(2, searchPattern);
+            rs = stm.executeQuery();
+
+            while (rs.next()) {
+                User user = new User();
+                user.setId(rs.getInt("id"));
+                user.setUserName(rs.getString("userName"));
+                user.setFullName(rs.getString("fullName"));
+                user.setEmail(rs.getString("email"));
+                user.setStatus(rs.getString("status"));
+                // Thêm user vào danh sách
+                users.add(user);
+            }
+
         } catch (SQLException ex) {
             ex.printStackTrace();
+        } finally {
+            try {
+                if (rs != null) {
+                    rs.close();
+                }
+                if (stm != null) {
+                    stm.close();
+                }
+                // Không đóng connection ở đây
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+            }
         }
-    }
 
     return users;
 }

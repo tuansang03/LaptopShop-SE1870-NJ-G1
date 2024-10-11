@@ -113,7 +113,9 @@
                         </ul>
                     </div>
                     <div class="col-md-1.5 border-right">
-                        <div class="d-flex flex-column align-items-center text-center p-3 py-5"><img class="rounded-circle mt-5" width="150px" src="https://st3.depositphotos.com/15648834/17930/v/600/depositphotos_179308454-stock-illustration-unknown-person-silhouette-glasses-profile.jpg"><span class="font-weight-bold">${sessionScope.user.fullName}</span><span class="text-black-50"></span><span> </span></div>
+                        <div class="d-flex flex-column align-items-center text-center p-3 py-5">
+                            <img class="rounded-circle mt-5" width="150px" 
+                                 src="${pageContext.request.contextPath}/images/${img.dell1.jp}" alt="Image" width="200""><span class="font-weight-bold">${sessionScope.user.fullName}</span><span class="text-black-50"></span><span> </span></div>
                     </div>
                     <!--CHo nay node de code de phan truong hop khi nguoi dung chon cac tuy chon-->
                     <div class="col-md-7 border-right ">
@@ -143,7 +145,7 @@
                                 </div>
                                 <div class="col-md-12">
                                     <label class="labels">Phone</label>
-                                    <input type="text" class="form-control" placeholder="enter email id" value="${orderInfo.getPhone()}">
+                                    <input type="text" class="form-control" placeholder="phone" value="${orderInfo.getPhone()}">
                                 </div>
                             </div>
                             <div class="row mt-3">

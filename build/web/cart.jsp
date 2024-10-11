@@ -86,7 +86,11 @@
                                                     </c:forEach>
                                                 </div>
                                                 <div class="media-body">
+<<<<<<< HEAD
                                                     <a href="information?productId=${p.getProductdetail().getId()}">${p.getProductdetail().getProduct().getName()} (${p.getProductdetail().getProduct().getCategory().getName()}, ${p.getProductdetail().getProduct().getBrand().getName()}, ${p.getProductdetail().getConfiguration().getName()})</a>
+=======
+                                                    <a href="information?productId=${p.getProductdetail().getProduct().getId()}">${p.getProductdetail().getProduct().getName()} (${p.getProductdetail().getProduct().getCategory().getName()}, ${p.getProductdetail().getProduct().getBrand().getName()}, ${p.getProductdetail().getConfiguration().getName()})</a>
+>>>>>>> a43fd81531035829ce1915360b2669002c42ac9d
                                                     <p>${p.getProductdetail().getColor().getName()}</p>
                                                     <p style="font-size: 11px;">${p.getProductdetail().getConfiguration().getName()}</p>
                                                 </div>

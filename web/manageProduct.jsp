@@ -23,7 +23,13 @@
         <%@include file="sidebar.jsp" %>
 
     <div class="col-md-10 content">
+        
         <h2>Manage Product</h2>
+        <form action="searchProductByName" method="GET" class="form-inline mb-3">
+    <input type="text" name="name" class="form-control mr-2" placeholder="Search by product name" value="${param.keyword}">
+    <button type="submit" class="btn btn-primary">Search</button>
+</form>
+
         <table class="table table-striped">
             <thead>
                 <tr>
@@ -83,7 +89,7 @@
                 text-decoration: none;
                 color: #333;
                 padding: 5px 10px;
-                margin: 0 2px;
+            margin: 0 2px;
                 border: 1px solid #ccc;
                 border-radius: 3px;
             }
