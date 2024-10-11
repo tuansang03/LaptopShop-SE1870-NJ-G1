@@ -10,10 +10,13 @@ import dal.ProductDetailDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.MultipartConfig;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+import jakarta.servlet.http.Part;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -28,7 +31,10 @@ import model.ProductDetail;
  *
  * @author ADMIN
  */
+@MultipartConfig
 public class inputProductDetail extends HttpServlet {
+
+    
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -89,6 +95,13 @@ public class inputProductDetail extends HttpServlet {
         ProductDetailDAO productDetailDAO = new ProductDetailDAO();
 // Lấy tất cả ProductDetail theo productId
         ArrayList<ProductDetail> productList = productDetailDAO.getAllProductDetailById(pId);
+        //Tạo đường dẫn lưu trữ 
+        String path = getServletContext().getRealPath("/images");
+   
+        File directory = new File(path);
+        if (!directory.exists()) {
+            directory.mkdirs(); // Tạo thư mục nếu chưa tồn tại
+        }
 
 // Lặp qua từng ProductDetail
         if (productList != null && !productList.isEmpty()) {
@@ -113,24 +126,20 @@ public class inputProductDetail extends HttpServlet {
                 productDetailDAO.insertDetail(product);
 
                 // Lấy danh sách URL của ảnh từ form
-                String[] imageUrls = request.getParameterValues("imageUrls_" + productDetailId + "[]");
-                if (imageUrls != null) {
-                    // Tạo danh sách đối tượng Image
-                    List<Image> images = new ArrayList<>();
-                    for (String url : imageUrls) {
-                        if (url != null && !url.trim().isEmpty()) {
-                            // Tạo đối tượng Image và đặt các giá trị
-                            Image image = new Image();
-                            image.setImage(url);  // Đặt URL của ảnh
-                            image.setProductDetail(product);  // Liên kết ảnh với ProductDetail (sử dụng ProductDetail đã có)
-                            images.add(image);  // Thêm ảnh vào danh sách
-                        }
-                    }
+                for (Part part : request.getParts()) {
+                    // Kiểm tra xem tên phần có bắt đầu bằng "imageFiles_" cộng với productDetailId không
+                    if (part.getName().equals("imageFiles_" + productDetailId + "[]")) {
+                        String fileName = getFileName(part); // Lấy tên file
+                        if (fileName != null && part.getSize() > 0) {
+                            File imageFile = new File(path, fileName);
+                            part.write(imageFile.getAbsolutePath()); // Lưu ảnh vào thư mục
 
-                    // Cập nhật danh sách ảnh vào cơ sở dữ liệu
-                    ImageDAO imageDAO = new ImageDAO();  // Tạo DAO cho Image
-                    for (Image img : images) {
-                        imageDAO.insertImage(img);  // Thực hiện insert từng ảnh vào cơ sở dữ liệu
+                            // Tạo đối tượng Image và lưu vào database
+                            Image image = new Image();
+                            image.setImage(fileName); // Lưu tên file vào database
+                            image.setProductDetail(product); // Liên kết ảnh với ProductDetail
+                            new ImageDAO().insertImage(image); // Chèn ảnh vào cơ sở dữ liệu
+                        }
                     }
                 }
 
@@ -176,5 +185,18 @@ public class inputProductDetail extends HttpServlet {
     public String getServletInfo() {
         return "Short description";
     }// </editor-fold>
+
+    private String getFileName(Part part) {
+        // Lấy tiêu đề "content-disposition" từ phần
+        String contentDisposition = part.getHeader("content-disposition");
+        // Tìm kiếm tên tệp trong tiêu đề
+        for (String item : contentDisposition.split(";")) {
+            if (item.trim().startsWith("filename")) {
+                // Tách tên tệp và loại bỏ các dấu nháy kép
+                return item.substring(item.indexOf('=') + 2, item.length() - 1);
+            }
+        }
+        return null; // Nếu không tìm thấy tên tệp, trả về null
+    }
 
 }

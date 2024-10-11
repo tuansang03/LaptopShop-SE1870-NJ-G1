@@ -419,7 +419,7 @@
                                                                     <div class="media">
                                                                         <div class="media-body">
                                                                             <!-- Tên người dùng -->
-                                                                            <h4>${comment.user.fullName} <c:if test="${reply.user.role.id == 2}">(Saler)</c:if></h4>
+                                                                            <h4>${comment.user.fullName} <c:if test="${comment.user.role.id == 2}">(Saler)</c:if></h4>
                                                                             <!-- Ngày bình luận -->
                                                                             <h5>
                                                                                 <fmt:formatDate value="${comment.commentDate}" pattern="dd/MM/yyyy HH:mm" />
