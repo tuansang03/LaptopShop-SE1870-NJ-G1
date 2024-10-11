@@ -48,7 +48,6 @@
                         <th>StartDate</th>
                         <th>EndDate</th>
                         <th>MinValue</th>
-                        <th>DiscountCap</th>
                         <th>Status</th>
                         <th>Action</th>
                     </tr>
@@ -65,7 +64,6 @@
                             <td>${v.getStartDate()}</td>
                             <td>${v.getEndDate()}</td>
                             <td>${v.getMinValue()}</td>
-                            <td>${v.getDiscountCap()}</td>
                             <c:if test="${v.getStatus() == 1}">
                                 <td><span class="text-success status-icon"">&#10003;</span></span></td>
                             </c:if>

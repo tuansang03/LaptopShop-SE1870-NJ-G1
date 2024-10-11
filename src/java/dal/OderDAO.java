@@ -4,15 +4,13 @@
  */
 package dal;
 
-import com.sun.jdi.connect.spi.Connection;
+
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import model.Order;
 import model.OrderDetail;
 import model.ProductDetail;
@@ -26,7 +24,7 @@ import model.Voucher;
 public class OderDAO extends DBContext {
 
     public void insertOrderOfCODNoVoucher(int uid, String name, String address, String phone,
-            LocalDateTime odate, int totalAmountBeFore, int totalAmountAfter, String paymentMethod) {
+            LocalDateTime odate, int totalAmountBeFore, int totalAmountAfter, String paymentMethod, String note) {
         String sql = "INSERT INTO [dbo].[Order]\n"
                 + "           ([UserId]\n"
                 + "           ,[Name]\n"
@@ -36,9 +34,10 @@ public class OderDAO extends DBContext {
                 + "           ,[TotalAmountBefore]\n"
                 + "           ,[TotalAmountAfter]\n"
                 + "           ,[PaymentMethod]\n"
-                + "           ,[OrderStatus])\n"
+                + "           ,[OrderStatus]\n"
+                + "           ,[Note])\n"
                 + "     VALUES\n"
-                + "           (?, ?, ?, ?, ?, ?, ?, ?, 'wait')";
+                + "           (?, ?, ?, ?, ?, ?, ?, ?, 'wait', ?)";
         try {
             PreparedStatement st = connection.prepareStatement(sql);
             st.setInt(1, uid);
@@ -49,6 +48,7 @@ public class OderDAO extends DBContext {
             st.setInt(6, totalAmountBeFore);
             st.setInt(7, totalAmountAfter);
             st.setString(8, paymentMethod);
+            st.setString(9, note);
             st.executeUpdate();
 
         } catch (Exception e) {
@@ -57,7 +57,7 @@ public class OderDAO extends DBContext {
 
     public void insertOrderOfCOD(int uid, String name, String address, String phone,
             LocalDateTime odate, int voucherID, int totalAmountBeFore, int discountAmount,
-            int totalAmountAfter, String paymentMethod) {
+            int totalAmountAfter, String paymentMethod, String note) {
         String sql = "INSERT INTO [dbo].[Order]\n"
                 + "           ([UserId]\n"
                 + "           ,[Name]\n"
@@ -69,9 +69,10 @@ public class OderDAO extends DBContext {
                 + "           ,[DiscountAmount]\n"
                 + "           ,[TotalAmountAfter]\n"
                 + "           ,[PaymentMethod]\n"
-                + "           ,[OrderStatus])\n"
+                + "           ,[OrderStatus]\n"
+                + "           ,[Note])\n"
                 + "     VALUES\n"
-                + "           (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'wait')";
+                + "           (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'wait', ?)";
         try {
             PreparedStatement st = connection.prepareStatement(sql);
             st.setInt(1, uid);
@@ -84,6 +85,7 @@ public class OderDAO extends DBContext {
             st.setInt(8, discountAmount);
             st.setInt(9, totalAmountAfter);
             st.setString(10, paymentMethod);
+            st.setString(11, note);
             st.executeUpdate();
 
         } catch (Exception e) {
@@ -92,7 +94,7 @@ public class OderDAO extends DBContext {
 
     public void insertOrderOfPaymentNoVoucher(int uid, String name, String address, String phone,
             LocalDateTime odate, int totalAmountBeFore, int totalAmountAfter,
-            String paymentMethod, String VnPayId) {
+            String paymentMethod, String VnPayId, String note) {
         String sql = "INSERT INTO [dbo].[Order]\n"
                 + "           ([UserId]\n"
                 + "           ,[Name]\n"
@@ -104,9 +106,10 @@ public class OderDAO extends DBContext {
                 + "           ,[PaymentMethod]\n"
                 + "           ,[PaymentStatus]\n"
                 + "           ,[VnPayTransactionId]\n"
-                + "           ,[OrderStatus])\n"
+                + "           ,[OrderStatus]\n"
+                + "           ,[Note])\n"
                 + "     VALUES\n"
-                + "           (?, ?, ?, ?, ?, ?, ?, ?, 'pending', ?,'wait')";
+                + "           (?, ?, ?, ?, ?, ?, ?, ?, 'pending', ?,'wait', ?)";
         try {
             PreparedStatement st = connection.prepareStatement(sql);
             st.setInt(1, uid);
@@ -118,6 +121,7 @@ public class OderDAO extends DBContext {
             st.setInt(7, totalAmountAfter);
             st.setString(8, paymentMethod);
             st.setString(9, VnPayId);
+            st.setString(10, note);
             st.executeUpdate();
 
         } catch (Exception e) {
@@ -127,7 +131,7 @@ public class OderDAO extends DBContext {
     public void insertOrderOfPayment(int uid, String name, String address, String phone,
             LocalDateTime odate, int voucherID, int totalAmountBeFore,
             int discountAmount, int totalAmountAfter,
-            String paymentMethod, String VnPayId) {
+            String paymentMethod, String VnPayId, String note) {
         String sql = "INSERT INTO [dbo].[Order]\n"
                 + "           ([UserId]\n"
                 + "           ,[Name]\n"
@@ -141,9 +145,10 @@ public class OderDAO extends DBContext {
                 + "           ,[PaymentMethod]\n"
                 + "           ,[PaymentStatus]\n"
                 + "           ,[VnPayTransactionId]\n"
-                + "           ,[OrderStatus])\n"
+                + "           ,[OrderStatus]\n"
+                + "           ,[Note])\n"
                 + "     VALUES\n"
-                + "           (?, ?, ?, ?, ?, ?, ?, ?, 'pending', ?,'wait')";
+                + "           (?, ?, ?, ?, ?, ?, ?, ?, ?, ?,'pending', ?,'wait', ?)";
         try {
             PreparedStatement st = connection.prepareStatement(sql);
             st.setInt(1, uid);
@@ -157,6 +162,7 @@ public class OderDAO extends DBContext {
             st.setInt(9, totalAmountAfter);
             st.setString(10, paymentMethod);
             st.setString(11, VnPayId);
+            st.setString(12, note);
             st.executeUpdate();
 
         } catch (Exception e) {
@@ -210,7 +216,7 @@ public OrderDetail getOrderDetailById(int id) throws SQLException {
         ResultSet resultSet = preparedStatement.executeQuery();
 
         if (resultSet.next()) {
-            orderDetail = new OrderDetail();
+            OrderDetail orderdetail = new OrderDetail();
             orderDetail.setId(resultSet.getInt("id"));
             orderDetail.setQuantity(resultSet.getInt("quantity"));
             orderDetail.setUnitPrice(resultSet.getInt("UnitPrice"));
@@ -309,7 +315,7 @@ public Voucher getVoucherById(int voucherId) {
     Voucher voucher = null;
 
 String voucherQuery = "SELECT [Id], [Code], [Name], [DiscountPercent], [Quantity], [Image], "
-                    + "[StartDate], [EndDate], [MinValue], [DiscountCap], [Status] "
+                    + "[StartDate], [EndDate], [MinValue], [Status] "
                     + "FROM [dbo].[Voucher] WHERE [Id] = ?";
 
 
@@ -330,7 +336,7 @@ String voucherQuery = "SELECT [Id], [Code], [Name], [DiscountPercent], [Quantity
             voucher.setStartDate(resultSet.getDate("StartDate"));
             voucher.setEndDate(resultSet.getDate("EndDate"));
             voucher.setMinValue(resultSet.getInt("MinValue"));
-            voucher.setDiscountCap(resultSet.getInt("DiscountCap"));
+            
             voucher.setStatus(resultSet.getString("Status"));
         }
     } catch (SQLException e) {
@@ -430,18 +436,52 @@ String voucherQuery = "SELECT [Id], [Code], [Name], [DiscountPercent], [Quantity
 }
 
 
+    public Order getOneOrderNewest(int uid) {
+        String sql = "SELECT TOP(1) * FROM [Order] WHERE UserId = ? ORDER BY Id DESC";
+
+        try {
+            PreparedStatement st = connection.prepareStatement(sql);
+            st.setInt(1, uid);
+            ResultSet rs = st.executeQuery();
+            if (rs.next()) {
+                UserDAO uDAO = new UserDAO();
+                VoucherDAO vDAO = new VoucherDAO();
+                LocalDateTime endDate = rs.getTimestamp("EndDate") != null ? rs.getTimestamp("EndDate").toLocalDateTime() : null;
+                Order o = new Order(rs.getInt("Id"),
+                        uDAO.getUserByIdD(rs.getInt("UserID")),
+                        rs.getString("Name"),
+                        rs.getString("Address"),
+                        rs.getString("Phone"),
+                        rs.getTimestamp("OrderDate").toLocalDateTime(),
+                        vDAO.getVoucherByID(rs.getInt("VoucherID")),
+                        rs.getInt("TotalAmountBefore"),
+                        rs.getInt("DiscountAmount"),
+                        rs.getInt("TotalAmountAfter"),
+                        rs.getString("PaymentMethod"),
+                        rs.getString("PaymentStatus"),
+                        rs.getString("VnPayTransactionId"),
+                        endDate,
+                        rs.getString("OrderStatus"));
+                return o;
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
     public static void main(String[] args) {
         OderDAO o = new OderDAO();
         OrderDetail order = null;
-       
         try {
             order = o.getOrderDetailById(1);
         } catch (SQLException ex) {
-            Logger.getLogger(OderDAO.class.getName()).log(Level.SEVERE, null, ex);
+          
         }
         
         
         System.out.println(order);
-        //o.insertOrder(5, "ss", "ss", "123", LocalDateTime.MAX, 0, 0, "hehe");
+
     }
 }

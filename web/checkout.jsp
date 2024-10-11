@@ -54,107 +54,110 @@
                         <input value="${voucherInput}" type="text" name="voucher" placeholder="Enter coupon code">
                         <Button type="submit" class="button button-coupon">Apply Coupon</Button>
                     </div>
+                    <input value="${totalPrice}" name="totalBefore" type="hidden"/>
                 </form>
                 <div class="billing_details">
                     <div class="row">
-                        <form action="processingCheckOut" style="display: flex">
-                            <div class="col-lg-8">
-                                <h3>Billing Details</h3>
-                                <div class="row contact_form">
-                                    <div class="col-md-12 form-group">
-                                        <input required value="${name}" type="text" class="form-control" name="name"   placeholder="Name">
-                                    </div>
-                                    <div class="col-md-12 form-group">
-                                        <input required type="text" class="form-control" name="address"   placeholder="Address">
-                                    </div>
-                                    <div class="col-md-12 form-group">
-                                        <input required type="number" class="form-control" name="phone"   placeholder="Phone">
-                                    </div>
-                                    <div class="col-md-12 form-group">
-                                        <input required value="${email}" type="email" class="form-control" name="email"  placeholder="Email">
-                                    </div>
-                                    <div class="col-md-12 form-group mb-0">
-                                        <div class="creat_account">
-                                            <h3>Shipping Details</h3>
+                        <form action="processingCheckOut" >
+                            <div style="display: flex">
+                                <div class="col-lg-8">
+                                    <h3>Billing Details</h3>
+                                    <div class="row contact_form">
+                                        <div class="col-md-12 form-group">
+                                            <input required value="${name}" type="text" class="form-control" name="name"   placeholder="Name">
                                         </div>
-                                        <textarea class="form-control" name="message" id="message" rows="1" placeholder="Order Notes"></textarea>
+                                        <div class="col-md-12 form-group">
+                                            <input value="${address}" required type="text" class="form-control" name="address"   placeholder="Address">
+                                        </div>
+                                        <div class="col-md-12 form-group">
+                                            <input value="${phone}" required type="number" class="form-control" name="phone"   placeholder="Phone">
+                                        </div>
+                                        <div class="col-md-12 form-group">
+                                            <input readonly value="${email}" type="email" class="form-control" name="email"  placeholder="Email">
+                                        </div>
+                                        <div class="col-md-12 form-group mb-0">
+                                            <div class="creat_account">
+                                                <h3>Shipping Details</h3>
+                                            </div>
+                                            <textarea class="form-control" name="message" rows="1" placeholder="Order Notes"></textarea>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                            <div class="col-lg-4">
-                                <div class="order_box">
-                                    <h2>Your Order</h2>
-                                    <h2>Product</h2>
-                                    <ul class="list">
-                                        <c:forEach items="${cartItem}" var="c">
-                                            <div style="display: flex">
-                                                <div style="margin-right: 6px">
-                                                    <li>
-                                                        <c:forEach items="${listImages}" var="i">
-                                                            <c:if test="${i.getProductDetail().getId() == c.getProductdetail().getId()}">
-                                                                <img style="width: 40px" src="${i.getImage()}" alt="">
-                                                            </c:if>
-                                                        </c:forEach>
-                                                    </li>
-                                                </div>
-                                                <div>
-                                                    <li>${c.getProductdetail().getProduct().getName()}</li>
-                                                    <li>Quantity: ${c.getQuantity()}</li>
-                                                    <li>
-                                                        Price: 
-                                                        <fmt:formatNumber value="${c.getProductdetail().getPrice() * c.getQuantity()}" type="number"/>đ
-                                                    </li>
-                                                    <c:set value="${c.getProductdetail().getPrice() * c.getQuantity()}" var="price"></c:set>
-                                                    <c:set value="${price + totalBefore}" var="totalBefore"></c:set>
+                                <div class="col-lg-4">
+                                    <div class="order_box">
+                                        <h2>Your Order</h2>
+                                        <h2>Product</h2>
+                                        <ul class="list">
+                                            <c:forEach items="${cartItem}" var="c">
+                                                <div style="display: flex">
+                                                    <div style="margin-right: 6px">
+                                                        <li>
+                                                            <c:forEach items="${listImages}" var="i">
+                                                                <c:if test="${i.getProductDetail().getId() == c.getProductdetail().getId()}">
+                                                                    <img style="width: 40px" src="${i.getImage()}" alt="">
+                                                                </c:if>
+                                                            </c:forEach>
+                                                        </li>
                                                     </div>
-                                                </div>
-                                                <hr style="border: none; height: 0.5px; background-color: #cec2c2;">
+                                                    <div>
+                                                        <li>${c.getProductdetail().getProduct().getName()}</li>
+                                                        <li>Quantity: ${c.getQuantity()}</li>
+                                                        <li>
+                                                            Price: 
+                                                            <fmt:formatNumber value="${c.getProductdetail().getPrice() * c.getQuantity()}" type="number"/>đ
+                                                        </li>
+                                                        <c:set value="${c.getProductdetail().getPrice() * c.getQuantity()}" var="price"></c:set>
+                                                        <c:set value="${price + totalBefore}" var="totalBefore"></c:set>
+                                                        </div>
+                                                    </div>
+                                                    <hr style="border: none; height: 0.5px; background-color: #cec2c2;">
 
-                                        </c:forEach>
-                                    </ul>
-                                    <h2>Total</h2>
-                                    <ul>
-                                        <li>Provisional Total: 
-                                            <input type="hidden" value="${totalBefore}" name="totalPriceBeforeDiscount"/>
-                                            <fmt:formatNumber value="${totalBefore}" type="number"/>đ
-                                        </li>
-                                        <li>Voucher: 
-                                            <c:if test="${voucher == null}">
-                                                0%
-                                            </c:if>
-                                            <c:if test="${voucher != null}">
-                                                <c:set value="${voucher.getDiscountPercent()}" var="voucherDiscount"></c:set>
-                                                ${voucherDiscount}%
-                                                <input type="hidden" value="${voucher.getId()}" name="voucherID"/>
-                                            </c:if>
-                                        </li>
-                                        <li style="display: flex; align-items: center">Total: 
-                                            <p style="font-size: 18px; padding-left: 8px; color: red; margin-bottom: 0;">
+                                            </c:forEach>
+                                        </ul>
+                                        <h2>Total</h2>
+                                        <ul>
+                                            <li>Provisional Total: 
+                                                <input type="hidden" value="${totalBefore}" name="totalPriceBeforeDiscount"/>
+                                                <fmt:formatNumber value="${totalBefore}" type="number"/>đ
+                                            </li>
+                                            <li>Voucher: 
                                                 <c:if test="${voucher == null}">
-                                                    <fmt:formatNumber value="${totalBefore}" type="number" />đ
-                                                    <input type="hidden" value="${totalBefore}" name="totalPriceAfterDiscount"/>
-                                                </c:if>   
-                                                <c:if test="${voucher != null}">
-                                                    <fmt:formatNumber value="${(voucherDiscount/100) * totalBefore}" type="number"/>đ
+                                                    0%
                                                 </c:if>
-                                            <p/>
-                                        </li>
-                                    </ul>
-                                    <div class="payment_item">
-                                        <input checked type="radio"  name="selector" value="nhanhang">
-                                        <label >Payment upon receipt</label>
-                                    </div>
-                                    <div class="payment_item">
-                                        <input type="radio" name="selector"  value="payment">
-                                        <label >Pay now</label>
-                                    </div>
+                                                <c:if test="${voucher != null}">
+                                                    <c:set value="${voucher.getDiscountPercent()}" var="voucherDiscount"></c:set>
+                                                    ${voucherDiscount}%
+                                                    <input type="hidden" value="${voucher.getId()}" name="voucherID"/>
+                                                </c:if>
+                                            </li>
+                                            <li style="display: flex; align-items: center">Total: 
+                                                <p style="font-size: 18px; padding-left: 8px; color: red; margin-bottom: 0;">
+                                                    <c:if test="${voucher == null}">
+                                                        <fmt:formatNumber value="${totalBefore}" type="number" />đ
+                                                        <input type="hidden" value="${totalBefore}" name="totalPriceAfterDiscount"/>
+                                                    </c:if>   
+                                                    <c:if test="${voucher != null}">
+                                                        <fmt:formatNumber value="${totalBefore - (voucherDiscount/100) * totalBefore}" type="number"/>đ
+                                                    </c:if>
+                                                <p/>
+                                            </li>
+                                        </ul>
+                                        <div class="payment_item">
+                                            <input checked type="radio"  name="selector" value="nhanhang">
+                                            <label >Payment upon receipt</label>
+                                        </div>
+                                        <div class="payment_item">
+                                            <input type="radio" name="selector"  value="payment">
+                                            <label >Pay now</label>
+                                        </div>
 
-                                    <div class="text-center">
-                                        <button class="button button-paypal">Proceed to Paypal</button>
+                                        <div class="text-center">
+                                            <button class="button button-paypal">Proceed to Paypal</button>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                        </form>
+                        </form>                                           
                     </div>
                 </div>
             </div>

@@ -107,11 +107,6 @@
                                             </div>
 
                                             <div>
-                                                <label>DiscountCap</label>
-                                                <input value="${voucher.getDiscountCap()}" type="text" name="discountcap" placeholder="Enter discount cap" required class="form-control">
-                                            </div>
-                                            
-                                            <div>
                                                 <label>Status</label><br>
                                                 <select name="status" >
                                                     <option ${voucher.getStatus() == 1 ? 'selected': ''} value="1" >Active</option>

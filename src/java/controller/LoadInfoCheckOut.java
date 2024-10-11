@@ -6,6 +6,7 @@ package controller;
 
 import dal.CartDAOS;
 import dal.ImageDAOS;
+import dal.OderDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -19,6 +20,7 @@ import java.util.List;
 import model.Cart;
 import model.CartItem;
 import model.Image;
+import model.Order;
 import model.User;
 import model.Voucher;
 
@@ -54,7 +56,9 @@ public class LoadInfoCheckOut extends HttpServlet {
         ImageDAOS iDAO = new ImageDAOS();
         List<Image> listImages = new ArrayList<>();
 
+        int totalPrice = 0;
         for (int i = 0; i < cartItem.size(); i++) {
+            totalPrice += cartItem.get(i).getQuantity() * cartItem.get(i).getProductdetail().getPrice();
             int productDetailId = cartItem.get(i).getProductdetail().getId();
             Image image = iDAO.getOneImageByProductDetailID(productDetailId);
             listImages.add(image); // Thêm hình ảnh vào danh sách
@@ -64,8 +68,19 @@ public class LoadInfoCheckOut extends HttpServlet {
         if (voucher != null) {
             request.setAttribute("voucher", voucher);
         }
+        
+        OderDAO oDAO = new OderDAO();
+        Order order = oDAO.getOneOrderNewest(user.getId());
+        
+        if (order != null) {
+            String phone = order.getPhone();
+            String address = order.getAddress();
+            request.setAttribute("phone", phone);
+            request.setAttribute("address", address);
+        }
 
         request.setAttribute("cartItem", cartItem);
+        request.setAttribute("totalPrice", totalPrice);
         request.setAttribute("name", name);
         request.setAttribute("email", email);
         request.setAttribute("listImages", listImages);
