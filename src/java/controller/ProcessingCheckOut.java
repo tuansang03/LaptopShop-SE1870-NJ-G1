@@ -26,7 +26,7 @@ import model.Voucher;
  *
  * @author ADMIN
  */
-//@WebServlet(name = "ProcessingCheckOut", urlPatterns = {"/processingCheckOut"})
+@WebServlet(name = "ProcessingCheckOut", urlPatterns = {"/processingCheckOut"})
 public class ProcessingCheckOut extends HttpServlet {
 
     /**

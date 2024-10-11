@@ -4,7 +4,14 @@
     Author     : kieud
 --%>
 
-<%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ page contentType="text/html" pageEncoding="UTF-8" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ page import="java.util.List" %>
+<%@ page import="dal.OderDAO" %>
+<%@ page import="model.OrderDetail" %>
+<%@ page import="model.Order" %> 
+<%@ page import="model.User" %>
 <!DOCTYPE html>
 <html>
     <head>
@@ -192,30 +199,70 @@
             <tr>
                 <th></th>
                 <th>Product</th>
-                <th>Quantity</th>
+                <th>Total Quantity</th>
                 <th>Order Date</th>
                 <th>Total Price</th>
                 <th>OrderStatus</th>
                 <th></th>
             </tr>
         </thead>
-        <tbody>
+        
+        <style>
+            .product_image{
+                width: 30%;
+                height: 70px;
+            }
+            .product_image img{
+                width: 100%;
+                height: 100%;
+            }
+            
+            
+        </style>
 <!--            orderListInfo-->
-<c:forEach items="${orderListInfo}" var="o" varStatus="status">
-    <c:set var="image" value="${ListPics[status.index]}" />
-            <tr>
-                <td>${o.id}</td>
-                <td>${o.getProductDetail().getProduct().getName()}</td>
-                
-                <td>${o.getQuantity()}</td>
-                <td>${o.order.getOrderDate()}</td>
-                <td>${o.getOrder().getTotalAmountAfter()}</td>
-                <td>${o.getOrder().getOrderStatus()}</td>
-                <td><a href="profile?profile=orderdetail&id=${o.getId()}"><i class='bx bx-show-alt'></i></a></td>
-            </tr>
-            </c:forEach>
-            <!-- Bạn có thể thêm nhiều hàng ở đây -->
-        </tbody>
+<%--<c:set var="count" value="0" />--%>
+   <c:forEach items="${orderListInfo}" var="o" varStatus="status">
+        <c:set var="orderId" value="${o.order.id}" />
+        <c:choose>
+            <c:when test="${not empty orderId}">
+                <c:set var="listOrder" value="${orderDAO.getOrderDetailsByOrderId(orderId)}" />
+                <tr>
+                    <td>${o.order.id}</td>
+                    <td>
+                       <c:if test="${not empty listOrder}">
+     <c:forEach items="${listOrder}" var="o1">
+        <div>
+           
+            <div class="product_name">
+                ${o1.productDetail.product.name} <!-- Tên sản phẩm -->
+            </div>
+             
+<!--            <div class="product_image">
+                <img src="">
+            </div>-->
+        </c:forEach>
+        </div>
+ 
+</c:if>
+<c:if test="${empty listOrder}">
+    <div>Không có sản phẩm nào trong đơn hàng.</div>
+</c:if>
+
+                    </td>
+                    <td>${o.quantity}</td> 
+                    <td>${o.order.orderDate}</td>
+                    <td><fmt:formatNumber value="${o.order.totalAmountAfter}" type="number"/>đ</td>
+                    <td>${o.order.orderStatus}</td> 
+                    
+                    <td><a href="profile?profile=orderdetail&id=${o.order.id}"><i class='bx bx-show-alt'></i></a></td>
+                </tr>
+            </c:when>
+        </c:choose>
+    </c:forEach>
+
+
+            
+        
     </table>
 
 
@@ -364,14 +411,14 @@
             <div class="text-uppercase">
                 <p>Order detail</p>
             </div>
-            <div class="h4">${currentOrderDetail.getOrder().getOrderDate()}</div>
+            <div class="h4">${currentOrder.getOrderDate()}</div>
             <div class="pt-1">
                 <p >Order #${currentOrderDetail.getId()} is currently<b class="text-danger"> ${currentOrderDetail.getOrder().getOrderStatus()}</b></p>
             </div>
             <a href="profile?profile=ordermanage"><div class="btn close text-white" ">&times;</div></a>
         </div>
         <div class="wrapper bg-white">
-            <div class="table-responsive">
+<!--            <div class="table-responsive">
                 <table class="table table-borderless">
                     <thead>
                         <tr class="text-uppercase text-muted">
@@ -386,65 +433,33 @@
                         </tr>
                     </tbody>
                 </table>
-            </div>
+            </div>-->
+<div style="padding: 15px;"> Product List</div>
+
+            <c:forEach items="${currentOrderDetailList}" var="o" varStatus="status">
+
             <div class="d-flex justify-content-start align-items-center list py-1">
-                <div><b>1px</b></div>
+                <div><b></b></div>
                 <div class="mx-3">
                     <img
                         src="https://images.pexels.com/photos/206959/pexels-photo-206959.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500"
                         alt="apple"
-                        class="rounded-circle"
+                        class=""
                         width="30"
                         height="30"
                         />
                 </div>
-                <div class="order-item">Apple</div>
+                
+                <div class="order-item">${o.getProductDetail().getProduct().getName()}  </div>&nbsp x${o.getQuantity()}
+                
+                
             </div>
-            <div
-                class="d-flex justify-content-start align-items-center list my-2 py-1"
-                >
-                <div><b>4px</b></div>
-                <div class="mx-3">
-                    <img
-                        src="https://images.unsplash.com/photo-1602081593819-65e7a8cee0dd?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1050&q=80"
-                        alt="apple"
-                        class="rounded-circle"
-                        width="30"
-                        height="30"
-                        />
-                </div>
-                <div class="order-item">Mango</div>
-            </div>
-            <div
-                class="d-flex justify-content-start align-items-center list my-2 py-1"
-                >
-                <div><b>2px</b></div>
-                <div class="mx-3">
-                    <img
-                        src="https://images.unsplash.com/photo-1584183187885-071d53d42531?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=500&q=60"
-                        alt="apple"
-                        class="rounded-circle"
-                        width="30"
-                        height="30"
-                        />
-                </div>
-                <div class="order-item">Carrot Apple Ginger</div>
-            </div>
-            <div
-                class="d-flex justify-content-start align-items-center list my-2 py-1"
-                >
-                <div><b>3px</b></div>
-                <div class="mx-3">
-                    <img
-                        src="https://images.unsplash.com/photo-1602096934878-5028bf10ca50?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=500&q=60"
-                        alt="apple"
-                        class="rounded-circle"
-                        width="30"
-                        height="30"
-                        />
-                </div>
-                <div class="order-item">Pear</div>
-            </div>
+                <div style="padding-left: 1.7%;"> Unit price: &nbsp<fmt:formatNumber value="${o.getUnitPrice()}" type="number"/>đ</div>
+                <div style="padding-left: 1.7%;"> Total price: &nbsp<fmt:formatNumber value="${(o.getUnitPrice()*o.getQuantity())}" type="number"/>đ</div>
+
+                </c:forEach>
+            
+
             <div class="pt-2 border-bottom mb-3"></div>
             <div class="d-flex justify-content-start align-items-center pl-3">
                 <div class="text-muted">Payment Method</div>
@@ -455,46 +470,53 @@
                         width="30"
                         height="30"
                         />
-                    <label>Mastercard ******5342</label>
+                    <label>${currentOrder.getPaymentMethod()}</label>
                 </div>
             </div>
-            <div class="d-flex justify-content-start align-items-center py-1 pl-3">
+                <div class="d-flex justify-content-start align-items-center pl-3">
+                <div class="text-muted">Total Price</div>
+                <div class="ml-auto">
+                    <labe><fmt:formatNumber value="${currentOrder.getTotalAmountBefore()}" type="number"/>đ</labe>
+                </div>
+            </div>
+<!--            <div class="d-flex justify-content-start align-items-center py-1 pl-3">
                 <div class="text-muted">Shipping</div>
                 <div class="ml-auto">
                     <label>Free</label>
                 </div>
-            </div>
+            </div>-->
             <div
                 class="d-flex justify-content-start align-items-center pb-4 pl-3 border-bottom"
                 >
                 <div class="text-muted">
-                    <button class="text-white btn">50% Discount</button>
+                    <button class="text-white btn">${currentOrder.getVoucher().getDiscountPercent()}% Discount</button>
                 </div>
-                <div class="ml-auto price">-$34.94</div>
+                <div class="ml-auto price">- <fmt:formatNumber value="${currentOrder.getDiscountAmount()}" type="number"/>đ</div>
             </div>
             <div
                 class="d-flex justify-content-start align-items-center pl-3 py-3 mb-4 border-bottom"
                 >
                 <div class="text-muted">Today's Total</div>
-                <div class="ml-auto h5">$34.94</div>
+                <div class="ml-auto h5" style="color: red"><fmt:formatNumber value="${currentOrder.getTotalAmountAfter()}" type="number"/>đ</div>
             </div>
             <div class="row border rounded p-1 my-3">
-                <div class="col-md-6 py-3">
-                    <div class="d-flex flex-column align-items start">
-                        <b>Billing Address</b>
-                        <p class="text-justify pt-2">
-                            James Thompson, 356 Jonathon Apt.220,
-                        </p>
-                        <p class="text-justify">New York</p>
-                    </div>
-                </div>
-                <div class="col-md-6 py-3">
+               
+                <div class="col-md-12 py-3">
                     <div class="d-flex flex-column align-items start">
                         <b>Shipping Address</b>
                         <p class="text-justify pt-2">
-                            James Thompson, 356 Jonathon Apt.220,
+                            ${currentOrder.getAddress()}
                         </p>
-                        <p class="text-justify">New York</p>
+                        <p class="text-justify" style="color: black">Vietnam</p>
+                    </div>
+                </div>
+                        <div class="col-md-12 py-3">
+                    <div class="d-flex flex-column align-items start">
+                        <b>Phone Number</b>
+                        <p class="text-justify pt-2">
+                            ${currentOrder.getPhone()}
+                        </p>
+                        
                     </div>
                 </div>
             </div>
