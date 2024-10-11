@@ -78,6 +78,11 @@
                     window.location = "deletefromwishlist?uid=" + uid + "&&pid=" + pid;
                 }
             }
+            function deleteAllWishlist(uid) {
+                if (confirm("Do you want to delete all product from your wishlist?")) {
+                    window.location = "deleteallwishlist?uid=" + uid;
+                }
+            }
         </script>
     </head>
     <body>
@@ -104,6 +109,8 @@
                         <th>Product</th>
                         <th></th>
                         <th>Price</th>
+                        <th>Add to cart</th>
+                        <th><input type="button"  value="Delete all" onclick="deleteAllWishlist(${user.id})" href=""/></th>
                     </tr>
                 </thead>
                 <tbody>
@@ -114,8 +121,12 @@
                                 ${i.productDetail.product.brand.name}<br>
                                 ${i.productDetail.configuration.name}
                             </td>
-                            <td><a style="float: right; font-size: 20px;" onclick="deleteWishlist(${user.id}, ${i.productDetail.id})" href="">&times;</a><br>
-                                <fmt:formatNumber value="${i.productDetail.price}" type="number"/>đ</td>
+                            <td><fmt:formatNumber value="${i.productDetail.price}" type="number"/>đ </td>
+                            <td><a  href="addtocart?pid=${i.productDetail.product.id}&&colorid=${i.productDetail.color.id}&&confid=${i.productDetail.configuration.id}">Add to cart</a></td>
+                            <td>
+                                <a style="font-size: 30px;" onclick="deleteWishlist(${user.id}, ${i.productDetail.id})" href="">&times;</a><br>
+                                
+                            </td>
                         </tr>
                     </c:forEach>
                 </tbody>

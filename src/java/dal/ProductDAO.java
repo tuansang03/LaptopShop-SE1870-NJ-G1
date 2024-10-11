@@ -538,8 +538,10 @@ public class ProductDAO extends DBContext {
         List<Image> list = new ArrayList<>();
         StringBuilder sql = new StringBuilder();
 
-        // Khởi tạo câu lệnh SQL
-        sql.append("SELECT MIN(i.Id) AS Id, i.ProductDetailId, MIN(i.FeedbackId) AS FeedbackId, MIN(i.Image) AS Image ")
+        // Bắt đầu câu lệnh SQL với CTE
+        sql.append("WITH RankedImages AS ( ")
+                .append("SELECT i.Id, i.ProductDetailId, i.FeedbackId, i.Image, ")
+                .append("ROW_NUMBER() OVER (PARTITION BY i.ProductDetailId ORDER BY i.Id) AS RowNum ")
                 .append("FROM Image i ")
                 .append("JOIN ProductDetail pd ON pd.Id = i.ProductDetailId ")
                 .append("JOIN Product p ON p.Id = pd.ProductId ");
@@ -549,7 +551,6 @@ public class ProductDAO extends DBContext {
         if (name != null) {
             conditions.add("p.Name LIKE N'%" + name + "%'");
         }
-        // Thêm điều kiện để loại trừ id, id2, id3
         if (id > 0) {
             conditions.add("i.ProductDetailId <> " + id);
         }
@@ -560,19 +561,23 @@ public class ProductDAO extends DBContext {
             conditions.add("i.ProductDetailId <> " + id3);
         }
 
-        // Nếu có điều kiện, thêm chúng vào câu lệnh
+        // Nếu có điều kiện, thêm chúng vào trong CTE
         if (!conditions.isEmpty()) {
             sql.append("WHERE ").append(String.join(" AND ", conditions));
         }
 
-        sql.append(" GROUP BY i.ProductDetailId");
+        // Đóng CTE và chọn từ RankedImages
+        sql.append(") ")
+                .append("SELECT Id, ProductDetailId, FeedbackId, Image ")
+                .append("FROM RankedImages ")
+                .append("WHERE RowNum = 1");
 
         try (PreparedStatement st = connection.prepareStatement(sql.toString())) {
             try (ResultSet re = st.executeQuery()) {
                 while (re.next()) {
                     Image i = new Image(
-                            re.getInt("Id"), // Đúng tên trường
-                            getProductDetail(re.getInt("ProductDetailId")), // Chỉnh sửa
+                            re.getInt("Id"),
+                            getProductDetail(re.getInt("ProductDetailId")),
                             null,
                             re.getString("Image"));
                     list.add(i);
@@ -704,6 +709,17 @@ public class ProductDAO extends DBContext {
             PreparedStatement pre = connection.prepareStatement(sql);
             pre.setInt(1, uid);
             pre.setInt(2, pid);
+            pre.executeUpdate();
+        } catch (SQLException ex) {
+            Logger.getLogger(UserDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+    public void deleteAllWishlist(int uid) {
+        String sql = "delete from Favorite where UserId=?";
+        try {
+            PreparedStatement pre = connection.prepareStatement(sql);
+            pre.setInt(1, uid);
             pre.executeUpdate();
         } catch (SQLException ex) {
             Logger.getLogger(UserDAO.class.getName()).log(Level.SEVERE, null, ex);

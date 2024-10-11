@@ -87,18 +87,17 @@
         <div class="container">
             <table class="table table-bordered">
                 <colgroup>
-                    <col style="width: 25%;">
-                    <col style="width: 25%;">
-                    <col style="width: 25%;">
-                    <col style="width: 25%;">
+                    <col style="width: 19%;">
+                    <col style="width: 27%;">
+                    <col style="width: 27%;">
+                    <col style="width: 27%;">
                 </colgroup>
                 <thead>
                     <tr>
-                        <th class="align-top">
-                            <h4>So sánh laptop </h4>
-                            <h6>${img1.productDetail.product.name}</h6>
+                        <th style="text-align: center; vertical-align: middle; padding: 10px;">
+                            <h3>So sánh laptop </h3>
                         </th>
-                        <th>
+                        <th style="text-align: center; vertical-align: middle; padding: 10px;">
                             <div style="height: 100%; display: flex; flex-direction: column; justify-content: space-between;" >
                                 <a class="product-link" style="display: block; height: 100%; text-decoration: none; color: inherit;">
 
@@ -109,7 +108,7 @@
                                             <div class="icon-container">
                                                 <a href="information?productId=${img1.productDetail.id}" class="ti-search"></a>
                                                 <a href="addtocart?pid=${img1.productDetail.product.id}&&colorid=${img1.productDetail.color.id}&&confid=${img1.productDetail.configuration.id}" class="ti-shopping-cart" ></a>
-                                                <a href="#" class="ti-heart"></a>
+                                                <a href="addtowishlist?pid=${img1.productDetail.id}&&uid=${user.id}" class="ti-heart"></a>
                                             </div>
                                         </div>
                                     </div>
@@ -120,6 +119,7 @@
 
                                     <!-- Hiển thị tên sản phẩm -->
                                     <h5>${img1.productDetail.product.name}</h5>
+                                    <p>Color: ${img1.productDetail.color.name}</p>
 
                                     <!-- Hiển thị giá tiền -->
                                     <fmt:formatNumber value="${img1.productDetail.price}" type="number"/>đ
@@ -127,7 +127,7 @@
                                 </a>
                             </div>
                         </th>
-                        <th>
+                        <th style="text-align: center; vertical-align: middle; padding: 10px;">
                             <c:if test="${empty img2}">
                                 <button id="openModal">Thêm sản phẩm</button>
                             </c:if>
@@ -137,13 +137,23 @@
                                     <a href="information?productId=${img2.productDetail.id}" class="product-link" style="display: block; height: 100%; text-decoration: none; color: inherit;">
 
                                         <!-- Hiển thị ảnh sản phẩm -->
-                                        <img src="${img2.image}" style="max-width: 100%; height: auto;">
+                                        <div class="image-container">
+                                            <img src="${img2.image}" alt="Product Image" style="max-width: 100%; height: auto;">
+                                            <div class="overlay">
+                                                <div class="icon-container">
+                                                    <a href="information?productId=${img2.productDetail.id}" class="ti-search"></a>
+                                                    <a href="addtocart?pid=${img2.productDetail.product.id}&&colorid=${img2.productDetail.color.id}&&confid=${img2.productDetail.configuration.id}" class="ti-shopping-cart" ></a>
+                                                    <a href="addtowishlist?pid=${img2.productDetail.id}&&uid=${user.id}" class="ti-heart"></a>
+                                                </div>
+                                            </div>
+                                        </div>
 
                                         <!-- Hiển thị thương hiệu -->
                                         <div class="brand">${img2.productDetail.product.brand.name}</div>
 
                                         <!-- Hiển thị tên sản phẩm -->
                                         <h5>${img2.productDetail.product.name}</h5>
+                                        <p>Color: ${img2.productDetail.color.name}</p>
 
                                         <!-- Hiển thị giá tiền -->
                                         <fmt:formatNumber value="${img2.productDetail.price}" type="number"/>đ
@@ -153,7 +163,7 @@
                             </c:if>
 
                         </th>
-                        <th>
+                        <th style="text-align: center; vertical-align: middle; padding: 10px;">
                             <c:if test="${!empty img2}">
                                 <c:if test="${empty img3}">
                                     <button id="openModal">Thêm sản phẩm</button>
@@ -164,13 +174,23 @@
                                         <a  class="product-link" style="display: block; height: 100%; text-decoration: none; color: inherit;">
 
                                             <!-- Hiển thị ảnh sản phẩm -->
-                                            <img src="${img3.image}" style="max-width: 100%; height: auto;">
+                                            <div class="image-container">
+                                                <img src="${img3.image}" alt="Product Image" style="max-width: 100%; height: auto;">
+                                                <div class="overlay">
+                                                    <div class="icon-container">
+                                                        <a href="information?productId=${img3.productDetail.id}" class="ti-search"></a>
+                                                        <a href="addtocart?pid=${img3.productDetail.product.id}&&colorid=${img3.productDetail.color.id}&&confid=${img3.productDetail.configuration.id}" class="ti-shopping-cart" ></a>
+                                                        <a href="addtowishlist?pid=${img3.productDetail.id}&&uid=${user.id}" class="ti-heart"></a>
+                                                    </div>
+                                                </div>
+                                            </div>
 
                                             <!-- Hiển thị thương hiệu -->
                                             <div class="brand">${img3.productDetail.product.brand.name}</div>
 
                                             <!-- Hiển thị tên sản phẩm -->
-                                            <h5 href="information?productId=${img3.productDetail.id}">${img3.productDetail.product.name}</h5>
+                                            <h5>${img3.productDetail.product.name}</h5>
+                                            <p>Color: ${img3.productDetail.color.name}</p>
 
                                             <!-- Hiển thị giá tiền -->
                                             <fmt:formatNumber value="${img3.productDetail.price}" type="number"/>đ
@@ -189,7 +209,7 @@
                 <tbody>
                     <c:forEach var="item1" items="${list1}" varStatus="status1">
                         <tr>
-                            <td>${item1.attribute.name}</td>
+                            <td><h5>${item1.attribute.name}</h5></td>
                             <td>
                                 <c:choose>
                                     <c:when test="${status1.index < fn:length(list1)}">
@@ -282,7 +302,7 @@
                                >
                                 <img src="${i.image}" alt="Product Image" />
                                 <label>
-                                    ${i.productDetail.product.name}<br>
+                                    ${i.productDetail.product.name} (${i.productDetail.color.name})<br>
                                     ${i.productDetail.product.brand.name}<br>
                                     ${i.productDetail.configuration.name}<br>
                                     <fmt:formatNumber value="${i.productDetail.price}" type="number"/>đ
@@ -409,7 +429,28 @@
                 color: #333;                  /* Màu chữ */
             }
 
+            /* Style cho button */
+            #openModal {
+                padding: 10px 20px;         /* Giảm padding để button không quá lớn */
+                font-size: 16px;            /* Kích thước chữ nhỏ gọn */
+                background-color: #f0f0f0;  /* Màu nền xám nhạt, nhẹ nhàng */
+                color: #333;                /* Màu chữ tối nhưng không quá nổi bật */
+                border: 1px solid #ccc;     /* Đường viền mỏng màu xám nhạt */
+                border-radius: 8px;         /* Bo góc nhẹ cho button */
+                cursor: pointer;            /* Hiển thị hình bàn tay khi hover */
+                transition: background-color 0.3s ease, transform 0.3s ease; /* Hiệu ứng chuyển đổi nhẹ */
+            }
 
+            /* Hiệu ứng khi hover vào button */
+            #openModal:hover {
+                background-color: #e0e0e0;  /* Đổi màu nền nhẹ hơn khi hover */
+                transform: scale(1.02);     /* Phóng to nhẹ button khi hover */
+            }
+
+            /* Hiệu ứng khi click vào button */
+            #openModal:active {
+                transform: scale(0.98);     /* Thu nhỏ nhẹ khi click */
+            }
         </style>
 
 

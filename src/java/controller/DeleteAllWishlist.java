@@ -19,8 +19,8 @@ import java.util.List;
  *
  * @author PHONG
  */
-@WebServlet(name = "Comparison", urlPatterns = {"/compare"})
-public class Comparison extends HttpServlet {
+@WebServlet(name = "DeleteAllWishlist", urlPatterns = {"/deleteallwishlist"})
+public class DeleteAllWishlist extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -34,7 +34,18 @@ public class Comparison extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-
+        try (PrintWriter out = response.getWriter()) {
+            /* TODO output your page here. You may use following sample code. */
+            out.println("<!DOCTYPE html>");
+            out.println("<html>");
+            out.println("<head>");
+            out.println("<title>Servlet DeleteAllWishlist</title>");
+            out.println("</head>");
+            out.println("<body>");
+            out.println("<h1>Servlet DeleteAllWishlist at " + request.getContextPath() + "</h1>");
+            out.println("</body>");
+            out.println("</html>");
+        }
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
@@ -50,64 +61,9 @@ public class Comparison extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         ProductDAO d = new ProductDAO();
-        int id1 = -1;
-        int id2 = -1;
-        int id3 = -1;
-
-        List<ProductAttribute> list1 = null;
-        List<ProductAttribute> list2 = null;
-        List<ProductAttribute> list3 = null;
-        Image img1 = null;
-        Image img2 = null;
-        Image img3 = null;
-
-        try {
-            id1 = Integer.parseInt(request.getParameter("productid"));
-            list1 = d.getAttributeById(id1);
-            img1 = d.getImage(id1);
-
-        } catch (Exception e) {
-        }
-
-        try {
-            id2 = Integer.parseInt(request.getParameter("productid2"));
-            list2 = d.getAttributeById(id2);
-            img2 = d.getImage(id2);
-        } catch (Exception e) {
-        }
-
-        try {
-            id3 = Integer.parseInt(request.getParameter("productid3"));
-            list3 = d.getAttributeById(id3);
-            img3 = d.getImage(id3);
-        } catch (Exception e) {
-        }
-
-        if (img2 == null) {
-            img2 = img3;
-            list2 = list3;
-            img3 = null;
-            list3 = null;
-        }
-
-        String name = null;
-        try {
-            name = request.getParameter("name");
-        } catch (Exception e) {
-        }
-
-        List<Image> mlist = d.getMiniImage(id1, id2, id3, name);
-
-        request.setAttribute("mlist", mlist);
-        request.setAttribute("list1", list1);
-        request.setAttribute("img1", img1);
-        request.setAttribute("list2", list2);
-        request.setAttribute("img2", img2);
-        request.setAttribute("list3", list3);
-        request.setAttribute("img3", img3);
-
-        request.getRequestDispatcher("compare.jsp").forward(request, response);
-
+        int uid = Integer.parseInt(request.getParameter("uid"));
+        d.deleteAllWishlist(uid);
+        request.getRequestDispatcher("wishlist.jsp").forward(request, response);
     }
 
     /**
@@ -121,7 +77,7 @@ public class Comparison extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-
+        processRequest(request, response);
     }
 
     /**
