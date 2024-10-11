@@ -94,6 +94,7 @@ Cookie arr[] = request.getCookies();
         String hashedPassword = hashPassword(password);
         User u = dao.UserLogin(username, hashedPassword);
         HttpSession session = request.getSession();
+         session.setMaxInactiveInterval(30 * 60); // 30 phút = 1800 giây
         if ("true".equals(remember)) {
             Cookie uC = new Cookie("userC", username);
             Cookie p = new Cookie("passC", password);

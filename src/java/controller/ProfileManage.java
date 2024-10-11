@@ -5,6 +5,8 @@
 
 package controller;
 
+import dal.ImageDAOS;
+import dal.OderDAO;
 import dal.UserDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -14,8 +16,14 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+import java.sql.SQLException;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.mail.Session;
+import model.Image;
+import model.Order;
+import model.OrderDetail;
 import model.User;
 
 /**
@@ -59,9 +67,57 @@ public class ProfileManage extends HttpServlet {
      */
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
-    throws ServletException, IOException {
-
-                 request.getRequestDispatcher("userprofile.jsp").forward(request, response);
+    throws ServletException, IOException {    
+                 HttpSession session = request.getSession();
+                 User getCurrentUser = (User)session.getAttribute("user");
+                 OderDAO order = new OderDAO();
+                 
+                 String profile = request.getParameter("profile");
+                 
+                  if(profile.equals("info")){
+                     
+                 
+                 Order getOrder = order.getNewestOrder(getCurrentUser.getId());
+                 request.setAttribute("orderInfo",getOrder);
+                 request.getRequestDispatcher("userprofile.jsp?profile=info").forward(request, response);
+                 
+                  }
+                  ImageDAOS image = new ImageDAOS();
+                 if(profile.equals("ordermanage")){
+                     List<OrderDetail> list = null;
+                     List<Image> listImage = null;
+                     for (int i = 0; i < list.size(); i++) {
+                         OrderDetail get = list.get(i);
+                         Image getImage = image.getOneImageByProductDetailID(get.getProductDetail().getId());
+                         listImage.add(getImage);
+                     }
+                     
+                     try {
+                         list = order.getAllOrderDetails();
+                     } catch (SQLException ex) {
+                         Logger.getLogger(ProfileManage.class.getName()).log(Level.SEVERE, null, ex);
+                     }
+                     request.setAttribute("listimage", listImage);
+                      request.setAttribute("orderListInfo",list);
+                 request.getRequestDispatcher("userprofile.jsp?profile=ordermanage").forward(request, response);
+                 }
+                 if(profile.equals("orderdetail")){
+//                     try {
+                         int getOrderDetailId = Integer.parseInt(request.getParameter("id"));
+                     try {
+                         OrderDetail currentOrderDetail = order.getOrderDetailById(getOrderDetailId);
+                         request.setAttribute("currentOrderDetail", currentOrderDetail);
+                     } catch (SQLException ex) {
+                         Logger.getLogger(ProfileManage.class.getName()).log(Level.SEVERE, null, ex);
+                     }
+                         
+                         request.getRequestDispatcher("userprofile.jsp?profile=orderdetail&id=" + getOrderDetailId).forward(request, response);
+//                     } catch (SQLException ex) {
+//                         Logger.getLogger(ProfileManage.class.getName()).log(Level.SEVERE, null, ex);
+//                     }
+                 }
+                 
+                 
         
     } 
 
@@ -87,5 +143,8 @@ public class ProfileManage extends HttpServlet {
     public String getServletInfo() {
         return "Short description";
     }// </editor-fold>
+    public static void main(String[] args) {
+        
+    }
 
 }

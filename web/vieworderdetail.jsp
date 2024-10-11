@@ -1,6 +1,6 @@
 <%-- 
-    Document   : userprofile
-    Created on : Oct 8, 2024, 1:22:21 PM
+    Document   : vieworderdetail
+    Created on : Oct 10, 2024, 4:04:18 AM
     Author     : kieud
 --%>
 
@@ -8,14 +8,13 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>Profile</title>
-        <link rel="stylesheet"
-  href="https://cdn.jsdelivr.net/npm/boxicons@latest/css/boxicons.min.css">
-  <!-- or -->
-  <link rel="stylesheet"
-  href="https://unpkg.com/boxicons@latest/css/boxicons.min.css">
-  <link
+        <title>TODO supply a title</title>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+        <!-- CSS CDN -->
+
+        <link
             rel="stylesheet"
             href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
             />
@@ -25,212 +24,7 @@
             />
     </head>
     <body>
-        <%@include file="header.jsp" %>
         <style>
-            body {
-                background: rgb(99, 39, 120)
-            }
-            .row{
-                align-items: last !important;
-            }
-
-            .form-control:focus {
-                box-shadow: none;
-                border-color: #BA68C8
-            }
-
-            .profile-button {
-                background: rgb(99, 39, 120);
-                box-shadow: none;
-                border: none
-            }
-
-            .profile-button:hover {
-                background: #682773
-            }
-
-            .profile-button:focus {
-                background: #682773;
-                box-shadow: none
-            }
-
-            .profile-button:active {
-                background: #682773;
-                box-shadow: none
-            }
-
-            .back:hover {
-                color: #682773;
-                cursor: pointer
-            }
-
-            .labels {
-                font-size: 11px
-            }
-
-            .add-experience:hover {
-                background: #BA68C8;
-                color: #fff;
-                cursor: pointer;
-                border: solid 1px #BA68C8
-            }
-            .option-profile{
-                margin-top: 110px;
-
-                height: 30%;
-            }
-            .option{
-                margin-top: 20px;
-                margin-bottom: 15px;
-                border: 2px solid gray;
-                font-size: 15px;
-                border-radius: 40px;
-                text-align: center;
-                width: 100%;
-                height: 20%;
-                padding: 10px;
-            }
-
-
-
-        </style>
-
-
-        <section>
-            <div class="container-fluid rounded bg-white mt-5 mb-5 margin-left">
-                <div class="row">
-                    <div class="col-md-2 option-profile">
-                        <ul>
-                            <li><a href="profile?profile=info" class="option">Profile Information</a></li>
-                            <li><a href="profile?profile=ordermanage" class="option">Order Manage</a></li>
-                        </ul>
-                    </div>
-                    <div class="col-md-1.5 border-right">
-                        <div class="d-flex flex-column align-items-center text-center p-3 py-5"><img class="rounded-circle mt-5" width="150px" src="https://st3.depositphotos.com/15648834/17930/v/600/depositphotos_179308454-stock-illustration-unknown-person-silhouette-glasses-profile.jpg"><span class="font-weight-bold">${sessionScope.user.fullName}</span><span class="text-black-50"></span><span> </span></div>
-                    </div>
-                    <!--CHo nay node de code de phan truong hop khi nguoi dung chon cac tuy chon-->
-                    <div class="col-md-7 border-right ">
-
-                        <% 
-                                   String profile = request.getParameter("profile");
-                                   if ("info".equals(profile)) { 
-                        %>
-                        <div class="p-3 py-5">
-                            <div class="d-flex justify-content-between align-items-center mb-3">
-                                <h4 class="text-right">Profile Settings</h4>
-                            </div>
-                            <div class="row mt-2">
-                                <div class="col-md-12">
-                                    <label class="labels">Full Name</label>
-                                    <input type="text" class="form-control" placeholder="enter user profile" value="${sessionScope.user.getFullName()}">
-                                </div>  
-                            </div>
-                            <div class="row mt-3">
-                                <div class="col-md-12">
-                                    <label class="labels">Address</label>
-                                    <input type="text" class="form-control" placeholder="enter address line 1" value="${orderInfo.getAddress()}">
-                                </div>
-                                <div class="col-md-12">
-                                    <label class="labels">Email ID</label>
-                                    <input type="text" class="form-control" placeholder="enter email id" value="${sessionScope.user.getEmail()}">
-                                </div>
-                                <div class="col-md-12">
-                                    <label class="labels">Phone</label>
-                                    <input type="text" class="form-control" placeholder="enter email id" value="${orderInfo.getPhone()}">
-                                </div>
-                            </div>
-                            <div class="row mt-3">
-                                <div class="col-md-6">
-                                    <label class="labels">UserName</label>
-                                    <input type="text" class="form-control" placeholder="enter username" value="${sessionScope.user.getUserName()}">
-                                </div>
-                                <div class="col-md-6">
-                                    <label class="labels">Password</label>
-                                    <input type="text" class="form-control" value="*********" placeholder="enter password" readonly>
-                                </div>
-                            </div>
-                            <div class="mt-5 text-center">
-                                <button class="btn btn-primary profile-button" type="button">Save Profile</button>
-                            </div>
-                        </div>
-                        <% 
-                            } 
-                        %>
-
-                        <% 
-            
-
-                if ("ordermanage".equals(profile)) {
-                        %>
-                            <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 20px;
-            background-color: #f4f4f4;
-        }
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin: 20px 0;
-            background-color: #fff;
-        }
-        th, td {
-            padding: 12px;
-            text-align: left;
-            border: 1px solid #ddd;
-        }
-        th {
-            background-color: #4CAF50;
-            color: white;
-        }
-        tr:hover {
-            background-color: #f1f1f1;
-        }
-    </style>
-    <table>
-        <thead>
-            <tr>
-                <th></th>
-                <th>Product</th>
-                <th>Quantity</th>
-                <th>Order Date</th>
-                <th>Total Price</th>
-                <th>OrderStatus</th>
-                <th></th>
-            </tr>
-        </thead>
-        <tbody>
-<!--            orderListInfo-->
-<c:forEach items="${orderListInfo}" var="o" varStatus="status">
-    <c:set var="image" value="${ListPics[status.index]}" />
-            <tr>
-                <td>${o.id}</td>
-                <td>${o.getProductDetail().getProduct().getName()}</td>
-                
-                <td>${o.getQuantity()}</td>
-                <td>${o.order.getOrderDate()}</td>
-                <td>${o.getOrder().getTotalAmountAfter()}</td>
-                <td>${o.getOrder().getOrderStatus()}</td>
-                <td><a href="profile?profile=orderdetail&id=${o.getId()}"><i class='bx bx-show-alt'></i></a></td>
-            </tr>
-            </c:forEach>
-            <!-- Bạn có thể thêm nhiều hàng ở đây -->
-        </tbody>
-    </table>
-
-
-
-
-
-
-
-                        <%
-                        }
-                        %>
-                         <% 
-                if ("orderdetail".equals(profile)) {
-                        %>
-                        <style>
             * {
                 padding: 0;
                 margin: 0;
@@ -338,7 +132,6 @@
             .subscriptions div {
                 font-size: 0.9rem;
             }
-            
             @media (max-width: 425px) {
                 .wrapper {
                     padding: 20px;
@@ -364,11 +157,11 @@
             <div class="text-uppercase">
                 <p>Order detail</p>
             </div>
-            <div class="h4">${currentOrderDetail.getOrder().getOrderDate()}</div>
+            <div class="h4">Thursday, July 24, 2017</div>
             <div class="pt-1">
-                <p >Order #${currentOrderDetail.getId()} is currently<b class="text-danger"> ${currentOrderDetail.getOrder().getOrderStatus()}</b></p>
+                <p>Order #12615 is currently<b class="text-dark"> processing</b></p>
             </div>
-            <a href="profile?profile=ordermanage"><div class="btn close text-white" ">&times;</div></a>
+            <div class="btn close text-white">&times;</div>
         </div>
         <div class="wrapper bg-white">
             <div class="table-responsive">
@@ -508,30 +301,5 @@
                 <div>Total: <b> $68.8 for 10 items</b></div>
             </div>
         </div>
-                        
-                         <%
-                        }
-                        %>
-                    </div>
-                    <!--CHo nay node de end code de phan truong hop khi nguoi dung chon cac tuy chon-->
-                    <!--                <div class="col-md-4">
-                                        <div class="p-3 py-5">
-                                            <div class="d-flex justify-content-between align-items-center experience"><span>Edit Experience</span><span class="border px-3 p-1 add-experience"><i class="fa fa-plus"></i>&nbsp;Experience</span></div><br>
-                                            <div class="col-md-12"><label class="labels">Experience in Designing</label><input type="text" class="form-control" placeholder="experience" value=""></div> <br>
-                                            <div class="col-md-12"><label class="labels">Additional Details</label><input type="text" class="form-control" placeholder="additional details" value=""></div>
-                                        </div>
-                                    </div>-->
-                </div>
-            </div>
-        </section>
-    </div>
-</div>
-
-
-
-
-<%@include file="footer.jsp" %>
-
-
-</body>
+    </body>
 </html>

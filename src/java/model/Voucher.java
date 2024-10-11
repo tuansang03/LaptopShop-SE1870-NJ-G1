@@ -140,4 +140,10 @@ public class Voucher {
     public void setStatus(String Status) {
         this.Status = Status;
     }    
+
+    @Override
+    public String toString() {
+        return "Voucher{" + "id=" + id + ", Code=" + Code + ", Name=" + Name + ", DiscountPercent=" + DiscountPercent + ", Quantity=" + Quantity + ", Image=" + Image + ", StartDate=" + StartDate + ", EndDate=" + EndDate + ", MinValue=" + MinValue + ", DiscountCap=" + DiscountCap + ", Status=" + Status + '}';
+    }
+    
 }

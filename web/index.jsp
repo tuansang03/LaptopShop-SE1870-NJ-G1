@@ -234,8 +234,8 @@
             <section class="section-margin calc-60px">
                 <div class="container">
                     <div class="section-intro pb-60px">
-                        <p>Newest Item in the market</p>
-                        <h2>Newest <span class="section-intro__style">Products</span></h2>
+                        <p>New Item in the market</p>
+                        <h2>New <span class="section-intro__style">Products</span></h2>
                     </div>
 
                     <div class="owl-carousel owl-theme " id="bestSellerCarousel">
@@ -272,7 +272,7 @@
                         </c:forEach>
 
 
-                    </di
+                    </div>
 
                 </div>
 
@@ -286,7 +286,7 @@
             <section class="blog">
                 <div class="container">
                     <div class="section-intro pb-60px">
-                        <p>Popular Item in the market</p>
+                        <p>Read our news</p>
                         <h2>Latest <span class="section-intro__style">News</span></h2>
                     </div>
 

@@ -65,4 +65,10 @@ public class OrderDetail {
     public void setUnitPrice(int UnitPrice) {
         this.UnitPrice = UnitPrice;
     }
+
+    @Override
+    public String toString() {
+        return "OrderDetail{" + "Id=" + Id + ", Order=" + Order + ", ProductDetail=" + ProductDetail + ", Quantity=" + Quantity + ", UnitPrice=" + UnitPrice + '}';
+    }
+    
 }

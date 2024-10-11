@@ -199,14 +199,15 @@
                             <div class="col-lg-3  col-md-3">
                                 <div class="blog_info text-right">
                                     <div class="post_tag">
-
+                                        <c:if test="${postDetail.category.name ne 'None'}">
                                         Type:   <a class="active" style="font-size: 15px;" href="listproduct?category%5B%5D=${postDetail.category.name}">${postDetail.category.name}</a>
-
+                                        </c:if>
                                     </div>
                                     <div class="post_tag">
+                                        <c:if test="${postDetail.brand.name ne 'None'}">
 
                                         Brand: <a class="active" style="font-size: 15px;" href="listproduct?brand%5B%5D=${postDetail.brand.name}">${postDetail.brand.name}</a>
-
+                                        </c:if>
                                     </div>
                                     <ul class="blog_meta list">
                                         <li>
@@ -635,7 +636,7 @@
         <!--================Blog Area =================-->
 
 
-        <!--================Instagram Area =================-->
+<!--        ================Instagram Area =================
         <section class="instagram_area">
             <div class="container box_1620">
                 <div class="insta_btn">
@@ -651,7 +652,7 @@
                 </div>
             </div>
         </section>
-        <!--================End Instagram Area =================-->
+        ================End Instagram Area =================-->
 
 
         <!--================ Start footer Area  =================-->	

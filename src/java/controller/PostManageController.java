@@ -17,6 +17,7 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
@@ -118,9 +119,10 @@ public class PostManageController extends HttpServlet {
             //lay post list de lay size cua list de set id tu tang
             UserDAO dao = new UserDAO();
             List<Post> postList = dao.getAllPostListD();
-
+            HttpSession session = request.getSession();
+            User userSession = (User) (session.getAttribute("user"));
             int id = postList.size() + 1;
-            int userId = Integer.parseInt(request.getParameter("user"));
+            int userId = userSession.getId();
             User user = dao.getUserByIdD(userId);
 
             int brand_request = Integer.parseInt(request.getParameter("brand"));
@@ -174,25 +176,59 @@ public class PostManageController extends HttpServlet {
                 List<Post> postList = dao.getAllPostListD();
                 request.setAttribute("listPost", postList);
                 request.getRequestDispatcher(MAIN_URL).forward(request, response);
-            
-            request.setAttribute("mess", mess);
-            request.getRequestDispatcher("managepostdisplay.jsp").forward(request, response);
-        }catch (Exception e) {
+
+                request.setAttribute("mess", mess);
+                request.getRequestDispatcher("managepostdisplay.jsp").forward(request, response);
+            } catch (Exception e) {
                 System.out.println(e);
             }
-    
 
+        }
+        //==============================Update=============================
+        if (service.equalsIgnoreCase("updatePostRequest")) {
+            int id = Integer.parseInt(request.getParameter("id"));
+            PostDAO post = new PostDAO();
+            UserDAO userDAO = new UserDAO();
+            Post getPost = userDAO.getPostById(id);
+            BrandDAO brand = new BrandDAO();
+            //lay 2 cai attribute voi brand 
+            CategoryDAO atr = new CategoryDAO();
+            List<Brand> listBrand = brand.getAll();
+            List<Category> listCategory = atr.getAll();
+            request.setAttribute("updatepostdisplay", getPost);
+            request.setAttribute("brandList", listBrand);
+            request.setAttribute("categoryList", listCategory);
+            request.getRequestDispatcher("updatepostdisplay.jsp").forward(request, response);
+        }
+        if (service.equalsIgnoreCase("updatedone")) {
+            int id = Integer.parseInt(request.getParameter("id"));
+            UserDAO userDAO = new UserDAO();
+            Post getPost = userDAO.getPostById(id);
+            //get gia tri thay doi
+            String title = request.getParameter("title");
+            String thum = request.getParameter("thum");
+            int brandId = Integer.parseInt(request.getParameter("brand"));
+            int categoryId = Integer.parseInt(request.getParameter("category"));
+            String shortContent = request.getParameter("short");
+            String fullContent = request.getParameter("full");
+            Post post = new Post(id, getPost.getUser(), userDAO.getBrandByIdD(brandId), userDAO.getCategoryByIdD(categoryId), title, shortContent, fullContent, thum, getPost.getPublishDate());
+            
+            PostDAO postUpdate = new PostDAO();
+            postUpdate.updatePost(post);
+            String mess = "Update successfull!!";
+                request.setAttribute("mess", mess);
+            request.getRequestDispatcher("updatebranddisplay.jsp").forward(request, response);
+
+        }
     }
 
-}
-
-/**
- * Returns a short description of the servlet.
- *
- * @return a String containing servlet description
- */
-@Override
-public String getServletInfo() {
+    /**
+     * Returns a short description of the servlet.
+     *
+     * @return a String containing servlet description
+     */
+    @Override
+    public String getServletInfo() {
         return "Short description";
     }// </editor-fold>
 
