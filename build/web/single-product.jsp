@@ -255,7 +255,7 @@
                             <div class="main-image">
                                 <div class="owl-carousel owl-theme s_Product_carousel">
                                     <c:forEach items="${image}" var="i">
-                                        <img class="img-fluid large-image" src="${i.image}" alt="">
+                                        <img class="img-fluid large-image" src="${pageContext.request.contextPath}/images/${i.image}" alt="">
                                     </c:forEach>
                                 </div>
                             </div>
@@ -264,7 +264,7 @@
                             <div class="thumbnail-carousel owl-carousel owl-theme">
                                 <c:forEach items="${image}" var="i">
                                     <div class="thumbnail-item">
-                                        <img class="img-thumbnail small-image" src="${i.image}" alt="">
+                                        <img class="img-thumbnail small-image" src="${pageContext.request.contextPath}/images/${i.image}" alt="">
                                     </div>
                                 </c:forEach>
                             </div>
@@ -500,7 +500,7 @@
                                         <c:forEach var="p" items="${listproduct}">
                                             <a href="information?productId=${p.detail}" class="product-link">
                                                 <div class="product-item">
-                                                    <img src="${p.img}" alt="${p.name}">
+                                                    <img src="${pageContext.request.contextPath}/images/${p.img}" alt="${p.name}">
                                                     <div class="brand">${p.brand}</div>
                                                     <h4>${p.name}</h4>
                                                     <p>Giá: ${p.price}</p>

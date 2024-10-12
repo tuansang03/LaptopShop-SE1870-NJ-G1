@@ -8,55 +8,75 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Product Variants</title>
         <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
-         <style>
-    .img-preview {
-        width: 80px;
-        height: 80px;
-        object-fit: cover; /* Để hình ảnh vừa khít, không bị méo */
-        border: 1px solid #ddd; /* Đường viền xám nhạt */
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Hiệu ứng đổ bóng */
-        margin: 5px; /* Khoảng cách giữa các hình ảnh */
-        border-radius: 8px; /* Bo góc ảnh cho đẹp */
-    }
-    
-    .preview-container {
-        display: flex;
-        flex-wrap: wrap; /* Sắp xếp ảnh theo dạng lưới */
-        gap: 10px; /* Khoảng cách giữa các ảnh */
-    }
-</style>
+        <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+        <style>
+            .img-preview {
+                width: 80px;
+                height: 80px;
+                object-fit: cover; /* Để hình ảnh vừa khít, không bị méo */
+                border: 1px solid #ddd; /* Đường viền xám nhạt */
+                box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Hiệu ứng đổ bóng */
+                margin: 5px; /* Khoảng cách giữa các hình ảnh */
+                border-radius: 8px; /* Bo góc ảnh cho đẹp */
+            }
+
+            .preview-container {
+                display: flex;
+                flex-wrap: wrap; /* Sắp xếp ảnh theo dạng lưới */
+                gap: 10px; /* Khoảng cách giữa các ảnh */
+            }
+            .img-preview {
+                width: 80px;
+                height: 80px;
+                object-fit: cover;
+                border: 1px solid #ddd;
+                box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+                margin: 5px;
+                border-radius: 8px;
+            }
+
+            .btn-danger {
+                display: inline-flex;
+                justify-content: center;
+                align-items: center;
+                height: 38px; /* Chiều cao nút xóa */
+            }
+
+            .d-flex {
+                display: flex;
+                gap: 10px; /* Khoảng cách giữa ảnh và nút xóa */
+            }
+
+        </style>
         <script>
-            
+
 
             function previewImage(input, productId) {
-        const imageContainer = document.getElementById('imageFileContainer-' + productId);
+                const imageContainer = document.getElementById('imageFileContainer-' + productId);
 
-        // Xóa toàn bộ ảnh preview cũ (nếu có)
-        const oldPreviews = imageContainer.getElementsByClassName('img-preview');
-        while (oldPreviews.length > 0) {
-            oldPreviews[0].parentNode.removeChild(oldPreviews[0]);
-        }
+                // Tạo container cho ảnh preview mới
+                const newPreviewContainer = document.createElement('div');
+                newPreviewContainer.className = 'new-preview-container';
 
-        // Hiển thị ảnh mới từ file input
-        if (input.files) {
-            const previewContainer = document.createElement('div');
-            previewContainer.className = 'preview-container'; // Container chứa các ảnh
+                // Hiển thị ảnh mới từ file input
+                if (input.files) {
+                    Array.from(input.files).forEach(file => {
+                        var reader = new FileReader();
+                        reader.onload = function (e) {
+                            const img = document.createElement("img");
+                            img.className = 'img-preview';
+                            img.src = e.target.result;
+                            newPreviewContainer.appendChild(img); // Thêm ảnh mới vào container riêng
+                        };
+                        reader.readAsDataURL(file);
+                    });
 
-            Array.from(input.files).forEach(file => {
-                var reader = new FileReader();
-                reader.onload = function (e) {
-                    const img = document.createElement("img");
-                    img.className = 'img-preview';
-                    img.src = e.target.result;
-                    previewContainer.appendChild(img); // Thêm ảnh vào container
-                };
-                reader.readAsDataURL(file);
-            });
+                    // Thêm container chứa ảnh mới vào form-group mà không xóa ảnh cũ
+                    imageContainer.appendChild(newPreviewContainer);
+                }
+            }
 
-            // Thêm container chứa ảnh vào form-group
-            imageContainer.appendChild(previewContainer);
-        }
-    }
             function removeImage(imageId, productId) {
                 const form = document.getElementById('deleteForm-' + imageId);
                 const confirmation = confirm("Are you sure you want to delete this image?");
@@ -64,13 +84,19 @@
                     form.submit(); // Gửi form xóa ảnh nếu người dùng xác nhận
                 }
             }
-function submitDeleteForm(imageId) {
-    const confirmation = confirm("Are you sure you want to delete this image?");
-    if (confirmation) {
-        document.getElementById('deleteForm-' + imageId).submit();
-    }
-}
-
+//            function submitDeleteForm(imageId) {
+//                const confirmation = confirm("Are you sure you want to delete this image?");
+//                if (confirmation) {
+//                    document.getElementById('deleteForm-' + imageId).submit();
+//                }
+//            }
+            function submitDeleteForm(imageId, pid) {
+                const confirmation = confirm("Are you sure you want to delete this image?");
+                if (confirmation) {
+//                    document.getElementById('deleteForm-' + imageId).submit();
+                    window.location.href = "deleteImage?imageId=" + imageId + "&productId=" + pid;
+                }
+            }
 
         </script>
     </head>
@@ -154,25 +180,16 @@ function submitDeleteForm(imageId) {
                                                     <div id="imageFileContainer-${p.id}" class="form-group">
                                                         <!-- Hiển thị các ảnh đã tồn tại -->
                                                         <c:forEach var="img" items="${imgListMap[p.id]}">
-                                                            <div class="input-group mb-2" id="imageWrapper-${img.id}">
+                                                            <div class="d-flex align-items-center mb-2" id="imageWrapper-${img.id}">
                                                                 <!-- Hiển thị ảnh hiện tại -->
-                                                                <img id="imgPreview-${img.id}" src="${pageContext.request.contextPath}/images/${img.image}" alt="Image" width="80px">
+                                                                <img id="imgPreview-${img.id}" src="${pageContext.request.contextPath}/images/${img.image}" alt="Image" class="img-preview">
 
-                                                                <!-- Nút xóa ảnh -->
-
-
-                                                                <!-- Form xóa ảnh -->
-                                                                <form action="deleteImage" method="post" id="deleteForm-${img.id}">
-                                                                    <input type="hidden" name="imageId" value="${img.id}">
-                                                                    <input type="hidden" name="productId" value="${p.id}">
-                                                                    <button type="button" class="btn btn-danger ml-2" onclick="submitDeleteForm(${img.id})">
-                                                                        <i class="bi bi-trash"></i>
-                                                                    </button>
-                                                                </form>
-
+                                                                <!-- Nút xóa ảnh với căn chỉnh đẹp hơn -->
+                                                                <a class="btn btn-danger ml-3" onclick="submitDeleteForm(${img.id},${p.id})" style="height: 38px; display: flex; align-items: center;">
+                                                                    <i class="bi bi-trash"></i>
+                                                                </a>
                                                             </div>
                                                         </c:forEach>
-
 
                                                         <!-- Input để chọn thêm ảnh mới -->
                                                         <input type="file" multiple id="fileInput-${p.id}" name="imageFiles_${p.id}[]" accept="image/*" onchange="previewImage(this, ${p.id})">
@@ -180,6 +197,7 @@ function submitDeleteForm(imageId) {
                                                         <!-- Ảnh preview sẽ được hiển thị ở đây sau khi chọn -->
                                                     </div>
                                                 </td>
+
                                                 <td>
                                                     <button type="button" class="btn btn-danger" onclick="confirmDelete(${p.id})"><i class="bi bi-trash"></i></button>
                                                 </td>
@@ -196,7 +214,6 @@ function submitDeleteForm(imageId) {
             </form>
         </div>
 
-        <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
-        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
     </body>
 </html>
