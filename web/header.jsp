@@ -4,8 +4,10 @@
 <%@ page import="java.util.List" %>
 <%@ page import="model.User" %>
 <%@ page import="dal.CartDAOS" %>
+<%@ page import="dal.ProductDAO" %>
 <%@ page import="model.Cart" %>
 <%@ page import="model.CartItem" %>
+<%@ page import="model.Favorite" %>
 <!DOCTYPE html>
 <html>
     <head>
@@ -111,19 +113,24 @@
                         <div class="collapse navbar-collapse offset" id="navbarSupportedContent">
                             <ul class="nav navbar-nav menu_nav ml-auto mr-auto">
                                 <li class="nav-item active"><a class="nav-link" href="home">Home</a></li>
+                                <li class="nav-item submenu dropdown">
+                                    <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
+                                       aria-expanded="false">Shop</a>
+                                    <ul class="dropdown-menu">
+                                        <li class="nav-item"><a class="nav-link" href="listproduct">Shop Category</a></li>
+                                        <!--<li class="nav-item"><a class="nav-link" href="single-product.jsp">Product Details</a></li>-->
+                                        <li class="nav-item"><a class="nav-link" href="checkout.jsp">Product Checkout</a></li>
+                                        <li class="nav-item"><a class="nav-link" href="confirmation.jsp">Confirmation</a></li>
+                                        <li class="nav-item"><a class="nav-link" href="cart.jsp">Shopping Cart</a></li>
+                                    </ul>
+                                </li>
+                                <li class="nav-item submenu dropdown">
+                                    <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
+                                       aria-expanded="false">Blog</a>    
+                                    <ul class="dropdown-menu">
+                                        <li class="nav-item"><a class="nav-link" href="postlist">See All Post</a></li>
 
-
-
-                                <li class="nav-item"><a class="nav-link" href="listproduct">Shop Category</a></li>
-
-
-
-
-
-
-                                <li class="nav-item"><a class="nav-link" href="postlist">See All Post</a></li>
-
-
+                                    </ul>
                                 </li>
                                 <li class="nav-item submenu dropdown">
                                     <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
@@ -199,6 +206,25 @@
                                         </button>
                                     </a>
                                 </li>
+                                <%
+                                List<Favorite> list = null;
+                                ProductDAO d = new ProductDAO();
+                                    if (user!=null){
+                                    list = d.listFavorite(user.getId());
+                                    }
+
+                                int number = 0;
+                                if (list != null) {
+                                    number = list.size();
+                                }
+                                %>
+                                <li class="nav-item">
+                                    <a href="showwishlist?uid=${user.getId()}">
+                                        <button>
+                                            <i class="ti-heart"></i><span class="nav-shop__circle"><%= number%></span>
+                                        </button>
+                                    </a>
+                                </li>
 
 
 
@@ -223,10 +249,7 @@
                                         <c:when test="${sessionScope.admin == null && sessionScope.user == null && sessionScope.sale == null}">
                                             <a href="login"><i class="fa fa-user"></i> Login</a>
                                         </c:when>
-                                        <c:when test="${sessionScope.user != null}">
-                                            <a href="profile?profile=info"><i class="bx bxs-user" style="width: 30px; height: 20px;"></i></a>
-                                            </c:when>   
-                                            <c:otherwise>
+                                        <c:otherwise>
                                             <div class="dropdown">
                                                 <button class="dropbtn"><i class="fa fa-user">
 
@@ -241,7 +264,7 @@
                                                 </c:if>
                                             </c:otherwise>
                                         </c:choose>
-                                        <c:if test="${sessionScope.user !=null ||sessionScope.admin !=null || sessionScope.sale !=null}"><a href="logout" class="bx bxs-log-out">Logout</a></c:if>
+                                        <c:if test="${sessionScope.user !=null ||sessionScope.admin !=null || sessionScope.sale !=null}"><a href="logout">Logout</a></c:if>
                                 </li>
 
                             </ul>

@@ -15,6 +15,7 @@ import dal.ProductDAO;
 import java.util.ArrayList;
 import model.*;
 import java.util.List;
+import java.util.Arrays;
 
 /**
  *
@@ -73,12 +74,10 @@ public class ListProduct extends HttpServlet {
         List<ProductList> list = d.listProduct(convert(selectedCategories), convert(selectedBrands), price, name);
 
 
-        request.setAttribute("selectedBrands", selectedBrands);
-        request.setAttribute("selectedCategories", selectedCategories);
+        request.setAttribute("selectedBrands", toShow(selectedBrands));
+        request.setAttribute("selectedCategories", toShow(selectedCategories));
 
-        request.setAttribute("a", convert(selectedCategories));
-        request.setAttribute("b", convert(selectedBrands));
-
+        request.setAttribute("size", list.size());
         request.setAttribute("brandlist", brandlist);
         request.setAttribute("categorylist", categorylist);
         request.setAttribute("price", price);
@@ -99,6 +98,15 @@ public class ListProduct extends HttpServlet {
             }
         }
         return result.toString();
+    }
+    
+    public static String toShow(String[] array) {
+        // Kiểm tra nếu mảng null hoặc rỗng
+        if (array == null || array.length == 0) {
+            return "";
+        }
+        // Sử dụng String.join để nối các phần tử của mảng với delimiter
+        return String.join(" ", array);
     }
 
 }

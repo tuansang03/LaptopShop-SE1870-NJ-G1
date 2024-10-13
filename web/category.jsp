@@ -1,5 +1,4 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
@@ -72,13 +71,7 @@
             <div class="container h-100">
                 <div class="blog-banner">
                     <div class="text-center">
-                        <h1>Shop Category</h1>
-                        <nav aria-label="breadcrumb" class="banner-breadcrumb">
-                            <ol class="breadcrumb">
-                                <li class="breadcrumb-item"><a href="#">Home</a></li>
-                                <li class="breadcrumb-item active" aria-current="page">Shop Category</li>
-                            </ol>
-                        </nav>
+                        <h1>Laptop List</h1>
                     </div>
                 </div>
             </div>
@@ -94,18 +87,15 @@
                             <div class="sidebar-filter">
                                 <div class="top-filter-head">Browse Brands</div>
                                 <div class="common-filter">
-                                    <div class="common-filter">
-                                        <ul>
-                                            <c:forEach items="${brandlist}" var="c">
-                                                <li class="filter-list">
-                                                    <input class="pixel-radio" type="checkbox" name="brand[]" value="${c.name}"
-                                                           <c:if test="${fn:contains(brand, c.name)}">checked</c:if>
-
-                                                               <label>${c.name}</label>
-                                                </li>    
-                                            </c:forEach>
-                                        </ul>
-                                    </div>
+                                    <ul>
+                                        <c:forEach items="${brandlist}" var="b">
+                                            <li class="filter-list">
+                                                <input class="pixel-radio" type="checkbox" name="brand[]" value="${b.name}"
+                                                       <c:if test="${fn:contains(selectedBrands, b.name)}">checked</c:if>>
+                                                <label>${b.name}</label>
+                                            </li>
+                                        </c:forEach>
+                                    </ul>
                                 </div>
                             </div>
 
@@ -116,9 +106,8 @@
                                         <c:forEach items="${categorylist}" var="c">
                                             <li class="filter-list">
                                                 <input class="pixel-radio" type="checkbox" name="category[]" value="${c.name}"
-                                                       <c:if test="${fn:contains(category, c.name)}">checked</c:if>
-
-                                                           <label>${c.name}</label>
+                                                       <c:if test="${fn:contains(selectedCategories, c.name)}">checked</c:if>>
+                                                <label>${c.name}</label>
                                             </li>    
                                         </c:forEach>
                                     </ul>
@@ -155,30 +144,12 @@
 
                                 </div>
                             </div>
+
                         </div>
                         <!-- End Filter Bar -->
-                        <div class="product-container">
-                            <c:if test="${not empty selectedBrands}">
-                                <p>Lọc theo brand: 
-                                    <!-- Sử dụng forEach để lặp qua các phần tử của selectedBrands -->
-                                    <c:forEach var="n" items="${selectedBrands}" varStatus="status">
-                                        ${n}
-                                        <!-- Nếu không phải là phần tử cuối cùng thì thêm dấu phẩy -->
-                                        <c:if test="${!status.last}">, </c:if>
-                                    </c:forEach>
-                                </p>
-                            </c:if>
-                            <c:if test="${not empty selectedCategories}">
-                                <p>Lọc theo category: 
-                                    <!-- Sử dụng forEach để lặp qua các phần tử của selectedBrands -->
-                                    <c:forEach var="n" items="${selectedCategories}" varStatus="status">
-                                        ${n}
-                                        <!-- Nếu không phải là phần tử cuối cùng thì thêm dấu phẩy -->
-                                        <c:if test="${!status.last}">, </c:if>
-                                    </c:forEach>
-                                </p>
-                            </c:if>
-                        </div>
+                        <c:if test="${!empty productlist}">
+                            <p class="product-container">(Tìm thấy ${size} sản phẩm)</p>
+                        </c:if>
 
 
 
@@ -217,7 +188,6 @@
             </div>
         </section>
         <!-- ================ category section end ================= -->	
-
 
 
 

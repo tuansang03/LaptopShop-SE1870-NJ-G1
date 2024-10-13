@@ -269,40 +269,38 @@
                                 </c:forEach>
                             </div>
 
-                            <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-                            <script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js"></script>
+                        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+                        <script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js"></script>
 
-                            <script>
-                                $(document).ready(function () {
-                                    // Initialize the main image carousel
-                                    var mainCarousel = $('.s_Product_carousel').owlCarousel({
-                                        items: 1,
-                                        loop: true,
-                                        dots: false,
-                                        nav: true,
-                                        navText: ['<span>&lt;</span>', '<span>&gt;</span>'],
-                                        autoplay: false
-                                    });
-
-                                    // Initialize the thumbnail carousel
-                                    var thumbnailCarousel = $('.thumbnail-carousel').owlCarousel({
-                                        items: 4,
-                                        margin: 10,
-                                        dots: false,
-                                        nav: true,
-                                        autoplay: false
-                                    });
-
-                                    // On thumbnail click, change the main image
-                                    $('.thumbnail-item').on('click', function () {
-                                        var index = $(this).index();
-                                        mainCarousel.trigger('to.owl.carousel', [index, 300]); // Navigate to the clicked thumbnail index
-
-                                        // Cập nhật khung ảnh lớn với ảnh thumbnail được chọn
-                                        $('.large-image').attr('src', $(this).find('img').attr('src'));
-                                    });
+                        <script>
+                            $(document).ready(function () {
+                                // Initialize the main image carousel
+                                var mainCarousel = $('.s_Product_carousel').owlCarousel({
+                                    items: 1,
+                                    loop: true,
+                                    dots: false,
+                                    nav: true,
+                                    navText: ['<span>&lt;</span>', '<span>&gt;</span>'],
+                                    autoplay: false
                                 });
-                            </script>
+
+                                // Initialize the thumbnail carousel
+                                var thumbnailCarousel = $('.thumbnail-carousel').owlCarousel({
+                                    items: 4,
+                                    margin: 10,
+                                    dots: false,
+                                    nav: true,
+                                    autoplay: false
+                                });
+
+                                // Sync thumbnail click with the main carousel
+                                thumbnailCarousel.on('click', '.owl-item', function () {
+                                    var index = $(this).index(); // Get the index of the clicked thumbnail
+                                    mainCarousel.trigger('to.owl.carousel', index); // Move to the corresponding main image
+                                });
+                            });
+                        </script>
+
                         </body>
 
 
@@ -312,15 +310,15 @@
                         <div class="s_product_text">
                             <h3>${detail.product.name}</h3>
                             <ul class="list">
-                                <li><a class="active" href="listproduct?brand=${detail.product.brand.name}"><span>Brand</span>: ${detail.product.brand.name}</a></li>
-                                <li><a class="active" href="listproduct?category=${detail.product.category.name}"><span>Category</span>: ${detail.product.category.name}</a></li>
+                                <li><a class="active" href="listproduct?brand%5B%5D=${detail.product.brand.name}"><span>Brand</span>: ${detail.product.brand.name}</a></li>
+                                <li><a class="active" href="listproduct?category%5B%5D=${detail.product.category.name}"><span>Category</span>: ${detail.product.category.name}</a></li>
                             </ul>
                             <br>
-                            RAM & ROM:
+                            Dung lượng:
                             <form action="information" method="get">
                                 <c:forEach items="${config}" var="c">
                                     <button type="submit" name="productId" value="${c.id}" 
-                                            class="${co == c.name ? 'btn-selected' : ''}">
+                                            class="${co == c.name ? 'btn-selected' : ''}" >
                                         ${c.name}
                                     </button>
                                 </c:forEach>
@@ -347,61 +345,64 @@
                                 ${sale}
                             </h5>
                             <p>${detail.shortDescription}</p>
-                            <div class="product_count">
-                                <a class="button primary-btn" href="addtocart?pid=${detail.product.id}&&colorid=${detail.color.id}&&confid=${detail.configuration.id}">Add to Cart</a>               
-                            </div>
-                            <!--
                             <div class="card_area d-flex align-items-center">
-                                <a class="icon_btn" href="#"><i class="lnr lnr lnr-diamond"></i></a>
-                                <a class="icon_btn" href="#"><i class="lnr lnr lnr-heart"></i></a>
+                                <a class="button primary-btn" href="addtocart?pid=${detail.product.id}&&colorid=${detail.color.id}&&confid=${detail.configuration.id}">Add to Cart</a>
+                                <a class="icon_btn" href="addtowishlist?pid=${detail.id}&&uid=${user.id}"><i class="lnr lnr lnr-heart"></i></a>
                             </div>
-                            --!>
+
+                            
+
+
+                            <div class="card_area d-flex align-items-center">
+                                <a class="button primary-btn" href="compare?productid=${detail.id}">Compare Product</a>
+                            </div>
+
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-                            <!--================End Single Product Area =================-->
+        <!--================End Single Product Area =================-->
 
-                            <!--================Product Description Area =================-->
-                            <section class="product_description_area">
-                                <div class="container">
-                                    <ul class="nav nav-tabs" id="myTab" role="tablist">
-                                        <li class="nav-item">
-                                            <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true">Description</a>
-                                        </li>
-                                        <li class="nav-item">
-                                            <a class="nav-link" id="profile-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile"
-                                               aria-selected="false">Specification</a>
-                                        </li>
-                                        <li class="nav-item">
-                                            <a class="nav-link" id="contact-tab" data-toggle="tab" href="#contact" role="tab" aria-controls="contact"
-                                               aria-selected="false">Comments</a>
-                                        </li>
-                                        <li class="nav-item">
-                                            <a class="nav-link" id="review-tab" data-toggle="tab" href="#review" role="tab" aria-controls="review"
-                                               aria-selected="false">Reviews</a>
-                                        </li>
-                                    </ul>
-                                    <div class="tab-content" id="myTabContent">
-                                        <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
-                                            <p>${detail.description}</p>
+        <!--================Product Description Area =================-->
+        <section class="product_description_area">
+            <div class="container">
+                <ul class="nav nav-tabs" id="myTab" role="tablist">
+                    <li class="nav-item">
+                        <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true">Description</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" id="profile-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile"
+                           aria-selected="false">Specification</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" id="contact-tab" data-toggle="tab" href="#contact" role="tab" aria-controls="contact"
+                           aria-selected="false">Comments</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" id="review-tab" data-toggle="tab" href="#review" role="tab" aria-controls="review"
+                           aria-selected="false">Reviews</a>
+                    </li>
+                </ul>
+                <div class="tab-content" id="myTabContent">
+                    <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
+                        <p>${detail.description}</p>
 
-                                        </div>
-                                        <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
-                                            <div class="table-responsive">
-                                                <table class="table">
-                                                    <tbody>
-                                                        <c:forEach items="${attribute}" var="a">
-                                                            <tr>
-                                                                <td>
-                                                                    <h5>${a.attribute.name}</h5>
-                                                                </td>
-                                                                <td>
-                                                                    <h5>${a.value}</h5>
-                                                                </td>
-                                                            </tr>    
-                                                        </c:forEach>
+                    </div>
+                    <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
+                        <div class="table-responsive">
+                            <table class="table">
+                                <tbody>
+                                    <c:forEach items="${attribute}" var="a">
+                                        <tr>
+                                            <td>
+                                                <h5>${a.attribute.name}</h5>
+                                            </td>
+                                            <td>
+                                                <h5>${a.value}</h5>
+                                            </td>
+                                        </tr>    
+                                    </c:forEach>
 
                                                     </tbody>
                                                 </table>
@@ -486,15 +487,15 @@
                         </section>
                         <!--================End Product Description Area =================-->
 
-                        <!--================ Start related Product area =================-->  
-                        <section class="related-product-area section-margin--small mt-0">
-                            <div class="container">
-                                <div class="section-intro pb-60px">
-                                    <h2><span class="section-intro__style">Related Product</span></h2>
-                                </div>
-                                <div class="product-carousel-container">
-                                    <!-- Nút mũi tên để trượt sang trái -->
-                                    <button class="carousel-prev" onclick="scrollLeft()">❮</button>
+        <!--================ Start related Product area =================-->  
+        <section class="related-product-area section-margin--small mt-0">
+            <div class="container">
+                <div class="section-intro pb-60px">
+                    <h2><span class="section-intro__style">Related Product</span></h2>
+                </div>
+                <div class="product-carousel-container">
+                    <!-- Nút mũi tên để trượt sang trái -->
+                    <button class="carousel-prev" onclick="scrollLeft()">❮</button>
 
                                     <div class="product-carousel">
                                         <c:forEach var="p" items="${listproduct}">
