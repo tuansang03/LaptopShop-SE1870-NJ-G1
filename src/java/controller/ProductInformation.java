@@ -70,7 +70,7 @@ public class ProductInformation extends HttpServlet {
         int id = Integer.parseInt(request.getParameter("productId"));
         session.setAttribute("pId", id);
         ProductDetailDAO pDDAO = new ProductDetailDAO();
-//       int productId = pDDAO.getProductIdByProductDetailId(id);
+       int productId = pDDAO.getProductIdByProductDetailId(id);
         List<Image> list = d.getImageById(id);
         ProductDetail pd = d.getProductDetail(id);
         
@@ -81,7 +81,10 @@ public class ProductInformation extends HttpServlet {
         
         List<ProductList> listproduct = d.listProduct("'" + pd.getProduct().getCategory().getName() + "'", null, null, null);
         String price = formatCurrency(d.getProductDetail(id).getPrice());
+         CommentDAO c = new CommentDAO();
+        ArrayList<Comment> cList = c.getCommentByProductId(productId);
         
+        request.setAttribute("commentList", cList);
         request.setAttribute("co", pd.getConfiguration().getName());
         request.setAttribute("col", pd.getColor().getName());
         request.setAttribute("detail", pd);

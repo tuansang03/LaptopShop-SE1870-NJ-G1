@@ -212,14 +212,16 @@ public class StatisticDAO extends DBContext {
 
     public List<ProductSales> getTopSellingProducts() {
         List<ProductSales> topSellingProducts = new ArrayList<>();
-        String sql = "SELECT TOP 5 "
-                + "pd.Id AS ProductId, p.Name AS ProductName, SUM(od.Quantity) AS TotalSold "
-                + "FROM OrderDetail od "
-                + "JOIN ProductDetail pd ON od.ProductDetailId = pd.Id "
-                + "JOIN Product p ON pd.ProductId = p.Id "
-                + "JOIN [Order] o ON od.OrderId = o.Id "
-                + "WHERE o.OrderStatus = 'done' "
-                + "GROUP BY pd.Id, p.Name "
+        String sql = "SELECT TOP 5 \n"
+                + "    p.Id AS ProductId, \n"
+                + "    p.Name AS ProductName, \n"
+                + "    SUM(od.Quantity) AS TotalSold \n"
+                + "FROM OrderDetail od \n"
+                + "JOIN ProductDetail pd ON od.ProductDetailId = pd.Id \n"
+                + "JOIN Product p ON pd.ProductId = p.Id \n"
+                + "JOIN [Order] o ON od.OrderId = o.Id \n"
+                + "WHERE o.OrderStatus = 'done' \n"
+                + "GROUP BY p.Id, p.Name \n"
                 + "ORDER BY TotalSold DESC;";
 
         try (PreparedStatement stmt = connection.prepareStatement(sql); ResultSet rs = stmt.executeQuery()) {
@@ -251,7 +253,6 @@ public class StatisticDAO extends DBContext {
         }
 
         // Getters và Setters
-
         public int getProductId() {
             return productId;
         }
@@ -275,8 +276,7 @@ public class StatisticDAO extends DBContext {
         public void setTotalSold(int totalSold) {
             this.totalSold = totalSold;
         }
-        
-        
+
     }
 
     public static void main(String[] args) {
