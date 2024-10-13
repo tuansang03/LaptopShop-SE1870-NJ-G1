@@ -57,6 +57,13 @@
             imageContainer.appendChild(previewContainer);
         }
     }
+    
+    function confirmDelete(productId) {
+        if (confirm("Are you sure you want to delete this product detail?")) {
+            // Nếu người dùng xác nhận, chuyển đến servlet deletePDBeforeUpdate
+            window.location.href = "deletePDBeforeUpdate?id=" + productId;
+        }
+    }
         </script>
     </head>
     <body>
