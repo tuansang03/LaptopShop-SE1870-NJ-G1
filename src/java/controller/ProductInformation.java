@@ -66,11 +66,11 @@ public class ProductInformation extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         ProductDAO d = new ProductDAO();
-
+        HttpSession session = request.getSession();
         int id = Integer.parseInt(request.getParameter("productId"));
         session.setAttribute("pId", id);
         ProductDetailDAO pDDAO = new ProductDetailDAO();
-       int productId = pDDAO.getProductIdByProductDetailId(id);
+//       int productId = pDDAO.getProductIdByProductDetailId(id);
         List<Image> list = d.getImageById(id);
         ProductDetail pd = d.getProductDetail(id);
         
