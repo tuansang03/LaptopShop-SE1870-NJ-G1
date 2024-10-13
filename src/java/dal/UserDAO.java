@@ -78,6 +78,25 @@ public class UserDAO extends DBContext {
 
         return isUpdated; // Trả về kết quả cập nhật
     }
+        public boolean updateUser2(User u) {
+        String sql = "UPDATE [User] SET fullName = ?, email = ?, Username = ? WHERE id = ?";
+        boolean isUpdated = false;
+
+        try {
+            PreparedStatement pre = connection.prepareStatement(sql);
+            pre.setString(1, u.getFullName()); // Cập nhật fullName
+            pre.setString(2, u.getEmail());     // Cập nhật email
+            pre.setString(3, u.getUserName());     // Cập nhật email
+            pre.setInt(4, u.getId());  // Sử dụng username làm điều kiện để cập nhật
+
+            int rowsAffected = pre.executeUpdate();
+            isUpdated = (rowsAffected > 0); // Nếu có ít nhất 1 hàng bị ảnh hưởng thì cập nhật thành công
+        } catch (SQLException ex) {
+            Logger.getLogger(UserDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        return isUpdated; // Trả về kết quả cập nhật
+    }
 
     public void insertUser(User user) {
         String sql = "INSERT INTO [dbo].[User]\n"

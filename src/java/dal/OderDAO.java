@@ -10,6 +10,8 @@ import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import model.Order;
 import model.OrderDetail;
 import model.ProductDetail;
@@ -487,15 +489,41 @@ public class OderDAO extends DBContext {
         }
         return null;
     }
+   public boolean updateNewestOrderContactInfo(int userId, String newPhone, String newAddress, String newUsername) {
+    String sql = "UPDATE [Order] " +
+                 "SET Phone = ?, Address = ?, Name = ? " +
+                 "WHERE Id = (SELECT TOP(1) Id FROM [Order] WHERE UserId = ? ORDER BY Id DESC)";
+
+    try {
+        PreparedStatement st = connection.prepareStatement(sql);
+        st.setString(1, newPhone);    // Đặt giá trị cho Phone
+        st.setString(2, newAddress);  // Đặt giá trị cho Address
+        st.setString(3, newUsername); // Đặt giá trị cho Name (username)
+        st.setInt(4, userId);         // Đặt giá trị cho UserId
+
+        int rowsUpdated = st.executeUpdate();
+
+        if (rowsUpdated > 0) {
+            return true; // Cập nhật thành công
+        }
+    } catch (Exception e) {
+        e.printStackTrace();
+    }
+    return false; // Cập nhật thất bại
+}
+
+
 
     public static void main(String[] args) {
         OderDAO o = new OderDAO();
-        List<OrderDetail> order = null;
+       
         try {
-            order = o.getOrderDetailsByOrderId(1);
+            OrderDetail or = o.getOrderDetailById(3);
+              System.out.println(or);
         } catch (SQLException ex) {
+            Logger.getLogger(OderDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
-        System.out.println(order);
+      
 
     }
 }
