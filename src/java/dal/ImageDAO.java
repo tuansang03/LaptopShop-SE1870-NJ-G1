@@ -33,16 +33,7 @@ public class ImageDAO extends DBContext {
             pre.executeUpdate();
         } catch (SQLException ex) {
             Logger.getLogger(ImageDAO.class.getName()).log(Level.SEVERE, null, ex);
-        } finally {
-            // Đóng PreparedStatement và Connection nếu cần
-            try {
-                if (connection != null) {
-                    connection.close();
-                }
-            } catch (SQLException ex) {
-                Logger.getLogger(ImageDAO.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        }
+        } 
     }
 
     public ArrayList<Image> getAllImageByPDId(int productDetailId) {
@@ -95,6 +86,20 @@ public class ImageDAO extends DBContext {
     try {
         PreparedStatement pre = connection.prepareStatement(sql);
         pre.setInt(1, imageId);
+        int rowsAffected = pre.executeUpdate();
+
+        // Nếu có ít nhất 1 dòng bị ảnh hưởng, tức là xóa thành công
+        return rowsAffected > 0;
+    } catch (SQLException ex) {
+        Logger.getLogger(ImageDAO.class.getName()).log(Level.SEVERE, null, ex);
+        return false;  // Trả về false nếu có lỗi xảy ra
+    }
+}
+     public boolean deleteImageByProductDetailId(int productDetailId) {
+    String sql = "DELETE FROM [Image] WHERE [ProductDetailId] = ?;";
+    try {
+        PreparedStatement pre = connection.prepareStatement(sql);
+        pre.setInt(1, productDetailId);
         int rowsAffected = pre.executeUpdate();
 
         // Nếu có ít nhất 1 dòng bị ảnh hưởng, tức là xóa thành công

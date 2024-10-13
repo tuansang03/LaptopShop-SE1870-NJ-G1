@@ -8,19 +8,19 @@ import dal.UserDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
-import jakarta.servlet.http.Cookie;
+import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
-import static model.PasswordUtil.hashPassword;
 import model.User;
 
 /**
  *
  * @author ADMIN
  */
-public class login extends HttpServlet {
+@WebServlet(name = "VerifyOTPStaff", urlPatterns = {"/VerifyOTPStaff"})
+public class VerifyOTPStaff extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -39,10 +39,10 @@ public class login extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet login</title>");
+            out.println("<title>Servlet VerifyOTPStaff</title>");
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet login at " + request.getContextPath() + "</h1>");
+            out.println("<h1>Servlet VerifyOTPStaff at " + request.getContextPath() + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
@@ -60,20 +60,7 @@ public class login extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-Cookie arr[] = request.getCookies();
-        if (arr != null) {
-            for (Cookie cookie : arr) {
-                if (cookie.getName().equals("userC")) {
-                    request.setAttribute("usernameC", cookie.getValue());
-
-                }
-                if (cookie.getName().equals("passC")) {
-                    request.setAttribute("passC", cookie.getValue());
-                }
-            }   
-
-        }
-        request.getRequestDispatcher("login.jsp").forward(request, response);
+        processRequest(request, response);
     }
 
     /**
@@ -87,40 +74,36 @@ Cookie arr[] = request.getCookies();
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        String username = request.getParameter("username");
-        String password = request.getParameter("password");
-        String remember = request.getParameter("rememberMe");
-        UserDAO dao = new UserDAO();
-        String hashedPassword = hashPassword(password);
-        User u = dao.UserLogin(username, hashedPassword);
+        String otpInput = request.getParameter("otp");
         HttpSession session = request.getSession();
-        if ("true".equals(remember)) {
-            Cookie uC = new Cookie("userC", username);
-            Cookie p = new Cookie("passC", password);
-            uC.setMaxAge(60 * 60);
-            p.setMaxAge(60 * 60);
-            response.addCookie(uC);
-            response.addCookie(p);
-        }
-        if (u != null) {
-            if(u.getStatus().equalsIgnoreCase("ban")){
-                session.setAttribute("ban", u);
-                response.sendRedirect("ban.jsp");
-                return;
+        String otpStored = (String) session.getAttribute("otp");
+
+        // Kiểm tra OTP
+        if (otpStored != null && otpStored.equals(otpInput)) {
+            // OTP hợp lệ, tiến hành cập nhật thông tin
+            String fullName = (String) session.getAttribute("fullName");
+            String email = (String) session.getAttribute("email");
+
+            User currentUser = (User) session.getAttribute("sale");
+            if (currentUser == null) {
+                currentUser = (User) session.getAttribute("admin");
             }
-            if (u.getRole().getId() == 3) {
-                session.setAttribute("user", u);
-                response.sendRedirect("home");
-            } else if (u.getRole().getId() == 2) {
-                session.setAttribute("sale", u);
-            } else if (u.getRole().getId() == 1) {
-                session.setAttribute("admin", u);
-                response.sendRedirect("admindashboard.jsp");
-            }
-            
-        }else{
-            request.setAttribute("error", "Incorrect username or password");
-            request.getRequestDispatcher("login.jsp").forward(request, response);
+            UserDAO userDAO = new UserDAO();
+
+            // Cập nhật thông tin người dùng
+            currentUser.setFullName(fullName);
+            currentUser.setEmail(email);    
+            userDAO.updateUser(currentUser); // Giả sử bạn đã có phương thức updateUser trong UserDAO
+
+            session.removeAttribute("otp"); // Xóa OTP khỏi session
+            session.removeAttribute("fullName");
+            session.removeAttribute("email");
+            request.setAttribute("message", "Account updated successfully!");
+            request.getRequestDispatcher("updateAccountPage.jsp").forward(request, response);
+        } else {
+            // OTP không hợp lệ, trở về trang cập nhật tài khoản với thông báo lỗi
+            request.setAttribute("error", "Invalid OTP. Please try again.");
+            request.getRequestDispatcher("otp_verificationAdmin.jsp").forward(request, response);
         }
     }
 

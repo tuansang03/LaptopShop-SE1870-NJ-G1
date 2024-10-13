@@ -187,7 +187,7 @@
                                 <a href="information?productId=${p.detail}" class="product-link">
                                     <div class="product-item">
                                         <!-- Hiển thị ảnh sản phẩm -->
-                                        <img src="${p.img}" alt="${p.name}">
+                                        <img src="${pageContext.request.contextPath}/images/${p.img}" alt="${p.name}">
 
                                         <!-- Hiển thị thương hiệu -->
                                         <div class="brand">${p.brand}</div>
