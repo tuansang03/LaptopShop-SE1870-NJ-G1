@@ -4,27 +4,22 @@
  */
 package controller;
 
-import dal.CartDAOS;
-import dal.ImageDAOS;
+import dal.VoucherDAO;
 import java.io.IOException;
 import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import jakarta.servlet.http.HttpSession;
-import java.util.ArrayList;
 import java.util.List;
-import model.Cart;
-import model.CartItem;
-import model.Image;
-import model.User;
+import model.Voucher;
 
 /**
  *
  * @author ADMIN
  */
-//@WebServlet(name="LoadProductCart", urlPatterns={"/loadProductCart"})
-public class LoadProductCart extends HttpServlet {
+@WebServlet(name = "SearchVoucher", urlPatterns = {"/searchVoucher"})
+public class SearchVoucher extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -38,34 +33,33 @@ public class LoadProductCart extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        HttpSession session = request.getSession();
-        User user = (User) session.getAttribute("user");
-        CartDAOS cartDAO = new CartDAOS();
-        Cart cartUser = cartDAO.getCartByUserID(user.getId());
+        String search = request.getParameter("search");
+        String op = request.getParameter("op");
+        VoucherDAO vDAO = new VoucherDAO();
 
-        if (cartUser == null) {
-            cartDAO.addToCart(user.getId());
-            cartUser = cartDAO.getCartByUserID(user.getId());
+        String status = "";
+        if (op.equals("expired")) {
+            status = "0";
+        }else if(op.equals("active")) {
+            status = "1";
+        }
+        
+        List<Voucher> listVoucher = null;
+        if (op.equals("all")) {
+            //find name
+            listVoucher = vDAO.searchVoucherByName(search, "", "all");
+        } else if (!(search.isEmpty()) && (op.equals("active") || op.equals("expired"))) {
+            //find status + name
+            listVoucher = vDAO.searchVoucherByName(search, status, op);
+        }else {
+            //find status
+            listVoucher = vDAO.searchVoucherByName("noName", status, op);
         }
 
-        List<CartItem> listCartItem = cartDAO.getAllProductOfCartItem(cartUser.getId());
-
-        ImageDAOS iDAO = new ImageDAOS();
-
-        List<Image> listImages = new ArrayList<>();
-
-        for (int i = 0; i < listCartItem.size(); i++) {
-            int productDetailId = listCartItem.get(i).getProductdetail().getId();
-            Image image = iDAO.getOneImageByProductDetailID(productDetailId);
-            listImages.add(image); // Thêm hình ảnh vào danh sách
-        }
-
-        int cartID = cartUser.getId();
-
-        request.setAttribute("cartID", cartID);
-        request.setAttribute("listImages", listImages);
-        request.setAttribute("listCartItem", listCartItem);
-        request.getRequestDispatcher("cart.jsp").forward(request, response);
+        request.setAttribute("op", op);
+        request.setAttribute("search", search);
+        request.setAttribute("listVoucher", listVoucher);
+        request.getRequestDispatcher("manageVoucherDisplay.jsp").forward(request, response);
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
@@ -94,6 +88,7 @@ public class LoadProductCart extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        processRequest(request, response);
     }
 
     /**

@@ -4,27 +4,23 @@
  */
 package controller;
 
-import dal.CartDAOS;
-import dal.ImageDAOS;
+import dal.VoucherDAO;
 import java.io.IOException;
+import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import jakarta.servlet.http.HttpSession;
-import java.util.ArrayList;
-import java.util.List;
-import model.Cart;
-import model.CartItem;
-import model.Image;
-import model.User;
+import java.util.Date;
+import model.Voucher;
 
 /**
  *
  * @author ADMIN
  */
-//@WebServlet(name="LoadProductCart", urlPatterns={"/loadProductCart"})
-public class LoadProductCart extends HttpServlet {
+@WebServlet(name = "ApplyVoucher", urlPatterns = {"/applyVoucher"})
+public class ApplyVoucher extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -38,34 +34,34 @@ public class LoadProductCart extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        HttpSession session = request.getSession();
-        User user = (User) session.getAttribute("user");
-        CartDAOS cartDAO = new CartDAOS();
-        Cart cartUser = cartDAO.getCartByUserID(user.getId());
 
-        if (cartUser == null) {
-            cartDAO.addToCart(user.getId());
-            cartUser = cartDAO.getCartByUserID(user.getId());
+        String voucher = request.getParameter("voucher");
+        String totalPriceBefore_raw = request.getParameter("totalBefore");
+        int totalPriceBefore = Integer.parseInt(totalPriceBefore_raw);
+
+        VoucherDAO vDAO = new VoucherDAO();
+
+        Voucher isVoucher = vDAO.checkVoucher(voucher);
+
+        if (isVoucher == null || isVoucher.getQuantity() == 0 || isVoucher.getStatus().equals("0")) {
+            request.setAttribute("error", "Not available ");
+        } else {
+            if (isVoucher.getMinValue() > totalPriceBefore) {
+                request.setAttribute("error", "Your total order value is too low");
+            } else if (isVoucher.getMinValue() <= totalPriceBefore) {
+                Date curentDate = new Date();
+                if (!(isVoucher.getStartDate().compareTo(curentDate) < 0
+                        && isVoucher.getEndDate().compareTo(curentDate) > 0)) {
+                    request.setAttribute("error", "Your voucher is not included in the time offer");
+                } else {
+                    int discount = isVoucher.getDiscountPercent();
+                    request.setAttribute("success", "You get " + discount + "% discount");
+                    request.setAttribute("isVoucher", isVoucher);
+                }
+            }
         }
-
-        List<CartItem> listCartItem = cartDAO.getAllProductOfCartItem(cartUser.getId());
-
-        ImageDAOS iDAO = new ImageDAOS();
-
-        List<Image> listImages = new ArrayList<>();
-
-        for (int i = 0; i < listCartItem.size(); i++) {
-            int productDetailId = listCartItem.get(i).getProductdetail().getId();
-            Image image = iDAO.getOneImageByProductDetailID(productDetailId);
-            listImages.add(image); // Thêm hình ảnh vào danh sách
-        }
-
-        int cartID = cartUser.getId();
-
-        request.setAttribute("cartID", cartID);
-        request.setAttribute("listImages", listImages);
-        request.setAttribute("listCartItem", listCartItem);
-        request.getRequestDispatcher("cart.jsp").forward(request, response);
+        request.setAttribute("voucherInput", voucher);
+        request.getRequestDispatcher("loadInfoCheckout").forward(request, response);
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
@@ -94,6 +90,7 @@ public class LoadProductCart extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        processRequest(request, response);
     }
 
     /**

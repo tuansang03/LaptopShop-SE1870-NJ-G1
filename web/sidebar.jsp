@@ -321,7 +321,10 @@
                     <a href="ConfigurationManageController?service=listall"><i class="fas fa-calendar"></i> Manage Configuration</a>
                     <a href="CategoryController?service=listall"><i class="fas fa-server"></i> Manage Category</a>
                     <a href="postmanage?service=listall"><i class="fas fa-server"></i> Manage Post</a>
-                    <a href="orderManage"><i class="fas fa-object-group"></i> Quản lý đơn hàng</a>
+                    
+                    <a href="voucherManager"><i class="fas fa-server"></i> Manage Voucher</a>
+                    
+                    <a href="managerOrder"><i class="fas fa-object-group"></i> Manager Order</a>
                     <a href="readComment"><i class="fas fa-object-group"></i> Manage Comment</a>
                     <a href="updateAccountPage.jsp"><i class="fas fa-upload  "></i>Update Account</a>
                     <div class="user">

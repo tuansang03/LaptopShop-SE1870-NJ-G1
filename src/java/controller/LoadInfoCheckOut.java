@@ -6,8 +6,11 @@ package controller;
 
 import dal.CartDAOS;
 import dal.ImageDAOS;
+import dal.OderDAO;
 import java.io.IOException;
+import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -17,14 +20,16 @@ import java.util.List;
 import model.Cart;
 import model.CartItem;
 import model.Image;
+import model.Order;
 import model.User;
+import model.Voucher;
 
 /**
  *
  * @author ADMIN
  */
-//@WebServlet(name="LoadProductCart", urlPatterns={"/loadProductCart"})
-public class LoadProductCart extends HttpServlet {
+@WebServlet(name = "LoadInfoCheckOut", urlPatterns = {"/loadInfoCheckout"})
+public class LoadInfoCheckOut extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -40,33 +45,47 @@ public class LoadProductCart extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
         HttpSession session = request.getSession();
         User user = (User) session.getAttribute("user");
-        CartDAOS cartDAO = new CartDAOS();
-        Cart cartUser = cartDAO.getCartByUserID(user.getId());
+        CartDAOS cDAO = new CartDAOS();
 
-        if (cartUser == null) {
-            cartDAO.addToCart(user.getId());
-            cartUser = cartDAO.getCartByUserID(user.getId());
-        }
+        int cid = cDAO.getCartByUserID(user.getId()).getId();
+        List<CartItem> cartItem = cDAO.getProductSelectd(cid);
 
-        List<CartItem> listCartItem = cartDAO.getAllProductOfCartItem(cartUser.getId());
+        String name = user.getFullName();
+        String email = user.getEmail();
 
         ImageDAOS iDAO = new ImageDAOS();
-
         List<Image> listImages = new ArrayList<>();
 
-        for (int i = 0; i < listCartItem.size(); i++) {
-            int productDetailId = listCartItem.get(i).getProductdetail().getId();
+        int totalPrice = 0;
+        for (int i = 0; i < cartItem.size(); i++) {
+            totalPrice += cartItem.get(i).getQuantity() * cartItem.get(i).getProductdetail().getPrice();
+            int productDetailId = cartItem.get(i).getProductdetail().getId();
             Image image = iDAO.getOneImageByProductDetailID(productDetailId);
             listImages.add(image); // Thêm hình ảnh vào danh sách
         }
 
-        int cartID = cartUser.getId();
+        Voucher voucher = (Voucher)request.getAttribute("isVoucher");
+        if (voucher != null) {
+            request.setAttribute("voucher", voucher);
+        }
+        
+        OderDAO oDAO = new OderDAO();
+        Order order = oDAO.getOneOrderNewest(user.getId());
+        
+        if (order != null) {
+            String phone = order.getPhone();
+            String address = order.getAddress();
+            request.setAttribute("phone", phone);
+            request.setAttribute("address", address);
+        }
 
-        request.setAttribute("cartID", cartID);
+        request.setAttribute("cartItem", cartItem);
+        request.setAttribute("totalPrice", totalPrice);
+        request.setAttribute("name", name);
+        request.setAttribute("email", email);
         request.setAttribute("listImages", listImages);
-        request.setAttribute("listCartItem", listCartItem);
-        request.getRequestDispatcher("cart.jsp").forward(request, response);
-    }
+        request.getRequestDispatcher("checkout.jsp").forward(request, response);
+        }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
@@ -94,6 +113,7 @@ public class LoadProductCart extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        processRequest(request, response);
     }
 
     /**
