@@ -390,7 +390,35 @@ public class UserDAO extends DBContext {
         String sql = "SELECT TOP 5 [Id], [UserId], [BrandId], [CategoryId], [Title], [ShortContent], [FullContent], [Thumbnail], [PublishDate] "
                 + "FROM [dbo].[Post] "
                 + "ORDER BY [PublishDate] DESC"; // Sắp xếp theo PublishDate
+        List<Post> list = new ArrayList<>();
+        String sql = "SELECT TOP 5 [Id], [UserId], [BrandId], [CategoryId], [Title], [ShortContent], [FullContent], [Thumbnail], [PublishDate] "
+                + "FROM [dbo].[Post] "
+                + "ORDER BY [PublishDate] DESC"; // Sắp xếp theo PublishDate
 
+        try {
+            PreparedStatement st = connection.prepareStatement(sql);
+            ResultSet rs = st.executeQuery();
+            while (rs.next()) {
+                Post p = new Post();
+                p.setId(rs.getInt("Id"));
+                User u = getUserByIdD(rs.getInt("UserId"));
+                p.setUser(u);
+                Brand b = getBrandByIdD(rs.getInt("BrandId"));
+                p.setBrand(b);
+                Category c = getCategoryByIdD(rs.getInt("CategoryId"));
+                p.setCategory(c);
+                p.setTittle(rs.getString("Title"));
+                p.setShortContent(rs.getString("ShortContent"));
+                p.setFullContent(rs.getString("FullContent"));
+                p.setThumbnail(rs.getString("Thumbnail"));
+                p.setPublishDate(rs.getDate("PublishDate"));
+                list.add(p);
+            }
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
+        return list;
+    }
         try {
             PreparedStatement st = connection.prepareStatement(sql);
             ResultSet rs = st.executeQuery();
@@ -555,16 +583,20 @@ public class UserDAO extends DBContext {
                 // Đặt giá trị cho Price và Quantity
                 newProduct.setPrice(rs.getInt("Price"));
                 newProduct.setQuantity(rs.getInt("Quantity"));
+                // Đặt giá trị cho Price và Quantity
+                newProduct.setPrice(rs.getInt("Price"));
+                newProduct.setQuantity(rs.getInt("Quantity"));
 
-                newProduct.setShortDescription(rs.getString("ShortDescription"));
-                newProduct.setDescription(rs.getString("Description"));
-                newProduct.setStatus(rs.getString("Status"));
-            }
-        } catch (SQLException e) {
-            System.out.println(e);
+            newProduct.setShortDescription(rs.getString("ShortDescription"));
+            newProduct.setDescription(rs.getString("Description"));
+            newProduct.setStatus(rs.getString("Status"));
         }
-        return newProduct;
+    } catch (SQLException e) {
+        System.out.println(e);
     }
+    return newProduct;
+}
+
 
     public List<Image> getPictureList() {
         List<Image> list = new ArrayList<>();
@@ -764,6 +796,29 @@ public Post getPostById(int id) {
             }
         }
     }
+
+    public void unBanAnUser(int userId) {
+        PreparedStatement stm = null;
+
+        String sql = "UPDATE [dbo].[user] SET [status] = 'unban' WHERE id = ?";
+        try {
+            stm = connection.prepareStatement(sql);
+            stm.setInt(1, userId);
+            stm.executeUpdate();
+
+        } catch (SQLException ex) {
+            Logger.getLogger(UserDAO.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            try {
+                if (stm != null) {
+                    stm.close(); // Đóng PreparedStatement
+                }
+                // Không đóng connection ở đây
+            } catch (SQLException ex) {
+                Logger.getLogger(UserDAO.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+    }
 // private Connection connection; // Biến kết nối tới database
 
     // Hàm tìm kiếm user theo từ khóa
@@ -809,8 +864,8 @@ public Post getPostById(int id) {
             }
         }
 
-    return users;
-}
+        return users;
+    }
 public int[] getMinMaxPostId() {
     int[] minMax = new int[2];
     String sql = "SELECT MIN([Id]) AS minId, MAX([Id]) AS maxId FROM [dbo].[Post]";
@@ -829,6 +884,129 @@ public int[] getMinMaxPostId() {
     return minMax;
 }
 
+
+    public List<User> getUserByRoleId(int roleId) {
+        PreparedStatement stm = null;
+        ResultSet rs = null;
+        List<User> users = new ArrayList<>();
+        String sql = "SELECT u.Id, u.Username, u.Password, u.Fullname, u.Email, u.RoleId, u.Status "
+                + "FROM [User] u WHERE u.RoleId = ?";
+
+        try {
+            stm = connection.prepareStatement(sql);
+            stm.setInt(1, roleId);  // Gán giá trị roleId vào câu truy vấn
+            rs = stm.executeQuery();
+
+            while (rs.next()) {
+                int id = rs.getInt("Id");
+                String username = rs.getString("Username");
+                String password = rs.getString("Password");
+                String fullname = rs.getString("Fullname");
+                String email = rs.getString("Email");
+                String status = rs.getString("Status");
+
+                // Tạo đối tượng User và thêm vào danh sách
+                User user = new User(id, username, password, fullname, email, status);
+                users.add(user);
+            }
+            return users;
+
+        } catch (SQLException ex) {
+            Logger.getLogger(UserDAO.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            // Đóng các tài nguyên
+            if (rs != null) try {
+                rs.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+            if (stm != null) try {
+                stm.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        return users;
+    }
+
+    public boolean deleteUserById(int userId) {
+        String deleteCartItemSql = "DELETE FROM CartItem WHERE CartId IN (SELECT Id FROM Cart WHERE UserId = ?)";
+        String deleteCartSql = "DELETE FROM Cart WHERE UserId = ?";
+        String deleteUserSql = "DELETE FROM [User] WHERE Id = ?";
+
+        try (
+                PreparedStatement cartItemStmt = connection.prepareStatement(deleteCartItemSql); PreparedStatement cartStmt = connection.prepareStatement(deleteCartSql); PreparedStatement userStmt = connection.prepareStatement(deleteUserSql)) {
+            // 1. Xóa các CartItem liên quan đến Cart của User
+            cartItemStmt.setInt(1, userId);
+            cartItemStmt.executeUpdate();
+
+            // 2. Xóa các Cart liên quan đến User
+            cartStmt.setInt(1, userId);
+            cartStmt.executeUpdate();
+
+            // 3. Xóa User
+            userStmt.setInt(1, userId);
+            int rowsAffected = userStmt.executeUpdate();
+
+            return rowsAffected > 0; // Trả về true nếu xóa thành công
+
+        } catch (SQLException ex) {
+            Logger.getLogger(UserDAO.class.getName()).log(Level.SEVERE, null, ex);
+            return false; // Trả về false nếu có lỗi xảy ra
+        }
+    }
+
+    public List<User> getUsersByKeywordAndRoleId(String keyword, int roleId) {
+        List<User> users = new ArrayList<>();
+        PreparedStatement stm = null;
+        ResultSet rs = null;
+
+        // Sử dụng tên bảng đầy đủ với schema nếu cần (ví dụ: dbo.User)
+        String sql = "SELECT * FROM dbo.[User] WHERE (userName LIKE ? OR email LIKE ?) AND RoleId = ?";
+
+        try {
+            stm = connection.prepareStatement(sql);
+            String searchPattern = "%" + keyword + "%";  // Sử dụng wildcard cho tìm kiếm
+            stm.setString(1, searchPattern);
+            stm.setString(2, searchPattern);
+            stm.setInt(3, roleId);  // Gán RoleId
+
+            rs = stm.executeQuery();
+
+            while (rs.next()) {
+                User user = new User();
+                user.setId(rs.getInt("id"));
+                user.setUserName(rs.getString("userName"));
+                user.setFullName(rs.getString("fullName"));
+                user.setEmail(rs.getString("email"));
+                user.setStatus(rs.getString("status"));
+                // Thêm user vào danh sách
+                users.add(user);
+            }
+
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        } finally {
+            try {
+                if (rs != null) {
+                    rs.close();
+                }
+                if (stm != null) {
+                    stm.close();
+                }
+                // Không đóng connection ở đây
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+            }
+        }
+
+        return users;
+    }
+
+//    public static void main(String[] args) {
+//        UserDAO dao = new UserDAO();
+//        System.out.println(dao.deleteUserById(4));
+//    }
 
 }
 //================================================================================================================

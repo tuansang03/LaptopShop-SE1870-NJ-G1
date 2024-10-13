@@ -27,24 +27,28 @@
         }
 
         .status-icon:hover {
-            color: #28a745;
+            color: #28a745; /* Màu xanh cho trạng thái hoạt động */
+        }
+
+        .status-icon.banned:hover {
+            color: #dc3545; /* Màu đỏ cho trạng thái bị ban */
         }
     </style>
 </head>
 <body>
     <div class="col-md-10 content">
-        <h2>Manage Users</h2>
+        <h2>Manage Staff</h2>
 
-        <!-- Form tìm kiếm user -->
+        <!-- Thêm form tìm kiếm user -->
         <form action="CustomerManageController" method="GET" class="form-inline mb-3">
             <input type="text" name="keyword" class="form-control mr-2" placeholder="Search by username or email" value="${param.keyword}">
-            <input type="hidden" name="service" value="searchUser">
+            <input type="hidden" name="service" value="searchStaff">
             <button type="submit" class="btn btn-primary">Search</button>
         </form>
 
         <!-- Thông báo -->
         <c:if test="${not empty mess}">
-            <div class="alert ${mess == 'Ban successful' ? 'alert-success' : 'alert-danger'}">
+            <div class="alert ${mess == 'Ban successful' || mess == 'Unban successful' || mess == 'Delete successful' ? 'alert-success' : 'alert-danger'}">
                 ${mess}
             </div>
         </c:if>
@@ -57,26 +61,27 @@
                     <th>Full Name</th>
                     <th>Email</th>
                     <th>Status</th>
-                    <th>Action</th>
+                    <th>Action</th> <!-- Cột Action -->
                 </tr>
             </thead>
 
             <tbody>
-                <c:forEach var="user" items="${listUser}"> 
+                <c:forEach var="user" items="${listStaff}">
                     <tr>
                         <td>${user.id}</td>
                         <td>${user.userName}</td>
                         <td>${user.fullName}</td>
                         <td>${user.email}</td>
+                        <!-- Hiển thị trạng thái -->
                         <td>
                             <c:choose>
                                 <c:when test="${user.status != 'ban'}">
-                                    <span class="text-success status-icon" 
-                                          onclick="updateStatus('${user.id}', 'ban');">&#10003;</span>
+                                    <!-- Khi nhấn vào dấu tích sẽ gọi hàm updateStatus để ban staff -->
+                                    <span class="text-success status-icon" onclick="updateStatus('${user.id}', 'ban');">&#10003;</span>
                                 </c:when>
                                 <c:otherwise>
-                                    <span class="text-danger status-icon" 
-                                          onclick="updateStatus('${user.id}', 'unban');">&#10006;</span>
+                                    <!-- Khi nhấn vào dấu x sẽ gọi hàm updateStatus để unban staff -->
+                                    <span class="text-danger status-icon banned" onclick="updateStatus('${user.id}', 'unban');">&#10006;</span>
                                 </c:otherwise>
                             </c:choose>
                         </td>
@@ -85,8 +90,8 @@
                                 <!-- Nút Delete -->
                                 <form action="CustomerManageController" method="GET" style="display:inline;">
                                     <input type="hidden" name="id" value="${user.id}">
-                                    <input type="hidden" name="service" value="deleteUser">
-                                    <button type="submit" onclick="return confirm('Are you sure you want to delete this user?');" class="btn btn-danger">
+                                    <input type="hidden" name="service" value="deleteStaff">
+                                    <button type="submit" onclick="return confirm('Are you sure you want to delete this staff?');" class="btn btn-danger">
                                         <i class="fas fa-trash-alt"></i> Delete
                                     </button>
                                 </form>
@@ -100,11 +105,12 @@
         <script>
             function updateStatus(userId, action) {
                 let confirmMessage = action === 'ban' 
-                    ? 'Are you sure you want to ban this user?' 
-                    : 'Are you sure you want to unban this user?';
+                    ? 'Are you sure you want to ban this staff?' 
+                    : 'Are you sure you want to unban this staff?';
 
                 if (confirm(confirmMessage)) {
-                    window.location.href = 'CustomerManageController?id=' + userId + '&service=' + action + 'User';
+                    // Chuyển hướng đến servlet với tham số service tương ứng
+                    window.location.href = 'CustomerManageController?id=' + userId + '&service=' + action + 'Staff';
                 }
             }
         </script>
