@@ -390,35 +390,6 @@ public class UserDAO extends DBContext {
         String sql = "SELECT TOP 5 [Id], [UserId], [BrandId], [CategoryId], [Title], [ShortContent], [FullContent], [Thumbnail], [PublishDate] "
                 + "FROM [dbo].[Post] "
                 + "ORDER BY [PublishDate] DESC"; // Sắp xếp theo PublishDate
-        List<Post> list = new ArrayList<>();
-        String sql = "SELECT TOP 5 [Id], [UserId], [BrandId], [CategoryId], [Title], [ShortContent], [FullContent], [Thumbnail], [PublishDate] "
-                + "FROM [dbo].[Post] "
-                + "ORDER BY [PublishDate] DESC"; // Sắp xếp theo PublishDate
-
-        try {
-            PreparedStatement st = connection.prepareStatement(sql);
-            ResultSet rs = st.executeQuery();
-            while (rs.next()) {
-                Post p = new Post();
-                p.setId(rs.getInt("Id"));
-                User u = getUserByIdD(rs.getInt("UserId"));
-                p.setUser(u);
-                Brand b = getBrandByIdD(rs.getInt("BrandId"));
-                p.setBrand(b);
-                Category c = getCategoryByIdD(rs.getInt("CategoryId"));
-                p.setCategory(c);
-                p.setTittle(rs.getString("Title"));
-                p.setShortContent(rs.getString("ShortContent"));
-                p.setFullContent(rs.getString("FullContent"));
-                p.setThumbnail(rs.getString("Thumbnail"));
-                p.setPublishDate(rs.getDate("PublishDate"));
-                list.add(p);
-            }
-        } catch (SQLException e) {
-            System.out.println(e);
-        }
-        return list;
-    }
         try {
             PreparedStatement st = connection.prepareStatement(sql);
             ResultSet rs = st.executeQuery();
