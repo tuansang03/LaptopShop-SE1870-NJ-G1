@@ -78,6 +78,25 @@ public class UserDAO extends DBContext {
 
         return isUpdated; // Trả về kết quả cập nhật
     }
+        public boolean updateUser2(User u) {
+        String sql = "UPDATE [User] SET fullName = ?, email = ?, Username = ? WHERE id = ?";
+        boolean isUpdated = false;
+
+        try {
+            PreparedStatement pre = connection.prepareStatement(sql);
+            pre.setString(1, u.getFullName()); // Cập nhật fullName
+            pre.setString(2, u.getEmail());     // Cập nhật email
+            pre.setString(3, u.getUserName());     // Cập nhật email
+            pre.setInt(4, u.getId());  // Sử dụng username làm điều kiện để cập nhật
+
+            int rowsAffected = pre.executeUpdate();
+            isUpdated = (rowsAffected > 0); // Nếu có ít nhất 1 hàng bị ảnh hưởng thì cập nhật thành công
+        } catch (SQLException ex) {
+            Logger.getLogger(UserDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        return isUpdated; // Trả về kết quả cập nhật
+    }
 
     public void insertUser(User user) {
         String sql = "INSERT INTO [dbo].[User]\n"
@@ -364,6 +383,7 @@ public class UserDAO extends DBContext {
         return list;
     }
 
+
     public List<Post> getNewestPostListD() {
 
         List<Post> list = new ArrayList<>();
@@ -605,8 +625,9 @@ public class UserDAO extends DBContext {
         }
         return list;
     }
+    
+public Post getPostById(int id) {
 
-    public Post getPostById(int id) {
         String sql = "SELECT [Id], [UserId], [BrandId], [CategoryId], [Title], "
                 + "[ShortContent], [FullContent], [Thumbnail], [PublishDate] "
                 + "FROM [dbo].[Post] WHERE [Id] = ?";
@@ -788,8 +809,26 @@ public class UserDAO extends DBContext {
             }
         }
 
-        return users;
+    return users;
+}
+public int[] getMinMaxPostId() {
+    int[] minMax = new int[2];
+    String sql = "SELECT MIN([Id]) AS minId, MAX([Id]) AS maxId FROM [dbo].[Post]";
+
+    try {
+        PreparedStatement st = connection.prepareStatement(sql);
+        ResultSet rs = st.executeQuery();
+
+        if (rs.next()) {
+            minMax[0] = rs.getInt("minId"); // Lấy id nhỏ nhất
+            minMax[1] = rs.getInt("maxId"); // Lấy id lớn nhất
+        }
+    } catch (SQLException e) {
+        System.out.println(e);
     }
+    return minMax;
+}
+
 
 }
 //================================================================================================================

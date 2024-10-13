@@ -51,84 +51,107 @@
                         <th>Author</th>
 
                         <th>Preview</th>
-                        
+
                         <th>Action</th>
                     </tr>
                 </thead>
 
                 <tbody>
-                    <c:forEach var="p" items="${listPost}"> 
-                        <tr>
-                            <td>${p.getId()}</td>
-                            <td>${p.getUser().getUserName()}</td>
+                <style>
+                    .tede{
+                        max-height: 300px !important;
+                        width: 100% !important;
+                    }
+                    .tede img{
 
-                            <td>
-                                <div class="row needToFix">
+                    }
+
+                </style>
+                <c:forEach var="p" items="${listPost}"> 
+                    <tr class="tede">
+                        <td>${p.getId()}</td>
+                        <td>${p.getUser().getUserName()}</td>
+
+                        <td >
+                            <div class="row needToFix">
 
 
-                                    <style>
-                                        .tach{
-                                            margin-right: 15px;
-                                        }
-                                        .needToFix{
-                                            width: 100%;
-                                        }
-                                        .card-blog{
-                                            display: flex !important;
-                                        }
+                                <style>
+                                    .tach{
+                                        margin-right: 15px;
+                                    }
+                                    .needToFix{
+                                        width: 100%;
+                                    }
+                                    .card-blog{
+                                        display: flex !important;
+                                    }
+                                    .dip{
+                                        padding: 0px 30px;
 
-                                    </style>
+                                    }
+                                    .dip img{
+                                        height: 300px;
+                                        width: 320px;
+                                    }
 
-                                    <div class="post tach">
-                                        <div class="card card-blog">
-                                            <div class="row no-gutters">
-                                                <!-- Cột hiển thị hình ảnh thumbnail -->
-                                                <div class="col-md-4">
-                                                    <div class="card-blog__img">
-                                                        <img class="card-img rounded-0" src="${p.thumbnail}" alt="${p.tittle}">
-                                                    </div>
+                                </style>
+
+                                <h4>${mess}</h4>
+                                <div class="post tach">
+                                    <div class="card card-blog">
+                                        <div class="row no-gutters">
+                                            <!-- Cột hiển thị hình ảnh thumbnail -->
+                                            <div class="col-md-4 dip">
+                                                <div class="card-blog__img">
+                                                    <img class="card-img rounded-0" src="${p.thumbnail}" alt="${p.tittle}">
                                                 </div>
-                                                <!-- Cột hiển thị thông tin bài viết -->
-                                                <div class="col-md-8">
-                                                    <div class="card-body">
-                                                        <ul class="card-blog__info">
+                                            </div>
+                                            <!-- Cột hiển thị thông tin bài viết -->
+                                            <div class="col-md-8">
+                                                <div class="card-body">
+                                                    <ul class="card-blog__info">
+                                                        <c:if test="${p.brand.name ne 'None'}">
                                                             <li><i class="bx bx-laptop"></i> ${p.brand.name}</li>
-                                                            <li><i class="bx bx-calendar"></i> ${p.publishDate}</li>
-                                                        </ul>
-                                                        <h4 class="card-blog__title">
-                                                            <a href="postdetail?id=${p.id}">${p.tittle}</a>
-                                                        </h4>
-                                                        <p>${p.shortContent}</p>
-                                                    </div>
+                                                            </c:if>
+
+                                                        <li><i class="bx bx-calendar"></i> ${p.publishDate}</li>
+                                                    </ul>
+                                                    <h4 class="card-blog__title">
+                                                        <a href="postdetail?id=${p.id}">${p.tittle}</a>
+                                                    </h4>
+                                                    <p>${p.shortContent}</p>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-                            </td>
+                            </div>
+                        </td>
 
 
 
-                            
-                            <td>
-<!--                                <div class="action-buttons">
-                                     Nút Update 
-                                    <button class="btn btn-warning" onclick="editCategory('${c.id}');">
-                                        <i class="fas fa-edit"></i> Update
+
+                        <td>
+                            <div class="action-buttons">
+
+                                <button class="btn btn-warning" onclick="editPost('${p.id}');">
+                                    <i class="fas fa-edit"></i> Update
+                                </button>
+
+
+                                <form action="postmanage" method="POST" style="display:inline;">
+                                    <input type="hidden" name="id" value="${p.id}">
+                                    <input type="hidden" name="service" value="deletePost">
+                                    <button type="submit" onclick="return confirm('Are you sure you want to delete this category?');" class="btn btn-danger">
+                                        <i class="fas fa-trash-alt"></i> Delete <br/>
+
                                     </button>
-
-                                     Nút Delete 
-                                    <form action="CategoryController" method="POST" style="display:inline;">
-                                        <input type="hidden" name="id" value="${c.id}">
-                                        <input type="hidden" name="service" value="deleteCategory">
-                                        <button type="submit" onclick="return confirm('Are you sure you want to delete this category?');" class="btn btn-danger">
-                                            <i class="fas fa-trash-alt"></i> Delete
-                                        </button>
-                                    </form>
-                                </div>-->
-                            </td>
-                        </tr>
-                    </c:forEach>
+                                </form>
+                            </div>
+                        </td>
+                    </tr>
+                </c:forEach>
                 </tbody>
             </table>
 
@@ -162,9 +185,9 @@
         </div>
 
         <script>
-            function editCategory(categoryId) {
+            function editPost(postId) {
                 // Chuyển hướng trực tiếp đến servlet mà không cần xác nhận
-                window.location.href = 'CategoryController?id=' + categoryId + '&service=updateCategoryRequest';
+                window.location.href = 'postmanage?id=' + postId + '&service=updatePostRequest';
             }
         </script>
 

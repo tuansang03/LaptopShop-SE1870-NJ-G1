@@ -190,7 +190,6 @@ public class Order {
     public void setOrderStatus(String OrderStatus) {
         this.OrderStatus = OrderStatus;
     }
-
     public String getNote() {
         return Note;
     }
@@ -198,13 +197,10 @@ public class Order {
     public void setNote(String Note) {
         this.Note = Note;
     }
-    
-    
 
     @Override
     public String toString() {
         return "Order{" + "Id=" + Id + ", User=" + User + ", Name=" + Name + ", Address=" + Address + ", Phone=" + Phone + ", OrderDate=" + OrderDate + ", Voucher=" + Voucher + ", TotalAmountBefore=" + TotalAmountBefore + ", DiscountAmount=" + DiscountAmount + ", TotalAmountAfter=" + TotalAmountAfter + ", PaymentMethod=" + PaymentMethod + ", PaymentStatus=" + PaymentStatus + ", VnPayTransactionId=" + VnPayTransactionId + ", EndDate=" + EndDate + ", OrderStatus=" + OrderStatus + '}';
     }
-    
-    
+
 }

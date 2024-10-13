@@ -94,15 +94,18 @@
                             <div class="sidebar-filter">
                                 <div class="top-filter-head">Browse Brands</div>
                                 <div class="common-filter">
-                                    <ul>
-                                        <c:forEach items="${brandlist}" var="b">
-                                            <li class="filter-list">
-                                                <input class="pixel-radio" type="checkbox" name="brand[]" value="${b.name}"
-                                                       <c:if test="${fn:contains(brand, b.name)}">checked</c:if>>
-                                                <label>${b.name}</label>
-                                            </li>
-                                        </c:forEach>
-                                    </ul>
+                                    <div class="common-filter">
+                                        <ul>
+                                            <c:forEach items="${brandlist}" var="c">
+                                                <li class="filter-list">
+                                                    <input class="pixel-radio" type="checkbox" name="brand[]" value="${c.name}"
+                                                           <c:if test="${fn:contains(brand, c.name)}">checked</c:if>
+
+                                                               <label>${c.name}</label>
+                                                </li>    
+                                            </c:forEach>
+                                        </ul>
+                                    </div>
                                 </div>
                             </div>
 
@@ -113,8 +116,9 @@
                                         <c:forEach items="${categorylist}" var="c">
                                             <li class="filter-list">
                                                 <input class="pixel-radio" type="checkbox" name="category[]" value="${c.name}"
-                                                       <c:if test="${fn:contains(category, c.name)}">checked</c:if>>
-                                                <label>${c.name}</label>
+                                                       <c:if test="${fn:contains(category, c.name)}">checked</c:if>
+
+                                                           <label>${c.name}</label>
                                             </li>    
                                         </c:forEach>
                                     </ul>
@@ -154,28 +158,28 @@
                         </div>
                         <!-- End Filter Bar -->
                         <div class="product-container">
-                        <c:if test="${not empty selectedBrands}">
-                            <p>Lọc theo brand: 
-                                <!-- Sử dụng forEach để lặp qua các phần tử của selectedBrands -->
-                                <c:forEach var="n" items="${selectedBrands}" varStatus="status">
-                                    ${n}
-                                    <!-- Nếu không phải là phần tử cuối cùng thì thêm dấu phẩy -->
-                                    <c:if test="${!status.last}">, </c:if>
-                                </c:forEach>
-                            </p>
-                        </c:if>
-                        <c:if test="${not empty selectedCategories}">
-                            <p>Lọc theo category: 
-                                <!-- Sử dụng forEach để lặp qua các phần tử của selectedBrands -->
-                                <c:forEach var="n" items="${selectedCategories}" varStatus="status">
-                                    ${n}
-                                    <!-- Nếu không phải là phần tử cuối cùng thì thêm dấu phẩy -->
-                                    <c:if test="${!status.last}">, </c:if>
-                                </c:forEach>
-                            </p>
-                        </c:if>
+                            <c:if test="${not empty selectedBrands}">
+                                <p>Lọc theo brand: 
+                                    <!-- Sử dụng forEach để lặp qua các phần tử của selectedBrands -->
+                                    <c:forEach var="n" items="${selectedBrands}" varStatus="status">
+                                        ${n}
+                                        <!-- Nếu không phải là phần tử cuối cùng thì thêm dấu phẩy -->
+                                        <c:if test="${!status.last}">, </c:if>
+                                    </c:forEach>
+                                </p>
+                            </c:if>
+                            <c:if test="${not empty selectedCategories}">
+                                <p>Lọc theo category: 
+                                    <!-- Sử dụng forEach để lặp qua các phần tử của selectedBrands -->
+                                    <c:forEach var="n" items="${selectedCategories}" varStatus="status">
+                                        ${n}
+                                        <!-- Nếu không phải là phần tử cuối cùng thì thêm dấu phẩy -->
+                                        <c:if test="${!status.last}">, </c:if>
+                                    </c:forEach>
+                                </p>
+                            </c:if>
                         </div>
-                        
+
 
 
 
