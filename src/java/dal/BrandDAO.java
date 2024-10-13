@@ -193,4 +193,8 @@ public class BrandDAO extends DBContext {
         }
         return null;
     }
+//    public static void main(String[] args) {
+//        BrandDAO dao = new BrandDAO();
+//        System.out.println(dao.getAll());
+//    }
 }
