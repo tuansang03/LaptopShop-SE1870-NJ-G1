@@ -258,11 +258,11 @@ public class ProductDAO extends DBContext {
 
     public List<Image> getImageById(int id) {
         List<Image> list = new ArrayList<>();
-        String sql = "SELECT p.Id AS product, pd.Id, i.FeedbackId, i.Image "
-                + "FROM Product p "
-                + "JOIN ProductDetail pd ON pd.ProductId = p.Id "
-                + "JOIN Image i ON i.ProductDetailId = pd.Id "
-                + "WHERE p.Id = (SELECT ProductId FROM ProductDetail WHERE Id = ?)";
+        String sql = "SELECT i.Id, i.ProductDetailId, i.FeedbackId, i.Image\n"
+                + "FROM Product p\n"
+                + "JOIN ProductDetail pd ON pd.ProductId = p.Id\n"
+                + "JOIN Image i ON i.ProductDetailId = pd.Id\n"
+                + "WHERE pd.Id = ?";
 
         try (PreparedStatement st = connection.prepareStatement(sql)) {
             st.setInt(1, id);
@@ -714,7 +714,7 @@ public class ProductDAO extends DBContext {
             Logger.getLogger(UserDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
+
     public void deleteAllWishlist(int uid) {
         String sql = "delete from Favorite where UserId=?";
         try {
