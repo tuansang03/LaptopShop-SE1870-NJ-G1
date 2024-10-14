@@ -31,6 +31,26 @@ public class Return {
         this.returnDate = returnDate;
     }
 
+    public Return(int totalReturnAmount, String reason, String refundMethod, String refundStatus, String returnStatus, Order oder, LocalDateTime returnDate) {
+        this.totalReturnAmount = totalReturnAmount;
+        this.reason = reason;
+        this.refundMethod = refundMethod;
+        this.refundStatus = refundStatus;
+        this.returnStatus = returnStatus;
+        this.oder = oder;
+        this.returnDate = returnDate;
+    }
+
+    public Return(int totalReturnAmount, String reason, String refundMethod, Order oder, LocalDateTime returnDate) {
+
+        this.totalReturnAmount = totalReturnAmount;
+        this.reason = reason;
+        this.refundMethod = refundMethod;
+
+        this.oder = oder;
+        this.returnDate = returnDate;
+    }
+
     public int getId() {
         return id;
     }
@@ -99,13 +119,5 @@ public class Return {
     public String toString() {
         return "Return{" + "id=" + id + ", totalReturnAmount=" + totalReturnAmount + ", reason=" + reason + ", refundMethod=" + refundMethod + ", refundStatus=" + refundStatus + ", returnStatus=" + returnStatus + ", oder=" + oder + ", returnDate=" + returnDate + '}';
     }
-    
-    
-
-
-
-
-    
-    
 
 }
