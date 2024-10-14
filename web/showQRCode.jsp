@@ -27,7 +27,7 @@
                     // Chuyển hướng về trang home sau 5 giây
                     setTimeout(function () {
                         window.location.href = "home";
-                    }, 100000);
+                    }, 5000);
                 </script>
         <style>
             .flex {

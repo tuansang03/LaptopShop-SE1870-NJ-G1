@@ -4,18 +4,14 @@
  */
 package dal;
 
+import java.sql.Timestamp;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import java.util.List;
 import model.Order;
-import model.OrderDetail;
 import model.ProductDetail;
 import model.User;
 import model.Voucher;
@@ -492,30 +488,29 @@ public class OderDAO extends DBContext {
         }
         return null;
     }
-   public boolean updateNewestOrderContactInfo(int userId, String newPhone, String newAddress, String newUsername) {
-    String sql = "UPDATE [Order] " +
-                 "SET Phone = ?, Address = ?, Name = ? " +
-                 "WHERE Id = (SELECT TOP(1) Id FROM [Order] WHERE UserId = ? ORDER BY Id DESC)";
 
-    try {
-        PreparedStatement st = connection.prepareStatement(sql);
-        st.setString(1, newPhone);    // Đặt giá trị cho Phone
-        st.setString(2, newAddress);  // Đặt giá trị cho Address
-        st.setString(3, newUsername); // Đặt giá trị cho Name (username)
-        st.setInt(4, userId);         // Đặt giá trị cho UserId
+    public boolean updateNewestOrderContactInfo(int userId, String newPhone, String newAddress, String newUsername) {
+        String sql = "UPDATE [Order] "
+                + "SET Phone = ?, Address = ?, Name = ? "
+                + "WHERE Id = (SELECT TOP(1) Id FROM [Order] WHERE UserId = ? ORDER BY Id DESC)";
 
-        int rowsUpdated = st.executeUpdate();
+        try {
+            PreparedStatement st = connection.prepareStatement(sql);
+            st.setString(1, newPhone);    // Đặt giá trị cho Phone
+            st.setString(2, newAddress);  // Đặt giá trị cho Address
+            st.setString(3, newUsername); // Đặt giá trị cho Name (username)
+            st.setInt(4, userId);         // Đặt giá trị cho UserId
 
-        if (rowsUpdated > 0) {
-            return true; // Cập nhật thành công
+            int rowsUpdated = st.executeUpdate();
+
+            if (rowsUpdated > 0) {
+                return true; // Cập nhật thành công
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-    } catch (Exception e) {
-        e.printStackTrace();
+        return false; // Cập nhật thất bại
     }
-    return false; // Cập nhật thất bại
-}
-
-
 
     public List<Order> getAllOrder() {
         String sql = "SELECT * FROM [Order]";
@@ -635,11 +630,59 @@ public class OderDAO extends DBContext {
         return listODetail;
     }
 
+    public List<Order> getOrderByOrderStatus(String status) {
+        String sql = "SELECT * FROM [Order] WHERE [OrderStatus] = ?";
+        List<Order> listOrder = new ArrayList<>();
+
+        try {
+            PreparedStatement st = connection.prepareStatement(sql);
+            st.setString(1, status);
+            ResultSet rs = st.executeQuery();
+            while (rs.next()) {
+                UserDAO uDAO = new UserDAO();
+                VoucherDAO vDAO = new VoucherDAO();
+                LocalDateTime endDate = rs.getTimestamp("EndDate") != null ? rs.getTimestamp("EndDate").toLocalDateTime() : null;
+                Order o = new Order(rs.getInt("Id"),
+                        uDAO.getUserByIdD(rs.getInt("UserID")),
+                        rs.getString("Name"),
+                        rs.getString("Address"),
+                        rs.getString("Phone"),
+                        rs.getTimestamp("OrderDate").toLocalDateTime(),
+                        vDAO.getVoucherByID(rs.getInt("VoucherID")),
+                        rs.getInt("TotalAmountBefore"),
+                        rs.getInt("DiscountAmount"),
+                        rs.getInt("TotalAmountAfter"),
+                        rs.getString("PaymentMethod"),
+                        rs.getString("PaymentStatus"),
+                        rs.getString("VnPayTransactionId"),
+                        endDate,
+                        rs.getString("OrderStatus"),
+                        rs.getString("Note"));
+                listOrder.add(o);
+            }
+        } catch (Exception e) {
+        }
+        return listOrder;
+    }
+
+    public void updateEnddate(LocalDateTime endDate, int id) {
+        String sql = "UPDATE [dbo].[Order] SET [EndDate] = ?   WHERE Id = ? ";
+        try {
+            PreparedStatement st = connection.prepareStatement(sql);
+            st.setTimestamp(1, Timestamp.valueOf(endDate));
+            st.setInt(2, id);
+            st.executeUpdate();
+        } catch (Exception e) {
+        }
+    }
+    
     public static void main(String[] args) {
         OderDAO o = new OderDAO();
 
-        List<OrderDetail> l = o.getAllOrdetailByID(1);
-        System.out.println(l);
+        //List<OrderDetail> l = o.getAllOrdetailByID(1);
+        //System.out.println(l);
+        
+        o.updateEnddate(LocalDateTime.now(), 27);
 
     }
 }

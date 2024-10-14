@@ -64,22 +64,22 @@
                                     <h3>Billing Details</h3>
                                     <div class="row contact_form">
                                         <div class="col-md-12 form-group">
-                                            <input required value="${name}" type="text" class="form-control" name="name"   placeholder="Name">
+                                            Name: <input required value="${name}" type="text" class="form-control" name="name"   placeholder="Name">
                                         </div>
                                         <div class="col-md-12 form-group">
-                                            <input value="${address}" required type="text" class="form-control" name="address"   placeholder="Address">
+                                           Address: <input value="${address}" required type="text" class="form-control" name="address"   placeholder="Address">
                                         </div>
                                         <div class="col-md-12 form-group">
-                                            <input value="${phone}" required type="number" class="form-control" name="phone"   placeholder="Phone">
+                                           Phone: <input value="${phone}" required type="number" class="form-control" name="phone"   placeholder="Phone">
                                         </div>
                                         <div class="col-md-12 form-group">
-                                            <input readonly value="${email}" type="email" class="form-control" name="email"  placeholder="Email">
+                                           Email: <input readonly value="${email}" type="email" class="form-control" name="email"  placeholder="Email">
                                         </div>
                                         <div class="col-md-12 form-group mb-0">
                                             <div class="creat_account">
                                                 <h3>Shipping Details</h3>
                                             </div>
-                                            <textarea class="form-control" name="message" rows="1" placeholder="Order Notes"></textarea>
+                                        Note: <textarea class="form-control" name="message" rows="1" placeholder="Order Notes"></textarea>
                                         </div>
                                     </div>
                                 </div>
@@ -94,7 +94,7 @@
                                                         <li>
                                                             <c:forEach items="${listImages}" var="i">
                                                                 <c:if test="${i.getProductDetail().getId() == c.getProductdetail().getId()}">
-                                                                    <img style="width: 40px" src="${i.getImage()}" alt="">
+                                                                    <img style="width: 40px" src="${pageContext.request.contextPath}/images/${i.getImage()}" alt="">
                                                                 </c:if>
                                                             </c:forEach>
                                                         </li>
@@ -152,7 +152,7 @@
                                         </div>
 
                                         <div class="text-center">
-                                            <button class="button button-paypal">Proceed to Paypal</button>
+                                            <button class="button button-paypal">Proceed to Payment</button>
                                         </div>
                                     </div>
                                 </div>

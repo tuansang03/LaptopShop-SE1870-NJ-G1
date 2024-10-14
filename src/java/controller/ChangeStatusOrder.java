@@ -12,6 +12,8 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import java.time.LocalDateTime;
+import model.Order;
 
 /**
  *
@@ -74,8 +76,21 @@ public class ChangeStatusOrder extends HttpServlet {
 
         OderDAO oDAO = new OderDAO();
 
+        Order order = oDAO.getOrderByID(oid);
+
+        if (order.getPaymentMethod().equals("Payment")
+                && (order.getPaymentStatus().equals("fail")
+                || order.getPaymentStatus().equals("pending"))) {
+            
+            request.setAttribute("error", "The failed or pending payment status cannot be changed to Accepted or Done");
+            request.getRequestDispatcher("managerOrder").forward(request, response);
+            return;
+        }
+
         oDAO.changeOrderStatus(opOrderStatus, oid);
-        response.sendRedirect("managerOrder");
+
+        request.setAttribute("oid", oid);
+        request.getRequestDispatcher("managerOrder").forward(request, response);
     }
 
     /**

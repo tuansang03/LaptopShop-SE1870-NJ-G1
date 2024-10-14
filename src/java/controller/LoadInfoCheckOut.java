@@ -50,6 +50,12 @@ public class LoadInfoCheckOut extends HttpServlet {
         int cid = cDAO.getCartByUserID(user.getId()).getId();
         List<CartItem> cartItem = cDAO.getProductSelectd(cid);
 
+        if (cartItem.isEmpty()) {
+            request.setAttribute("error", "Please select at least 1 product");
+            request.getRequestDispatcher("loadProductCart").forward(request, response);
+            return;
+        }
+
         String name = user.getFullName();
         String email = user.getEmail();
 
@@ -64,14 +70,14 @@ public class LoadInfoCheckOut extends HttpServlet {
             listImages.add(image); // Thêm hình ảnh vào danh sách
         }
 
-        Voucher voucher = (Voucher)request.getAttribute("isVoucher");
+        Voucher voucher = (Voucher) request.getAttribute("isVoucher");
         if (voucher != null) {
             request.setAttribute("voucher", voucher);
         }
-        
+
         OderDAO oDAO = new OderDAO();
         Order order = oDAO.getOneOrderNewest(user.getId());
-        
+
         if (order != null) {
             String phone = order.getPhone();
             String address = order.getAddress();
@@ -85,7 +91,7 @@ public class LoadInfoCheckOut extends HttpServlet {
         request.setAttribute("email", email);
         request.setAttribute("listImages", listImages);
         request.getRequestDispatcher("checkout.jsp").forward(request, response);
-        }
+    }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**

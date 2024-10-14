@@ -95,7 +95,7 @@
                 <thead>
                     <tr>
                         <th style="text-align: center; vertical-align: middle; padding: 10px;">
-                            <h3>Compare laptop </h3>
+                            <h3>So sánh laptop </h3>
                         </th>
                         <th style="text-align: center; vertical-align: middle; padding: 10px;">
                             <div style="height: 100%; display: flex; flex-direction: column; justify-content: space-between;" >
@@ -103,7 +103,7 @@
 
                                     <!-- Hiển thị ảnh sản phẩm -->
                                     <div class="image-container">
-                                        <img src="${pageContext.request.contextPath}/images/${img1.image}" alt="Product Image" style="max-width: 100%; height: auto;">
+                                        <img src="${img1.image}" alt="Product Image" style="max-width: 100%; height: auto;">
                                         <div class="overlay">
                                             <div class="icon-container">
                                                 <a href="information?productId=${img1.productDetail.id}" class="ti-search"></a>
@@ -129,7 +129,7 @@
                         </th>
                         <th style="text-align: center; vertical-align: middle; padding: 10px;">
                             <c:if test="${empty img2}">
-                                <button id="openModal">Add product</button>
+                                <button id="openModal">Thêm sản phẩm</button>
                             </c:if>
                             <c:if test="${!empty img2}">
                                 <a style="float: right; font-size: 30px;" href="compare?productid=${img1.productDetail.id}&&productid3=${img3.productDetail.id}" >&times;</a>
@@ -138,7 +138,7 @@
 
                                         <!-- Hiển thị ảnh sản phẩm -->
                                         <div class="image-container">
-                                            <img src="${pageContext.request.contextPath}/images/${img2.image}" alt="Product Image" style="max-width: 100%; height: auto;">
+                                            <img src="${img2.image}" alt="Product Image" style="max-width: 100%; height: auto;">
                                             <div class="overlay">
                                                 <div class="icon-container">
                                                     <a href="information?productId=${img2.productDetail.id}" class="ti-search"></a>
@@ -166,7 +166,7 @@
                         <th style="text-align: center; vertical-align: middle; padding: 10px;">
                             <c:if test="${!empty img2}">
                                 <c:if test="${empty img3}">
-                                    <button id="openModal">Add product</button>
+                                    <button id="openModal">Thêm sản phẩm</button>
                                 </c:if> 
                                 <c:if test="${!empty img3}">
                                     <a style="float: right; font-size: 30px;" href="compare?productid=${img1.productDetail.id}&&productid2=${img2.productDetail.id}" >&times;</a>
@@ -175,7 +175,7 @@
 
                                             <!-- Hiển thị ảnh sản phẩm -->
                                             <div class="image-container">
-                                                <img src="${pageContext.request.contextPath}/images/${img3.image}" alt="Product Image" style="max-width: 100%; height: auto;">
+                                                <img src="${img3.image}" alt="Product Image" style="max-width: 100%; height: auto;">
                                                 <div class="overlay">
                                                     <div class="icon-container">
                                                         <a href="information?productId=${img3.productDetail.id}" class="ti-search"></a>
@@ -281,10 +281,10 @@
                 <a style="text-align: right; font-size: 40px;" class="close">&times;</a>
 
                 <div class="row">
-                    <div class="col-md-1"></div>
-                    <div class="col-md-3">
-                        <h2>Choose a product</h2>
-                        <input type="text" id="searchInput" oninput="filterProducts()" placeholder="Search">
+                    <div class="col-md-2"></div>
+                    <div class="col-md-2">
+                        <h2>Chọn sản phẩm</h2>
+                        <input type="text" id="searchInput" oninput="filterProducts()" placeholder="Nhập từ khóa...">
                     </div>
 
                     <div class="col-md-8" id="productList"> <!-- Thêm ID cho div chứa danh sách sản phẩm -->
@@ -300,7 +300,7 @@
                                    </c:otherwise>
                                </c:choose>
                                >
-                                <img src="${pageContext.request.contextPath}/images/${i.image}" alt="Product Image" />
+                                <img src="${i.image}" alt="Product Image" />
                                 <label>
                                     ${i.productDetail.product.name} (${i.productDetail.color.name})<br>
                                     ${i.productDetail.product.brand.name}<br>

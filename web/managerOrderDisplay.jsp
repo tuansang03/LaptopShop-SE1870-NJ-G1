@@ -27,11 +27,30 @@
 
             <!-- Form tìm kiếm danh mục -->
             <div style="display: flex; align-items: center">
-                <form style="width: 100%;"  class="form-inline mb-3">
-                    <input type="text" name="search" value="${search}" class="form-control mr-2" placeholder="Search Voucher">
-                    <button type="submit" class="btn btn-primary">Search</button>
+                <form action="selectStatusOrder" style="width: 100%;"  class="form-inline mb-3">
+                    <select onchange="this.form.submit()" name="op" style="
+                            margin-left: 10px;
+                            text-align: center;
+                            height: 48px;
+                            width: 10%;
+                            color: black;
+                            border: 2px solid #28a745;
+                            background-color: white;
+                            border-radius: 4px;
+                            padding: 5px;
+                            font-size: 16px;
+                            cursor: pointer;
+                            outline: none;
+                            ">
+                        <option ${op.equals('all') ? 'selected':''} value="all">All</option>
+                        <option ${op.equals('wait') ? 'selected':''} value="wait">Wait</option>
+                        <option ${op.equals('accepted') ? 'selected':''} value="accepted">Accepted</option>
+                        <option ${op.equals('done') ? 'selected':''} value="done">Done</option>
+                    </select>
                 </form>
+
             </div>
+            <p style="color: red;" class="text-center" >${error}</p>
 
             <!-- Bảng hiển thị danh mục -->
             <table class="table table-bordered">
@@ -83,11 +102,11 @@
 
                                 <c:if test="${o.getPaymentStatus() != null}">
                                     <form action="changeStatusOrder" method="get">
-                                        <select name="opPaymentStatus" onchange="this.form.submit()">
-                                            <option ${o.getPaymentStatus().equals("pending") ? 'selected':''} value="pending">Pending</option>
-                                            <option ${o.getPaymentStatus().equals("completed") ? 'selected':''} value="completed">Completed</option>
-                                            <option ${o.getPaymentStatus().equals("fail") ? 'selected':''} value="fail">Fail</option>
-                                        </select>
+                                            <select name="opPaymentStatus" onchange="this.form.submit()">
+                                                <option ${o.getPaymentStatus().equals("pending") ? 'selected':''} value="pending">Pending</option>
+                                                <option ${o.getPaymentStatus().equals("completed") ? 'selected':''} value="completed">Completed</option>
+                                                <option ${o.getPaymentStatus().equals("fail") ? 'selected':''} value="fail">Fail</option>
+                                            </select>
                                         <input type="hidden" value="${o.getId()}" name="oid"/>
                                     </form>
                                 </c:if>    
@@ -116,6 +135,7 @@
                                     <select name="opOrderStatus" onchange="this.form.submit()">
                                         <option ${o.getOrderStatus().equals("wait") ? 'selected':''} value="wait">Wait</option>
                                         <option ${o.getOrderStatus().equals("accepted") ? 'selected':''} value="accepted">Accepted</option>
+                                        <option ${o.getOrderStatus().equals("done") ? 'selected':''} value="done">Done</option>
                                     </select>
                                     <input type="hidden" value="${o.getId()}" name="oid"/>
                                 </form>
