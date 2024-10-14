@@ -32,67 +32,67 @@ import java.text.DecimalFormat;
  * @author ADMIN
  */
 public class ProductDAO extends DBContext {
-public ArrayList<Product> searchProductByName(String name, int pageNumber, int rowsPerPage) {
-    ArrayList<Product> pList = new ArrayList<>();
-    String sql = "WITH ProductCTE AS ( "
-            + "    SELECT p.Id, p.Name, p.BrandId, p.CategoryId, b.Name AS BrandName, c.Name AS CategoryName, "
-            + "           ROW_NUMBER() OVER (ORDER BY p.Id) AS RowNum "
-            + "    FROM product p "
-            + "    JOIN brand b ON p.BrandId = b.Id "
-            + "    JOIN category c ON p.CategoryId = c.Id "
-            + "    WHERE p.Name LIKE ? "
-            + ") "
-            + "SELECT * "
-            + "FROM ProductCTE "
-            + "WHERE RowNum BETWEEN ? AND ?;";
-    try {
-        PreparedStatement pre = connection.prepareStatement(sql);
-        pre.setString(1, "%" + name + "%"); // Thêm điều kiện tìm kiếm theo tên
 
-        // Tính toán giá trị cho tham số phân trang
-        int startRow = (pageNumber - 1) * rowsPerPage + 1;
-        int endRow = pageNumber * rowsPerPage;
+    public ArrayList<Product> searchProductByName(String name, int pageNumber, int rowsPerPage) {
+        ArrayList<Product> pList = new ArrayList<>();
+        String sql = "WITH ProductCTE AS ( "
+                + "    SELECT p.Id, p.Name, p.BrandId, p.CategoryId, b.Name AS BrandName, c.Name AS CategoryName, "
+                + "           ROW_NUMBER() OVER (ORDER BY p.Id) AS RowNum "
+                + "    FROM product p "
+                + "    JOIN brand b ON p.BrandId = b.Id "
+                + "    JOIN category c ON p.CategoryId = c.Id "
+                + "    WHERE p.Name LIKE ? "
+                + ") "
+                + "SELECT * "
+                + "FROM ProductCTE "
+                + "WHERE RowNum BETWEEN ? AND ?;";
+        try {
+            PreparedStatement pre = connection.prepareStatement(sql);
+            pre.setString(1, "%" + name + "%"); // Thêm điều kiện tìm kiếm theo tên
 
-        // Set giá trị cho các tham số trong câu truy vấn
-        pre.setInt(2, startRow);  // Giá trị bắt đầu
-        pre.setInt(3, endRow);    // Giá trị kết thúc
+            // Tính toán giá trị cho tham số phân trang
+            int startRow = (pageNumber - 1) * rowsPerPage + 1;
+            int endRow = pageNumber * rowsPerPage;
 
-        ResultSet rs = pre.executeQuery();
+            // Set giá trị cho các tham số trong câu truy vấn
+            pre.setInt(2, startRow);  // Giá trị bắt đầu
+            pre.setInt(3, endRow);    // Giá trị kết thúc
 
-        while (rs.next()) {
-            Product p = new Product();
-            p.setId(rs.getInt("Id"));
-            p.setName(rs.getString("Name"));
+            ResultSet rs = pre.executeQuery();
 
-            // Tạo đối tượng Brand
-            Brand b = new Brand();
-            b.setId(rs.getInt("BrandId"));
-            b.setName(rs.getString("BrandName"));
-            p.setBrand(b);
+            while (rs.next()) {
+                Product p = new Product();
+                p.setId(rs.getInt("Id"));
+                p.setName(rs.getString("Name"));
 
-            // Tạo đối tượng Category
-            Category c = new Category();
-            c.setId(rs.getInt("CategoryId"));
-            c.setName(rs.getString("CategoryName"));
-            p.setCategory(c);
+                // Tạo đối tượng Brand
+                Brand b = new Brand();
+                b.setId(rs.getInt("BrandId"));
+                b.setName(rs.getString("BrandName"));
+                p.setBrand(b);
 
-            // Thêm sản phẩm vào danh sách
-            pList.add(p);
+                // Tạo đối tượng Category
+                Category c = new Category();
+                c.setId(rs.getInt("CategoryId"));
+                c.setName(rs.getString("CategoryName"));
+                p.setCategory(c);
+
+                // Thêm sản phẩm vào danh sách
+                pList.add(p);
+            }
+
+            // Đóng ResultSet và PreparedStatement
+            rs.close();
+            pre.close();
+
+            return pList;
+
+        } catch (SQLException ex) {
+            Logger.getLogger(ProductDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
-
-        // Đóng ResultSet và PreparedStatement
-        rs.close();
-        pre.close();
-
-        return pList;
-
-    } catch (SQLException ex) {
-        Logger.getLogger(ProductDAO.class.getName()).log(Level.SEVERE, null, ex);
+        return null;
     }
-    return null;
-}
-    
-    
+
     public ArrayList<Product> readProduct(int pageNumber, int rowsPerPage) {
         ArrayList<Product> pList = new ArrayList<>();
         String sql = "WITH ProductCTE AS ( "
@@ -151,13 +151,12 @@ public ArrayList<Product> searchProductByName(String name, int pageNumber, int r
         return null;
     }
 
-public ArrayList<Product> getAllProduct(){
-    ArrayList<Product> pList = new ArrayList<>();
-    String sql = "select * from Product";
+    public ArrayList<Product> getAllProduct() {
+        ArrayList<Product> pList = new ArrayList<>();
+        String sql = "select * from Product";
         try {
             PreparedStatement pre = connection.prepareStatement(sql);
             ResultSet rs = pre.executeQuery();
-
 
             while (rs.next()) {
                 Product p = new Product();
@@ -167,13 +166,13 @@ public ArrayList<Product> getAllProduct(){
                 // Tạo đối tượng Brand
                 Brand b = new Brand();
                 b.setId(rs.getInt("BrandId"));  // Lấy ID của brand
-                 // Lấy tên của brand
+                // Lấy tên của brand
                 p.setBrand(b);
 
                 // Tạo đối tượng Category
                 Category c = new Category();
                 c.setId(rs.getInt("CategoryId"));  // Lấy ID của category
-                  // Lấy tên của category
+                // Lấy tên của category
                 p.setCategory(c);
 
                 // Thêm sản phẩm vào danh sách
@@ -184,7 +183,8 @@ public ArrayList<Product> getAllProduct(){
             Logger.getLogger(ProductDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
         return null;
-}
+    }
+
     public int insertProduct(int brandId, int categoryId, String name) {
         String sql = "INSERT INTO [dbo].[Product] (BrandId, CategoryId, Name) VALUES (?, ?, ?)";
         int generatedId = -1;  // Khởi tạo giá trị mặc định cho ID sinh ra
@@ -245,30 +245,31 @@ public ArrayList<Product> getAllProduct(){
     }
 
     public int countProductByName(String name) {
-    // Câu lệnh SQL để đếm sản phẩm theo tên
-    String sql = "SELECT COUNT(*) FROM product WHERE Name LIKE ?";
-    
-    try {
-        // Chuẩn bị câu lệnh với điều kiện tìm kiếm
-        PreparedStatement pre = connection.prepareStatement(sql);
-        
-        // Gán giá trị cho tham số tên sản phẩm, sử dụng ký tự '%' cho tìm kiếm LIKE
-        pre.setString(1, "%" + name + "%");
-        
-        // Thực thi câu lệnh và nhận kết quả
-        ResultSet rs = pre.executeQuery();
+        // Câu lệnh SQL để đếm sản phẩm theo tên
+        String sql = "SELECT COUNT(*) FROM product WHERE Name LIKE ?";
 
-        // Kiểm tra nếu có kết quả, trả về tổng số sản phẩm
-        if (rs.next()) {
-            return rs.getInt(1); // Lấy giá trị đếm được từ cột đầu tiên
+        try {
+            // Chuẩn bị câu lệnh với điều kiện tìm kiếm
+            PreparedStatement pre = connection.prepareStatement(sql);
+
+            // Gán giá trị cho tham số tên sản phẩm, sử dụng ký tự '%' cho tìm kiếm LIKE
+            pre.setString(1, "%" + name + "%");
+
+            // Thực thi câu lệnh và nhận kết quả
+            ResultSet rs = pre.executeQuery();
+
+            // Kiểm tra nếu có kết quả, trả về tổng số sản phẩm
+            if (rs.next()) {
+                return rs.getInt(1); // Lấy giá trị đếm được từ cột đầu tiên
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(ProductDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
-    } catch (SQLException ex) {
-        Logger.getLogger(ProductDAO.class.getName()).log(Level.SEVERE, null, ex);
+
+        // Trả về 0 nếu có lỗi hoặc không có kết quả
+        return 0;
     }
-    
-    // Trả về 0 nếu có lỗi hoặc không có kết quả
-    return 0;
-}
+
     public List<Brand> listBrand() {
         List<Brand> list = new ArrayList<>();
         String sql = "select * from Brand";
@@ -833,7 +834,7 @@ public ArrayList<Product> getAllProduct(){
             Logger.getLogger(UserDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
+
     public void deleteAllWishlist(int uid) {
         String sql = "delete from Favorite where UserId=?";
         try {
@@ -845,9 +846,67 @@ public ArrayList<Product> getAllProduct(){
         }
     }
 
+    public List<Return> listReturn() {
+        List<Return> list = new ArrayList<>();
+        String sql = "SELECT * FROM [Return]";
+        try (PreparedStatement st = connection.prepareStatement(sql)) {
+            try (ResultSet re = st.executeQuery()) {
+                while (re.next()) {
+                    Return c = new Return(
+                            re.getInt("id"),
+                            re.getInt("totalreturnamount"),
+                            re.getString("reason"),
+                            re.getString("refundmethod"),
+                            re.getString("refundstatus"),
+                            re.getString("refundstatus"),
+                            getOrder(re.getInt("orderid")),
+                            re.getTimestamp("returndate").toLocalDateTime()
+                    );
+                    list.add(c);
+                }
+            }
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+        return list;
+    }
+
+    public Order getOrder(int id) {
+        String sql = "SELECT * FROM [Order] WHERE Id = ?";
+        try (PreparedStatement st = connection.prepareStatement(sql)) {
+            st.setInt(1, id);  // Truyền tham số vào câu lệnh SQL
+            try (ResultSet re = st.executeQuery()) {
+                if (re.next()) {
+                    Order i = new Order(
+                            re.getInt("id"),
+                            getUser(re.getInt("userid")),
+                            re.getString("name"),
+                            re.getString("address"),
+                            re.getString("phone"),
+                            re.getTimestamp("OrderDate").toLocalDateTime(),
+                            null,
+                            re.getInt("TotalAmountBefore"),
+                            re.getInt("DiscountAmount"),
+                            re.getInt("TotalAmountAfter"),
+                            re.getString("paymentmethod"),
+                            re.getString("paymentstatus"),
+                            re.getString("VnPayTransactionId"),
+                            re.getTimestamp("EndDate") != null ? re.getTimestamp("EndDate").toLocalDateTime() : null,
+                            re.getString("orderstatus"),
+                            re.getString("note"));
+                    return i;
+                }
+            }
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
+
+        return null;
+    }
+
     public static void main(String[] args) {
         ProductDAO p = new ProductDAO();
-ArrayList pList = p.getAllProduct();
+        ArrayList pList = p.getAllProduct();
         System.out.println(pList);
     }
 }
