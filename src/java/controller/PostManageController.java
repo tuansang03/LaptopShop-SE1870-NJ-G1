@@ -216,8 +216,8 @@ public class PostManageController extends HttpServlet {
             PostDAO postUpdate = new PostDAO();
             postUpdate.updatePost(post);
             String mess = "Update successfull!!";
-                request.setAttribute("mess", mess);
-            request.getRequestDispatcher("updatebranddisplay.jsp").forward(request, response);
+            request.setAttribute("mess", mess);
+            request.getRequestDispatcher("postmanage?service=listall").forward(request, response);
 
         }
     }

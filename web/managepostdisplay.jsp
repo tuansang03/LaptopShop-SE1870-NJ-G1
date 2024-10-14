@@ -100,15 +100,15 @@
                                 <h4>${mess}</h4>
                                 <div class="post tach">
                                     <div class="card card-blog">
-                                        <div class="row no-gutters">
+                                        <div class="row no-gutters" style="width: 100%">
                                             <!-- Cột hiển thị hình ảnh thumbnail -->
-                                            <div class="col-md-4 dip">
+                                            <div class="col-md-6 dip">
                                                 <div class="card-blog__img">
-                                                    <img class="card-img rounded-0" src="${p.thumbnail}" alt="${p.tittle}">
+                                                    <img style="width: 100%" class="card-img rounded-0" src="${p.thumbnail}" alt="${p.tittle}">
                                                 </div>
                                             </div>
                                             <!-- Cột hiển thị thông tin bài viết -->
-                                            <div class="col-md-8">
+                                            <div class="col-md-6">
                                                 <div class="card-body">
                                                     <ul class="card-blog__info">
                                                         <c:if test="${p.brand.name ne 'None'}">

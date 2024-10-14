@@ -77,7 +77,16 @@ public class displaySearchPage extends HttpServlet {
         String query = request.getParameter("query"); // Lấy giá trị từ tham số request
         String error = "";
         UserDAO dao = new UserDAO();
+        List<Integer> listId = new ArrayList<>();
         List<Post> listP = dao.getPostsByTitleOrContent(query);
+        for (int i = 0; i < listP.size(); i++) {
+            Post get = listP.get(i);
+            listId.add(get.getId()); 
+        }
+        int min = listP.get(0).getId();
+        int max = listP.size() + 1;
+        
+        request.setAttribute("listId", listId);
         // Gọi phương thức với tham số đúng
         List<Image> list = dao.getPictureListByProductName(query);
         if (list.isEmpty() && listP.isEmpty()) {
@@ -87,7 +96,9 @@ public class displaySearchPage extends HttpServlet {
         } else if (listP.isEmpty()) {
             error = " ! ! ! There is no Post that match your Keyword";
         }
-
+        
+        request.setAttribute("min", min);
+        request.setAttribute("max", max);
         request.setAttribute("pop_size", list.size());
         request.setAttribute("err", error);
         request.setAttribute("listP", listP);

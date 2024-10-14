@@ -226,9 +226,9 @@
                                             <li><i class="bx bx-laptop"></i>${p.brand.name}</li>
                                             <li><i class="bx bx-laptop"></i>${p.publishDate}</li>
                                         </ul>
-                                        <h4 class="card-blog__title"><a href="postdetail?id=${p.id}">${p.tittle}</a></h4>
+                                        <h4 class="card-blog__title"><a href="postdetail?id=${p.id}&postmove=yes&min=${min}&max=${max}">${p.tittle}</a></h4>
                                         <p>${p.shortContent}</p>
-                                        <a class="card-blog__link" href="postdetail?id=${p.id}">Read More -> <i class="ti-arrow-right"></i></a>
+                                        <a class="card-blog__link" href="postdetail?id=${p.id}&postmove=yes">Read More -> <i class="ti-arrow-right"></i></a>
                                     </div>
                                 </div>
                             </div>
