@@ -35,7 +35,7 @@
     <div class="col-md-10 content">
         <h2>Manage Users</h2>
 
-        <!-- Thêm form tìm kiếm user -->
+        <!-- Form tìm kiếm user -->
         <form action="CustomerManageController" method="GET" class="form-inline mb-3">
             <input type="text" name="keyword" class="form-control mr-2" placeholder="Search by username or email" value="${param.keyword}">
             <input type="hidden" name="service" value="searchUser">
@@ -57,6 +57,7 @@
                     <th>Full Name</th>
                     <th>Email</th>
                     <th>Status</th>
+                    <th>Action</th>
                 </tr>
             </thead>
 
@@ -67,16 +68,29 @@
                         <td>${user.userName}</td>
                         <td>${user.fullName}</td>
                         <td>${user.email}</td>
-                        <!-- Hiển thị trạng thái -->
                         <td>
                             <c:choose>
                                 <c:when test="${user.status != 'ban'}">
-                                    <span class="text-success status-icon" onclick="updateStatus('${user.id}');">&#10003;</span>
+                                    <span class="text-success status-icon" 
+                                          onclick="updateStatus('${user.id}', 'ban');">&#10003;</span>
                                 </c:when>
                                 <c:otherwise>
-                                    <span class="text-danger status-icon">&#10006;</span>
+                                    <span class="text-danger status-icon" 
+                                          onclick="updateStatus('${user.id}', 'unban');">&#10006;</span>
                                 </c:otherwise>
                             </c:choose>
+                        </td>
+                        <td>
+                            <div class="action-buttons">
+                                <!-- Nút Delete -->
+                                <form action="CustomerManageController" method="GET" style="display:inline;">
+                                    <input type="hidden" name="id" value="${user.id}">
+                                    <input type="hidden" name="service" value="deleteUser">
+                                    <button type="submit" onclick="return confirm('Are you sure you want to delete this user?');" class="btn btn-danger">
+                                        <i class="fas fa-trash-alt"></i> Delete
+                                    </button>
+                                </form>
+                            </div>
                         </td>
                     </tr>
                 </c:forEach>
@@ -84,9 +98,13 @@
         </table>
 
         <script>
-            function updateStatus(userId) {
-                if (confirm('Are you sure you want to ban this user?')) {
-                    window.location.href = 'CustomerManageController?id=' + userId + '&service=banUser';
+            function updateStatus(userId, action) {
+                let confirmMessage = action === 'ban' 
+                    ? 'Are you sure you want to ban this user?' 
+                    : 'Are you sure you want to unban this user?';
+
+                if (confirm(confirmMessage)) {
+                    window.location.href = 'CustomerManageController?id=' + userId + '&service=' + action + 'User';
                 }
             }
         </script>

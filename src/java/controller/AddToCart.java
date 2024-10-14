@@ -79,11 +79,9 @@ public class AddToCart extends HttpServlet {
             cartDAO.addToCartItem(cartUser.getId(), pDetail.getId(), 1);
         }
 
-
-
         request.getRequestDispatcher("home").forward(request, response);
 
-}
+    }
 
     /**
      * Handles the HTTP <code>POST</code> method.

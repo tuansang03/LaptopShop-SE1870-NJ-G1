@@ -39,6 +39,6 @@ public class ImageDAOS extends DBContext{
     
     public static void main(String[] args) {
         ImageDAOS i = new ImageDAOS();
-        System.out.println(i.getOneImageByProductDetailID(1));
+        System.out.println(i.getOneImageByProductDetailID(10));
     }
 }

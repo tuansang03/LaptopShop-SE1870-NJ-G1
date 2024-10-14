@@ -315,15 +315,20 @@
 
 
                     <a href="CustomerManageController?service=listall"><i class="fas fa-users"></i> Manage User</a>
-
+                    <a href="CustomerManageController?service=listallstaff"><i class="fas fa-calendar"></i> Manage Staff</a>
                     <a href="BrandController?service=listall"><i class="fas fa-calendar"></i> Manage Brand</a>
-
+                    
                     <a href="ConfigurationManageController?service=listall"><i class="fas fa-calendar"></i> Manage Configuration</a>
                     <a href="CategoryController?service=listall"><i class="fas fa-server"></i> Manage Category</a>
                     <a href="postmanage?service=listall"><i class="fas fa-server"></i> Manage Post</a>
-                    <a href="orderManage"><i class="fas fa-object-group"></i> Quản lý đơn hàng</a>
-
-                    <a href="editAdmin.jsp"><i class="fas fa-upload  "></i> Cập nhật thông tin</a>
+                    <a href="StatisticController?service=listall"><i class="fas fa-calendar"></i> Statistic</a>
+                    
+                    <a href="voucherManager"><i class="fas fa-server"></i> Manage Voucher</a>
+                    
+                    <a href="managerOrder"><i class="fas fa-object-group"></i> Manager Order</a>
+                    <a href="readComment"><i class="fas fa-object-group"></i> Manage Comment</a>
+                    <a href="showreturnrequest"><i class="fas fa-object-group"></i> Manage Return</a>
+                    <a href="updateAccountPage.jsp"><i class="fas fa-upload  "></i>Update Account</a>
                     <div class="user">
 
                         <p>Xin chào ${sessionScope.admin.fullName}</p>

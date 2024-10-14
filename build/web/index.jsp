@@ -167,7 +167,7 @@
                 </div>
             </section>
             <!--================ Hero banner start =================-->
-
+            
             <!--================ Hero Carousel start =================-->
 
             <div class="ramdon_title">EXPLORE OUR PRODUCT</div>
@@ -186,7 +186,7 @@
                         <c:forEach items="${listR}" var="o" varStatus="status">
                             <div class="hero-carousel__slide xxxx">
                                 <div class="xxxxx">
-                                    <img src="${o.getImage()}" alt="" class="img-fluid">
+                                    <img src="${pageContext.request.contextPath}/images/${o.getImage()}" alt="" class="img-fluid">
                                 </div>
                                 <a href="information?productId=${o.productDetail.id}" class="hero-carousel__slideOverlay">
                                     <p class="nhot">${o.getProductDetail().getProduct().getBrand().getName()}</p>
@@ -234,8 +234,8 @@
             <section class="section-margin calc-60px">
                 <div class="container">
                     <div class="section-intro pb-60px">
-                        <p>Newest Item in the market</p>
-                        <h2>Newest <span class="section-intro__style">Products</span></h2>
+                        <p>New Item in the market</p>
+                        <h2>New <span class="section-intro__style">Products</span></h2>
                     </div>
 
                     <div class="owl-carousel owl-theme " id="bestSellerCarousel">
@@ -245,7 +245,7 @@
 
                             <div class="card text-center card-product borderr">
                                 <div class="card-product__img">
-                                    <img class="img-fluid" src="${image.getImage()}" alt=""> <!-- Sử dụng 'image' để lấy hình ảnh -->
+                                    <img class="img-fluid" src="${pageContext.request.contextPath}/images/${image.getImage()}" alt=""> <!-- Sử dụng 'image' để lấy hình ảnh -->
                                     <ul class="card-product__imgOverlay">
                                         <li style="margin-top: 30px;"><a href="information?productId=${o3.getId()}"><i class="ti-search"></i></a></li>
                                         <li class="cart_button" style="margin-top: 30px;"><a class="ti-shopping-cart" href="addtocart?pid=${o3.getProduct().getId()}&&colorid=${o3.getColor().getId()}&&confid=${o3.getConfiguration().getId()}"></a></li>
@@ -286,7 +286,7 @@
             <section class="blog">
                 <div class="container">
                     <div class="section-intro pb-60px">
-                        <p>Popular Item in the market</p>
+                        <p>Read our news</p>
                         <h2>Latest <span class="section-intro__style">News</span></h2>
                     </div>
 

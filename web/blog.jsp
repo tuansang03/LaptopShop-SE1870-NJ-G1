@@ -87,9 +87,9 @@
                               <div class="blog_info text-right">
                                   <div class="post_tag">
 <!--                                      <a href="#">Food,</a>-->
-                                      Type: <a class="active" href="#"> ${o.category.name}</a><br/>
+                                      Type: <a class="active" href="listproduct?category%5B%5D=${o.category.name}"> ${o.category.name}</a><br/>
                                       
-                                      Brand: <a class="active" href="#">${o.brand.name}</a>
+                                      Brand: <a class="active" href="listproduct?brand%5B%5D=${o.brand.name}">${o.brand.name}</a>
 <!--                                      <a href="#">Politics,</a>
                                       <a href="#">Lifestyle</a>-->
                                   </div>

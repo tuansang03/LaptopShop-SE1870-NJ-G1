@@ -19,7 +19,17 @@
     </head>
     <body>
         <!--================ Start Header Menu Area =================-->
+<%
+    User xuser = (User) session.getAttribute("user");
+    if(xuser != null && (xuser.getId() == 1 || xuser.getId() == 2) || xuser == null) {
+        // Include the header if the user's ID is 1 or 2
+        %>
         <%@include file="header.jsp" %>
+        <%
+    }
+%>
+
+        
         <!--================ End Header Menu Area =================-->
 
 
@@ -28,13 +38,18 @@
 
                 background-image: url('https://img.freepik.com/free-photo/laptop-pencils-arrangement_23-2148128294.jpg?t=st=1726983433~exp=1726987033~hmac=a7a8fb714723647f753b6f315b3f3c8ac4de65ba64313295a5fcc38db4055518&w=1380');
                 background-size: cover; /* Để hình ảnh phù hợp với kích thước phần tử */
-                background-position: center; /* Đặt vị trí hình ảnh ở giữa */
-                width: 100%; /* Đặt chiều rộng cho phần tử */
-                height: 400px; /* Bạn có thể thay đổi chiều cao nếu cần */
+                background-position: center;
+                width: 100%; 
+                height: 400px; 
 
             }
 
-         
+            *{
+                font-style: normal;
+            }
+            .image img{
+                width: 100%;
+            }
     .container-fluid {
         max-width: 100%;
         padding: 0 15px;
@@ -58,9 +73,15 @@
     }
 
     .blog_details h2 {
-        font-size: 30px;
+        font-size: 20px;
         line-height: 1.5;
         margin-bottom: 20px;
+    }
+    h2{
+        font-size: 25px !important;
+    }
+    h3{
+        font-size: 20px !important;
     }
 
     .blog_info {
@@ -68,7 +89,7 @@
     }
 
     .quotes {
-        font-size: 18px;
+        
         line-height: 1.8;
         margin-bottom: 30px;
         padding: 20px;
@@ -100,14 +121,41 @@
     }
 
     .arrow span {
-        font-size: 30px;
+        font-size: 20px;
         color: #fff;
     }
+    p{
+        text-align: justify;
+    }
+    li{
+        text-align: justify;
+    }
 
-    .detials a {
+     .detials a{
         font-size: 18px;
         color: #000;
+                
+     }.detials a:hover{
+         transform: translate(10px,0px);
+     }
+    .wp-block-heading{
+        font-size: 22px;
+        color: #4e555b;
+        padding: 10px;
     }
+    .wp-post-image{
+        width: 100%;
+    }
+    .single-post{
+        width: 1300px;
+        
+    }
+    img {width: 100%}
+    .post_tag{
+        text-align: left;
+    }
+    
+    
 </style>
 
 
@@ -151,14 +199,15 @@
                             <div class="col-lg-3  col-md-3">
                                 <div class="blog_info text-right">
                                     <div class="post_tag">
-
-                                        Type:   <a class="active" style="font-size: 15px;" href="listproduct?category=${postDetail.category.name}">${postDetail.category.name}</a>
-
+                                        <c:if test="${postDetail.category.name ne 'None'}">
+                                        Type:   <a class="active" style="font-size: 15px;" href="listproduct?category%5B%5D=${postDetail.category.name}">${postDetail.category.name}</a>
+                                        </c:if>
                                     </div>
                                     <div class="post_tag">
+                                        <c:if test="${postDetail.brand.name ne 'None'}">
 
-                                        Brand: <a class="active" style="font-size: 15px;" href="listproduct?brand=${postDetail.brand.name}">${postDetail.brand.name}</a>
-
+                                        Brand: <a class="active" style="font-size: 15px;" href="listproduct?brand%5B%5D=${postDetail.brand.name}">${postDetail.brand.name}</a>
+                                        </c:if>
                                     </div>
                                     <ul class="blog_meta list">
                                         <li>
@@ -240,35 +289,17 @@
                         <div class="navigation-area">
                             <div class="row">
                                 <div class="col-lg-6 col-md-6 col-12 nav-left flex-row d-flex justify-content-start align-items-center">
-                                    <div class="thumb">
-                                        <a href="#">
-                                            <img class="img-fluid" src="img/blog/prev.jpg" alt="">
-                                        </a>
-                                    </div>
-                                    <div class="arrow">
-                                        <a href="postdetail?id=${postDetail.getId()-1}">
-                                            <span class="lnr text-white lnr-arrow-left"></span>
-                                        </a>
-                                    </div>
-                                    <div class="detials">
-                                        <a href="postdetail?id=${postDetail.getId()-1}">Previous Post</a>
+
+
+                                    <div class="detials pre" style="${pre}">
+                                        <a href="postdetail?id=${postDetail.getId()-1}"><===Previous Post</a>
                                    
                                     </div>
                                 </div>
                                 <div class="col-lg-6 col-md-6 col-12 nav-right flex-row d-flex justify-content-end align-items-center">
-                                    <div class="detials">
-                                        <a href="postdetail?id=${postDetail.getId()+ 1}">Next Post</a>
+                                    <div class="detials next" style="${next}">
+                                        <a href="postdetail?id=${postDetail.getId()+ 1}">Next Post===></a>
         
-                                    </div>
-                                    <div class="arrow">
-                                        <a href="postdetail?id=${postDetail.getId()+ 1}">
-                                            <span class="lnr text-white lnr-arrow-right"></span>
-                                        </a>
-                                    </div>
-                                    <div class="thumb">
-                                        <a href="postdetail?id=${postDetail.getId()+ 1}">
-                                            <img class="img-fluid" src="img/blog/next.jpg" alt="">
-                                        </a>
                                     </div>
                                 </div>
                             </div>
@@ -605,7 +636,7 @@
         <!--================Blog Area =================-->
 
 
-        <!--================Instagram Area =================-->
+<!--        ================Instagram Area =================
         <section class="instagram_area">
             <div class="container box_1620">
                 <div class="insta_btn">
@@ -621,11 +652,21 @@
                 </div>
             </div>
         </section>
-        <!--================End Instagram Area =================-->
+        ================End Instagram Area =================-->
 
 
         <!--================ Start footer Area  =================-->	
+        
+        <%
+    
+    if(xuser != null && (xuser.getId() == 1 || xuser.getId() == 2) || xuser ==null) {
+        // Include the header if the user's ID is 1 or 2
+        %>
         <%@include file="footer.jsp" %>
+        <%
+    }
+%>
+        
         <!--================ End footer Area  =================-->
 
 

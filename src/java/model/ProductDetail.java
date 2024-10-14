@@ -40,8 +40,6 @@ public class ProductDetail {
         this.attributes = attributes;
     }
 
-   
-
     public ProductDetail() {
     }
 

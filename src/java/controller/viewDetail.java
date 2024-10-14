@@ -13,10 +13,12 @@ import dal.ProductDetailDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.MultipartConfig;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+import jakarta.servlet.http.Part;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -27,11 +29,14 @@ import model.Image;
 import model.Product;
 import model.ProductAttribute;
 import model.ProductDetail;
+import java.io.File;
+import java.util.Collection;
 
 /**
  *
  * @author ADMIN
  */
+@MultipartConfig
 public class viewDetail extends HttpServlet {
 
     /**
@@ -104,7 +109,7 @@ public class viewDetail extends HttpServlet {
         session.setAttribute("pDList", productDetailList);
         session.setAttribute("attList", attList); // Gán attList sau vòng lặp
         session.setAttribute("desc", desc);
-        
+
         session.setAttribute("updateProductId", productId);
         request.getRequestDispatcher("viewDetail.jsp").forward(request, response);
 
@@ -153,44 +158,59 @@ public class viewDetail extends HttpServlet {
                 // Cập nhật thông tin sản phẩm vào cơ sở dữ liệu
                 productDetailDAO.updateProductDetail(product); // Giả sử phương thức updateProductDetail tồn tại
 
-                // Lấy danh sách URL của ảnh từ form
-                String[] imageUrls = request.getParameterValues("imageUrls_" + productDetailId + "[]");
+                Collection<Part> fileParts = request.getParts();
                 ImageDAO imgDao = new ImageDAO();
 
-                if (imageUrls != null) {
-                    // Tạo danh sách đối tượng Image
-                    ArrayList<Image> imagesToUpdate = new ArrayList<>();
+// Lấy danh sách ảnh hiện tại để có ID cho việc cập nhật
+                ArrayList<Image> existingImages = imgDao.getAllImageByPDId(product.getId());
 
-                    // Lấy danh sách ảnh hiện tại để có ID cho việc cập nhật
-                    ArrayList<Image> existingImages = imgDao.getAllImageByPDId(product.getId());
+                int existingImageIndex = 0; // Biến đếm cho danh sách ảnh hiện tại
+                int newImageCount = 0;      // Biến đếm cho số ảnh mới
 
-                    // Duyệt qua từng URL hình ảnh mới
-                    for (int i = 0; i < imageUrls.length; i++) {
-                        String url = imageUrls[i];
-                        if (url != null && !url.trim().isEmpty()) {
-                            // Tạo đối tượng Image
+//xoa all old image
+//                boolean isDeleteOldImages = false;
+//                for (Part part : fileParts) {
+//                    // Kiểm tra nếu part là file hình ảnh và không phải các part khác (ví dụ như form fields)
+//                    if (part.getName().equals("imageFiles_" + productDetailId + "[]")) {
+//                        String fileName = getFileName(part);
+//                        if (fileName != null && part.getSize() > 0) {
+//                            isDeleteOldImages = true;
+//                            break;
+//                        }
+//                    }
+//                }
+//                if (isDeleteOldImages) {
+//                    imgDao.deleteImageByProductDetailId(Integer.parseInt(productDetailId));
+//                }
+
+// Duyệt qua các phần tệp hình ảnh
+                for (Part part : fileParts) {
+                    // Kiểm tra nếu part là file hình ảnh và không phải các part khác (ví dụ như form fields)
+                    if (part.getName().equals("imageFiles_" + productDetailId + "[]")) {
+                        String fileName = getFileName(part);
+                        if (fileName != null && part.getSize() > 0) {
+                            // Lưu ảnh vào thư mục
+                            String path = getServletContext().getRealPath("/images");
+                            File imageFile = new File(path, fileName);
+                            part.write(imageFile.getAbsolutePath());
+
+                            // Tạo đối tượng Image và liên kết với ProductDetail
                             Image image = new Image();
-                            image.setImage(url); // Đặt URL của ảnh
-                            image.setProductDetail(product); // Liên kết ảnh với ProductDetail
+                            image.setImage(fileName); // Đặt tên file ảnh (URL)
+                            image.setProductDetail(product); // Gán ProductDetail cho ảnh
 
-                            // Nếu có ảnh hiện tại, cập nhật ảnh theo chỉ số
-                            if (i < existingImages.size()) {
-                                image.setId(existingImages.get(i).getId()); // Gán ID của ảnh hiện tại để cập nhật
-                            }
+                            imgDao.insertImage(image);
 
-                            imagesToUpdate.add(image); // Thêm ảnh vào danh sách cần cập nhật
-                        }
-                    }
-
-                    // Cập nhật danh sách ảnh vào cơ sở dữ liệu
-                    ImageDAO imageDAO = new ImageDAO(); // Tạo DAO cho Image
-                    for (Image img : imagesToUpdate) {
-                        if (img.getId() != 0) {
-                            // Nếu ID của ảnh đã được gán, thực hiện cập nhật
-                            imageDAO.updateImage(img); // Thực hiện update từng ảnh vào cơ sở dữ liệu
-                        } else {
-                            // Nếu không có ID (tức là ảnh mới), thực hiện thêm mới
-                            imageDAO.insertImage(img); // Thực hiện insert từng ảnh vào cơ sở dữ liệu
+//            if (existingImageIndex < existingImages.size()) {
+//                // Cập nhật các ảnh đã tồn tại
+//                image.setId(existingImages.get(existingImageIndex).getId()); // Lấy ID của ảnh hiện tại để cập nhật
+//                imgDao.updateImage(image); // Cập nhật ảnh trong database
+//                existingImageIndex++; // Tăng chỉ số cho ảnh hiện tại
+//            } else {
+//                // Thêm ảnh mới nếu không còn ảnh hiện có
+//                imgDao.insertImage(image); // Thực hiện thêm ảnh mới
+//                newImageCount++; // Đếm số ảnh mới thêm
+//            }
                         }
                     }
                 }
@@ -215,7 +235,7 @@ public class viewDetail extends HttpServlet {
 
                         // Cập nhật ProductAttribute vào cơ sở dữ liệu
                         productDetailDAO.updateProductDetailAttribute(productAttribute); // Gọi hàm update trong DAO
-                    } 
+                    }
                 }
 
             }
@@ -226,6 +246,16 @@ public class viewDetail extends HttpServlet {
             response.sendRedirect("readProduct");
         }
 
+    }
+
+    private String getFileName(Part part) {
+        String contentDisposition = part.getHeader("content-disposition");
+        for (String cd : contentDisposition.split(";")) {
+            if (cd.trim().startsWith("filename")) {
+                return cd.substring(cd.indexOf('=') + 2, cd.length() - 1);
+            }
+        }
+        return null;
     }
 
     /**

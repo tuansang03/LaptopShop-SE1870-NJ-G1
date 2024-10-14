@@ -1,4 +1,4 @@
-    <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html lang="en">
@@ -19,7 +19,7 @@
         <div class="container-fluid mt-5">
             <h2>Add New Product</h2>
             <div class="row justify-content-center">
-                <div class="col-md-12"> <!-- Sửa từ col-md-8 thành col-md-12 -->
+                <div class="col-md-12">
                     <div class="card">
                         <div class="card-header">Product Details</div>
                         <div class="card-body">
@@ -66,21 +66,17 @@
                                     </c:forEach>
                                 </div>
 
-                                <!-- Chọn nhiều configurations với checkbox -->
                                 <div class="form-group">
-                                    <label for="productConfigs">Configurations</label><br/>
+                                    <label for="productColors">Configuration</label><br/>
                                     <c:forEach var="config" items="${configList}">
                                         <div class="form-check form-check-inline">
                                             <input class="form-check-input" type="checkbox" id="config${config.id}" name="configurations" value="${config.id}">
-                                            <label class="form-check-label" for="config${config.id}">${config.name}</label>
+                                            <label class="form-check-label" for="color${config.id}">${config.name}</label>
                                         </div>
                                     </c:forEach>
                                 </div>
 
                                 <button type="submit" class="btn btn-success">Next: Add Product Variant</button>
-
-
-
                             </form>
                         </div>
                     </div>

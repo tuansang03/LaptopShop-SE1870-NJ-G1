@@ -51,6 +51,51 @@ public class PostDAO extends DBContext {
             }
         }
     }
+    public boolean deletePostById(int id){
+        PreparedStatement ps = null;
+        String sql = "DELETE FROM [dbo].[Post]\n" +
+"      WHERE Id = ?;";
+        try {
+            ps = connection.prepareStatement(sql);
+            ps.setInt(1, id);
+            ps.executeUpdate();
+            return true;
+        } catch (Exception e) {
+            System.out.println(e);
+            return false;
+        }
+    }
+      public boolean updatePost(Post post) {
+        PreparedStatement stm = null;
+        String sql = "UPDATE Post SET BrandId = ?, CategoryId = ?, Title = ?, ShortContent = ?, FullContent = ?, Thumbnail = ? WHERE Id = ?";
+
+        try {
+            stm = connection.prepareStatement(sql);
+            stm.setInt(1, post.getBrand().getId());
+            stm.setInt(2, post.getCategory().getId());
+            stm.setString(3, post.getTittle());
+            stm.setString(4, post.getShortContent());
+            stm.setString(5, post.getFullContent());
+            stm.setString(6, post.getThumbnail());
+            stm.setInt(7, post.getId());
+
+            int rowsUpdated = stm.executeUpdate();
+            return rowsUpdated > 0;
+
+        } catch (SQLException ex) {
+           
+            return false;
+        } finally {
+            try {
+                if (stm != null) {
+                    stm.close();
+                }
+            } catch (SQLException ex) {
+               
+            }
+        }
+    }
+
     
     public static void main(String[] args) {
         PostDAO post = new PostDAO();

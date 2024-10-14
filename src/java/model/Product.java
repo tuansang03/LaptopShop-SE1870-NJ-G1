@@ -11,9 +11,9 @@ package model;
 public class Product {
 
     private int id;
-    private Brand brand;
+    public Brand brand;
     private Category category;
-    private String name;
+    public String name;
     private String status;
 
     public Product() {

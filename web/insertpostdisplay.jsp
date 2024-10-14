@@ -20,7 +20,7 @@
     <body>
         <%@include file="sidebar.jsp" %>
 
-        
+
         <div class="col-md-10 content">
             <h2>Add Post</h2>
             <form action="postmanage" method="Post">
@@ -33,39 +33,41 @@
                     <tbody>
                         <tr>
                             <td>
-                                <input type="text" name="title" placeholder="Enter post title" required class="form-control">
+                                <input type="text" name="title" placeholder="Enter post title" required class="form-control" maxlength="250">
+
 
                                 <input type="text" name="thum" placeholder="Enter thumbnail link" required class="form-control" style="margin-top: 1%">
                                 <div class="select">
-                                    
+
                                     <select required name="brand">
+                                        
                                         <option value="" disabled selected>Select a Brand</option>
                                         <c:forEach items="${brandList}" var="brand">
                                             <option value="${brand.id}">${brand.name}</option>
                                         </c:forEach>
-                                        
                                     </select>
-                                    
+
+
                                     <select required name='category'>
+                                        
                                         <option value="" disabled selected>Select a Category</option>
                                         <c:forEach items="${categoryList}" var="cate">
                                             <option value="${cate.id}">${cate.name}</option>
                                         </c:forEach>
                                     </select>
-                                    <select required name='user'>
-                                        <option value="" disabled selected>Select author</option>
-                                        <c:forEach items="${userList}" var="user">
-                                            <option value="${user.id}">${user.userName}</option>
-                                        </c:forEach>
-                                    </select>
+                                    
+
+
                                 </div>
-                                
-                                <textarea  name="short" placeholder="Enter short content" required class="form-control" style="margin-top: 1%; width: 100%; height: 100px;"></textarea>
+
+                                <textarea name="short" placeholder="Enter short content" required class="form-control" style="margin-top: 1%; width: 100%; height: 100px;" maxlength="500"></textarea>
+                                <p id="charCount">Max 500 characters</p>
+
                                 <textarea name='full' id='default' placeholder="Enter Full content"></textarea>
                             </td>
 
 
-                            
+
                         </tr>
                     </tbody>
                 </table>
@@ -79,7 +81,7 @@
                     <span class="text-success">${mess}</span>
                 </c:if>
             </form>
-            
+
         </div>
         <script src='./tinymce/tinymce.min.js'></script>
         <script src='./js/tinyMceConfig.js'></script>
@@ -94,8 +96,8 @@
                 width: 100%;
                 display: flex;
                 justify-content: center;
-                    gap: 3%;
-                    margin-top: 1%;
+                gap: 3%;
+                margin-top: 1%;
             }
             .select select{
                 width: 48.3%;

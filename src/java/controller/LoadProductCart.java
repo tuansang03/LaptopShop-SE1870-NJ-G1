@@ -59,10 +59,9 @@ public class LoadProductCart extends HttpServlet {
             Image image = iDAO.getOneImageByProductDetailID(productDetailId);
             listImages.add(image); // Thêm hình ảnh vào danh sách
         }
-        
 
         int cartID = cartUser.getId();
-        
+
         request.setAttribute("cartID", cartID);
         request.setAttribute("listImages", listImages);
         request.setAttribute("listCartItem", listCartItem);

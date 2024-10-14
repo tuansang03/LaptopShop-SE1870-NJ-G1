@@ -154,15 +154,28 @@ public void deletePDById(int id){
 "WHERE ProductDetailId = ?;\n" +
 "\n" +
 "DELETE FROM Product_Attribute\n" +
-"WHERE ProductDetailId = ?;\n" +
+"WHERE ProductDetailId = ?\n" +
+"\n" +
+"DELETE FROM CartItem\n" +
+"WHERE ProductDetailId = ?\n" +
+"\n" +
+"DELETE FROM Favorite\n" +
+"WHERE ProductDetailId = ?\n" +
+"\n" +
+"DELETE FROM OrderDetail\n" +
+"WHERE ProductDetailId = ?\n" +
 "\n" +
 "DELETE FROM ProductDetail\n" +
-"WHERE Id= ?;";
+"WHERE Id= ?";
+    
         try {
             PreparedStatement pre =connection.prepareStatement(sql);
             pre.setInt(1, id);
             pre.setInt(2, id);
             pre.setInt(3, id);
+            pre.setInt(4, id);
+            pre.setInt(5, id);
+            pre.setInt(6, id);
             pre.executeQuery();
         } catch (SQLException ex) {
             Logger.getLogger(ProductDetailDAO.class.getName()).log(Level.SEVERE, null, ex);
@@ -212,6 +225,27 @@ public void updateProductDetailAttribute(ProductAttribute productAttribute) {
 }
 
 public void deletePDAfterUpdate(int id){
+    
+}
+
+public int getProductIdByProductDetailId(int productdetailId){
+    String sql = "SELECT ProductId\n" +
+"FROM ProductDetail\n" +
+"WHERE Id = ?; ";
+    int productId = 0;
+        try {
+            PreparedStatement pre = connection.prepareStatement(sql);
+            pre.setInt(1, productdetailId);
+            ResultSet rs = pre.executeQuery();
+            if(rs.next()){
+               productId = rs.getInt("ProductId");
+               return productId;
+            }
+            
+        } catch (SQLException ex) {
+            Logger.getLogger(ProductDetailDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return 0;
     
 }
     public static void main(String[] args) {

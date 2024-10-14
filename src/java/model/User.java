@@ -1,4 +1,4 @@
-/*
+    /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
@@ -16,6 +16,7 @@ public class User {
     private String email;
     private Role role;
     private String status;
+    
 
     public User(String userName, String password, String fullName, String email, Role role) {
         this.userName = userName;
