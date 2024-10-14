@@ -161,5 +161,7 @@
                 background-color: #f0f0f0;
             }
         </style>
+        <script src='./tinymce/tinymce.min.js'></script>
+        <script src='./js/tinyMceConfig.js'></script>
     </body>
 </html>

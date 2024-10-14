@@ -14,6 +14,21 @@
 <%@ page import="model.User" %>
 <%@ page import="dal.ImageDAOS" %>
 <%@ page import="model.Image" %> 
+    <link rel="icon" href="img/Fevicon.png" type="image/png">
+        <link rel="stylesheet" href="vendors/bootstrap/bootstrap.min.css">
+        <link rel="stylesheet" href="vendors/fontawesome/css/all.min.css">
+        <link rel="stylesheet" href="vendors/themify-icons/themify-icons.css">
+        <link rel="stylesheet" href="vendors/nice-select/nice-select.css">
+        <link rel="stylesheet" href="vendors/owl-carousel/owl.theme.default.min.css">
+        <link rel="stylesheet" href="vendors/owl-carousel/owl.carousel.min.css">
+
+        <link rel="stylesheet" href="css/style.css">
+
+        <link rel="stylesheet"
+              href="https://cdn.jsdelivr.net/npm/boxicons@latest/css/boxicons.min.css">
+        <!-- or -->
+        <link rel="stylesheet"
+              href="https://unpkg.com/boxicons@latest/css/boxicons.min.css">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,200..1000;1,200..1000&family=PT+Sans:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
@@ -151,7 +166,7 @@
                                     </div>
                                     <div class="col-md-12">
                                         <label class="labels">Email</label>
-                                        <input type="text" class="form-control" maxlength="125" placeholder="enter email id" value="${sessionScope.user.getEmail()}" name="email">
+                                        <input type="text" class="form-control" maxlength="125" readonly="You cant change email" placeholder="enter email id" value="${sessionScope.user.getEmail()}" name="email">
                                     </div>
                                     <div class="col-md-12">
                                         <label class="labels">Phone</label>
@@ -317,9 +332,18 @@
                                         <td>${o.quantity}</td>
                                         <td>${o.order.orderDate}</td>
                                         <td><fmt:formatNumber value="${o.order.totalAmountAfter}" type="number"/>đ</td>
+                                        <c:if test="${o.order.paymentStatus== null}">
+                                            <td>None</td>
+                                        </c:if>
+                                        <c:if test="${o.order.paymentStatus!= null}">
                                         <td>${o.order.paymentStatus}</td>
+                                        </c:if>
+                                        <c:if test="${o.order.orderStatus.isEmpty()}">
+                                            <td>None</td>
+                                            </c:if>
+                                            <c:if test="${!(o.order.orderStatus.isEmpty())}">
                                         <td>${o.order.orderStatus}</td>
-
+                                        </c:if>
                                         <td><a href="profile?profile=orderdetail&id=${o.order.id}"><i class='bx bx-show-alt'></i></a></td>
                                     </tr>
                                 </c:forEach>
@@ -484,8 +508,10 @@
                                 <c:if test="${currentOrderDetail.getOrder().getOrderStatus() eq 'accepted'}">
                                     <c:set var="colorOrder" value="#5cb99a"/>
                                 </c:if>
+                                
+                                
                                 <div class="pt-1">
-                                    <p style="font-size: 18px">Order #${currentOrderDetail.getId()} is currently<b style="color: ${colorOrder}"> ${currentOrderDetail.getOrder().getOrderStatus()}</b></p>
+                                    <p style="font-size: 18px">Order #${currentOrder.getId()} is currently<b style="color: ${colorOrder}"> ${currentOrder.getOrderStatus().isEmpty()? "None":currentOrder.getOrderStatus() }</b></p>
                                 </div>
                                 <a href="profile?profile=ordermanage"><div class="btn close text-white" ">&times;</div></a>
                             </div>
@@ -516,13 +542,13 @@
                                         <div><b></b></div>
                                         <div class="mx-3">
                                             <c:if test="${not empty image}">
-                                                <img src="${image.getImage()}" alt="Product Image" width="90" height="80"/>
+                                                <img src="${pageContext.request.contextPath}/images/${image.getImage()}" alt="Product Image" width="90" height="80"/>
                                             </c:if>
 
                                         </div>
 
-                                        <div class="order-item">${o.productDetail.product.name} ${o.productDetail.product.category.name}<br/>
-                                            ${o.productDetail.configuration.name} (${o.productDetail.color.name}) x ${o.getQuantity()}</div>
+                                        <a href="information?productId=${o.productDetail.id}"><div class="order-item">${o.productDetail.product.name} ${o.productDetail.product.category.name}<br/>
+                                            ${o.productDetail.configuration.name} (${o.productDetail.color.name}) x ${o.getQuantity()}</div></a>
                                     </div>
                                     <div style="padding-left: 1.7%;"> Unit price: &nbsp;<fmt:formatNumber value="${o.getUnitPrice()}" type="number"/>đ</div>
                                     <div style="padding-left: 1.7%;"> Total price: &nbsp;<fmt:formatNumber value="${(o.getUnitPrice() * o.getQuantity())}" type="number"/>đ</div>
@@ -533,10 +559,11 @@
                                 <div class="d-flex justify-content-start align-items-center pl-3">
                                     <div class="text-muted">Payment Method</div>
                                     <div class="ml-auto">
-                                        <img
-                                            src="https://www.freepnglogos.com/uploads/mastercard-png/mastercard-logo-logok-15.png"
+                                        <img 
+                                            
+                                            src="http://kimloaithudo.com/uploads/images/20-Tin-tuc/Ship-COD.jpg"
                                             alt=""
-                                            width="30"
+                                            width="50"
                                             height="30"
                                             />
                                         <label>${currentOrder.getPaymentMethod()}</label>
@@ -558,7 +585,7 @@
                                     class="d-flex justify-content-start align-items-center pb-4 pl-3 border-bottom"
                                     >
                                     <div class="text-muted" >
-                                        <button class="text-white btn">${currentOrder.getVoucher().getDiscountPercent()}% Discount</button>
+                                        <button style="" class="text-white btn">${currentOrder.getVoucher().getDiscountPercent()}% Discount</button>
                                     </div>
                                     <div class="ml-auto price" style="font-size: 18px;">- <fmt:formatNumber value="${currentOrder.getDiscountAmount()}" type="number"/>đ</div>
                                 </div>
@@ -587,21 +614,24 @@
 
                                     <div class="col-md-12 py-3">
                                         <div class="d-flex flex-column align-items start">
-                                            <b>Shipping Address</b>
+                                            <b style="font-size: 17px">Shipping Address</b>
                                             <p class="text-justify pt-2">
                                                 ${currentOrder.getAddress()}
                                             </p>
 
-                                            <p class="text-justify" style="color: black">Vietnam</p>
+                                            <p class="text-justify" style="color: black">#Vietnam</p>
                                         </div>
                                     </div>
                                     <div class="col-md-12 py-3">
                                         <div class="d-flex flex-column align-items start">
-                                            <b>Phone Number</b>
+                                            <b style="font-size: 17px">Customer Information</b>
+                                            <p class="text-justify pt-2">
+                                                ${currentOrder.getName()}
+                                            </p>
                                             <p class="text-justify pt-2">
                                                 ${currentOrder.getPhone()}
                                             </p>
-                                            <b>Email</b>
+                                            <b style="font-size: 14px">Email</b>
                                             <p class="text-justify pt-2">
                                                 ${currentOrder.getUser().getEmail()}
                                             </p>
