@@ -4,7 +4,6 @@
  */
 package model;
 
-import java.sql.Date;
 import java.time.LocalDateTime;
 
 /**
@@ -27,6 +26,7 @@ public class Order {
     private String VnPayTransactionId;
     private LocalDateTime EndDate;
     private String OrderStatus;
+    private String Note;
 
     public Order() {
     }
@@ -49,7 +49,25 @@ public class Order {
         this.OrderStatus = OrderStatus;
     }
 
-    
+    public Order(int Id, User User, String Name, String Address, String Phone, LocalDateTime OrderDate, Voucher Voucher, int TotalAmountBefore, int DiscountAmount, int TotalAmountAfter, String PaymentMethod, String PaymentStatus, String VnPayTransactionId, LocalDateTime EndDate, String OrderStatus, String Note) {
+        this.Id = Id;
+        this.User = User;
+        this.Name = Name;
+        this.Address = Address;
+        this.Phone = Phone;
+        this.OrderDate = OrderDate;
+        this.Voucher = Voucher;
+        this.TotalAmountBefore = TotalAmountBefore;
+        this.DiscountAmount = DiscountAmount;
+        this.TotalAmountAfter = TotalAmountAfter;
+        this.PaymentMethod = PaymentMethod;
+        this.PaymentStatus = PaymentStatus;
+        this.VnPayTransactionId = VnPayTransactionId;
+        this.EndDate = EndDate;
+        this.OrderStatus = OrderStatus;
+        this.Note = Note;
+    }
+
 
     public int getId() {
         return Id;
@@ -120,7 +138,8 @@ public class Order {
     public int getTotalAmountAfter() {
         return TotalAmountAfter;
     }
-public void setTotalAmountAfter(int TotalAmountAfter) {
+
+    public void setTotalAmountAfter(int TotalAmountAfter) {
         this.TotalAmountAfter = TotalAmountAfter;
     }
 
@@ -164,8 +183,6 @@ public void setTotalAmountAfter(int TotalAmountAfter) {
         this.EndDate = EndDate;
     }
 
-    
-
     public String getOrderStatus() {
         return OrderStatus;
     }
@@ -173,4 +190,17 @@ public void setTotalAmountAfter(int TotalAmountAfter) {
     public void setOrderStatus(String OrderStatus) {
         this.OrderStatus = OrderStatus;
     }
+    public String getNote() {
+        return Note;
+    }
+
+    public void setNote(String Note) {
+        this.Note = Note;
+    }
+
+    @Override
+    public String toString() {
+        return "Order{" + "Id=" + Id + ", User=" + User + ", Name=" + Name + ", Address=" + Address + ", Phone=" + Phone + ", OrderDate=" + OrderDate + ", Voucher=" + Voucher + ", TotalAmountBefore=" + TotalAmountBefore + ", DiscountAmount=" + DiscountAmount + ", TotalAmountAfter=" + TotalAmountAfter + ", PaymentMethod=" + PaymentMethod + ", PaymentStatus=" + PaymentStatus + ", VnPayTransactionId=" + VnPayTransactionId + ", EndDate=" + EndDate + ", OrderStatus=" + OrderStatus + '}';
+    }
+
 }

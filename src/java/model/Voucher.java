@@ -1,3 +1,7 @@
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
+ */
 package model;
 
 import java.util.Date;
@@ -16,13 +20,12 @@ public class Voucher {
     private Date StartDate;
     private Date EndDate;
     private int MinValue;
-    private int DiscountCap;
     private String Status;
 
     public Voucher() {
     }
 
-    public Voucher(int id, String Code, String Name, int DiscountPercent, int Quantity, Date StartDate, Date EndDate, int MinValue, int DiscountCap, String Status) {
+    public Voucher(int id, String Code, String Name, int DiscountPercent, int Quantity, Date StartDate, Date EndDate, int MinValue, String Status) {
         this.id = id;
         this.Code = Code;
         this.Name = Name;
@@ -31,11 +34,10 @@ public class Voucher {
         this.StartDate = StartDate;
         this.EndDate = EndDate;
         this.MinValue = MinValue;
-        this.DiscountCap = DiscountCap;
         this.Status = Status;
     }
-    
-    public Voucher(int id, String Code, String Name, int DiscountPercent, int Quantity, String Image, Date StartDate, Date EndDate, int MinValue, int DiscountCap, String Status) {
+
+    public Voucher(int id, String Code, String Name, int DiscountPercent, int Quantity, String Image, Date StartDate, Date EndDate, int MinValue, String Status) {
         this.id = id;
         this.Code = Code;
         this.Name = Name;
@@ -45,7 +47,6 @@ public class Voucher {
         this.StartDate = StartDate;
         this.EndDate = EndDate;
         this.MinValue = MinValue;
-        this.DiscountCap = DiscountCap;
         this.Status = Status;
     }
 
@@ -121,18 +122,17 @@ public class Voucher {
         this.MinValue = MinValue;
     }
 
-    public int getDiscountCap() {
-        return DiscountCap;
-    }
-
-    public void setDiscountCap(int DiscountCap) {
-        this.DiscountCap = DiscountCap;
-    }
 
     public String getStatus() {
         return Status;
     }
-public void setStatus(String Status) {
+
+    public void setStatus(String Status) {
         this.Status = Status;
     }    
+
+    @Override
+    public String toString() {
+        return "Voucher{" + "id=" + id + ", Code=" + Code + ", Name=" + Name + ", DiscountPercent=" + DiscountPercent + ", Quantity=" + Quantity + ", Image=" + Image + ", StartDate=" + StartDate + ", EndDate=" + EndDate + ", MinValue=" + MinValue + ", Status=" + Status + '}';
+    }
 }
