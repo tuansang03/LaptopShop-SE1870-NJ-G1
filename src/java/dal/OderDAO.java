@@ -725,7 +725,6 @@ public class OderDAO extends DBContext {
             }
         }
     } catch (SQLException ex) {
-        Logger.getLogger(ProductDetailDAO.class.getName()).log(Level.SEVERE, null, ex);
     }
 
     return productDetail;
