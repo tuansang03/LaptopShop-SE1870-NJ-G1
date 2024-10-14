@@ -3,12 +3,18 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
+<<<<<<< HEAD
             <file>file:/D:/SWP_clone/LaptopShop-SE1870-NJ-G1/src/java/controller/ChangeStatusReturn.java</file>
             <file>file:/D:/SWP_clone/LaptopShop-SE1870-NJ-G1/src/java/dal/DBContext.java</file>
             <file>file:/D:/SWP_clone/LaptopShop-SE1870-NJ-G1/src/java/controller/ShowReturnRequest.java</file>
             <file>file:/D:/SWP_clone/LaptopShop-SE1870-NJ-G1/web/single-product.jsp</file>
             <file>file:/D:/SWP_clone/LaptopShop-SE1870-NJ-G1/web/managereturn.jsp</file>
             <file>file:/D:/SWP_clone/LaptopShop-SE1870-NJ-G1/src/java/dal/ProductDAO.java</file>
+=======
+            <file>file:/D:/SWP391/LaptopShop-SE1870-NJ-G1/src/java/controller/ProductInformation.java</file>
+            <file>file:/D:/SWP391/LaptopShop-SE1870-NJ-G1/web/single-product.jsp</file>
+            <file>file:/D:/SWP391/LaptopShop-SE1870-NJ-G1/src/java/dal/ProductDAO.java</file>
+>>>>>>> 4c8a1940f847a93f062d8125c33b7afcca8f74ec
         </group>
     </open-files>
 </project-private>

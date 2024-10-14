@@ -920,9 +920,4 @@ public class ProductDAO extends DBContext {
         }
     }
 
-    public static void main(String[] args) {
-        ProductDAO p = new ProductDAO();
-        List<Return> list = p.listReturn();
-        System.out.println(list.size());
-    }
 }
