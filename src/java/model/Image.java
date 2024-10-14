@@ -10,9 +10,9 @@ package model;
  */
 public class Image {
    private int id;
-   private ProductDetail productDetail;
+   public ProductDetail productDetail;
    private Feedback feedBack;
-   private String image;
+   public String image;
 
     public Image() {
     }

@@ -28,6 +28,76 @@ import model.Role;
  */
 public class UserDAO extends DBContext {
 
+    public void updatePassword(String username, String newPassword) {
+        String sql = "UPDATE [User] SET password = ? WHERE userName = ?";
+        try {
+            PreparedStatement pre = connection.prepareStatement(sql);
+            pre.setString(1, newPassword); // Gán mật khẩu mới (nên mã hóa trước khi lưu)
+            pre.setString(2, username); // Gán tên người dùng
+
+            pre.executeUpdate(); // Thực thi câu lệnh UPDATE
+
+        } catch (SQLException ex) {
+            Logger.getLogger(UserDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    public boolean checkPassword(String username, String password) {
+        String sql = "SELECT COUNT(Id) FROM [User] WHERE Username = ? AND [Password] = ?";
+        try {
+            PreparedStatement pre = connection.prepareStatement(sql);
+            pre.setString(1, username);
+            pre.setString(2, password); // Bạn nên mã hóa mật khẩu ở đây trước khi so sánh!
+
+            ResultSet rs = pre.executeQuery();
+            if (rs.next()) {
+                // Nếu có ít nhất 1 dòng được trả về, mật khẩu là đúng
+                return rs.getInt(1) > 0;
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(UserDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return false; // Nếu không tìm thấy hoặc có lỗi xảy ra
+    }
+
+    public boolean updateUser(User u) {
+        String sql = "UPDATE [User] SET fullName = ?, email = ? WHERE id = ?";
+        boolean isUpdated = false;
+
+        try {
+            PreparedStatement pre = connection.prepareStatement(sql);
+            pre.setString(1, u.getFullName()); // Cập nhật fullName
+            pre.setString(2, u.getEmail());     // Cập nhật email
+            pre.setInt(3, u.getId());  // Sử dụng username làm điều kiện để cập nhật
+
+            int rowsAffected = pre.executeUpdate();
+            isUpdated = (rowsAffected > 0); // Nếu có ít nhất 1 hàng bị ảnh hưởng thì cập nhật thành công
+        } catch (SQLException ex) {
+            Logger.getLogger(UserDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        return isUpdated; // Trả về kết quả cập nhật
+    }
+        public boolean updateUser2(User u) {
+        String sql = "UPDATE [User] SET fullName = ?, email = ?, Username = ? WHERE id = ?";
+        boolean isUpdated = false;
+
+        try {
+            PreparedStatement pre = connection.prepareStatement(sql);
+            pre.setString(1, u.getFullName()); // Cập nhật fullName
+            pre.setString(2, u.getEmail());     // Cập nhật email
+            pre.setString(3, u.getUserName());     // Cập nhật email
+            pre.setInt(4, u.getId());  // Sử dụng username làm điều kiện để cập nhật
+
+            int rowsAffected = pre.executeUpdate();
+            isUpdated = (rowsAffected > 0); // Nếu có ít nhất 1 hàng bị ảnh hưởng thì cập nhật thành công
+        } catch (SQLException ex) {
+            Logger.getLogger(UserDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        return isUpdated; // Trả về kết quả cập nhật
+    }
+
     public void insertUser(User user) {
         String sql = "INSERT INTO [dbo].[User]\n"
                 + "           ([Username]\n"
@@ -58,6 +128,24 @@ public class UserDAO extends DBContext {
         try {
             PreparedStatement pre = connection.prepareStatement(sql);
             pre.setString(1, user.getEmail());
+            ResultSet rs = pre.executeQuery();
+            if (rs.next()) {
+                int count = rs.getInt(1);
+                if (count == 0) {
+                    return false;
+                }
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(UserDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return true;
+    }
+
+    public boolean isMailDuplicate2(String email) {
+        String sql = "SELECT COUNT(*) FROM [User] WHERE email = ?";
+        try {
+            PreparedStatement pre = connection.prepareStatement(sql);
+            pre.setString(1, email);
             ResultSet rs = pre.executeQuery();
             if (rs.next()) {
                 int count = rs.getInt(1);
@@ -295,13 +383,13 @@ public class UserDAO extends DBContext {
         return list;
     }
 
+
     public List<Post> getNewestPostListD() {
 
         List<Post> list = new ArrayList<>();
         String sql = "SELECT TOP 5 [Id], [UserId], [BrandId], [CategoryId], [Title], [ShortContent], [FullContent], [Thumbnail], [PublishDate] "
                 + "FROM [dbo].[Post] "
                 + "ORDER BY [PublishDate] DESC"; // Sắp xếp theo PublishDate
-
         try {
             PreparedStatement st = connection.prepareStatement(sql);
             ResultSet rs = st.executeQuery();
@@ -466,16 +554,20 @@ public class UserDAO extends DBContext {
                 // Đặt giá trị cho Price và Quantity
                 newProduct.setPrice(rs.getInt("Price"));
                 newProduct.setQuantity(rs.getInt("Quantity"));
+                // Đặt giá trị cho Price và Quantity
+                newProduct.setPrice(rs.getInt("Price"));
+                newProduct.setQuantity(rs.getInt("Quantity"));
 
-                newProduct.setShortDescription(rs.getString("ShortDescription"));
-                newProduct.setDescription(rs.getString("Description"));
-                newProduct.setStatus(rs.getString("Status"));
-            }
-        } catch (SQLException e) {
-            System.out.println(e);
+            newProduct.setShortDescription(rs.getString("ShortDescription"));
+            newProduct.setDescription(rs.getString("Description"));
+            newProduct.setStatus(rs.getString("Status"));
         }
-        return newProduct;
+    } catch (SQLException e) {
+        System.out.println(e);
     }
+    return newProduct;
+}
+
 
     public List<Image> getPictureList() {
         List<Image> list = new ArrayList<>();
@@ -536,8 +628,9 @@ public class UserDAO extends DBContext {
         }
         return list;
     }
+    
+public Post getPostById(int id) {
 
-    public Post getPostById(int id) {
         String sql = "SELECT [Id], [UserId], [BrandId], [CategoryId], [Title], "
                 + "[ShortContent], [FullContent], [Thumbnail], [PublishDate] "
                 + "FROM [dbo].[Post] WHERE [Id] = ?";
@@ -744,6 +837,24 @@ public class UserDAO extends DBContext {
 
         return users;
     }
+public int[] getMinMaxPostId() {
+    int[] minMax = new int[2];
+    String sql = "SELECT MIN([Id]) AS minId, MAX([Id]) AS maxId FROM [dbo].[Post]";
+
+    try {
+        PreparedStatement st = connection.prepareStatement(sql);
+        ResultSet rs = st.executeQuery();
+
+        if (rs.next()) {
+            minMax[0] = rs.getInt("minId"); // Lấy id nhỏ nhất
+            minMax[1] = rs.getInt("maxId"); // Lấy id lớn nhất
+        }
+    } catch (SQLException e) {
+        System.out.println(e);
+    }
+    return minMax;
+}
+
 
     public List<User> getUserByRoleId(int roleId) {
         PreparedStatement stm = null;

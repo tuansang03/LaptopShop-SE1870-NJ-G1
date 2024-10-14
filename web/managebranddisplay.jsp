@@ -24,11 +24,13 @@
         <h2>Manage Brand</h2>
 
         <!-- Form tìm kiếm thương hiệu -->
-        <form action="BrandController" method="GET" class="form-inline mb-3">
-            <input type="text" name="search" class="form-control mr-2" placeholder="Search Brand" value="${param.search}">
-            <input type="hidden" name="service" value="searchBrand">
-            <button type="submit" class="btn btn-primary">Search</button>
-        </form>
+<form action="BrandController" method="GET" class="form-inline mb-3">
+    <input type="text" name="search" class="form-control mr-2" placeholder="Search Brand" 
+           value="${param.search}" maxlength="15" pattern=".{0,15}" title="Please enter up to 15 characters.">
+    <input type="hidden" name="service" value="searchBrand">
+    <button type="submit" class="btn btn-primary">Search</button>
+</form>
+
 
         <!-- Nút Add Brand -->
         <form action="BrandController" method="GET" class="form-inline mb-3">

@@ -190,5 +190,5 @@
     <servlet-mapping>
         <servlet-name>deleteImage</servlet-name>
         <url-pattern>/deleteImage</url-pattern>
-    </servlet-mapping>
+    </servlet-mapping>    
 </web-app>

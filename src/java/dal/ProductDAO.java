@@ -33,6 +33,66 @@ import java.text.DecimalFormat;
  */
 public class ProductDAO extends DBContext {
 
+    public ArrayList<Product> searchProductByName(String name, int pageNumber, int rowsPerPage) {
+        ArrayList<Product> pList = new ArrayList<>();
+        String sql = "WITH ProductCTE AS ( "
+                + "    SELECT p.Id, p.Name, p.BrandId, p.CategoryId, b.Name AS BrandName, c.Name AS CategoryName, "
+                + "           ROW_NUMBER() OVER (ORDER BY p.Id) AS RowNum "
+                + "    FROM product p "
+                + "    JOIN brand b ON p.BrandId = b.Id "
+                + "    JOIN category c ON p.CategoryId = c.Id "
+                + "    WHERE p.Name LIKE ? "
+                + ") "
+                + "SELECT * "
+                + "FROM ProductCTE "
+                + "WHERE RowNum BETWEEN ? AND ?;";
+        try {
+            PreparedStatement pre = connection.prepareStatement(sql);
+            pre.setString(1, "%" + name + "%"); // Thêm điều kiện tìm kiếm theo tên
+
+            // Tính toán giá trị cho tham số phân trang
+            int startRow = (pageNumber - 1) * rowsPerPage + 1;
+            int endRow = pageNumber * rowsPerPage;
+
+            // Set giá trị cho các tham số trong câu truy vấn
+            pre.setInt(2, startRow);  // Giá trị bắt đầu
+            pre.setInt(3, endRow);    // Giá trị kết thúc
+
+            ResultSet rs = pre.executeQuery();
+            
+            while (rs.next()) {
+                Product p = new Product();
+                p.setId(rs.getInt("Id"));
+                p.setName(rs.getString("Name"));
+
+                // Tạo đối tượng Brand
+                Brand b = new Brand();
+                b.setId(rs.getInt("BrandId"));
+                b.setName(rs.getString("BrandName"));
+                p.setBrand(b);
+
+                // Tạo đối tượng Category
+                Category c = new Category();
+                c.setId(rs.getInt("CategoryId"));
+                c.setName(rs.getString("CategoryName"));
+                p.setCategory(c);
+
+                // Thêm sản phẩm vào danh sách
+                pList.add(p);
+            }
+
+            // Đóng ResultSet và PreparedStatement
+            rs.close();
+            pre.close();
+            
+            return pList;
+            
+        } catch (SQLException ex) {
+            Logger.getLogger(ProductDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
+    }
+    
     public ArrayList<Product> readProduct(int pageNumber, int rowsPerPage) {
         ArrayList<Product> pList = new ArrayList<>();
         String sql = "WITH ProductCTE AS ( "
@@ -57,8 +117,7 @@ public class ProductDAO extends DBContext {
             pre.setInt(2, endRow);    // Giá trị kết thúc
 
             ResultSet rs = pre.executeQuery();
-
-
+            
             while (rs.next()) {
                 Product p = new Product();
                 p.setId(rs.getInt("Id"));  // Lấy ID của sản phẩm
@@ -83,15 +142,48 @@ public class ProductDAO extends DBContext {
             // Đóng ResultSet và PreparedStatement
             rs.close();
             pre.close();
-
+            
             return pList;
-
+            
         } catch (SQLException ex) {
             Logger.getLogger(ProductDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
         return null;
     }
+    
+    public ArrayList<Product> getAllProduct() {
+        ArrayList<Product> pList = new ArrayList<>();
+        String sql = "select * from Product";
+        try {
+            PreparedStatement pre = connection.prepareStatement(sql);
+            ResultSet rs = pre.executeQuery();
+            
+            while (rs.next()) {
+                Product p = new Product();
+                p.setId(rs.getInt("Id"));  // Lấy ID của sản phẩm
+                p.setName(rs.getString("Name"));  // Lấy tên sản phẩm
 
+                // Tạo đối tượng Brand
+                Brand b = new Brand();
+                b.setId(rs.getInt("BrandId"));  // Lấy ID của brand
+                // Lấy tên của brand
+                p.setBrand(b);
+
+                // Tạo đối tượng Category
+                Category c = new Category();
+                c.setId(rs.getInt("CategoryId"));  // Lấy ID của category
+                // Lấy tên của category
+                p.setCategory(c);
+
+                // Thêm sản phẩm vào danh sách
+                pList.add(p);
+            }
+            return pList;
+        } catch (SQLException ex) {
+            Logger.getLogger(ProductDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
+    }
 
     public int insertProduct(int brandId, int categoryId, String name) {
         String sql = "INSERT INTO [dbo].[Product] (BrandId, CategoryId, Name) VALUES (?, ?, ?)";
@@ -118,22 +210,27 @@ public class ProductDAO extends DBContext {
         } catch (SQLException ex) {
             Logger.getLogger(ProductDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
-
+        
         return generatedId;  // Trả về ID của sản phẩm vừa được thêm
     }
-
+    
     public void deleteById(int id) {
-        String sql = "DELETE FROM Product \n"
-                + "WHERE Id= ?";
+        String sql = "DELETE FROM Comment \n"
+                + "WHERE ProductId = ?\n"
+                + "\n"
+                + "\n"
+                + "DELETE FROM Product \n"
+                + "                WHERE Id= ?";
         try {
             PreparedStatement pre = connection.prepareStatement(sql);
             pre.setInt(1, id);
+            pre.setInt(2, id);
             pre.executeQuery();
         } catch (SQLException ex) {
             Logger.getLogger(ProductDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-
+    
     public int countProduct() {
         String sql = "SELECT COUNT(*) FROM product"; // Câu lệnh SQL để đếm sản phẩm
         try {
@@ -151,6 +248,32 @@ public class ProductDAO extends DBContext {
         }
         return 0; // Trả về 0 nếu có lỗi
     }
+    
+    public int countProductByName(String name) {
+        // Câu lệnh SQL để đếm sản phẩm theo tên
+        String sql = "SELECT COUNT(*) FROM product WHERE Name LIKE ?";
+        
+        try {
+            // Chuẩn bị câu lệnh với điều kiện tìm kiếm
+            PreparedStatement pre = connection.prepareStatement(sql);
+
+            // Gán giá trị cho tham số tên sản phẩm, sử dụng ký tự '%' cho tìm kiếm LIKE
+            pre.setString(1, "%" + name + "%");
+
+            // Thực thi câu lệnh và nhận kết quả
+            ResultSet rs = pre.executeQuery();
+
+            // Kiểm tra nếu có kết quả, trả về tổng số sản phẩm
+            if (rs.next()) {
+                return rs.getInt(1); // Lấy giá trị đếm được từ cột đầu tiên
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(ProductDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        // Trả về 0 nếu có lỗi hoặc không có kết quả
+        return 0;
+    }
 
     public List<Brand> listBrand() {
         List<Brand> list = new ArrayList<>();
@@ -167,10 +290,10 @@ public class ProductDAO extends DBContext {
         } catch (SQLException e) {
             System.out.println(e);
         }
-
+        
         return list;
     }
-
+    
     public List<Category> listCategory() {
         List<Category> list = new ArrayList<>();
         String sql = "select * from Category";
@@ -186,10 +309,10 @@ public class ProductDAO extends DBContext {
         } catch (SQLException e) {
             System.out.println(e);
         }
-
+        
         return list;
     }
-
+    
     public List<ProductList> listProduct(String category, String brand, String price, String name) {
         List<ProductList> list = new ArrayList<>();
         String sql = "WITH RankedProducts AS (\n"
@@ -210,7 +333,7 @@ public class ProductDAO extends DBContext {
                 + "SELECT Id, detail, name, brand, category, img, price\n"
                 + "FROM RankedProducts\n"
                 + "WHERE rn = 1";
-
+        
         if (category != null) {
             sql += " and category in (" + category + ")";
         }
@@ -224,11 +347,11 @@ public class ProductDAO extends DBContext {
                 sql += " order by price " + price;
             }
         }
-
+        
         if (name != null) {
             sql += " and name like N'%" + name + "%'";
         }
-
+        
         try {
             PreparedStatement st = connection.prepareStatement(sql);
             //st.setInt(1, cid);
@@ -244,15 +367,15 @@ public class ProductDAO extends DBContext {
                         formatCurrency(re.getInt("price"))
                 );
                 list.add(p);
-
+                
             }
         } catch (SQLException e) {
         }
-
+        
         return list;
-
+        
     }
-
+    
     public static String formatCurrency(int amount) {
         DecimalFormat formatter = new DecimalFormat("#,###");
         return formatter.format(amount) + " VNĐ";
@@ -260,26 +383,28 @@ public class ProductDAO extends DBContext {
     
     public List<Image> getImageById(int id) {
         List<Image> list = new ArrayList<>();
-        String sql = "select p.Id as product, pd.Id, i.FeedbackId, i.Image\n"
-                + "from Image i\n"
-                + "join ProductDetail pd on pd.Id=i.ProductDetailId\n"
-                + "join Product p on p.Id=pd.ProductId\n"
-                + "and pd.Id=" + id;
-        try {
-            PreparedStatement st = connection.prepareStatement(sql);
-            ResultSet re = st.executeQuery();
-            while (re.next()) {
-                Image i = new Image(
-                        re.getInt("id"),
-                        null,
-                        null,
-                        re.getString("image"));
-                list.add(i);
+        String sql = "SELECT p.Id AS product, pd.Id, i.FeedbackId, i.Image "
+                + "FROM Product p "
+                + "JOIN ProductDetail pd ON pd.ProductId = p.Id "
+                + "JOIN Image i ON i.ProductDetailId = pd.Id "
+                + "WHERE p.Id = (SELECT ProductId FROM ProductDetail WHERE Id = ?)";
+        
+        try (PreparedStatement st = connection.prepareStatement(sql)) {
+            st.setInt(1, id);
+            try (ResultSet re = st.executeQuery()) {
+                while (re.next()) {
+                    Image i = new Image(
+                            re.getInt("id"),
+                            null,
+                            null,
+                            re.getString("image"));
+                    list.add(i);
+                }
             }
         } catch (SQLException e) {
-            System.out.println(e);
+            System.out.println(e.getMessage());
         }
-
+        
         return list;
     }
     
@@ -306,11 +431,11 @@ public class ProductDAO extends DBContext {
         } catch (SQLException e) {
             System.out.println(e);
         }
-
+        
         return null;
     }
     
-     public Configuration getConfigurationById(int id) {
+    public Configuration getConfigurationById(int id) {
         String sql = "SELECT * FROM Configuration WHERE id = ?";
         try (PreparedStatement st = connection.prepareStatement(sql)) {
             st.setInt(1, id);  // Truyền tham số vào câu lệnh SQL
@@ -323,11 +448,11 @@ public class ProductDAO extends DBContext {
         } catch (SQLException e) {
             System.out.println(e);
         }
-
+        
         return null;
     }
     
-     public Color getColorById(int id) {
+    public Color getColorById(int id) {
         String sql = "SELECT * FROM Color WHERE id = ?";
         try (PreparedStatement st = connection.prepareStatement(sql)) {
             st.setInt(1, id);  // Truyền tham số vào câu lệnh SQL
@@ -340,7 +465,7 @@ public class ProductDAO extends DBContext {
         } catch (SQLException e) {
             System.out.println(e);
         }
-
+        
         return null;
     }
     
@@ -363,11 +488,11 @@ public class ProductDAO extends DBContext {
         } catch (SQLException e) {
             System.out.println(e);
         }
-
+        
         return null;
     }
     
-     public Brand getBrandById(int id) {
+    public Brand getBrandById(int id) {
         String sql = "SELECT * FROM Brand WHERE id = ?";
         try (PreparedStatement st = connection.prepareStatement(sql)) {
             st.setInt(1, id);  // Truyền tham số vào câu lệnh SQL
@@ -380,10 +505,10 @@ public class ProductDAO extends DBContext {
         } catch (SQLException e) {
             System.out.println(e);
         }
-
+        
         return null;
     }
-
+    
     public Category getCategoryById(int id) {
         String sql = "SELECT * FROM Category WHERE id = ?";
         try (PreparedStatement st = connection.prepareStatement(sql)) {
@@ -397,30 +522,35 @@ public class ProductDAO extends DBContext {
         } catch (SQLException e) {
             System.out.println(e);
         }
-
+        
         return null;
     }
-      public List<ProductAttribute> getAttributeById(int id) {
+    
+    public List<ProductAttribute> getAttributeById(int id) {
         List<ProductAttribute> list = new ArrayList<>();
-        String sql = "select * from Product_Attribute where ProductDetailId = " + id + " order by AttributeId";
-        try {
-            PreparedStatement st = connection.prepareStatement(sql);
-            ResultSet re = st.executeQuery();
-            while (re.next()) {
-                ProductAttribute p = new ProductAttribute(
-                        re.getInt("id"),
-                        getProductDetail(re.getInt("productdetailid")),
-                        getAttribute(re.getInt("attributeid")),
-                        re.getString("value"));
-                list.add(p);
+        String sql = "SELECT * FROM Product_Attribute WHERE ProductDetailId = ? ORDER BY AttributeId";
+        
+        try (PreparedStatement st = connection.prepareStatement(sql)) {
+            st.setInt(1, id);
+            
+            try (ResultSet re = st.executeQuery()) {
+                while (re.next()) {
+                    ProductAttribute p = new ProductAttribute(
+                            re.getInt("id"),
+                            getProductDetail(re.getInt("productdetailid")),
+                            getAttribute(re.getInt("attributeid")),
+                            re.getString("value")
+                    );
+                    list.add(p);
+                }
             }
         } catch (SQLException e) {
-            System.out.println(e);
+            System.err.println("Error while fetching product attributes: " + e.getMessage());
         }
-
+        
         return list;
     }
-
+    
     public Attribute getAttribute(int id) {
         String sql = "SELECT * FROM Attribute WHERE id = ?";
         try (PreparedStatement st = connection.prepareStatement(sql)) {
@@ -434,10 +564,10 @@ public class ProductDAO extends DBContext {
         } catch (SQLException e) {
             System.out.println(e);
         }
-
+        
         return null;
     }
-
+    
     public List<Configuration> listConfigurationById(int id) {
         List<Configuration> list = new ArrayList<>();
         String sql = "SELECT MIN(pd.Id) AS id, c.Name AS name\n"
@@ -458,12 +588,12 @@ public class ProductDAO extends DBContext {
         } catch (SQLException e) {
             System.out.println(e);
         }
-
+        
         return list;
     }
-
+    
     public List<Color> listColorById(int id, int cid) {
-
+        
         List<Color> list = new ArrayList<>();
         String sql = "select pd.Id, c.Name\n"
                 + "from ProductDetail pd\n"
@@ -482,35 +612,248 @@ public class ProductDAO extends DBContext {
         } catch (SQLException e) {
             System.out.println(e);
         }
-
+        
         return list;
     }
-     
-     
-public List<Product> getProductsByBrand(int bid) {
-    PreparedStatement stm = null;
-    ResultSet rs = null;
-    List<Product> products = new ArrayList<>();
-    String sql = "SELECT * FROM [product] WHERE brand_id = ?";
-    try {
-        stm = connection.prepareStatement(sql);
-        stm.setInt(1, bid);
-        rs = stm.executeQuery();
-        while (rs.next()) {
-            int id = rs.getInt("id");
-            String name = rs.getString("name");
-
-            // Tạo sản phẩm với các trường cần thiết
-            products.add(new Product(id, name));
+    
+    public List<Product> getProductsByBrand(int bid) {
+        PreparedStatement stm = null;
+        ResultSet rs = null;
+        List<Product> products = new ArrayList<>();
+        String sql = "SELECT * FROM [product] WHERE brand_id = ?";
+        try {
+            stm = connection.prepareStatement(sql);
+            stm.setInt(1, bid);
+            rs = stm.executeQuery();
+            while (rs.next()) {
+                int id = rs.getInt("id");
+                String name = rs.getString("name");
+                
+                products.add(new Product(id, name));
+            }
+            return products;
+        } catch (SQLException ex) {
+            Logger.getLogger(ProductDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
-        return products;
-    } catch (SQLException ex) {
-        Logger.getLogger(ProductDAO.class.getName()).log(Level.SEVERE, null, ex);
+        return null;
     }
-    return null;
-}
+    
+    public Image getImage(int id) {
+        String sql = "SELECT top 1 * FROM Image WHERE ProductDetailId = ?";
+        try (PreparedStatement st = connection.prepareStatement(sql)) {
+            st.setInt(1, id);  // Truyền tham số vào câu lệnh SQL
+            try (ResultSet re = st.executeQuery()) {
+                if (re.next()) {
+                    Image i = new Image(
+                            re.getInt("id"),
+                            getProductDetail(id),
+                            null,
+                            re.getString("image"));
+                    return i;
+                }
+            }
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
+        
+        return null;
+    }
+    
+    public List<Image> getMiniImage(int id, int id2, int id3, String name) {
+        List<Image> list = new ArrayList<>();
+        StringBuilder sql = new StringBuilder();
+
+        // Bắt đầu câu lệnh SQL với CTE
+        sql.append("WITH RankedImages AS ( ")
+                .append("SELECT i.Id, i.ProductDetailId, i.FeedbackId, i.Image, ")
+                .append("ROW_NUMBER() OVER (PARTITION BY i.ProductDetailId ORDER BY i.Id) AS RowNum ")
+                .append("FROM Image i ")
+                .append("JOIN ProductDetail pd ON pd.Id = i.ProductDetailId ")
+                .append("JOIN Product p ON p.Id = pd.ProductId ");
+
+        // Thêm điều kiện WHERE nếu cần
+        List<String> conditions = new ArrayList<>();
+        if (name != null) {
+            conditions.add("p.Name LIKE N'%" + name + "%'");
+        }
+        if (id > 0) {
+            conditions.add("i.ProductDetailId <> " + id);
+        }
+        if (id2 > 0) {
+            conditions.add("i.ProductDetailId <> " + id2);
+        }
+        if (id3 > 0) {
+            conditions.add("i.ProductDetailId <> " + id3);
+        }
+
+        // Nếu có điều kiện, thêm chúng vào trong CTE
+        if (!conditions.isEmpty()) {
+            sql.append("WHERE ").append(String.join(" AND ", conditions));
+        }
+
+        // Đóng CTE và chọn từ RankedImages
+        sql.append(") ")
+                .append("SELECT Id, ProductDetailId, FeedbackId, Image ")
+                .append("FROM RankedImages ")
+                .append("WHERE RowNum = 1");
+        
+        try (PreparedStatement st = connection.prepareStatement(sql.toString())) {
+            try (ResultSet re = st.executeQuery()) {
+                while (re.next()) {
+                    Image i = new Image(
+                            re.getInt("Id"),
+                            getProductDetail(re.getInt("ProductDetailId")),
+                            null,
+                            re.getString("Image"));
+                    list.add(i);
+                }
+            }
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+        
+        return list;
+    }
+    
+    public Role getRole(int id) {
+        String sql = "SELECT * FROM Role WHERE Id = ?";
+        try (PreparedStatement st = connection.prepareStatement(sql)) {
+            st.setInt(1, id);  // Truyền tham số vào câu lệnh SQL
+            try (ResultSet re = st.executeQuery()) {
+                if (re.next()) {
+                    Role i = new Role(
+                            re.getInt("id"),
+                            re.getString("name"));
+                    return i;
+                }
+            }
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
+        
+        return null;
+    }
+    
+    public User getUser(int id) {
+        String sql = "SELECT * FROM [User] WHERE Id = ?";
+        try (PreparedStatement st = connection.prepareStatement(sql)) {
+            st.setInt(1, id);  // Truyền tham số vào câu lệnh SQL
+            try (ResultSet re = st.executeQuery()) {
+                if (re.next()) {
+                    User i = new User(
+                            re.getInt("id"),
+                            re.getString("username"),
+                            re.getString("password"),
+                            re.getString("fullname"),
+                            re.getString("email"),
+                            getRole(re.getByte("roleid")),
+                            re.getString("status"));
+                    return i;
+                }
+            }
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
+        
+        return null;
+    }
+    
+    public List<Favorite> listFavorite(int uid) {
+        List<Favorite> list = new ArrayList<>();
+        String sql = "SELECT * FROM Favorite WHERE Userid = ?";
+        
+        try (PreparedStatement st = connection.prepareStatement(sql)) {
+            st.setInt(1, uid);
+            try (ResultSet re = st.executeQuery()) {
+                while (re.next()) {
+                    Favorite c = new Favorite(
+                            re.getInt("id"),
+                            getProductDetail(re.getInt("productdetailid")),
+                            getUser(re.getInt("userid"))
+                    );
+                    list.add(c);
+                }
+            }
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+        return list;
+    }
+    
+    public List<Image> listWish(int uid) {
+        List<Image> list = new ArrayList<>();
+        String sql = "WITH RankedImages AS (\n"
+                + "    SELECT \n"
+                + "        i.Id,\n"
+                + "        i.ProductDetailId,\n"
+                + "        i.FeedbackId,\n"
+                + "        i.Image,\n"
+                + "        ROW_NUMBER() OVER (PARTITION BY i.ProductDetailId ORDER BY i.Id) AS RowNum\n"
+                + "    FROM Image i\n"
+                + "	JOIN ProductDetail pd ON pd.Id = i.ProductDetailId\n"
+                + "    JOIN Favorite f ON f.ProductDetailId = pd.Id\n"
+                + "    WHERE f.UserId = ?\n"
+                + ")\n"
+                + "SELECT Id, ProductDetailId, FeedbackId, Image\n"
+                + "FROM RankedImages\n"
+                + "WHERE RowNum = 1";
+        
+        try (PreparedStatement st = connection.prepareStatement(sql)) {
+            st.setInt(1, uid);
+            try (ResultSet re = st.executeQuery()) {
+                while (re.next()) {
+                    Image c = new Image(
+                            re.getInt("id"),
+                            getProductDetail(re.getInt("productdetailid")),
+                            null,
+                            re.getString("image"));
+                    list.add(c);
+                }
+            }
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+        return list;
+    }
+    
+    public void addWishlist(int uid, int pid) {
+        String sql = "insert into Favorite (ProductDetailId, UserId) values (?,?)";
+        try {
+            PreparedStatement pre = connection.prepareStatement(sql);
+            pre.setInt(1, pid);
+            pre.setInt(2, uid);
+            pre.executeQuery();
+        } catch (SQLException ex) {
+            Logger.getLogger(UserDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+    public void deleteFromWishlist(int uid, int pid) {
+        String sql = "delete from Favorite where UserId=? and ProductDetailId=?";
+        try {
+            PreparedStatement pre = connection.prepareStatement(sql);
+            pre.setInt(1, uid);
+            pre.setInt(2, pid);
+            pre.executeUpdate();
+        } catch (SQLException ex) {
+            Logger.getLogger(UserDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+    public void deleteAllWishlist(int uid) {
+        String sql = "delete from Favorite where UserId=?";
+        try {
+            PreparedStatement pre = connection.prepareStatement(sql);
+            pre.setInt(1, uid);
+            pre.executeUpdate();
+        } catch (SQLException ex) {
+            Logger.getLogger(UserDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
     public static void main(String[] args) {
         ProductDAO p = new ProductDAO();
-
+        ArrayList pList = p.getAllProduct();
+        System.out.println(pList);
     }
 }

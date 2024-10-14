@@ -261,83 +261,75 @@
                                     background-color: #f1f1f1;
                                 }
                             </style>
-                            <table style="width: 75%; align-items: center; text-align: center; margin: 0px auto;">
-    <thead>
-        <tr>
-            <th></th>
-            <th>Product</th>
-            <th>Total Quantity</th>
-            <th>Order Date</th>
-            <th>Total Price</th>
-            <th>Payment Status</th>
-            <th>Order Status</th>
-            <th>Action</th>
-            <th></th>
-        </tr>
-    </thead>
+                            <table style="width: 75%; align-items: center;text-align: center; margin: 0px auto;">
+                                <thead>
+                                    <tr>
+                                        <th></th>
+                                        <th>Product</th>
+                                        <th>Total Quantity</th>
+                                        <th>Order Date</th>
+                                        <th>Total Price</th>
+                                        <th>Payment Status</th>
+                                        <th>OrderStatus</th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
 
-    <style>
-        .product_image {
-            width: 30%;
-            height: 70px;
-        }
-        .product_image img {
-            width: 100%;
-            height: 100%;
-        }
-        .product_name {
-            color: #002752;
-        }
-    </style>
+                                <style>
+                                    .product_image{
+                                        width: 30%;
+                                        height: 70px;
+                                    }
+                                    .product_image img{
+                                        width: 100%;
+                                        height: 100%;
+                                    }
+                                    .product_name{
+                                        color: #002752
+                                    }
 
-    <c:forEach items="${orderListInfo}" var="o" varStatus="status">
-        <c:set var="orderId" value="${status.index + 1}" />
-        <c:set var="listOrder" value="${orderDAO.getOrderDetailsByOrderId(o.getOrder().getId())}" />
 
-        <tr>
-            <td>${orderId}</td>
-            <td style="width: 45%;">
-                <c:forEach items="${listOrder}" var="o1" varStatus="cao">
-                    <c:set var="count" value="${cao.index + 1}" />
-                    <c:set var="image" value="${imageDAOS.getOneImageByProductDetailID(o1.getProductDetail().getId())}" />
+                                </style>
+                                <!--            orderListInfo-->
+                                <%--<c:set var="count" value="0" />--%>
+                                <c:forEach items="${orderListInfo}" var="o" varStatus="status">
+                                    <c:set var="orderId" value="${status.index + 1}" />
+                                    <c:set var="listOrder" value="${orderDAO.getOrderDetailsByOrderId(o.getOrder().getId())}" />
+                                    <tr>
+                                        <td>${orderId}</td>
+                                        <td style="width: 45%">
+                                            <c:forEach items="${listOrder}" var="o1" varStatus="cao">
+                                                <c:set var="count" value="${cao.index + 1}" />
+                                                <c:set var="image" value="${imageDAOS.getOneImageByProductDetailID(o1.getProductDetail().getId())}" />
+                                                <div style="display: flex;">
+                                                    
+                                                    <div style="width: 65%">
+                                                        <h5 class="product_name" style="font-size: 19px; color: #002752 !important; font-family: Nunito, sans-serif !important;">
+                                                            ${count}. ${o1.productDetail.product.name} ${o1.productDetail.product.category.name}
+                                                            ${o1.productDetail.configuration.name} (${o1.productDetail.color.name})
+                                                        </h5>
+                                                        <h5 style="font-size: 17px;">Quantity: ${o1.quantity}</h5>
+                                                    </div>
+                                                    <br>
+                                                </div>
+                                            </c:forEach>
+                                        </td>
+                                        <td>${o.quantity}</td>
+                                        <td>${o.order.orderDate}</td>
+                                        <td><fmt:formatNumber value="${o.order.totalAmountAfter}" type="number"/>đ</td>
+                                        <td>${o.order.paymentStatus}</td>
+                                        <td>${o.order.orderStatus}</td>
 
-                    <div style="display: flex;">
-                        <div style="width: 65%;">
-                            <h5 class="product_name" 
-                                style="font-size: 19px; color: #002752 !important; font-family: Nunito, sans-serif !important;">
-                                ${count}. ${o1.productDetail.product.name} 
-                                ${o1.productDetail.product.category.name} 
-                                ${o1.productDetail.configuration.name} (${o1.productDetail.color.name})
-                            </h5>
-                            <h5 style="font-size: 17px;">Quantity: ${o1.quantity}</h5>
-                        </div>
-                        <br>
-                    </div>
-                </c:forEach>
-            </td>
+                                        <td><a href="profile?profile=orderdetail&id=${o.order.id}"><i class='bx bx-show-alt'></i></a></td>
+                                    </tr>
+                                </c:forEach>
 
-            <td>${o.quantity}</td>
-            <td>${o.order.orderDate}</td>
-            <td><fmt:formatNumber value="${o.order.totalAmountAfter}" type="number"/>đ</td>
-            <td>${o.order.paymentStatus}</td>
-            <td>${o.order.orderStatus}</td>
 
-            <!-- Chỉ hiển thị nút Return khi trạng thái đơn hàng là 'done' -->
-            <td>
-                <c:if test="${o.order.orderStatus == 'done'}">
-                    <a href="ReturnController?id=${o.order.id}&service=returnRequest">Return</a>
-                </c:if>
-            </td>
 
-            <td>
-                <a href="profile?profile=orderdetail&id=${o.order.id}">
-                    <i class='bx bx-show-alt'></i>
-                </a>
-            </td>
-        </tr>
-    </c:forEach>
-</table>
 
+
+
+                            </table>
 
 
 

@@ -1,3 +1,7 @@
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
+ */
 package model;
 
 /**
@@ -61,4 +65,10 @@ public class OrderDetail {
     public void setUnitPrice(int UnitPrice) {
         this.UnitPrice = UnitPrice;
     }
+
+    @Override
+    public String toString() {
+        return "OrderDetail{" + "Id=" + Id + ", Order=" + Order + ", ProductDetail=" + ProductDetail + ", Quantity=" + Quantity + ", UnitPrice=" + UnitPrice + '}';
+    }
+    
 }

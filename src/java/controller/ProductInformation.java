@@ -4,6 +4,7 @@
  */
 package controller;
 
+import dal.CommentDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -12,10 +13,12 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import dal.ProductDAO;
+import dal.ProductDetailDAO;
+import jakarta.servlet.http.HttpSession;
 import model.*;
 import java.util.List;
 import java.text.DecimalFormat;
-
+import java.util.ArrayList;
 
 /**
  *
@@ -63,25 +66,31 @@ public class ProductInformation extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         ProductDAO d = new ProductDAO();
-
-
+        HttpSession session = request.getSession();
         int id = Integer.parseInt(request.getParameter("productId"));
+        session.setAttribute("pId", id);
+        ProductDetailDAO pDDAO = new ProductDetailDAO();
+       int productId = pDDAO.getProductIdByProductDetailId(id);
         List<Image> list = d.getImageById(id);
         ProductDetail pd = d.getProductDetail(id);
-        List<Configuration> con = d.listConfigurationById(id);
+        
         List<ProductAttribute> pa = d.getAttributeById(id);
-        int selectedConfigId = pd.getConfiguration().getId();
-        int selectedColorId = pd.getColor().getId();
-        List<Color> col = d.listColorById(id, selectedConfigId);
+        
+        List<Configuration> con = d.listConfigurationById(id);
+        List<Color> col = d.listColorById(id, pd.getConfiguration().getId());
+        
         List<ProductList> listproduct = d.listProduct("'" + pd.getProduct().getCategory().getName() + "'", null, null, null);
         String price = formatCurrency(d.getProductDetail(id).getPrice());
+         CommentDAO c = new CommentDAO();
+        ArrayList<Comment> cList = c.getCommentByProductId(productId);
+        
+        request.setAttribute("commentList", cList);
         request.setAttribute("co", pd.getConfiguration().getName());
         request.setAttribute("col", pd.getColor().getName());
         request.setAttribute("detail", pd);
         request.setAttribute("attribute", pa);
         request.setAttribute("config", con);
-        request.setAttribute("selectedConfigId", selectedConfigId);
-        request.setAttribute("selectedColorId", selectedColorId);
+
         request.setAttribute("image", list);
         request.setAttribute("color", col);
         request.setAttribute("price", price);

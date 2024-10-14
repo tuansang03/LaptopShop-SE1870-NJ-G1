@@ -44,10 +44,14 @@ public class InputQuantityProduct extends HttpServlet {
             if (!(quantity_raw.isEmpty() || quantity_raw == null)) {
                 if (quantity > 0 && quantity <= pCart.getProductdetail().getQuantity()) {
                     cDAO.updateQuantityProduct(quantity, pdtid);
-                }else {
+
+                }else if(quantity <= 0) {
+                    cDAO.updateQuantityProduct(pCart.getQuantity(), pdtid);
+                }
+                else {
                     cDAO.updateQuantityProduct(pCart.getProductdetail().getQuantity(), pdtid);
                 }
-
+                
             } else {
                 CartItem cart = cDAO.getCartItemByPdtID(pdtid);
                 quantity = cart.getQuantity();
