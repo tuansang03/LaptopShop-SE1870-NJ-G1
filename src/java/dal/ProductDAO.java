@@ -59,7 +59,7 @@ public class ProductDAO extends DBContext {
             pre.setInt(3, endRow);    // Giá trị kết thúc
 
             ResultSet rs = pre.executeQuery();
-            
+
             while (rs.next()) {
                 Product p = new Product();
                 p.setId(rs.getInt("Id"));
@@ -84,15 +84,15 @@ public class ProductDAO extends DBContext {
             // Đóng ResultSet và PreparedStatement
             rs.close();
             pre.close();
-            
+
             return pList;
-            
+
         } catch (SQLException ex) {
             Logger.getLogger(ProductDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
         return null;
     }
-    
+
     public ArrayList<Product> readProduct(int pageNumber, int rowsPerPage) {
         ArrayList<Product> pList = new ArrayList<>();
         String sql = "WITH ProductCTE AS ( "
@@ -150,14 +150,14 @@ public class ProductDAO extends DBContext {
         }
         return null;
     }
-    
+
     public ArrayList<Product> getAllProduct() {
         ArrayList<Product> pList = new ArrayList<>();
         String sql = "select * from Product";
         try {
             PreparedStatement pre = connection.prepareStatement(sql);
             ResultSet rs = pre.executeQuery();
-            
+
             while (rs.next()) {
                 Product p = new Product();
                 p.setId(rs.getInt("Id"));  // Lấy ID của sản phẩm
@@ -248,11 +248,11 @@ public class ProductDAO extends DBContext {
         }
         return 0; // Trả về 0 nếu có lỗi
     }
-    
+
     public int countProductByName(String name) {
         // Câu lệnh SQL để đếm sản phẩm theo tên
         String sql = "SELECT COUNT(*) FROM product WHERE Name LIKE ?";
-        
+
         try {
             // Chuẩn bị câu lệnh với điều kiện tìm kiếm
             PreparedStatement pre = connection.prepareStatement(sql);
@@ -383,12 +383,12 @@ public class ProductDAO extends DBContext {
     
     public List<Image> getImageById(int id) {
         List<Image> list = new ArrayList<>();
-        String sql = "SELECT p.Id AS product, pd.Id, i.FeedbackId, i.Image "
-                + "FROM Product p "
-                + "JOIN ProductDetail pd ON pd.ProductId = p.Id "
-                + "JOIN Image i ON i.ProductDetailId = pd.Id "
-                + "WHERE p.Id = (SELECT ProductId FROM ProductDetail WHERE Id = ?)";
-        
+        String sql = "SELECT i.Id, i.ProductDetailId, i.FeedbackId, i.Image\n"
+                + "FROM Product p\n"
+                + "JOIN ProductDetail pd ON pd.ProductId = p.Id\n"
+                + "JOIN Image i ON i.ProductDetailId = pd.Id\n"
+                + "WHERE pd.Id = ?";
+
         try (PreparedStatement st = connection.prepareStatement(sql)) {
             st.setInt(1, id);
             try (ResultSet re = st.executeQuery()) {
@@ -839,7 +839,7 @@ public class ProductDAO extends DBContext {
             Logger.getLogger(UserDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
+
     public void deleteAllWishlist(int uid) {
         String sql = "delete from Favorite where UserId=?";
         try {
@@ -850,10 +850,74 @@ public class ProductDAO extends DBContext {
             Logger.getLogger(UserDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
-    public static void main(String[] args) {
-        ProductDAO p = new ProductDAO();
-        ArrayList pList = p.getAllProduct();
-        System.out.println(pList);
+
+    public Order getOrder(int id) {
+        String sql = "SELECT * FROM [Order] WHERE Id = ?";
+        try (PreparedStatement st = connection.prepareStatement(sql)) {
+            st.setInt(1, id);  // Truyền tham số vào câu lệnh SQL
+            try (ResultSet re = st.executeQuery()) {
+                if (re.next()) {
+                    Order i = new Order(
+                            re.getInt("id"),
+                            getUser(re.getInt("userid")),
+                            re.getString("name"),
+                            re.getString("address"),
+                            re.getString("phone"),
+                            re.getTimestamp("OrderDate").toLocalDateTime(),
+                            null,
+                            re.getInt("TotalAmountBefore"),
+                            re.getInt("DiscountAmount"),
+                            re.getInt("TotalAmountAfter"),
+                            re.getString("paymentmethod"),
+                            re.getString("paymentstatus"),
+                            re.getString("VnPayTransactionId"),
+                            re.getTimestamp("EndDate") != null ? re.getTimestamp("EndDate").toLocalDateTime() : null,
+                            re.getString("orderstatus"),
+                            re.getString("note"));
+                    return i;
+                }
+            }
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
+
+        return null;
     }
+
+    public List<Return> listReturn() {
+        List<Return> list = new ArrayList<>();
+        String sql = "SELECT * FROM [Return]";
+        try (PreparedStatement st = connection.prepareStatement(sql)) {
+            try (ResultSet re = st.executeQuery()) {
+                while (re.next()) {
+                    Return c = new Return(
+                            re.getInt("id"),
+                            re.getInt("totalreturnamount"),
+                            re.getString("reason"),
+                            re.getString("refundmethod"),
+                            re.getString("refundstatus"),
+                            re.getString("refundstatus"),
+                            getOrder(re.getInt("orderid")),
+                            re.getTimestamp("returndate").toLocalDateTime()
+                    );
+                    list.add(c);
+                }
+            }
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+        return list;
+    }
+    
+    public void changeReturnStatus(String op, int id) {
+        String sql = "UPDATE [dbo].[Return] SET[ReturnStatus] = ? WHERE Id = ?";
+        try {
+            PreparedStatement st = connection.prepareStatement(sql);
+            st.setString(1, op);
+            st.setInt(2, id);
+            st.executeUpdate();
+        } catch (Exception e) {
+        }
+    }
+
 }

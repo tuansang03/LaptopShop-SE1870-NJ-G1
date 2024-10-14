@@ -116,7 +116,7 @@
                 <tbody>
                     <c:forEach items="${wishlist}" var="i">
                         <tr>
-                            <td><img src="${i.image}" alt="Product Image"/></td>
+                            <td><img src="${pageContext.request.contextPath}/images/${i.image}" alt="Product Image"/></td>
                             <td><a href="information?productId=${i.productDetail.id}">${i.productDetail.product.name}</a> (${i.productDetail.color.name})<br>
                                 ${i.productDetail.product.brand.name}<br>
                                 ${i.productDetail.configuration.name}

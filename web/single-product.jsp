@@ -3,6 +3,9 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -49,6 +52,18 @@
         <div class="product_image_area">
             <div class="container">
                 <div class="row s_product_inner">
+                    <div class="col-md-12">
+                        <c:if test="${msg != null}">
+                            <div class="alert alert-danger" role="alert">
+                                <strong>Error:</strong> ${msg}
+                            </div>
+                        </c:if>
+                        <c:if test="${success != null}">
+                            <div class="alert alert-success" role="alert">
+                                <strong>Success:</strong> ${success}
+                            </div>
+                        </c:if>
+                    </div>
                     <div class="col-md-12">
                         <c:if test="${msg != null}">
                             <div class="alert alert-danger" role="alert">
@@ -343,6 +358,7 @@
                             <h2>${price}</h2>
                             <h5 style="text-decoration: line-through; font-size: 16px; color: #a19c9c; padding-left: 16px ">
                                 ${sale}
+                                ${sale}
                             </h5>
                             <p>${detail.shortDescription}</p>
                             <div class="card_area d-flex align-items-center">
@@ -478,9 +494,88 @@
                                                     </div>
                                                 </div>
 
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                        <div class="tab-pane fade" id="contact" role="tabpanel" aria-labelledby="contact-tab">
+                                            <div class="row">
+                                                <div class="col-lg-6">
+                                                    <div class="comment_list">
+                                                        <!-- Vòng lặp để duyệt qua danh sách bình luận -->
+                                                        <c:forEach items="${commentList}" var="comment">
+                                                            <!-- Kiểm tra nếu RepplyCommentId là NULL (bình luận chính) -->
+                                                            <c:if test="${comment.repplyCommentId == null}">
+                                                                <div class="review_item">
+                                                                    <div class="media">
+                                                                        <div class="media-body">
+                                                                            <!-- Tên người dùng -->
+                                                                            <h4>${comment.user.fullName} <c:if test="${comment.user.role.id == 2}">(Saler)</c:if></h4>
+                                                                            <!-- Ngày bình luận -->
+                                                                            <h5>
+                                                                                <fmt:formatDate value="${comment.commentDate}" pattern="dd/MM/yyyy HH:mm" />
+                                                                               
+                                                                            </h5>
+                                                                        </div>
+                                                                    </div>
+                                                                    <!-- Nội dung bình luận -->
+                                                                    <p>${comment.commentContent}</p>
+                                                                </div>
+
+                                                                <!-- Vòng lặp lồng kiểm tra các phản hồi cho bình luận chính này -->
+                                                                <div class="replies">
+                                                                    <c:forEach items="${commentList}" var="reply">
+                                                                        <!-- Kiểm tra nếu RepplyCommentId của bình luận này trùng với Id của bình luận chính -->
+                                                                        <c:if test="${reply.repplyCommentId == comment.id}">
+                                                                            <div class="review_item reply">
+                                                                                <div class="media">
+                                                                                    <div class="media-body">
+                                                                                        <!-- Hiển thị thêm nhãn "Reply" -->
+                                                                                        <h4>${reply.user.fullName}<c:if test="${reply.user.role.id == 2}">(Saler)</c:if> <span style="font-size: 12px; color: #007bff;">(Reply)</span></h4>
+                                                                                        <h5><fmt:formatDate value="${reply.commentDate}" pattern="dd/MM/yyyy HH:mm" /></h5>
+                                                                                    </div>
+                                                                                </div>
+                                                                                <p>${reply.commentContent}</p>
+                                                                            </div>
+                                                                        </c:if>
+                                                                    </c:forEach>
+                                                                </div>
+                                                                <hr><!-- Phân cách giữa các comment -->
+                                                            </c:if>
+                                                        </c:forEach>
+                                                    </div>
+
+
+
+
+                                                </div>
+
+                                                <div class="col-lg-6">
+                                                    <div class="review_box p-4 shadow-sm border rounded">
+                                                        <h4 class="mb-4">Post a Comment</h4>
+                                                        <form action="submitComment" method="post">
+                                                            <!-- Comment Content -->
+                                                            <div class="form-group mb-3">
+                                                                <label for="commentContent" class="form-label">Comment</label>
+                                                                <textarea class="form-control" id="commentContent" name="commentContent" rows="4" placeholder="Write your comment here..." required></textarea>
+                                                            </div>
+
+                                                            <!-- Submit Button -->
+                                                            <div class="text-end">
+                                                                <button type="submit" class="btn btn-primary">Submit</button>
+                                                            </div>
+                                                        </form>
+                                                    </div>
+                                                </div>
+
                                             </div>
                                         </div>
                                     </div>
+
+                                </div>
+                        </div>
+                        </section>
+                        <!--================End Product Description Area =================-->
 
                                 </div>
                         </div>
@@ -512,7 +607,25 @@
                                             <p>Không có sản phẩm nào để hiển thị.</p>
                                         </c:if>
                                     </div>
+                                    <div class="product-carousel">
+                                        <c:forEach var="p" items="${listproduct}">
+                                            <a href="information?productId=${p.detail}" class="product-link">
+                                                <div class="product-item">
+                                                    <img src="${pageContext.request.contextPath}/images/${p.img}" alt="${p.name}">
+                                                    <div class="brand">${p.brand}</div>
+                                                    <h4>${p.name}</h4>
+                                                    <p>Giá: ${p.price}</p>
+                                                </div>
+                                            </a>
+                                        </c:forEach>
+                                        <c:if test="${empty listproduct}">
+                                            <p>Không có sản phẩm nào để hiển thị.</p>
+                                        </c:if>
+                                    </div>
 
+                                    <!-- Nút mũi tên để trượt sang phải -->
+                                    <button class="carousel-next" onclick="scrollRight()">❯</button>
+                                </div>
                                     <!-- Nút mũi tên để trượt sang phải -->
                                     <button class="carousel-next" onclick="scrollRight()">❯</button>
                                 </div>
@@ -520,13 +633,29 @@
                             </div>
                         </section>
                         <!--================ end related Product area =================-->  	
+                            </div>
+                        </section>
+                        <!--================ end related Product area =================-->  	
 
+                        <!--================ Start footer Area  =================-->	
+                        <%@include file="footer.jsp" %>
+                        <!--================ End footer Area  =================-->
                         <!--================ Start footer Area  =================-->	
                         <%@include file="footer.jsp" %>
                         <!--================ End footer Area  =================-->
 
 
 
+                        <script src="vendors/jquery/jquery-3.2.1.min.js"></script>
+                        <script src="vendors/bootstrap/bootstrap.bundle.min.js"></script>
+                        <script src="vendors/skrollr.min.js"></script>
+                        <script src="vendors/owl-carousel/owl.carousel.min.js"></script>
+                        <script src="vendors/nice-select/jquery.nice-select.min.js"></script>
+                        <script src="vendors/jquery.ajaxchimp.min.js"></script>
+                        <script src="vendors/mail-script.js"></script>
+                        <script src="js/main.js"></script>
+                        </body>
+                        </html>
                         <script src="vendors/jquery/jquery-3.2.1.min.js"></script>
                         <script src="vendors/bootstrap/bootstrap.bundle.min.js"></script>
                         <script src="vendors/skrollr.min.js"></script>
