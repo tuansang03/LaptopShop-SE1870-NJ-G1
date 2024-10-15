@@ -124,7 +124,7 @@
 
 
 
-                                <li class="nav-item"><a class="nav-link" href="listproduct">Shop Category</a></li>
+                                <li class="nav-item"><a class="nav-link" href="listproduct">Shop</a></li>
 
 
 

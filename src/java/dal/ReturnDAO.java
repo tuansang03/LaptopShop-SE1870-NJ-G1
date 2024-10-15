@@ -5,6 +5,7 @@
 package dal;
 
 import java.sql.PreparedStatement;
+import java.util.List;
 import model.Return;
 
 /**
@@ -45,4 +46,9 @@ public class ReturnDAO extends DBContext{
 
     return false; // Trả về false nếu có lỗi xảy ra
 }
+    public static void main(String[] args) {
+        ProductDAO dao = new ProductDAO();
+        List <Return> list = dao.listReturn();
+        System.out.println(list);
+    }
 }

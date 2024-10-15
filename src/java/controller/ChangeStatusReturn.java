@@ -12,7 +12,6 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import dal.ProductDAO;
-import jakarta.servlet.http.HttpSession;
 import model.*;
 import java.util.List;
 
@@ -20,8 +19,8 @@ import java.util.List;
  *
  * @author PHONG
  */
-@WebServlet(name = "ShowReturnRequest", urlPatterns = {"/showreturnrequest"})
-public class ShowReturnRequest extends HttpServlet {
+@WebServlet(name = "ChangeStatusReturn", urlPatterns = {"/changestatusreturn"})
+public class ChangeStatusReturn extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -40,10 +39,10 @@ public class ShowReturnRequest extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet ShowReturnRequest</title>");            
+            out.println("<title>Servlet ChangeStatusReturn</title>");
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet ShowReturnRequest at " + request.getContextPath() + "</h1>");
+            out.println("<h1>Servlet ChangeStatusReturn at " + request.getContextPath() + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
@@ -61,12 +60,15 @@ public class ShowReturnRequest extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-       
         ProductDAO dao = new ProductDAO();
-        List <Return> list = dao.listReturn();
+        int id = Integer.parseInt(request.getParameter("rid"));
+        String status = request.getParameter("status");
+        dao.changeReturnStatus(status, id);
+        List<Return> list = dao.listReturn();
         request.setAttribute("list", list);
         request.getRequestDispatcher("managereturn.jsp").forward(request, response);
     }
+
 
     /**
      * Handles the HTTP <code>POST</code> method.

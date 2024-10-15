@@ -26,6 +26,7 @@ import model.ProductList;
 import model.ProductList;
 import model.*;
 import java.text.DecimalFormat;
+import java.time.LocalDateTime;
 
 /**
  *
@@ -215,7 +216,7 @@ public class ProductDAO extends DBContext {
     }
 
     public void deleteById(int id) {
-       String sql = "DELETE FROM Comment \n"
+        String sql = "DELETE FROM Comment \n"
                 + "WHERE ProductId = ?\n"
                 + "\n"
                 + "\n"
@@ -223,7 +224,7 @@ public class ProductDAO extends DBContext {
                 + "                WHERE Id= ?";
         try {
             PreparedStatement pre = connection.prepareStatement(sql);
-             pre.setInt(1, id);
+            pre.setInt(1, id);
             pre.setInt(2, id);
             pre.executeQuery();
         } catch (SQLException ex) {
@@ -383,11 +384,11 @@ public class ProductDAO extends DBContext {
 
     public List<Image> getImageById(int id) {
         List<Image> list = new ArrayList<>();
-        String sql = "SELECT p.Id AS product, pd.Id, i.FeedbackId, i.Image "
-                + "FROM Product p "
-                + "JOIN ProductDetail pd ON pd.ProductId = p.Id "
-                + "JOIN Image i ON i.ProductDetailId = pd.Id "
-                + "WHERE p.Id = (SELECT ProductId FROM ProductDetail WHERE Id = ?)";
+       String sql = "SELECT i.Id, i.ProductDetailId, i.FeedbackId, i.Image\n"
+                + "FROM Product p\n"
+                + "JOIN ProductDetail pd ON pd.ProductId = p.Id\n"
+                + "JOIN Image i ON i.ProductDetailId = pd.Id\n"
+                + "WHERE pd.Id = ?";
 
         try (PreparedStatement st = connection.prepareStatement(sql)) {
             st.setInt(1, id);
@@ -857,16 +858,18 @@ public class ProductDAO extends DBContext {
         try (PreparedStatement st = connection.prepareStatement(sql)) {
             try (ResultSet re = st.executeQuery()) {
                 while (re.next()) {
-                    Return c = new Return(
-                            re.getInt("id"),
-                            re.getInt("totalreturnamount"),
-                            re.getString("reason"),
-                            re.getString("refundmethod"),
-                            re.getString("refundstatus"),
-                            re.getString("refundstatus"),
-                            getOrder(re.getInt("orderid")),
-                            re.getTimestamp("returndate").toLocalDateTime()
-                    );
+                    Return c = new Return();
+                    c.setId(re.getInt("Id"));
+                    Order o = new Order();
+                    o.setId(re.getInt("OrderId"));
+                    c.setOder(o);
+                     
+                    c.setTotalReturnAmount(re.getInt("TotalReturnAmount"));
+                    c.setReason(re.getString("Reason"));
+                    c.setRefundMethod(re.getString("RefundMethod"));
+                    c.setRefundStatus(re.getString("RefundStatus"));
+                    c.setReturnStatus(re.getString("ReturnStatus"));
+                    
                     list.add(c);
                 }
             }
@@ -909,9 +912,20 @@ public class ProductDAO extends DBContext {
         return null;
     }
 
+    public void changeReturnStatus(String op, int id) {
+        String sql = "UPDATE [dbo].[Return] SET[ReturnStatus] = ? WHERE Id = ?";
+        try {
+            PreparedStatement st = connection.prepareStatement(sql);
+            st.setString(1, op);
+            st.setInt(2, id);
+            st.executeUpdate();
+        } catch (Exception e) {
+        }
+    }
+
     public static void main(String[] args) {
         ProductDAO p = new ProductDAO();
-        ArrayList pList = p.getAllProduct();
-        System.out.println(pList);
+        List<Return> l = p.listReturn();
+        System.out.println(l);
     }
 }

@@ -31,26 +31,27 @@
                 </thead>
                 <tbody>
                     <c:forEach items="${list}" var="i">
-                        <tr>
-                            <td>${i.id}</td>
-                            <td>${i.oder.getId()}</td>
-                            <td>${i.returnDate}</td>
-                            <td>${i.totalReturnAmount}</td>
-                            <td>${i.reason}</td>
-                            <td>${i.refundMethod}</td>
-                            <td>${i.refundStatus}</td>
-                            <td>
-                                <form action="changestatusreturn" method="get">
-                                    <select name="status" onchange="this.form.submit()">
-                                        <option ${o.getOrderStatus().equals("wait") ? 'selected':''} value="wait">Wait</option>
-                                        <option ${o.getOrderStatus().equals("denied") ? 'selected':''} value="denied">Denied</option>
-                                        <option ${o.getOrderStatus().equals("accepted") ? 'selected':''} value="accepted">Accepted</option>
-                                    </select>
-                                    <input type="hidden" value="${i.id}" name="rid"/>
-                                </form>
-                            </td>
-                        </tr>
-                    </c:forEach>  
+    <tr>
+        <td>${i.id}</td>
+         <td>${i.getOder().getId()}</td><!-- Kiểm tra lại 'oder', có thể bạn muốn dùng 'order' -->
+        <td>${i.returnDate}</td>
+        <td>${i.totalReturnAmount}</td>
+        <td>${i.reason}</td>
+        <td>${i.refundMethod}</td>
+        <td>${i.refundStatus}</td>
+        <td>
+            <form action="changestatusreturn" method="get">
+                <select name="status" onchange="this.form.submit()">
+                    <option ${i.returnStatus == 'wait' ? 'selected' : ''} value="wait">Wait</option>
+                    <option ${i.returnStatus == 'denied' ? 'selected' : ''} value="denied">Denied</option>
+                    <option ${i.returnStatus == 'accepted' ? 'selected' : ''} value="accepted">Accepted</option>
+                </select>
+                <input type="hidden" value="${i.id}" name="rid"/>
+            </form>
+        </td>
+    </tr>
+</c:forEach>
+
 
                 </tbody>
             </table>

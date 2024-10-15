@@ -103,7 +103,7 @@
 
                                     <!-- Hiển thị ảnh sản phẩm -->
                                     <div class="image-container">
-                                        <img src="${img1.image}" alt="Product Image" style="max-width: 100%; height: auto;">
+                                        <img src="${pageContext.request.contextPath}/images/${img1.image}" alt="Product Image" style="max-width: 100%; height: auto;">
                                         <div class="overlay">
                                             <div class="icon-container">
                                                 <a href="information?productId=${img1.productDetail.id}" class="ti-search"></a>
@@ -138,7 +138,7 @@
 
                                         <!-- Hiển thị ảnh sản phẩm -->
                                         <div class="image-container">
-                                            <img src="${img2.image}" alt="Product Image" style="max-width: 100%; height: auto;">
+                                            <img src="${pageContext.request.contextPath}/images/${img2.image}" alt="Product Image" style="max-width: 100%; height: auto;">
                                             <div class="overlay">
                                                 <div class="icon-container">
                                                     <a href="information?productId=${img2.productDetail.id}" class="ti-search"></a>
@@ -175,7 +175,7 @@
 
                                             <!-- Hiển thị ảnh sản phẩm -->
                                             <div class="image-container">
-                                                <img src="${img3.image}" alt="Product Image" style="max-width: 100%; height: auto;">
+                                                <img src="${pageContext.request.contextPath}/images/${img3.image}" alt="Product Image" style="max-width: 100%; height: auto;">
                                                 <div class="overlay">
                                                     <div class="icon-container">
                                                         <a href="information?productId=${img3.productDetail.id}" class="ti-search"></a>
@@ -300,7 +300,7 @@
                                    </c:otherwise>
                                </c:choose>
                                >
-                                <img src="${i.image}" alt="Product Image" />
+                                <img src="${pageContext.request.contextPath}/images/${i.image}" alt="Product Image" />
                                 <label>
                                     ${i.productDetail.product.name} (${i.productDetail.color.name})<br>
                                     ${i.productDetail.product.brand.name}<br>

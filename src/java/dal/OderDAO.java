@@ -781,7 +781,7 @@ public class OderDAO extends DBContext {
 
         //List<OrderDetail> l = o.getAllOrdetailByID(1);
         //System.out.println(l);
-        
+      
         o.updateEnddate(LocalDateTime.now(), 27);
 
     }
