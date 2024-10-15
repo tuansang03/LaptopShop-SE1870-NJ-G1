@@ -215,11 +215,16 @@ public class ProductDAO extends DBContext {
     }
 
     public void deleteById(int id) {
-        String sql = "DELETE FROM Product \n"
-                + "WHERE Id= ?";
+       String sql = "DELETE FROM Comment \n"
+                + "WHERE ProductId = ?\n"
+                + "\n"
+                + "\n"
+                + "DELETE FROM Product \n"
+                + "                WHERE Id= ?";
         try {
             PreparedStatement pre = connection.prepareStatement(sql);
-            pre.setInt(1, id);
+             pre.setInt(1, id);
+            pre.setInt(2, id);
             pre.executeQuery();
         } catch (SQLException ex) {
             Logger.getLogger(ProductDAO.class.getName()).log(Level.SEVERE, null, ex);

@@ -150,19 +150,31 @@ public void deletePDBeforeUpdate(int id){
 }
 
 public void deletePDById(int id){
-    String sql ="DELETE FROM [Image]\n" +
+   String sql ="DELETE FROM [Image]\n" +
 "WHERE ProductDetailId = ?;\n" +
 "\n" +
 "DELETE FROM Product_Attribute\n" +
-"WHERE ProductDetailId = ?;\n" +
+"WHERE ProductDetailId = ?\n" +
+"\n" +
+"DELETE FROM CartItem\n" +
+"WHERE ProductDetailId = ?\n" +
+"\n" +
+"DELETE FROM Favorite\n" +
+"WHERE ProductDetailId = ?\n" +
+"\n" +
+"DELETE FROM OrderDetail\n" +
+"WHERE ProductDetailId = ?\n" +
 "\n" +
 "DELETE FROM ProductDetail\n" +
-"WHERE Id= ?;";
+"WHERE Id= ?";
         try {
             PreparedStatement pre =connection.prepareStatement(sql);
-            pre.setInt(1, id);
+           pre.setInt(1, id);
             pre.setInt(2, id);
             pre.setInt(3, id);
+            pre.setInt(4, id);
+            pre.setInt(5, id);
+            pre.setInt(6, id);
             pre.executeQuery();
         } catch (SQLException ex) {
             Logger.getLogger(ProductDetailDAO.class.getName()).log(Level.SEVERE, null, ex);
