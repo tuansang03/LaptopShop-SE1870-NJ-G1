@@ -6,8 +6,6 @@
 <%@ page import="dal.CartDAOS" %>
 <%@ page import="model.Cart" %>
 <%@ page import="model.CartItem" %>
-<%@ page import="dal.ProductDAO" %>
-<%@ page import="model.Favorite" %>
 <!DOCTYPE html>
 <html>
     <head>
@@ -16,14 +14,6 @@
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
         <link href="https://fonts.googleapis.com/css2?family=Farro:wght@300;400;500;700&display=swap" rel="stylesheet">
-
-
-        <link rel="stylesheet"
-              href="https://cdn.jsdelivr.net/npm/boxicons@latest/css/boxicons.min.css">
-        <!-- or -->
-        <link rel="stylesheet"
-              href="https://unpkg.com/boxicons@latest/css/boxicons.min.css">
-
     </head>
     <body>
 
@@ -124,7 +114,7 @@
 
 
 
-                                <li class="nav-item"><a class="nav-link" href="listproduct">Shop</a></li>
+                                <li class="nav-item"><a class="nav-link" href="listproduct">Shop Category</a></li>
 
 
 
@@ -175,7 +165,6 @@
 
                                     <form action="displaySearchSuggest" method="get" id="searchForm">
                                         <input type="text" id="searchField" name="query" class="search-field" placeholder="Search for products..." />
-                                        <input type = hidden name="postmove" value="on">
                                         <ul id="suggestions" class="suggestions"></ul>
                                     </form>
                                 </div>
@@ -207,26 +196,6 @@
                                         <button>
 
                                             <i class="ti-shopping-cart"></i><span class="nav-shop__circle"><%= quantity%></span>
-                                        </button>
-                                    </a>
-                                </li>
-                                
-                                                                <%
-                                List<Favorite> list = null;
-                                ProductDAO d = new ProductDAO();
-                                    if (user!=null){
-                                    list = d.listFavorite(user.getId());
-                                    }
-
-                                int number = 0;
-                                if (list != null) {
-                                    number = list.size();
-                                }
-                                %>
-                                <li class="nav-item">
-                                    <a href="showwishlist?uid=${user.getId()}">
-                                        <button>
-                                            <i class="ti-heart"></i><span class="nav-shop__circle"><%= number%></span>
                                         </button>
                                     </a>
                                 </li>

@@ -5,6 +5,7 @@
 package controller;
 
 import dal.OderDAO;
+import dal.OrdeiDetailDAO;
 import dal.ReturnDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -23,6 +24,7 @@ import java.util.logging.Logger;
 import model.Order;
 import model.OrderDetail;
 import model.Return;
+import model.ReturnDetail;
 import model.User;
 
 /**
@@ -81,8 +83,12 @@ public class ReturnController extends HttpServlet {
 //            session.setAttribute("orderId", orderId);
             List<OrderDetail> list = new ArrayList<>();
             try {
+//                OrdeiDetailDAO detailDAO = new OrdeiDetailDAO();
+//                List<OrderDetail> listOrderDetail = new ArrayList<>();
+//                listOrderDetail = detailDAO.getOrderDetailByOrderId(orderId);
+//                session.setAttribute("listReturn", listOrderDetail);
                 list = order.getOrderDetailsByUserAndOrder(getCurrentUser.getId(), orderId);
-                  request.setAttribute("orderId", orderId);
+                request.setAttribute("orderId", orderId);
                 request.setAttribute("listOrderDetail", list);
                 request.getRequestDispatcher("returndisplay.jsp").forward(request, response);
             } catch (SQLException ex) {
@@ -99,10 +105,34 @@ public class ReturnController extends HttpServlet {
             String refundMethod = request.getParameter("refundMethod");
             LocalDateTime currentReturnDate = LocalDateTime.now();
             OderDAO dao = new OderDAO();
-            Order o = dao.getOrderById(orderId);           
-            Return return1 = new Return(money,reason,refundMethod,"wait","wait",o,currentReturnDate);
+            Order o = dao.getOrderById(orderId);
+            Return return1 = new Return(money, reason, refundMethod, "wait", "wait", o, currentReturnDate);
             ReturnDAO returnDao = new ReturnDAO();
-            returnDao.insertReturn(return1);
+            int returnId = returnDao.insertReturn(return1);
+            return1.setId(returnId);
+//            ReturnDetail returnDetail = new ReturnDetail(return1.getId(),);
+            ReturnDAO returnDAO = new ReturnDAO();
+            OrdeiDetailDAO detailDAO = new OrdeiDetailDAO();
+            List<OrderDetail> listOrderDetail = new ArrayList<>();
+            List<ReturnDetail> listReturnDetail = new ArrayList<>();
+            listOrderDetail = detailDAO.getOrderDetailByOrderId(orderId);
+            for (OrderDetail orderDetail : listOrderDetail) {
+                int quantity = Integer.parseInt(request.getParameter("orderDetailId_" + orderDetail.getId()));
+                System.out.println("quantity " + quantity);
+                if(quantity > 0){
+                    int price = quantity * orderDetail.getUnitPrice();
+                    ReturnDetail r = new ReturnDetail(return1, orderDetail, quantity, price);
+                    returnDAO.insertReturnDetail(r);
+                }
+            }
+//            List<Integer> listOrderDetaiId = new ArrayList<>();
+//            listOrderDetaiId = detailDAO.getOrderDetailIdByOrderId(orderId);
+//            for (Integer integer : listOrderDetaiId) {
+//                String i = integer+"";
+//                request.getAttribute(i);
+//            }
+//            List<OrderDetail> listOrderDetail = new ArrayList<>(); 
+//            listOrderDetail = detailDAO.getOrderDetailByOrderId(orderId);
 
         }
     }

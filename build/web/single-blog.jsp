@@ -19,9 +19,15 @@
     </head>
     <body>
         <!--================ Start Header Menu Area =================-->
-
+<%
+    User xuser = (User) session.getAttribute("user");
+    if(xuser != null && (xuser.getId() == 1 || xuser.getId() == 2) || xuser == null) {
+        // Include the header if the user's ID is 1 or 2
+        %>
         <%@include file="header.jsp" %>
-  
+        <%
+    }
+%>
 
         
         <!--================ End Header Menu Area =================-->
@@ -199,6 +205,7 @@
                                     </div>
                                     <div class="post_tag">
                                         <c:if test="${postDetail.brand.name ne 'None'}">
+
                                         Brand: <a class="active" style="font-size: 15px;" href="listproduct?brand%5B%5D=${postDetail.brand.name}">${postDetail.brand.name}</a>
                                         </c:if>
                                     </div>
@@ -279,34 +286,24 @@
                                 </div>-->
                             </div>
                         </div>
-                                
-                                
-                                    <c:if test="${param.postmove eq 'yes'}">
-                                        
-                                                <div class="navigation-area">
+                        <div class="navigation-area">
                             <div class="row">
                                 <div class="col-lg-6 col-md-6 col-12 nav-left flex-row d-flex justify-content-start align-items-center">
-                                    <c:if test="${param.id > param.min}">
+
 
                                     <div class="detials pre" style="${pre}">
-                                        <a href="postdetail?id=${postDetail.getId()-1}&postmove=yes"><===Previous Post</a>
+                                        <a href="postdetail?id=${postDetail.getId()-1}"><===Previous Post</a>
                                    
                                     </div>
-                                         </c:if>  
                                 </div>
-                                <c:if test="${param.id < param.max}">
                                 <div class="col-lg-6 col-md-6 col-12 nav-right flex-row d-flex justify-content-end align-items-center">
                                     <div class="detials next" style="${next}">
-                                        <a href="postdetail?id=${postDetail.getId()+ 1}&postmove=yes">Next Post===></a>
+                                        <a href="postdetail?id=${postDetail.getId()+ 1}">Next Post===></a>
         
                                     </div>
                                 </div>
-                                        </c:if>
                             </div>
                         </div>
-                                        
-                                    </c:if>
-                
 <!--                        <div class="comments-area">
                             <h4>05 Comments</h4>
                             <div class="comment-list">
@@ -660,9 +657,15 @@
 
         <!--================ Start footer Area  =================-->	
         
-  
+        <%
+    
+    if(xuser != null && (xuser.getId() == 1 || xuser.getId() == 2) || xuser ==null) {
+        // Include the header if the user's ID is 1 or 2
+        %>
         <%@include file="footer.jsp" %>
-   
+        <%
+    }
+%>
         
         <!--================ End footer Area  =================-->
 
