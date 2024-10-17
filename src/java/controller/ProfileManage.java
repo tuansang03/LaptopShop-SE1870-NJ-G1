@@ -99,9 +99,10 @@ public class ProfileManage extends HttpServlet {
 //                     List<Image> listImage = new ArrayList<>();
                 for (int i = 0; i < list.size(); i++) {
                     OrderDetail get = list.get(i);
-                    if (get.getOrder().getUser().getId() == getCurrentUser.getId()) {
-                        OrderDetail getOrderDetail = get;
-                        listFilter.add(get);
+                    if (get.getOrder() != null && get.getOrder().getUser() != null) {
+                        if (get.getOrder().getUser().getId() == getCurrentUser.getId()) {
+                            listFilter.add(get);
+                        }
                     }
                 }
 
@@ -140,7 +141,7 @@ public class ProfileManage extends HttpServlet {
                 Logger.getLogger(ProfileManage.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
-  
+
 //   
     }
 

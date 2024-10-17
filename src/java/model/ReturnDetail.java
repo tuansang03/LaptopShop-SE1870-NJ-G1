@@ -9,6 +9,7 @@ package model;
  * @author LocPham
  */
 public class ReturnDetail {
+
     private int id;
     private Return returnn;
     private OrderDetail oderDetail;
@@ -20,6 +21,13 @@ public class ReturnDetail {
 
     public ReturnDetail(int id, Return returnn, OrderDetail oderDetail, int quantity, int returnAmount) {
         this.id = id;
+        this.returnn = returnn;
+        this.oderDetail = oderDetail;
+        this.quantity = quantity;
+        this.returnAmount = returnAmount;
+    }
+
+    public ReturnDetail(Return returnn, OrderDetail oderDetail, int quantity, int returnAmount) {
         this.returnn = returnn;
         this.oderDetail = oderDetail;
         this.quantity = quantity;
@@ -70,13 +78,5 @@ public class ReturnDetail {
     public String toString() {
         return "ReturnDetail{" + "id=" + id + ", returnn=" + returnn + ", oderDetail=" + oderDetail + ", quantity=" + quantity + ", returnAmount=" + returnAmount + '}';
     }
-    
-    
 
-
-
-
-
-
-    
 }

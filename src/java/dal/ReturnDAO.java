@@ -6,43 +6,83 @@ package dal;
 
 import java.sql.PreparedStatement;
 import model.Return;
+import model.ReturnDetail;
 
 /**
  *
  * @author LocPham
  */
-public class ReturnDAO extends DBContext{
+public class ReturnDAO extends DBContext {
+
     public boolean insertReturn(Return return1) {
-    PreparedStatement stm = null;
-    String sql = "INSERT INTO dbo.[Return] (TotalReturnAmount, Reason, RefundMethod, RefundStatus, ReturnStatus, OrderId, ReturnDate) \n" +
-                 "VALUES (?,?, ?, ?, ?, ?, ?);";
+        PreparedStatement stm = null;
+        String sql = "INSERT INTO dbo.[Return] (TotalReturnAmount, Reason, RefundMethod, RefundStatus, ReturnStatus, OrderId, ReturnDate) \n"
+                + "VALUES (?,?, ?, ?, ?, ?, ?);";
 
-    try {
-        stm = connection.prepareStatement(sql);
-        
-        // Gán giá trị từ đối tượng return1 vào câu lệnh SQL
-        stm.setInt(1, return1.getTotalReturnAmount());
-        stm.setString(2, return1.getReason());
-        stm.setString(3, return1.getRefundMethod());
-        stm.setString(4, return1.getRefundStatus());
-        stm.setString(5, return1.getReturnStatus());
-        stm.setInt(6, return1.getOder().getId()); // Lấy ID của đơn hàng
-        stm.setObject(7, return1.getReturnDate());  // Gán ngày trả về
-
-        // Thực thi câu lệnh và kiểm tra kết quả
-        int rowsInserted = stm.executeUpdate();
-        return rowsInserted > 0; // Trả về true nếu thêm thành công
-
-    } catch (java.sql.SQLException ex) {
-        ex.printStackTrace();
-    } finally {
         try {
-            if (stm != null) stm.close(); // Đóng PreparedStatement sau khi sử dụng
+            stm = connection.prepareStatement(sql);
+
+            // Gán giá trị từ đối tượng return1 vào câu lệnh SQL
+            stm.setInt(1, return1.getTotalReturnAmount());
+            stm.setString(2, return1.getReason());
+            stm.setString(3, return1.getRefundMethod());
+            stm.setString(4, return1.getRefundStatus());
+            stm.setString(5, return1.getReturnStatus());
+            stm.setInt(6, return1.getOder().getId()); // Lấy ID của đơn hàng
+            stm.setObject(7, return1.getReturnDate());  // Gán ngày trả về
+
+            // Thực thi câu lệnh và kiểm tra kết quả
+            int rowsInserted = stm.executeUpdate();
+            return rowsInserted > 0; // Trả về true nếu thêm thành công
+
         } catch (java.sql.SQLException ex) {
             ex.printStackTrace();
+        } finally {
+            try {
+                if (stm != null) {
+                    stm.close(); // Đóng PreparedStatement sau khi sử dụng
+                }
+            } catch (java.sql.SQLException ex) {
+                ex.printStackTrace();
+            }
         }
+
+        return false; // Trả về false nếu có lỗi xảy ra
     }
 
-    return false; // Trả về false nếu có lỗi xảy ra
-}
+    public boolean insertReturnDetail(ReturnDetail returnDetail) {
+        PreparedStatement stm = null;
+        String sql = "INSERT INTO dbo.[ReturnDetail] (ReturnId, OrderDetailId, Quantity, ReturnAmount) "
+                + "VALUES (?, ?, ?, ?);";
+
+        try {
+            stm = connection.prepareStatement(sql);
+
+            // Gán giá trị từ đối tượng return1 vào câu lệnh SQL
+            stm.setInt(1, returnDetail.getReturnn().getId());
+            stm.setInt(2, returnDetail.getOderDetail().getId());
+            stm.setInt(3, returnDetail.getQuantity());
+            stm.setInt(4, returnDetail.getReturnAmount());
+
+            // Thực thi câu lệnh và kiểm tra kết quả
+            int rowsInserted = stm.executeUpdate();
+            return rowsInserted > 0; // Trả về true nếu thêm thành công
+
+        } catch (java.sql.SQLException ex) {
+            ex.printStackTrace();
+        } finally {
+            try {
+                if (stm != null) {
+                    stm.close(); // Đóng PreparedStatement sau khi sử dụng
+                }
+            } catch (java.sql.SQLException ex) {
+                ex.printStackTrace();
+            }
+        }
+
+        return false; // Trả về false nếu có lỗi xảy ra
+    }
+    
+
+
 }
