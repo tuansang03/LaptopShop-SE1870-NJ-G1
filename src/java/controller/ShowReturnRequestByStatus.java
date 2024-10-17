@@ -19,8 +19,8 @@ import java.util.List;
  *
  * @author PHONG
  */
-@WebServlet(name = "ShowWishlist", urlPatterns = {"/showwishlist"})
-public class ShowWishlist extends HttpServlet {
+@WebServlet(name = "ShowReturnRequestByStatus", urlPatterns = {"/showreturnrequestbystatus"})
+public class ShowReturnRequestByStatus extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -39,10 +39,10 @@ public class ShowWishlist extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet ShowWishlist</title>");
+            out.println("<title>Servlet ShowReturnRequestByStatus</title>");
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet ShowWishlist at " + request.getContextPath() + "</h1>");
+            out.println("<h1>Servlet ShowReturnRequestByStatus at " + request.getContextPath() + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
@@ -60,20 +60,17 @@ public class ShowWishlist extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        ProductDAO d = new ProductDAO();
-        int uid = -1;
-
-        try {
-            uid = Integer.parseInt(request.getParameter("uid"));
-        } catch (Exception e) {
-        }
-        if (uid < 0) {
-            request.getRequestDispatcher("login").forward(request, response);
+        ProductDAO dao = new ProductDAO();
+        String op = request.getParameter("op");
+        List<Return> list = null;
+        if (op.equals("all")) {
+            list = dao.listReturn();
         } else {
-            List<Image> listwish = d.listWish(uid);
-            request.setAttribute("wishlist", listwish);
-            request.getRequestDispatcher("wishlist.jsp").forward(request, response);
+            list = dao.listReturnByStatus(op);
         }
+        request.setAttribute("op", op);
+        request.setAttribute("list", list);
+        request.getRequestDispatcher("managereturn.jsp").forward(request, response);
     }
 
     /**

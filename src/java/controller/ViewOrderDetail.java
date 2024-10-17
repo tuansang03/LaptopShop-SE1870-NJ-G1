@@ -40,7 +40,7 @@ public class ViewOrderDetail extends HttpServlet {
         List<OrderDetail> listOrderDetail = oDAO.getAllOrdetailByID(id);
         
         request.setAttribute("listOrderDetail", listOrderDetail);
-        request.getRequestDispatcher("viewOrderDetail.jsp").forward(request, response);
+        request.getRequestDispatcher("vieworderdetail.jsp").forward(request, response);
     } 
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
