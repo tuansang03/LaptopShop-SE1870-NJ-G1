@@ -14,21 +14,21 @@
 <%@ page import="model.User" %>
 <%@ page import="dal.ImageDAOS" %>
 <%@ page import="model.Image" %> 
-    <link rel="icon" href="img/Fevicon.png" type="image/png">
-        <link rel="stylesheet" href="vendors/bootstrap/bootstrap.min.css">
-        <link rel="stylesheet" href="vendors/fontawesome/css/all.min.css">
-        <link rel="stylesheet" href="vendors/themify-icons/themify-icons.css">
-        <link rel="stylesheet" href="vendors/nice-select/nice-select.css">
-        <link rel="stylesheet" href="vendors/owl-carousel/owl.theme.default.min.css">
-        <link rel="stylesheet" href="vendors/owl-carousel/owl.carousel.min.css">
+<link rel="icon" href="img/Fevicon.png" type="image/png">
+<link rel="stylesheet" href="vendors/bootstrap/bootstrap.min.css">
+<link rel="stylesheet" href="vendors/fontawesome/css/all.min.css">
+<link rel="stylesheet" href="vendors/themify-icons/themify-icons.css">
+<link rel="stylesheet" href="vendors/nice-select/nice-select.css">
+<link rel="stylesheet" href="vendors/owl-carousel/owl.theme.default.min.css">
+<link rel="stylesheet" href="vendors/owl-carousel/owl.carousel.min.css">
 
-        <link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="css/style.css">
 
-        <link rel="stylesheet"
-              href="https://cdn.jsdelivr.net/npm/boxicons@latest/css/boxicons.min.css">
-        <!-- or -->
-        <link rel="stylesheet"
-              href="https://unpkg.com/boxicons@latest/css/boxicons.min.css">
+<link rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/boxicons@latest/css/boxicons.min.css">
+<!-- or -->
+<link rel="stylesheet"
+      href="https://unpkg.com/boxicons@latest/css/boxicons.min.css">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,200..1000;1,200..1000&family=PT+Sans:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
@@ -276,89 +276,101 @@
                                     background-color: #f1f1f1;
                                 }
                             </style>
-<table style="width: 75%; align-items: center; text-align: center; margin: 0px auto;">
-    <thead>
-        <tr>
-            <th></th>
-            <th>Product</th>
-            <th>Total Quantity</th>
-            <th>Order Date</th>
-            <th>Total Price</th>
-            <th>Payment Status</th>
-            <th>Order Status</th>
-            <th>Action</th>
-            <th></th>
-        </tr>
-    </thead>
+                            <table style="width: 75%; align-items: center; text-align: center; margin: 0px auto;">
+                                <thead>
+                                    <tr>
+                                        <th></th>
+                                        <th>Product</th>
+                                        <th>Total Quantity</th>
+                                        <th>Order Date</th>
+                                        <th>Total Price</th>
+                                        <th>Payment Status</th>
+                                        <th>Order Status</th>
+                                        <th>Action</th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
 
-    <style>
-        .product_image {
-            width: 30%;
-            height: 70px;
-        }
-        .product_image img {
-            width: 100%;
-            height: 100%;
-        }
-        .product_name {
-            color: #002752;
-        }
-    </style>
+                                <style>
+                                    .product_image {
+                                        width: 30%;
+                                        height: 70px;
+                                    }
+                                    .product_image img {
+                                        width: 100%;
+                                        height: 100%;
+                                    }
+                                    .product_name {
+                                        color: #002752;
+                                    }
+                                </style>
 
-    <c:forEach items="${orderListInfo}" var="o" varStatus="status">
-        <c:set var="orderId" value="${status.index + 1}" />
-        <c:set var="listOrder" value="${orderDAO.getOrderDetailsByOrderId(o.getOrder().getId())}" />
+                                <c:forEach items="${orderListInfo}" var="o" varStatus="status">
+                                    <c:set var="orderId" value="${status.index + 1}" />
+                                    <c:set var="listOrder" value="${orderDAO.getOrderDetailsByOrderId(o.getOrder().getId())}" />
 
-        <tr>
-            <td>${orderId}</td>
-            <td style="width: 45%;">
-                <c:forEach items="${listOrder}" var="o1" varStatus="cao">
-                    <c:set var="count" value="${cao.index + 1}" />
-                    <c:set var="image" value="${imageDAOS.getOneImageByProductDetailID(o1.getProductDetail().getId())}" />
+                                    <tr>
+                                        <td>${orderId}</td>
+                                        <td style="width: 45%;">
+                                            <c:forEach items="${listOrder}" var="o1" varStatus="cao">
+                                                <c:set var="count" value="${cao.index + 1}" />
+                                                <c:set var="image" value="${imageDAOS.getOneImageByProductDetailID(o1.getProductDetail().getId())}" />
 
-                    <div style="display: flex;">
-                        <div style="width: 65%;">
-                            <h5 class="product_name" 
-                                style="font-size: 19px; color: #002752 !important; font-family: Nunito, sans-serif !important;">
-                                ${count}. ${o1.productDetail.product.name} 
-                                ${o1.productDetail.product.category.name} 
-                                ${o1.productDetail.configuration.name} (${o1.productDetail.color.name})
-                            </h5>
-                            <h5 style="font-size: 17px;">Quantity: ${o1.quantity}</h5>
-                        </div>
-                        <br>
-                    </div>
-                </c:forEach>
-            </td>
+                                                <div style="display: flex;">
+                                                    <div style="width: 65%;">
+                                                        <h5 class="product_name" 
+                                                            style="font-size: 19px; color: #002752 !important; font-family: Nunito, sans-serif !important;">
+                                                            ${count}. ${o1.productDetail.product.name} 
+                                                            ${o1.productDetail.product.category.name} 
+                                                            ${o1.productDetail.configuration.name} (${o1.productDetail.color.name})
+                                                        </h5>
+                                                        <h5 style="font-size: 17px;">Quantity: ${o1.quantity}</h5>
+                                                    </div>
+                                                    <br>
+                                                </div>
+                                            </c:forEach>
+                                        </td>
 
-            <td>${o.quantity}</td>
-            <td>${o.order.orderDate}</td>
-            <td><fmt:formatNumber value="${o.order.totalAmountAfter}" type="number"/>đ</td>
-            <td>${o.order.paymentStatus}</td>
-            <td>${o.order.orderStatus}</td>
+                                        <td>${o.quantity}</td>
+                                        <td>${o.order.orderDate}</td>
+                                        <td><fmt:formatNumber value="${o.order.totalAmountAfter}" type="number"/>đ</td>
 
-            <!-- Chỉ hiển thị nút Return khi trạng thái đơn hàng là 'done' -->
-            <td>
-                <c:if test="${o.order.orderStatus == 'done'}">
-                    <a href="ReturnController?id=${o.order.id}&service=returnRequest">Return</a>
-                </c:if>
-            </td>
-
-            <td>
-                <a href="profile?profile=orderdetail&id=${o.order.id}">
-                    <i class='bx bx-show-alt'></i>
-                </a>
-            </td>
-        </tr>
-    </c:forEach>
-</table>
+                                        <c:if test="${o.order.paymentStatus == null}">
+                                            <td>None</td>
+                                        </c:if>
+                                        <c:if test="${o.order.paymentStatus != null}">
+                                            <td>${o.order.paymentStatus}</td>
+                                        </c:if>
+                                        <c:if test="${o.order.orderStatus.isEmpty()}">
+                                            <td>None</td>
+                                        </c:if>
+                                        <c:if test="${!(o.order.orderStatus.isEmpty())}">
+                                            <td>${o.order.orderStatus}</td>
+                                        </c:if>
 
 
+                                        <!-- Chỉ hiển thị nút Return khi trạng thái đơn hàng là 'done' -->
+                                        <td>
+                                            <c:if test="${o.order.orderStatus == 'done'}">
+                                                <a href="ReturnController?id=${o.order.id}&service=returnRequest">Return</a>
+                                            </c:if>
+                                        </td>
+
+                                        <td>
+                                            <a href="profile?profile=orderdetail&id=${o.order.id}">
+                                                <i class='bx bx-show-alt'></i>
+                                            </a>
+                                        </td>
+                                    </tr>
+                                </c:forEach>
+                            </table>
 
 
 
 
-                            
+
+
+
 
 
 
@@ -513,8 +525,8 @@
                                 <c:if test="${currentOrderDetail.getOrder().getOrderStatus() eq 'accepted'}">
                                     <c:set var="colorOrder" value="#5cb99a"/>
                                 </c:if>
-                                
-                                
+
+
                                 <div class="pt-1">
                                     <p style="font-size: 18px">Order #${currentOrder.getId()} is currently<b style="color: ${colorOrder}"> ${currentOrder.getOrderStatus().isEmpty()? "None":currentOrder.getOrderStatus() }</b></p>
                                 </div>
@@ -553,7 +565,7 @@
                                         </div>
 
                                         <a href="information?productId=${o.productDetail.id}"><div class="order-item">${o.productDetail.product.name} ${o.productDetail.product.category.name}<br/>
-                                            ${o.productDetail.configuration.name} (${o.productDetail.color.name}) x ${o.getQuantity()}</div></a>
+                                                ${o.productDetail.configuration.name} (${o.productDetail.color.name}) x ${o.getQuantity()}</div></a>
                                     </div>
                                     <div style="padding-left: 1.7%;"> Unit price: &nbsp;<fmt:formatNumber value="${o.getUnitPrice()}" type="number"/>đ</div>
                                     <div style="padding-left: 1.7%;"> Total price: &nbsp;<fmt:formatNumber value="${(o.getUnitPrice() * o.getQuantity())}" type="number"/>đ</div>
@@ -565,7 +577,7 @@
                                     <div class="text-muted">Payment Method</div>
                                     <div class="ml-auto">
                                         <img 
-                                            
+
                                             src="http://kimloaithudo.com/uploads/images/20-Tin-tuc/Ship-COD.jpg"
                                             alt=""
                                             width="50"
@@ -613,7 +625,13 @@
                                 </c:if>
                                 <div style="display: flex">
                                     <div class="" style="margin-left: 15px;">Payment Status</div>
-                                    <div class="ml-auto h5" style="color: ${color}">${currentOrder.getPaymentStatus()}</div>
+                                    <c:if test="${currentOrder.getPaymentStatus()== null}">
+                                        <div class="ml-auto h5" style="color: black; font-weight: bold;">None</div>
+                                    </c:if>
+
+                                    <c:if test="${currentOrder.getPaymentStatus()!= null}">
+                                        <div class="ml-auto h5" style="color: ${color}">${currentOrder.getPaymentStatus()}</div>
+                                    </c:if>
                                 </div>
                                 <div class="row border rounded p-1 my-3">
 

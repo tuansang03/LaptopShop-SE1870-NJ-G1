@@ -39,7 +39,7 @@ public class ShowReturnRequest extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet ShowReturnRequest</title>");            
+            out.println("<title>Servlet ShowReturnRequest</title>");
             out.println("</head>");
             out.println("<body>");
             out.println("<h1>Servlet ShowReturnRequest at " + request.getContextPath() + "</h1>");
@@ -61,7 +61,7 @@ public class ShowReturnRequest extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         ProductDAO dao = new ProductDAO();
-        List <Return> list = dao.listReturn();
+        List<Return> list = dao.listReturn();
         request.setAttribute("list", list);
         request.getRequestDispatcher("managereturn.jsp").forward(request, response);
     }

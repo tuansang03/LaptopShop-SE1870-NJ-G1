@@ -97,7 +97,12 @@
                     window.location.href = "deleteImage?imageId=" + imageId + "&productId=" + pid;
                 }
             }
-
+function confirmDelete(productId) {
+        if (confirm("Are you sure you want to delete this product detail?")) {
+            // Nếu người dùng xác nhận, chuyển đến servlet deletePDBeforeUpdate
+            window.location.href = "deletePDAfterUpdate?id=" + productId;
+        }
+    }
         </script>
     </head>
     <body>

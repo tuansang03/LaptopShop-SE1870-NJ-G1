@@ -314,7 +314,7 @@ public class OderDAO extends DBContext {
                 order.setPaymentMethod(resultSet.getString("PaymentMethod"));
                 order.setPaymentStatus(resultSet.getString("PaymentStatus"));
                 order.setVnPayTransactionId(resultSet.getString("VnPayTransactionId"));
-                order.setEndDate(resultSet.getTimestamp("EndDate") != null ? resultSet.getTimestamp("end_date").toLocalDateTime() : null);
+                order.setEndDate(resultSet.getTimestamp("EndDate") != null ? resultSet.getTimestamp("EndDate").toLocalDateTime() : null);
                 order.setOrderStatus(resultSet.getString("OrderStatus"));
 
                 int userId = resultSet.getInt("UserId");
@@ -785,7 +785,7 @@ public class OderDAO extends DBContext {
 
         //List<OrderDetail> l = o.getAllOrdetailByID(1);
         //System.out.println(l);
-        
+      
         o.updateEnddate(LocalDateTime.now(), 27);
 
     }
