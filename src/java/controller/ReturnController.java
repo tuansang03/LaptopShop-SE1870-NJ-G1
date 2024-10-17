@@ -83,10 +83,10 @@ public class ReturnController extends HttpServlet {
 //            session.setAttribute("orderId", orderId);
             List<OrderDetail> list = new ArrayList<>();
             try {
-                OrdeiDetailDAO detailDAO = new OrdeiDetailDAO();
-                List<OrderDetail> listOrderDetail = new ArrayList<>();
-                listOrderDetail = detailDAO.getOrderDetailByOrderId(orderId);
-                session.setAttribute("listReturn", listOrderDetail);
+//                OrdeiDetailDAO detailDAO = new OrdeiDetailDAO();
+//                List<OrderDetail> listOrderDetail = new ArrayList<>();
+//                listOrderDetail = detailDAO.getOrderDetailByOrderId(orderId);
+//                session.setAttribute("listReturn", listOrderDetail);
                 list = order.getOrderDetailsByUserAndOrder(getCurrentUser.getId(), orderId);
                 request.setAttribute("orderId", orderId);
                 request.setAttribute("listOrderDetail", list);
@@ -108,7 +108,8 @@ public class ReturnController extends HttpServlet {
             Order o = dao.getOrderById(orderId);
             Return return1 = new Return(money, reason, refundMethod, "wait", "wait", o, currentReturnDate);
             ReturnDAO returnDao = new ReturnDAO();
-            returnDao.insertReturn(return1);
+            int returnId = returnDao.insertReturn(return1);
+            return1.setId(returnId);
 //            ReturnDetail returnDetail = new ReturnDetail(return1.getId(),);
             ReturnDAO returnDAO = new ReturnDAO();
             OrdeiDetailDAO detailDAO = new OrdeiDetailDAO();

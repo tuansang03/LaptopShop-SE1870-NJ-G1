@@ -4,9 +4,11 @@
  */
 package dal;
 
+import java.sql.Statement;
 import java.sql.PreparedStatement;
 import model.Return;
 import model.ReturnDetail;
+import java.sql.ResultSet;
 
 /**
  *
@@ -14,13 +16,14 @@ import model.ReturnDetail;
  */
 public class ReturnDAO extends DBContext {
 
-    public boolean insertReturn(Return return1) {
+    public int insertReturn(Return return1) {
         PreparedStatement stm = null;
+        ResultSet generatedKeys = null;
         String sql = "INSERT INTO dbo.[Return] (TotalReturnAmount, Reason, RefundMethod, RefundStatus, ReturnStatus, OrderId, ReturnDate) \n"
                 + "VALUES (?,?, ?, ?, ?, ?, ?);";
 
         try {
-            stm = connection.prepareStatement(sql);
+            stm = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
 
             // Gán giá trị từ đối tượng return1 vào câu lệnh SQL
             stm.setInt(1, return1.getTotalReturnAmount());
@@ -33,7 +36,17 @@ public class ReturnDAO extends DBContext {
 
             // Thực thi câu lệnh và kiểm tra kết quả
             int rowsInserted = stm.executeUpdate();
-            return rowsInserted > 0; // Trả về true nếu thêm thành công
+            
+            if (rowsInserted > 0) {
+            // Lấy ID vừa được tạo ra
+            generatedKeys = stm.getGeneratedKeys();
+            if (generatedKeys.next()) {
+                int returnId = generatedKeys.getInt(1); // ID vừa được chèn
+                
+
+                return returnId; // Thêm thành công
+            }
+        }
 
         } catch (java.sql.SQLException ex) {
             ex.printStackTrace();
@@ -47,7 +60,7 @@ public class ReturnDAO extends DBContext {
             }
         }
 
-        return false; // Trả về false nếu có lỗi xảy ra
+        return 0; // Trả về false nếu có lỗi xảy ra
     }
 
     public boolean insertReturnDetail(ReturnDetail returnDetail) {
