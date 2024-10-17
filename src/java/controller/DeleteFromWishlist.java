@@ -64,6 +64,8 @@ public class DeleteFromWishlist extends HttpServlet {
         int uid = Integer.parseInt(request.getParameter("uid"));
         int pid = Integer.parseInt(request.getParameter("pid"));
         d.deleteFromWishlist(uid, pid);
+        List<Image> listwish = d.listWish(uid);
+        request.setAttribute("wishlist", listwish);
         request.getRequestDispatcher("wishlist.jsp").forward(request, response);
     }
 
