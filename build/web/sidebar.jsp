@@ -327,6 +327,7 @@
                     
                     <a href="managerOrder"><i class="fas fa-object-group"></i> Manager Order</a>
                     <a href="readComment"><i class="fas fa-object-group"></i> Manage Comment</a>
+                    <a href="showreturnrequest"><i class="fas fa-object-group"></i> Manage Return</a>
                     <a href="updateAccountPage.jsp"><i class="fas fa-upload  "></i>Update Account</a>
                     <div class="user">
 

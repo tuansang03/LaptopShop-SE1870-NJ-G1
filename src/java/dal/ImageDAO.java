@@ -19,6 +19,27 @@ import model.ProductDetail;
  */
 public class ImageDAO extends DBContext {
 
+    public Image getImageById (int imageId){
+        String sql = "select * from [Image] where Id = ?" ;
+        try {
+            PreparedStatement pre = connection.prepareStatement(sql);
+            pre.setInt(1, imageId);
+            ResultSet rs = pre.executeQuery();
+            if(rs.next()){
+                Image i = new Image();
+                i.setId(rs.getInt("Id"));
+                ProductDetail p = new ProductDetail();
+                p.setId(rs.getInt("ProductDetailId"));
+                i.setImage(rs.getString("Image"));
+                return i;
+            }
+            
+        } catch (SQLException ex) {
+            Logger.getLogger(ImageDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
+    }
+    
     public void insertImage(Image img) {
         // Câu lệnh SQL để chèn một bản ghi vào bảng Image
         String sql = "INSERT INTO Image (ProductDetailId, Image) VALUES (?, ?)";
@@ -109,4 +130,9 @@ public class ImageDAO extends DBContext {
         return false;  // Trả về false nếu có lỗi xảy ra
     }
 }
+     public static void main(String[] args) {
+        ImageDAO i = new ImageDAO();
+       Image a = i.getImageById(36);
+         System.out.println(a);
+    }
 }
