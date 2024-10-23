@@ -4,6 +4,7 @@
  */
 package dal;
 
+import java.beans.Statement;
 import model.User;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -118,11 +119,51 @@ public class UserDAO extends DBContext {
             pre.setString(2, user.getPassword());
             pre.setString(3, user.getFullName());
             pre.setString(4, user.getEmail());
-            pre.executeQuery();
+            pre.executeUpdate();
         } catch (SQLException ex) {
             Logger.getLogger(UserDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
+   public int insertUser2(User user) {
+    int userId = -1;  // Biến lưu userId mới
+     String sql = "INSERT INTO [dbo].[User]\n"
+                + "           ([Username]\n"
+                + "          ,[Password]\n"
+                + "          ,[Fullname]\n"
+                + "           \n"
+                + "           ,[Email]\n"
+                + "           \n"
+                + "           ,[RoleId],\n"
+                + "		   [Status]\n"
+                + "           )\n"
+                + "    VALUES\n"
+                + "          (?,?,?,?,3,'active')";
+    
+    try {
+        // Sử dụng RETURN_GENERATED_KEYS để lấy userId vừa thêm
+        PreparedStatement pre = connection.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS);
+        
+        // Thiết lập các giá trị cho câu lệnh SQL
+        pre.setString(1, user.getUserName());
+            pre.setString(2, user.getPassword());
+            pre.setString(3, user.getFullName());
+            pre.setString(4, user.getEmail());
+        
+        // Thực thi câu lệnh
+        pre.executeUpdate();
+        
+        // Lấy userId vừa được thêm
+        ResultSet rs = pre.getGeneratedKeys();
+        if (rs.next()) {
+            userId = rs.getInt(1);  // Lấy giá trị khóa chính
+        }
+        
+    } catch (SQLException ex) {
+        Logger.getLogger(UserDAO.class.getName()).log(Level.SEVERE, null, ex);
+    }
+    
+    return userId;  // Trả về userId hoặc -1 nếu thất bại
+}
 
     public boolean isMailDuplicate(User user) {
         String sql = "SELECT COUNT(*) FROM [User] WHERE email = ?";
@@ -1023,10 +1064,47 @@ public int[] getMinMaxPostId() {
     return false;
 }
 
-//    public static void main(String[] args) {
-//        UserDAO dao = new UserDAO();
-//        System.out.println(dao.deleteUserById(4));
-//    }
+public User getUserByEmail(String email) {
+    String sql = "SELECT * FROM [User] WHERE email = ?";  // Truy vấn SQL lấy user dựa trên email
+    
+    
+    try {
+        // Chuẩn bị câu lệnh SQL
+        PreparedStatement pre = connection.prepareStatement(sql);
+        
+        // Gán giá trị cho biến email trong câu lệnh SQL
+        pre.setString(1, email);
+        
+        // Thực thi câu lệnh và nhận kết quả
+        ResultSet rs = pre.executeQuery();
+        
+        // Xử lý kết quả trả về từ ResultSet
+        if (rs.next()) {
+                User u = new User();
+                u.setId(rs.getInt(1));
+                u.setUserName(rs.getString(2));
+                u.setPassword(rs.getString(3));
+                u.setFullName(rs.getString(4));
+                u.setEmail(rs.getString(5));
+                Role role = new Role();
+                role.setId(rs.getInt(6));
+                u.setRole(role);
+                u.setStatus(rs.getString(7));
+                return u;
+            }
+    } catch (SQLException ex) {
+        Logger.getLogger(UserDAO.class.getName()).log(Level.SEVERE, null, ex);
+    }
+    
+    return null;  // Trả về đối tượng User hoặc null nếu không tìm thấy
+}
+
+
+ 
+    public static void main(String[] args) {
+        UserDAO dao = new UserDAO();
+        System.out.println(dao.getUserByEmail("trantienminh204@gmail.com"));
+    }
 
 }
 //================================================================================================================
