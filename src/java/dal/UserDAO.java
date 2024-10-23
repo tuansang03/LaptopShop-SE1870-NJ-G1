@@ -17,6 +17,7 @@ import model.Category;
 import model.Color;
 import model.Configuration;
 import model.Image;
+import static model.PasswordUtil.hashPassword;
 import model.Post;
 import model.Product;
 import model.ProductDetail;
@@ -973,6 +974,54 @@ public int[] getMinMaxPostId() {
 
         return users;
     }
+
+   public boolean isEmailMatchUsername(String email, String username) {
+    String sql = "SELECT * FROM [User] WHERE email = ? AND username = ?";
+    try {
+        PreparedStatement pre = connection.prepareStatement(sql);
+        pre.setString(1, email);    // Đặt email vào vị trí dấu ? đầu tiên
+        pre.setString(2, username); // Đặt username vào vị trí dấu ? thứ hai
+
+        ResultSet rs = pre.executeQuery();
+        // Nếu tìm thấy một hàng, nghĩa là email và username khớp nhau
+        if (rs.next()) {
+            return true;
+        }
+    } catch (SQLException ex) {
+        Logger.getLogger(UserDAO.class.getName()).log(Level.SEVERE, null, ex);
+    }
+    return false; // Trả về false nếu không tìm thấy
+}
+
+   
+ public boolean resetPassword(String username, String email , String newPassword) {
+    // Câu lệnh SQL để cập nhật mật khẩu mới
+    String sql = "UPDATE [User] SET [Password] = ? WHERE username = ? AND Email = ?";
+    
+    try {
+        PreparedStatement pre = connection.prepareStatement(sql);
+        
+        // Mã hóa mật khẩu mới (nếu cần), ví dụ: mã hóa bằng BCrypt hoặc bất kỳ phương pháp nào bạn muốn
+        // Ở đây mình sẽ sử dụng mật khẩu trực tiếp, nhưng bạn có thể thay đổi nếu cần
+        String hashedPassword = hashPassword(newPassword);  
+        
+        // Thiết lập giá trị cho câu lệnh SQL
+        pre.setString(1, hashedPassword);
+        pre.setString(2, username);
+        pre.setString(3, email);
+        // Thực thi cập nhật
+        int result = pre.executeUpdate();
+        
+        // Nếu cập nhật thành công, trả về true
+        return result > 0;
+        
+    } catch (SQLException ex) {
+        Logger.getLogger(UserDAO.class.getName()).log(Level.SEVERE, null, ex);
+    }
+    
+    // Nếu có lỗi xảy ra, trả về false
+    return false;
+}
 
 //    public static void main(String[] args) {
 //        UserDAO dao = new UserDAO();

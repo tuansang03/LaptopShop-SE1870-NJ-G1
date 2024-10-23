@@ -8,19 +8,20 @@ import dal.UserDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
-import jakarta.servlet.http.Cookie;
+import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
-import static model.PasswordUtil.hashPassword;
-import model.User;
+import java.util.Random;
+import model.SendMailSSL;
 
 /**
  *
  * @author ADMIN
  */
-public class login extends HttpServlet {
+@WebServlet(name = "resetPassword", urlPatterns = {"/resetPassword"})
+public class resetPassword extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -39,10 +40,10 @@ public class login extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet login</title>");
+            out.println("<title>Servlet resetPassword</title>");
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet login at " + request.getContextPath() + "</h1>");
+            out.println("<h1>Servlet resetPassword at " + request.getContextPath() + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
@@ -60,20 +61,7 @@ public class login extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        Cookie arr[] = request.getCookies();
-        if (arr != null) {
-            for (Cookie cookie : arr) {
-                if (cookie.getName().equals("userC")) {
-                    request.setAttribute("usernameC", cookie.getValue());
-
-                }
-                if (cookie.getName().equals("passC")) {
-                    request.setAttribute("passC", cookie.getValue());
-                }
-            }
-
-        }
-        request.getRequestDispatcher("login.jsp").forward(request, response);
+        processRequest(request, response);
     }
 
     /**
@@ -87,45 +75,32 @@ public class login extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        // Lấy dữ liệu từ form
         String username = request.getParameter("username");
-        String password = request.getParameter("password");
-        String remember = request.getParameter("rememberMe");
-        UserDAO dao = new UserDAO();
-        String hashedPassword = hashPassword(password);
-        User u = dao.UserLogin(username, hashedPassword);
-        HttpSession session = request.getSession();
-        session.setMaxInactiveInterval(30 * 60); // 30 phút = 1800 giây
-        if ("true".equals(remember)) {
-            Cookie uC = new Cookie("userC", username);
-            Cookie p = new Cookie("passC", password);
-            uC.setMaxAge(60 * 60);
-            p.setMaxAge(60 * 60);
-            response.addCookie(uC);
-            response.addCookie(p);
+        String email = request.getParameter("email");
+        UserDAO u = new UserDAO();
+        if (!u.isMailDuplicate2(email)) {
+            request.setAttribute("error", "Please enter correct email");
+            request.getRequestDispatcher("forgotpassword.jsp").forward(request, response);
+            return;
         }
-        if (u != null) {
-            if (u.getStatus().equalsIgnoreCase("ban")) {
-                session.setAttribute("ban", u);
-                response.sendRedirect("ban.jsp");
-                return;
-            }
-            if (u.getRole().getId() == 3) {
-                session.setAttribute("user", u);
-                response.sendRedirect("home");
-            } else if (u.getRole().getId() == 2) {git 
-                session.setAttribute("sale", u);
-                response.sendRedirect("admindashboard.jsp");
-            } else if (u.getRole().getId() == 1) {
-                session.setAttribute("admin", u);
-                response.sendRedirect("admindashboard.jsp");
-            }
+        if (!u.isEmailMatchUsername(email, username)) {
+            request.setAttribute("error", "Email does not match with the username");
+            request.getRequestDispatcher("forgotpassword.jsp").forward(request, response);
+            return;
+        }
+          String resetLink = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort()
+            + request.getContextPath() + "/reset?email=" + email + "&username=" + username;
+        String to = request.getParameter("email");
+       
+        SendMailSSL mail = new SendMailSSL();
+        mail.send(to,"Reset password", resetLink, request);
+        request.setAttribute("success", "Please check email entered");
+        request.getRequestDispatcher("forgotpassword.jsp").forward(request, response);
 
-        } else {
-            request.setAttribute("error", "Incorrect username or password");
-            request.getRequestDispatcher("login.jsp").forward(request, response);
-        }
     }
 
+    // Phương thức tạo mã OTP ngẫu nhiên
     /**
      * Returns a short description of the servlet.
      *
