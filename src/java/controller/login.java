@@ -112,7 +112,7 @@ public class login extends HttpServlet {
             if (u.getRole().getId() == 3) {
                 session.setAttribute("user", u);
                 response.sendRedirect("home");
-            } else if (u.getRole().getId() == 2) {git 
+            } else if (u.getRole().getId() == 2) {
                 session.setAttribute("sale", u);
                 response.sendRedirect("admindashboard.jsp");
             } else if (u.getRole().getId() == 1) {
