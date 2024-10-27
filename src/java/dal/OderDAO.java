@@ -27,7 +27,7 @@ import model.Product;
 public class OderDAO extends DBContext {
 
     public void insertOrderOfCODNoVoucher(int uid, String name, String address, String phone,
-            LocalDateTime odate, int totalAmountBeFore, int totalAmountAfter, String paymentMethod, String note) {
+            LocalDateTime odate, int totalAmountBeFore, int totalAmountAfter, String paymentMethod, String note, int saleID) {
         String sql = "INSERT INTO [dbo].[Order]\n"
                 + "           ([UserId]\n"
                 + "           ,[Name]\n"
@@ -38,9 +38,10 @@ public class OderDAO extends DBContext {
                 + "           ,[TotalAmountAfter]\n"
                 + "           ,[PaymentMethod]\n"
                 + "           ,[OrderStatus]\n"
-                + "           ,[Note])\n"
+                + "           ,[Note]\n"
+                + "           ,[SaleId])\n"
                 + "     VALUES\n"
-                + "           (?, ?, ?, ?, ?, ?, ?, ?, 'wait', ?)";
+                + "           (?, ?, ?, ?, ?, ?, ?, ?, 'wait', ?, ?)";
         try {
             PreparedStatement st = connection.prepareStatement(sql);
             st.setInt(1, uid);
@@ -52,6 +53,7 @@ public class OderDAO extends DBContext {
             st.setInt(7, totalAmountAfter);
             st.setString(8, paymentMethod);
             st.setString(9, note);
+            st.setInt(10, saleID);
             st.executeUpdate();
 
         } catch (Exception e) {
@@ -60,7 +62,7 @@ public class OderDAO extends DBContext {
 
     public void insertOrderOfCOD(int uid, String name, String address, String phone,
             LocalDateTime odate, int voucherID, int totalAmountBeFore, int discountAmount,
-            int totalAmountAfter, String paymentMethod, String note) {
+            int totalAmountAfter, String paymentMethod, String note, int saleID) {
         String sql = "INSERT INTO [dbo].[Order]\n"
                 + "           ([UserId]\n"
                 + "           ,[Name]\n"
@@ -73,9 +75,10 @@ public class OderDAO extends DBContext {
                 + "           ,[TotalAmountAfter]\n"
                 + "           ,[PaymentMethod]\n"
                 + "           ,[OrderStatus]\n"
-                + "           ,[Note])\n"
+                + "           ,[Note]\n"
+                + "           ,[SaleId])\n"
                 + "     VALUES\n"
-                + "           (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'wait', ?)";
+                + "           (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'wait', ?, ?)";
         try {
             PreparedStatement st = connection.prepareStatement(sql);
             st.setInt(1, uid);
@@ -89,6 +92,7 @@ public class OderDAO extends DBContext {
             st.setInt(9, totalAmountAfter);
             st.setString(10, paymentMethod);
             st.setString(11, note);
+            st.setInt(12, saleID);
             st.executeUpdate();
 
         } catch (Exception e) {
@@ -97,7 +101,7 @@ public class OderDAO extends DBContext {
 
     public void insertOrderOfPaymentNoVoucher(int uid, String name, String address, String phone,
             LocalDateTime odate, int totalAmountBeFore, int totalAmountAfter,
-            String paymentMethod, String VnPayId, String note) {
+            String paymentMethod, String paymentStatus, String VnPayId, String note, int saleID) {
         String sql = "INSERT INTO [dbo].[Order]\n"
                 + "           ([UserId]\n"
                 + "           ,[Name]\n"
@@ -110,9 +114,10 @@ public class OderDAO extends DBContext {
                 + "           ,[PaymentStatus]\n"
                 + "           ,[VnPayTransactionId]\n"
                 + "           ,[OrderStatus]\n"
-                + "           ,[Note])\n"
+                + "           ,[Note]\n"
+                + "           ,[SaleId])\n"
                 + "     VALUES\n"
-                + "           (?, ?, ?, ?, ?, ?, ?, ?, 'pending', ?,'wait', ?)";
+                + "           (?, ?, ?, ?, ?, ?, ?, ?, ?, ?,'wait', ?, ?)";
         try {
             PreparedStatement st = connection.prepareStatement(sql);
             st.setInt(1, uid);
@@ -123,8 +128,10 @@ public class OderDAO extends DBContext {
             st.setInt(6, totalAmountBeFore);
             st.setInt(7, totalAmountAfter);
             st.setString(8, paymentMethod);
-            st.setString(9, VnPayId);
-            st.setString(10, note);
+            st.setString(9, paymentStatus);
+            st.setString(10, VnPayId);
+            st.setString(11, note);
+            st.setInt(12, saleID);
             st.executeUpdate();
 
         } catch (Exception e) {
@@ -134,7 +141,7 @@ public class OderDAO extends DBContext {
     public void insertOrderOfPayment(int uid, String name, String address, String phone,
             LocalDateTime odate, int voucherID, int totalAmountBeFore,
             int discountAmount, int totalAmountAfter,
-            String paymentMethod, String VnPayId, String note) {
+            String paymentMethod, String paymentStatus, String VnPayId, String note, int saleID) {
         String sql = "INSERT INTO [dbo].[Order]\n"
                 + "           ([UserId]\n"
                 + "           ,[Name]\n"
@@ -149,9 +156,10 @@ public class OderDAO extends DBContext {
                 + "           ,[PaymentStatus]\n"
                 + "           ,[VnPayTransactionId]\n"
                 + "           ,[OrderStatus]\n"
-                + "           ,[Note])\n"
+                + "           ,[Note]\n"
+                + "           ,[SaleId])\n"
                 + "     VALUES\n"
-                + "           (?, ?, ?, ?, ?, ?, ?, ?, ?, ?,'pending', ?,'wait', ?)";
+                + "           (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,'wait', ?, ?)";
         try {
             PreparedStatement st = connection.prepareStatement(sql);
             st.setInt(1, uid);
@@ -164,8 +172,10 @@ public class OderDAO extends DBContext {
             st.setInt(8, discountAmount);
             st.setInt(9, totalAmountAfter);
             st.setString(10, paymentMethod);
-            st.setString(11, VnPayId);
-            st.setString(12, note);
+            st.setString(11, paymentStatus);
+            st.setString(12, VnPayId);
+            st.setString(13, note);
+            st.setInt(14, saleID);
             st.executeUpdate();
 
         } catch (Exception e) {
@@ -515,11 +525,24 @@ public class OderDAO extends DBContext {
         return false; // Cập nhật thất bại
     }
 
-    public List<Order> getAllOrder() {
-        String sql = "SELECT * FROM [Order]";
+    public List<Order> getAllOrder(String op) {
+        String sql = "SELECT * FROM [Order] WHERE OrderStatus ";
         List<Order> listOrder = new ArrayList<>();
 
         try {
+            if (op.equals("wait")) {
+                sql += "LIKE 'wait'";
+            } else if (op.equals("rejected")) {
+                sql += "LIKE 'rejected'";
+            } else if (op.equals("accepted")) {
+                sql += "LIKE 'accepted'";
+            } else if (op.equals("intransit")) {
+                sql += "LIKE 'intransit'";
+            } else if (op.equals("failed")) {
+                sql += "LIKE 'failed'";
+            } else if (op.equals("done")) {
+                sql += "LIKE 'done'";
+            }
             PreparedStatement st = connection.prepareStatement(sql);
             ResultSet rs = st.executeQuery();
 
@@ -632,103 +655,103 @@ public class OderDAO extends DBContext {
         }
         return listODetail;
     }
-    
-        public List<OrderDetail> getOrderDetailsByUserAndOrder(int userId, int orderId) throws SQLException {
-    List<OrderDetail> orderDetailsList = new ArrayList<>();
 
-    // Câu truy vấn lấy OrderDetail theo UserId và OrderId
-    String sql = "SELECT od.Id, od.OrderId, od.ProductDetailId, od.Quantity, od.UnitPrice " +
-                 "FROM OrderDetail od " +
-                 "JOIN [Order] o ON od.OrderId = o.Id " +
-                 "WHERE o.UserId = ? AND o.Id = ?";
+    public List<OrderDetail> getOrderDetailsByUserAndOrder(int userId, int orderId) throws SQLException {
+        List<OrderDetail> orderDetailsList = new ArrayList<>();
 
-    try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
-        // Gán giá trị cho các tham số trong câu truy vấn
-        preparedStatement.setInt(1, userId);
-        preparedStatement.setInt(2, orderId);
+        // Câu truy vấn lấy OrderDetail theo UserId và OrderId
+        String sql = "SELECT od.Id, od.OrderId, od.ProductDetailId, od.Quantity, od.UnitPrice "
+                + "FROM OrderDetail od "
+                + "JOIN [Order] o ON od.OrderId = o.Id "
+                + "WHERE o.UserId = ? AND o.Id = ?";
 
-        // Thực thi câu truy vấn và lấy kết quả
-        try (ResultSet resultSet = preparedStatement.executeQuery()) {
-            while (resultSet.next()) {
-                // Tạo đối tượng OrderDetail và gán các giá trị từ ResultSet
-                OrderDetail orderDetail = new OrderDetail();
-                orderDetail.setId(resultSet.getInt("Id"));
+        try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+            // Gán giá trị cho các tham số trong câu truy vấn
+            preparedStatement.setInt(1, userId);
+            preparedStatement.setInt(2, orderId);
 
-                // Gán đối tượng Order
-                Order order = getOrderById(resultSet.getInt("OrderId"));
-                orderDetail.setOrder(order);
+            // Thực thi câu truy vấn và lấy kết quả
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                while (resultSet.next()) {
+                    // Tạo đối tượng OrderDetail và gán các giá trị từ ResultSet
+                    OrderDetail orderDetail = new OrderDetail();
+                    orderDetail.setId(resultSet.getInt("Id"));
 
-                // Gán đối tượng ProductDetail
-                ProductDetail productDetail = getProductDetailById(resultSet.getInt("ProductDetailId"));
-                orderDetail.setProductDetail(productDetail);
+                    // Gán đối tượng Order
+                    Order order = getOrderById(resultSet.getInt("OrderId"));
+                    orderDetail.setOrder(order);
 
-                // Gán các trường còn lại
-                orderDetail.setQuantity(resultSet.getInt("Quantity"));
-                orderDetail.setUnitPrice(resultSet.getInt("UnitPrice"));
+                    // Gán đối tượng ProductDetail
+                    ProductDetail productDetail = getProductDetailById(resultSet.getInt("ProductDetailId"));
+                    orderDetail.setProductDetail(productDetail);
 
-                // Thêm OrderDetail vào danh sách
-                orderDetailsList.add(orderDetail);
+                    // Gán các trường còn lại
+                    orderDetail.setQuantity(resultSet.getInt("Quantity"));
+                    orderDetail.setUnitPrice(resultSet.getInt("UnitPrice"));
+
+                    // Thêm OrderDetail vào danh sách
+                    orderDetailsList.add(orderDetail);
+                }
             }
         }
+
+        return orderDetailsList;
     }
 
-    return orderDetailsList;
-}
-        
-            public ProductDetail getProductDetailById(int productDetailId) {
-    ProductDetail productDetail = null;
+    public ProductDetail getProductDetailById(int productDetailId) {
+        ProductDetail productDetail = null;
 
-    String sql = "SELECT pd.[Id], pd.[ProductId], p.[Name] AS ProductName, \n" +
-                 "       pd.[ColorId], c.[Name] AS ColorName, \n" +
-                 "       pd.[ConfigurationId], cfg.[Name] AS ConfigurationName, \n" +
-                 "       pd.[Price], pd.[Quantity], pd.[ShortDescription], \n" +
-                 "       pd.[Description], pd.[Status] \n" +
-                 "FROM [ProductDetail] pd \n" +
-                 "JOIN [Color] c ON pd.[ColorId] = c.[Id] \n" +
-                 "JOIN [Configuration] cfg ON pd.[ConfigurationId] = cfg.[Id] \n" +
-                 "JOIN [Product] p ON pd.[ProductId] = p.[Id] \n" +
-                 "WHERE pd.[Id] = ?";
+        String sql = "SELECT pd.[Id], pd.[ProductId], p.[Name] AS ProductName, \n"
+                + "       pd.[ColorId], c.[Name] AS ColorName, \n"
+                + "       pd.[ConfigurationId], cfg.[Name] AS ConfigurationName, \n"
+                + "       pd.[Price], pd.[Quantity], pd.[ShortDescription], \n"
+                + "       pd.[Description], pd.[Status] \n"
+                + "FROM [ProductDetail] pd \n"
+                + "JOIN [Color] c ON pd.[ColorId] = c.[Id] \n"
+                + "JOIN [Configuration] cfg ON pd.[ConfigurationId] = cfg.[Id] \n"
+                + "JOIN [Product] p ON pd.[ProductId] = p.[Id] \n"
+                + "WHERE pd.[Id] = ?";
 
-    try (PreparedStatement ps = connection.prepareStatement(sql)) {
-        // Gán tham số productDetailId vào câu truy vấn
-        ps.setInt(1, productDetailId);
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            // Gán tham số productDetailId vào câu truy vấn
+            ps.setInt(1, productDetailId);
 
-        try (ResultSet rs = ps.executeQuery()) {
-            if (rs.next()) {
-                productDetail = new ProductDetail();
-                productDetail.setId(rs.getInt("Id"));
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    productDetail = new ProductDetail();
+                    productDetail.setId(rs.getInt("Id"));
 
-                // Thiết lập đối tượng Product
-                Product product = new Product();
-                product.setId(rs.getInt("ProductId"));
-                product.setName(rs.getString("ProductName"));
-                productDetail.setProduct(product);
+                    // Thiết lập đối tượng Product
+                    Product product = new Product();
+                    product.setId(rs.getInt("ProductId"));
+                    product.setName(rs.getString("ProductName"));
+                    productDetail.setProduct(product);
 
-                // Thiết lập đối tượng Color
-                Color color = new Color();
-                color.setId(rs.getInt("ColorId"));
-                color.setName(rs.getString("ColorName"));
-                productDetail.setColor(color);
+                    // Thiết lập đối tượng Color
+                    Color color = new Color();
+                    color.setId(rs.getInt("ColorId"));
+                    color.setName(rs.getString("ColorName"));
+                    productDetail.setColor(color);
 
-                // Thiết lập đối tượng Configuration
-                Configuration config = new Configuration();
-                config.setId(rs.getInt("ConfigurationId"));
-                config.setName(rs.getString("ConfigurationName"));
-                productDetail.setConfiguration(config);
+                    // Thiết lập đối tượng Configuration
+                    Configuration config = new Configuration();
+                    config.setId(rs.getInt("ConfigurationId"));
+                    config.setName(rs.getString("ConfigurationName"));
+                    productDetail.setConfiguration(config);
 
-                // Thiết lập các thuộc tính khác
-                productDetail.setPrice(rs.getInt("Price"));
-                productDetail.setQuantity(rs.getInt("Quantity"));
-                productDetail.setShortDescription(rs.getString("ShortDescription"));
-                productDetail.setDescription(rs.getString("Description"));
-                productDetail.setStatus(rs.getString("Status"));
+                    // Thiết lập các thuộc tính khác
+                    productDetail.setPrice(rs.getInt("Price"));
+                    productDetail.setQuantity(rs.getInt("Quantity"));
+                    productDetail.setShortDescription(rs.getString("ShortDescription"));
+                    productDetail.setDescription(rs.getString("Description"));
+                    productDetail.setStatus(rs.getString("Status"));
+                }
             }
+        } catch (SQLException ex) {
         }
-    } catch (SQLException ex) {
-    }
 
-    return productDetail;
-}
+        return productDetail;
+    }
 
     public List<Order> getOrderByOrderStatus(String status) {
         String sql = "SELECT * FROM [Order] WHERE [OrderStatus] = ?";
@@ -775,18 +798,86 @@ public class OderDAO extends DBContext {
         } catch (Exception e) {
         }
     }
-    
-    
-    
-    
-    
+
+    public void deleteOrderDetail(int oid) {
+        String sql = "DELETE FROM [dbo].[OrderDetail] WHERE OrderId = ?";
+        try {
+            PreparedStatement st = connection.prepareStatement(sql);
+            st.setInt(1, oid);
+            st.executeUpdate();
+        } catch (Exception e) {
+        }
+    }
+
+    public void deleteOrder(int id) {
+        String sql = "DELETE FROM [dbo].[Order] WHERE Id = ?";
+        try {
+            PreparedStatement st = connection.prepareStatement(sql);
+            st.setInt(1, id);
+            st.executeUpdate();
+        } catch (Exception e) {
+        }
+    }
+
+    public int totalOrderByOrderStatus(String status) {
+        String sql = "SELECT COUNT(ID) FROM [Order] WHERE OrderStatus LIKE ?";
+        int totalOrders = 0;
+        try {
+            PreparedStatement st = connection.prepareStatement(sql);
+            st.setString(1, status);
+            ResultSet rs = st.executeQuery();
+
+            if (rs.next()) {
+                totalOrders = rs.getInt(1);
+            }
+
+        } catch (Exception e) {
+        }
+        return totalOrders;
+    }
+
+    public int totalAmountByOrderStatus(String status) {
+        String sql = "SELECT SUM(TotalAmountAfter) FROM [Order] WHERE OrderStatus LIKE ?";
+        int totalAmount = 0;
+        try {
+            PreparedStatement st = connection.prepareStatement(sql);
+            st.setString(1, status);
+            ResultSet rs = st.executeQuery();
+
+            if (rs.next()) {
+                totalAmount = rs.getInt(1);
+            }
+
+        } catch (Exception e) {
+        }
+        return totalAmount;
+    }
+
+    public int getSallerMinOrder() {
+        String sql = "SELECT TOP 1 u.Id, COUNT(o.Id) AS OrderCount\n"
+                + "FROM [User] u\n"
+                + "LEFT JOIN [Order] o ON u.Id = o.SaleId\n"
+                + "WHERE u.RoleId = 2\n"
+                + "GROUP BY u.Id\n"
+                + "ORDER BY OrderCount ASC";
+        int saleid = 0;
+        try {
+            PreparedStatement st = connection.prepareStatement(sql);
+            ResultSet rs = st.executeQuery();
+
+            if (rs.next()) {
+                saleid = rs.getInt(1);
+            }
+        } catch (Exception e) {
+        }
+        return saleid;
+    }
+
     public static void main(String[] args) {
         OderDAO o = new OderDAO();
 
-        //List<OrderDetail> l = o.getAllOrdetailByID(1);
-        //System.out.println(l);
-      
-        o.updateEnddate(LocalDateTime.now(), 27);
+        int a = o.getSallerMinOrder();
+        System.out.println(a);
 
     }
 }

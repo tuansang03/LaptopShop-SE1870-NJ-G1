@@ -35,7 +35,7 @@ public class ManagerOrder extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         OderDAO oDAO = new OderDAO();
-        List<Order> listOrder = oDAO.getAllOrder();
+        List<Order> listOrder = oDAO.getAllOrder("wait");
 
         Integer oid = (Integer) request.getAttribute("oid");
 
@@ -46,7 +46,7 @@ public class ManagerOrder extends HttpServlet {
             }
         }
 
-        
+        request.setAttribute("action", "wait");
         request.setAttribute("listOrder", listOrder);
         request.getRequestDispatcher("managerOrderDisplay.jsp").forward(request, response);
     }
