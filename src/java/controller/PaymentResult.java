@@ -21,6 +21,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import model.CartItem;
+import model.SendMailSSL;
 import model.User;
 import model.Voucher;
 
@@ -92,6 +93,7 @@ public class PaymentResult extends HttpServlet {
             String totalPriceBeforeDiscount_raw = orderDetails.get("totalPrice");
             String message = orderDetails.get("message");
             String voucherID_raw = orderDetails.get("voucherID");
+            String email = orderDetails.get("email");
             int totalBeforeDiscount = Integer.parseInt(totalPriceBeforeDiscount_raw);
 
             int totalAfterDiscount = 0;
@@ -107,10 +109,13 @@ public class PaymentResult extends HttpServlet {
                     double totalAfterDiscountDouble = totalBeforeDiscount - (totalBeforeDiscount * (double) discount / 100);
                     totalAfterDiscount = (int) totalAfterDiscountDouble;
 
-                    //giảm số lượng của voucher khi được sử dụng
-                    int quantityVoucher = voucher.getQuantity();
-                    vDAO.updateQuantityVoucher((quantityVoucher - 1), Integer.parseInt(voucherID_raw));
-
+//                    //giảm số lượng của voucher khi được sử dụng
+//                    int quantityVoucher = voucher.getQuantity();
+//                    vDAO.updateQuantityVoucher((quantityVoucher - 1), Integer.parseInt(voucherID_raw));
+//
+//                    //tăng số lượng voucher đã sử dụng
+//                    int usedVoucher = voucher.getUsedQuantity();
+//                    vDAO.updateUsedQuantityVoucher((usedVoucher + 1), Integer.parseInt(voucherID_raw));
                 }
                 LocalDateTime dateTimeLocal = LocalDateTime.now();
                 int sallerID = oDAO.getSallerMinOrder();
@@ -130,8 +135,10 @@ public class PaymentResult extends HttpServlet {
                 for (int i = 0; i < cartItem.size(); i++) {
                     oDAO.insertOrderDetail(oid, pid[i], qlt[i], unitPrice[i]);
                 }
+                SendMailSSL mailSender = new SendMailSSL();
+                mailSender.sendOrderConfirmation(email, oid);
             }
-            
+
             request.setAttribute("name", name);
             request.setAttribute("address", address);
             request.setAttribute("phone", phone);

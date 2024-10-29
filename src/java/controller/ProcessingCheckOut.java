@@ -24,6 +24,7 @@ import java.util.Map;
 import java.util.Random;
 import java.util.UUID;
 import model.CartItem;
+import model.SendMailSSL;
 import model.User;
 import model.Voucher;
 
@@ -92,6 +93,10 @@ public class ProcessingCheckOut extends HttpServlet {
             int quantityVoucher = voucher.getQuantity();
             vDAO.updateQuantityVoucher((quantityVoucher - 1), Integer.parseInt(voucherID_raw));
 
+            //tăng số lượng voucher đã sử dụng
+            int usedVoucher = voucher.getUsedQuantity();
+            vDAO.updateUsedQuantityVoucher((usedVoucher + 1), Integer.parseInt(voucherID_raw));
+
         }
 
         OderDAO oDAO = new OderDAO();
@@ -113,15 +118,17 @@ public class ProcessingCheckOut extends HttpServlet {
             for (int i = 0; i < cartItem.size(); i++) {
                 oDAO.insertOrderDetail(oid, pid[i], qlt[i], unitPrice[i]);
             }
-            response.sendRedirect("home");
+            SendMailSSL mailSender = new SendMailSSL();
+            mailSender.sendOrderConfirmation(email, oid);
+            response.sendRedirect("orderSuccess.jsp");
         } else if (paymentMethod.equals("Payment")) {
 
             if (totalAfterDiscount == 0) {
                 totalAfterDiscount = totalBeforeDiscount;
             }
             String totalDiscountStr = String.valueOf(totalAfterDiscount);
-            
-            request.setAttribute("name", name);
+
+            request.setAttribute("email", email);
             request.setAttribute("name", name);
             request.setAttribute("address", address);
             request.setAttribute("phone", phone);

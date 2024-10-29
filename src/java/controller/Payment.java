@@ -3,6 +3,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
  */
 package controller;
+
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -42,32 +43,32 @@ public class Payment extends HttpServlet {
             throws ServletException, IOException {
         String vnp_Version = "2.1.0";
         String vnp_Command = "pay";
-        
-        
-        String name = (String)request.getAttribute("name");
-        String address = (String)request.getAttribute("address");
-        String phone = (String)request.getAttribute("phone");
-        String totalPriceBeforeDiscount_raw = (String)request.getAttribute("totalPriceBeforeDiscount_raw");
-        String message = (String)request.getAttribute("message");
-        String voucherID_raw = (String)request.getAttribute("voucherID_raw");
-        
-        String orderInfo = String.format("name=%s|address=%s|phone=%s|totalPrice=%s|message=%s|voucherID=%s",
-        URLEncoder.encode(name != null ? name : "", "UTF-8"),
-        URLEncoder.encode(address != null ? address : "", "UTF-8"),
-        URLEncoder.encode(phone != null ? phone : "", "UTF-8"),
-        URLEncoder.encode(totalPriceBeforeDiscount_raw != null ? totalPriceBeforeDiscount_raw : "", "UTF-8"),
-        URLEncoder.encode(message != null ? message : "", "UTF-8"),
-        URLEncoder.encode(voucherID_raw != null ? voucherID_raw : "", "UTF-8")
+
+        String name = (String) request.getAttribute("name");
+        String address = (String) request.getAttribute("address");
+        String phone = (String) request.getAttribute("phone");
+        String totalPriceBeforeDiscount_raw = (String) request.getAttribute("totalPriceBeforeDiscount_raw");
+        String message = (String) request.getAttribute("message");
+        String voucherID_raw = (String) request.getAttribute("voucherID_raw");
+        String email = (String) request.getAttribute("email");
+
+        String orderInfo = String.format("name=%s|address=%s|phone=%s|totalPrice=%s|message=%s|voucherID=%s|email=%s",
+                URLEncoder.encode(name != null ? name : "", "UTF-8"),
+                URLEncoder.encode(address != null ? address : "", "UTF-8"),
+                URLEncoder.encode(phone != null ? phone : "", "UTF-8"),
+                URLEncoder.encode(totalPriceBeforeDiscount_raw != null ? totalPriceBeforeDiscount_raw : "", "UTF-8"),
+                URLEncoder.encode(message != null ? message : "", "UTF-8"),
+                URLEncoder.encode(voucherID_raw != null ? voucherID_raw : "", "UTF-8"),
+                URLEncoder.encode(email != null ? email : "", "UTF-8")
         );
-        
-        
+
         String vnp_OrderInfo = orderInfo;
         String orderType = "130000";
         String vnp_TxnRef = Config.getRandomNumber(8);
         String vnp_IpAddr = Config.getIpAddress(request);
         String vnp_TmnCode = Config.vnp_TmnCode;
 
-        int amount = Integer.parseInt((String)request.getAttribute("paymentData"));
+        int amount = Integer.parseInt((String) request.getAttribute("paymentData"));
         Map vnp_Params = new HashMap<>();
         vnp_Params.put("vnp_Version", vnp_Version);
         vnp_Params.put("vnp_Command", vnp_Command);
@@ -164,7 +165,6 @@ public class Payment extends HttpServlet {
 //        job.addProperty("data", paymentUrl);
 //        Gson gson = new Gson();
 //        response.getWriter().write(gson.toJson(job));
-
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
@@ -194,7 +194,6 @@ public class Payment extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-        
     }
 
     /**

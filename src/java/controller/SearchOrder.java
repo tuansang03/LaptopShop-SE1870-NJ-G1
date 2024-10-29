@@ -4,6 +4,7 @@
  */
 package controller;
 
+import dal.OderDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -11,6 +12,8 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import java.util.List;
+import model.Order;
 
 /**
  *
@@ -33,29 +36,47 @@ public class SearchOrder extends HttpServlet {
         String search = request.getParameter("searchOrder");
         String startDate = request.getParameter("startDate");
         String endDate = request.getParameter("endDate");
-
+        //String action = request.getParameter("action");
+        OderDAO oDAO = new OderDAO();
+        List<Order> listOrder = null;
         if((search == null || search.isEmpty()) 
             && (startDate == null || startDate.isEmpty()) 
             && (endDate == null || endDate.isEmpty())){
         //dung yen
+        listOrder = oDAO.searchOrderByUserNameAndDate("Null", "Null", "Null");
         }else if((startDate == null || startDate.isEmpty()) 
             && (endDate == null || endDate.isEmpty())){
             //Search
+           listOrder = oDAO.searchOrderByUserNameAndDate(search, "Null", "Null");
         }else if((search == null || search.isEmpty()) 
             && (endDate == null || endDate.isEmpty())) {
             //Start
+           listOrder = oDAO.searchOrderByUserNameAndDate("Null", startDate, "Null");
         }else if((search == null || search.isEmpty())
             && (startDate == null || startDate.isEmpty())) {
             //End
+           listOrder = oDAO.searchOrderByUserNameAndDate("Null", "Null", endDate);
         }else if((endDate == null || endDate.isEmpty())) {
             //Search + Start
+           listOrder = oDAO.searchOrderByUserNameAndDate(search, startDate, "Null");
         }else if((startDate == null || startDate.isEmpty())) {
             //Search + End
+           listOrder = oDAO.searchOrderByUserNameAndDate(search, "Null", endDate);
         }else if((search == null || search.isEmpty())) {
             //Start + End
+           listOrder = oDAO.searchOrderByUserNameAndDate("Null", startDate, endDate);
         } else {
             //ALL
+           listOrder = oDAO.searchOrderByUserNameAndDate(search, startDate, endDate);
         }
+        request.setAttribute("listOrderOfSearch", listOrder);
+        
+        String action = "wait";
+        request.setAttribute("action", action);
+        request.setAttribute("startDate", startDate);
+        request.setAttribute("endDate", endDate);
+        request.setAttribute("search", search);
+        request.getRequestDispatcher("searchAndGetStatus").forward(request, response);
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

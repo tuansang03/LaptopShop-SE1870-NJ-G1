@@ -21,8 +21,8 @@ import model.Order;
  *
  * @author ADMIN
  */
-@WebServlet(name = "SelectOrderbyStatus", urlPatterns = {"/selectOrderbyStatus"})
-public class SelectOrderbyStatus extends HttpServlet {
+@WebServlet(name = "SearchAndGetStatus", urlPatterns = {"/searchAndGetStatus"})
+public class SearchAndGetStatus extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -35,6 +35,12 @@ public class SelectOrderbyStatus extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        List<Order> listOrderOfSearch = (List<Order>) request.getAttribute("listOrderOfSearch");
+
+        String search = (String) request.getAttribute("search");
+        String endDate = (String) request.getAttribute("endDate");
+        String startDate = (String) request.getAttribute("startDate");
+
         String action = request.getParameter("action");
 
         OderDAO oDAO = new OderDAO();
@@ -52,7 +58,7 @@ public class SelectOrderbyStatus extends HttpServlet {
         } else if (action.equals("done")) {
             op = "done";
         }
-        List<Order> listOrder = oDAO.getAllOrder(op);
+        //List<Order> listOrder = oDAO.getAllOrder(op);
 
         int totalAmountWait = oDAO.totalAmountByOrderStatus("wait");
         int totalAmountRejected = oDAO.totalAmountByOrderStatus("rejected");
@@ -82,10 +88,24 @@ public class SelectOrderbyStatus extends HttpServlet {
         request.setAttribute("totalOrderFailed", totalOrderFailed);
         request.setAttribute("totalOrderDone", totalOrderDone);
 
-        request.setAttribute("action", action);
+        //request.setAttribute("action", action);
+        //request.setAttribute("listOrder", listOrder);
+        Map<Integer, String> orderStatusMap = new HashMap<>();
 
-        request.setAttribute("listOrder", listOrder);
-        request.getRequestDispatcher("managerOrderDisplay.jsp").forward(request, response);
+        for (Order order : listOrderOfSearch) {
+            orderStatusMap.put(order.getId(), order.getOrderStatus());
+        }
+
+//            for (Map.Entry<Integer, String> entry : orderStatusMap.entrySet()) {
+//                System.out.println("Order ID: " + entry.getKey() + ", Status: " + entry.getValue());
+//            }
+        request.setAttribute("orderStatusMap", orderStatusMap);
+        request.setAttribute("listOrder", listOrderOfSearch);
+        request.setAttribute("search", search);
+        request.setAttribute("endDate", endDate);
+        request.setAttribute("startDate", startDate);
+        request.getRequestDispatcher("managerOrderDisplay2.jsp").forward(request, response);
+
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

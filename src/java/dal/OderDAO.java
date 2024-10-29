@@ -873,11 +873,90 @@ public class OderDAO extends DBContext {
         return saleid;
     }
 
+    public List<Order> searchOrderByUserNameAndDate(String userName,
+            String startDate, String endDate) {
+        
+        String sql = "SELECT * FROM [Order] o ";
+        List<Order> listOrder = new ArrayList<>();
+        try {
+
+            if (startDate.equals("Null") && endDate.equals("Null") && userName.equals("Null")) {
+                sql += "";
+            } else if (startDate.equals("Null") && endDate.equals("Null")) {
+                sql += " WHERE (o.[name] LIKE ?)";
+            } else if (userName.equals("Null") && endDate.equals("Null")) {
+                sql += " WHERE (o.OrderDate >= ?)";
+            } else if (userName.equals("Null") && startDate.equals("Null")) {
+                sql += " WHERE (o.OrderDate <= ?)";
+            } else if (endDate.equals("Null")) {
+                sql += " WHERE (o.[name] LIKE ? AND o.OrderDate >= ?)";
+            } else if (startDate.equals("Null")) {
+                sql += " WHERE (o.[name] LIKE ? AND o.OrderDate <= ?)";
+            } else if (userName.equals("Null")) {
+                sql += " WHERE (o.OrderDate BETWEEN ? AND ?)";
+            } else {
+                sql += " WHERE (o.[name] LIKE ? AND o.OrderDate BETWEEN ? AND ?)";
+            }
+
+            PreparedStatement st = connection.prepareStatement(sql);
+
+            if (startDate.equals("Null") && endDate.equals("Null") && userName.equals("Null")) {
+                //ResultSet rs = st.executeQuery();
+            } else if (startDate.equals("Null") && endDate.equals("Null")) {
+                st.setString(1, "%" + userName + "%");
+            } else if (userName.equals("Null") && endDate.equals("Null")) {
+                st.setString(1, startDate);
+            } else if (userName.equals("Null") && startDate.equals("Null")) {
+                st.setString(1, endDate);
+            } else if (endDate.equals("Null")) {
+                st.setString(1, "%" + userName + "%");
+                st.setString(2, startDate);
+            } else if (startDate.equals("Null")) {
+                st.setString(1, "%" + userName + "%");
+                st.setString(2, endDate);
+            } else if (userName.equals("Null")) {
+                st.setString(1, startDate);
+                st.setString(2, endDate);
+            } else {
+                st.setString(1, "%" + userName + "%");
+                st.setString(2, startDate);
+                st.setString(3, endDate);
+            }
+            ResultSet rs = st.executeQuery();
+            
+            while (rs.next()) {
+                UserDAO uDAO = new UserDAO();
+                VoucherDAO vDAO = new VoucherDAO();
+                LocalDateTime aendDate = rs.getTimestamp("EndDate") != null ? rs.getTimestamp("EndDate").toLocalDateTime() : null;
+                Order o = new Order(rs.getInt("Id"),
+                        uDAO.getUserByIdD(rs.getInt("UserID")),
+                        rs.getString("Name"),
+                        rs.getString("Address"),
+                        rs.getString("Phone"),
+                        rs.getTimestamp("OrderDate").toLocalDateTime(),
+                        vDAO.getVoucherByID(rs.getInt("VoucherID")),
+                        rs.getInt("TotalAmountBefore"),
+                        rs.getInt("DiscountAmount"),
+                        rs.getInt("TotalAmountAfter"),
+                        rs.getString("PaymentMethod"),
+                        rs.getString("PaymentStatus"),
+                        rs.getString("VnPayTransactionId"),
+                        aendDate,
+                        rs.getString("OrderStatus"),
+                        rs.getString("Note"));
+                listOrder.add(o);
+            }
+            
+        } catch (Exception e) {
+        }
+        return listOrder;
+    }
+
     public static void main(String[] args) {
         OderDAO o = new OderDAO();
 
-        int a = o.getSallerMinOrder();
-        System.out.println(a);
+        List<Order> a = o.searchOrderByUserNameAndDate("23", "Null", "Null");
+        System.out.println(a.size());
 
     }
 }

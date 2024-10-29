@@ -55,7 +55,8 @@ public class VoucherDAO extends DBContext {
 
             while (rs.next()) {
 
-                Voucher v = new Voucher(rs.getInt("Id"),
+                Voucher v = new Voucher(
+                        rs.getInt("Id"),
                         rs.getString("Code"),
                         rs.getString("Name"),
                         rs.getInt("DiscountPercent"),
@@ -63,7 +64,8 @@ public class VoucherDAO extends DBContext {
                         rs.getDate("StartDate"),
                         rs.getDate("EndDate"),
                         rs.getInt("MinValue"),
-                        rs.getString("Status"));
+                        rs.getString("Status"),
+                        rs.getInt("UsedQuantity"));
                 listVoucher.add(v);
             }
 
@@ -79,7 +81,8 @@ public class VoucherDAO extends DBContext {
             st.setInt(1, id);
             ResultSet rs = st.executeQuery();
             if (rs.next()) {
-                Voucher v = new Voucher(rs.getInt("Id"),
+                Voucher v = new Voucher(
+                        rs.getInt("Id"),
                         rs.getString("Code"),
                         rs.getString("Name"),
                         rs.getInt("DiscountPercent"),
@@ -87,7 +90,8 @@ public class VoucherDAO extends DBContext {
                         rs.getDate("StartDate"),
                         rs.getDate("EndDate"),
                         rs.getInt("MinValue"),
-                        rs.getString("Status"));
+                        rs.getString("Status"),
+                        rs.getInt("UsedQuantity"));
                 return v;
             }
         } catch (Exception e) {
@@ -241,16 +245,30 @@ public class VoucherDAO extends DBContext {
         return listVoucher;
     }
 
+    public void updateUsedQuantityVoucher(int quantity, int id) {
+        String sql = "UPDATE [dbo].[Voucher]\n"
+                + "   SET [UsedQuantity] = ?\n"
+                + " WHERE Id = ?";
+        try {
+            PreparedStatement st = connection.prepareStatement(sql);
+            st.setInt(1, quantity);
+            st.setInt(2, id);
+            st.executeUpdate();
+        } catch (Exception e) {
+        }
+        
+    
+    }
+
     public static void main(String[] args) {
         VoucherDAO v = new VoucherDAO();
-
+        Voucher a = v.getVoucherByID(1);
         //v.addVoucher("FE3424d", "VoucherTest 1", 70, 20, startDate, endDate, 2, 2);
         //Date startDate = Date.valueOf("2024-10-07");
         //Date endDate = Date.valueOf("2024-10-10");
         //v.editVoucher(5, "123hihi", "test22", 12, 12, startDate, endDate,  12, "0");
-        
-    List<Voucher> list = v.searchVoucherByName("u", "1", "active");
-   // List<Voucher> list = v.searchVoucherByName("noName", "1", "active");
-        System.out.println(list);
+        // List<Voucher> list = v.searchVoucherByName("u", "1", "active");
+        // List<Voucher> list = v.searchVoucherByName("noName", "1", "active");
+        System.out.println(a);
     }
 }
