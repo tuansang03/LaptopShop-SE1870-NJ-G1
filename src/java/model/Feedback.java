@@ -13,7 +13,7 @@ import java.util.Date;
 public class Feedback {
     private int id;
     private User user;
-    private Product product;
+    private OrderDetail orderdetailid;
     private int rating;
     private String FeedbackContent;
     private Date FeedbackDate;
@@ -22,10 +22,10 @@ public class Feedback {
     public Feedback() {
     }
 
-    public Feedback(int id, User user, Product product, int rating, String FeedbackContent, Date FeedbackDate, int ReplyFeedbackId) {
+    public Feedback(int id, User user, OrderDetail orderdetailid, int rating, String FeedbackContent, Date FeedbackDate, int ReplyFeedbackId) {
         this.id = id;
         this.user = user;
-        this.product = product;
+        this.orderdetailid = orderdetailid;
         this.rating = rating;
         this.FeedbackContent = FeedbackContent;
         this.FeedbackDate = FeedbackDate;
@@ -48,12 +48,12 @@ public class Feedback {
         this.user = user;
     }
 
-    public Product getProduct() {
-        return product;
+    public OrderDetail getOrderdetailid() {
+        return orderdetailid;
     }
 
-    public void setProduct(Product product) {
-        this.product = product;
+    public void setOrderdetailid(OrderDetail orderdetailid) {
+        this.orderdetailid = orderdetailid;
     }
 
     public int getRating() {
@@ -87,12 +87,6 @@ public class Feedback {
     public void setReplyFeedbackId(int ReplyFeedbackId) {
         this.ReplyFeedbackId = ReplyFeedbackId;
     }
-
-    @Override
-    public String toString() {
-        return "Feedback{" + "id=" + id + ", user=" + user + ", product=" + product + ", rating=" + rating + ", FeedbackContent=" + FeedbackContent + ", FeedbackDate=" + FeedbackDate + ", ReplyFeedbackId=" + ReplyFeedbackId + '}';
-    }
-    
     
     
 }

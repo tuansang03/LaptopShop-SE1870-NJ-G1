@@ -32,12 +32,6 @@
                 <div class="blog-banner">
                     <div class="text-center">
                         <h1>Product Information</h1>
-                        <nav aria-label="breadcrumb" class="banner-breadcrumb">
-                            <ol class="breadcrumb">
-                                <li class="breadcrumb-item"><a href="#">Home</a></li>
-                                <li class="breadcrumb-item active" aria-current="page">Shop Single</li>
-                            </ol>
-                        </nav>
                     </div>
                 </div>
             </div>
@@ -309,12 +303,13 @@
                     <div class="col-lg-5 offset-lg-1">
                         <div class="s_product_text">
                             <h3>${detail.product.name}</h3>
+                            <p style="white-space: pre;">Rating:${rating}&#9733;     Feedback:${number}     ${numsale} Sold</p>
                             <ul class="list">
                                 <li><a class="active" href="listproduct?brand%5B%5D=${detail.product.brand.name}"><span>Brand</span>: ${detail.product.brand.name}</a></li>
                                 <li><a class="active" href="listproduct?category%5B%5D=${detail.product.category.name}"><span>Category</span>: ${detail.product.category.name}</a></li>
                             </ul>
                             <br>
-                            Dung lượng:
+                            Option:
                             <form action="information" method="get">
                                 <c:forEach items="${config}" var="c">
                                     <button type="submit" name="productId" value="${c.id}" 
@@ -345,6 +340,7 @@
                                 ${sale}
                             </h5>
                             <p>${detail.shortDescription}</p>
+                            
                             <div class="card_area d-flex align-items-center">
                                 <a class="button primary-btn" href="addtocart?pid=${detail.product.id}&&colorid=${detail.color.id}&&confid=${detail.configuration.id}">Add to Cart</a>
                                 <a class="icon_btn" href="addtowishlist?pid=${detail.id}&&uid=${user.id}"><i class="lnr lnr lnr-heart"></i></a>

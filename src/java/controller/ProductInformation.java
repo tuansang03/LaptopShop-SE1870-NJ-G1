@@ -5,6 +5,7 @@
 package controller;
 
 import dal.CommentDAO;
+import dal.FeedbackDAOS;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -98,6 +99,16 @@ public class ProductInformation extends HttpServlet {
         String sale = formatCurrency2(salep);
         request.setAttribute("sale", sale);
         request.setAttribute("listproduct", listproduct);
+        
+        FeedbackDAOS fdao = new FeedbackDAOS();
+        List<Feedback> feedbacklist = fdao.getFeedbackByProduct(id);
+        int numsale = fdao.getSaleNumber(id);
+        double rating = fdao.getRatingPoint(id);
+        
+        request.setAttribute("feedbacklist", feedbacklist);
+        request.setAttribute("rating", rating);
+        request.setAttribute("number", feedbacklist.size());
+        request.setAttribute("numsale", numsale);
         request.getRequestDispatcher("single-product.jsp").forward(request, response);
     }
 

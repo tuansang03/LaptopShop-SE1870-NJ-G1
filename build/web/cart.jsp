@@ -48,6 +48,7 @@
         <!--================Cart Area =================-->
         <section class="cart_area">
             <div class="container">
+                <p style="color: red; margin-bottom: 0;" class="text-center" >${error}</p>
                 <div class="cart_inner">
                     <div class="table-responsive">
                         <div style="display: flex;justify-content: right;margin-right: 10%;font-size: 16px;" >
@@ -80,7 +81,7 @@
                                                     <c:forEach items="${requestScope.listImages}" var="i">
                                                         <div class="d-flex">
                                                             <c:if test="${p.getProductdetail().getId() == i.getProductDetail().getId()}">
-                                                                <img style="width: 80px" src="${i.getImage()}" alt="">
+                                                                <img style="width: 80px" src="${pageContext.request.contextPath}/images/${i.getImage()}" alt="">
                                                             </c:if>
                                                         </div>
                                                     </c:forEach>
@@ -137,7 +138,7 @@
                                     </tr>
                                 </c:forEach>
 
-                                
+
                                 <tr>
                                     <td>
 
@@ -195,5 +196,20 @@
         <script src="vendors/jquery.ajaxchimp.min.js"></script>
         <script src="vendors/mail-script.js"></script>
         <script src="js/main.js"></script>
+        <script>
+            
+            function doDeleteProduct(cid, pid, name) {
+                if (confirm("Do you want to delete product name: " + name)) {
+                    window.location = "deleteCart?cid=" +cid + "&&pid=" + pid;
+                }
+            }
+            
+            function doDeleteALLProduct(cid) {
+                if (confirm("Do you want to delete all product")) {
+                    window.location = "deleteAllCart?cid=" + cid;
+                }
+            }
+            
+        </script>
     </body>
 </html>
