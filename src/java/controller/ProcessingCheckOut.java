@@ -25,6 +25,7 @@ import java.util.Random;
 import java.util.UUID;
 import model.CartItem;
 import model.SendMailSSL;
+import model.SendMailSSL;
 import model.User;
 import model.Voucher;
 
@@ -112,7 +113,7 @@ public class ProcessingCheckOut extends HttpServlet {
                 oDAO.insertOrderOfCOD(user.getId(), name, address, phone, dateTimeLocal, voucherID, totalBeforeDiscount, discountAmount, totalAfterDiscount, paymentMethod, message == null ? null : message, sallerID);
                 cDAO.deleteProductAfterCheckOut(cid);
             }
-
+         
             //insert oderDetail
             int oid = oDAO.getIdOfOrderNewest();
             for (int i = 0; i < cartItem.size(); i++) {
@@ -122,6 +123,37 @@ public class ProcessingCheckOut extends HttpServlet {
             mailSender.sendOrderConfirmation(email, oid);
             response.sendRedirect("orderSuccess.jsp");
         } else if (paymentMethod.equals("Payment")) {
+            int arrRan[] = new int[5];
+            //random code qr
+            Random random = new Random();
+            for (int i = 0; i < 5; i++) {
+                int ran = random.nextInt(5);
+                arrRan[i] = ran;
+            }
+            String code = "LaptopShop_";
+            for (int i = 0; i < arrRan.length; i++) {
+                code += arrRan[i];
+            }
+
+            if (voucherID_raw == null) {
+                oDAO.insertOrderOfPaymentNoVoucher(user.getId(), name, address, phone, dateTimeLocal, totalBeforeDiscount, (totalAfterDiscount == 0) ? totalBeforeDiscount : totalBeforeDiscount, paymentMethod, code, message == null ? null : message);
+                cDAO.deleteProductAfterCheckOut(cid);
+            } else {
+                int voucherID = Integer.parseInt(voucherID_raw);
+                int discountAmount = (totalBeforeDiscount - totalAfterDiscount);
+
+                oDAO.insertOrderOfPayment(user.getId(), name, address, phone, dateTimeLocal, voucherID, totalBeforeDiscount, discountAmount, totalAfterDiscount, paymentMethod, code, message == null ? null : message);
+                cDAO.deleteProductAfterCheckOut(cid);
+            }
+
+            //insert oderDetail
+            int oid = oDAO.getIdOfOrderNewest();
+            for (int i = 0; i < cartItem.size(); i++) {
+                oDAO.insertOrderDetail(oid, pid[i], qlt[i], unitPrice[i]);
+            }
+
+            request.setAttribute("code", code);
+
 
             if (totalAfterDiscount == 0) {
                 totalAfterDiscount = totalBeforeDiscount;

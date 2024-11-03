@@ -4,7 +4,10 @@
     Author     : ADMIN
 --%>
 
-<%@page contentType="text/html" pageEncoding="UTF-8"%>
+
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@page contentType="text/html" pageEncoding="UTF-8"%>  
 <!DOCTYPE html>
 <html>
     <head>
@@ -52,11 +55,32 @@
         background-color: #f0f0f0 !important; /* Màu nền trắng xám */
         color: #343a40 !important; /* Màu chữ tối */
     }
+    /* Định vị widget ở góc phải dưới màn hình */
+df-messenger {
+  position: fixed;
+  bottom: 20px; /* Điều chỉnh khoảng cách với cạnh dưới */
+  right: 20px;  /* Điều chỉnh khoảng cách với cạnh phải */
+  z-index: 1000; /* Đảm bảo widget nằm trên các thành phần khác */
+}
+
+/* Điều chỉnh kích thước của widget */
+df-messenger {
+  width: 300px; /* Đặt chiều rộng mong muốn */
+  height: 400px; /* Đặt chiều cao mong muốn */
+}
+
+df-messenger .chat-wrapper {
+  border-radius: 10px; /* Bo góc để trông mềm mại hơn */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Đổ bóng để widget nổi bật */
+}
+
 </style>
 
 
     </head>
     <body>
+        <c:if test="${sessionScope.user!=null || (sessionScope.user==null && 
+                      sessionScope.sale==null && sessionScope.admin==null)}">
         <footer class="footer">
             <div class="footer-area">
                 <div class="container">
@@ -95,5 +119,14 @@
                 </div>
             </div>
         </footer>
+        </c:if>
+  
     </body>
+    <script src="https://www.gstatic.com/dialogflow-console/fast/messenger/bootstrap.js?v=1"></script>
+<df-messenger
+  intent="WELCOME"
+  chat-title="LaptopShop"
+  agent-id="618e0042-fe69-4333-80ac-5f0e0c7e9e9f"
+  language-code="en"
+></df-messenger>
 </html>

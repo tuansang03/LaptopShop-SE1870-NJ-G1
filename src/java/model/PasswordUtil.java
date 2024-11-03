@@ -7,12 +7,15 @@ package model;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.security.SecureRandom;
 
 /**
  *
  * @author ADMIN
  */
 public class PasswordUtil {
+private static final String CHARACTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()-_=+";
+    private static final int PASSWORD_LENGTH = 9;  // Độ dài mật khẩu tối thiểu là 9 ký tự
 
     public static String hashPassword(String password) {
         try {
@@ -45,10 +48,23 @@ public class PasswordUtil {
         // Kiểm tra độ dài mật khẩu có ít nhất 8 ký tự
         return password != null && password.length() >= 8;
     }
-    public static void main(String[] args) {
-        String password = "tienminh8";
-        String hashedPassword = hashPassword(password);
-        System.out.println("Mật khẩu đã mã hóa: " + hashedPassword);
+    
+   public static String generateRandomPassword() {
+        SecureRandom random = new SecureRandom();
+        StringBuilder password = new StringBuilder(PASSWORD_LENGTH);
+
+        // Tạo chuỗi ngẫu nhiên từ bộ ký tự đã định nghĩa
+        for (int i = 0; i < PASSWORD_LENGTH; i++) {
+            int randomIndex = random.nextInt(CHARACTERS.length());
+            password.append(CHARACTERS.charAt(randomIndex));
+        }
+
+        return password.toString();
     }
 
+    public static void main(String[] args) {
+        // Gọi hàm để tạo mật khẩu ngẫu nhiên và in ra màn hình
+        String randomPassword = generateRandomPassword();
+        System.out.println("Mật khẩu ngẫu nhiên: " + randomPassword);
+    }
 }

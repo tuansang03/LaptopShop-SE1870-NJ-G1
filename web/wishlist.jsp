@@ -4,7 +4,9 @@ head    <%--
     Author     : PHONG
 --%>
 
-<%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@page contentType="text/html" pageEncoding="UTF-8"%>  
 <!DOCTYPE html>
 <html>
     <head>
@@ -86,6 +88,8 @@ head    <%--
         </script>
     </head>
     <body>
+        <c:if test="${sessionScope.user!=null || (sessionScope.user==null && 
+                      sessionScope.sale==null && sessionScope.admin==null)}">
         <!--================ Start Header Menu Area =================-->
         <%@include file="header.jsp" %>
         <!--================ End Header Menu Area =================-->
@@ -136,5 +140,9 @@ head    <%--
         <!--================ Start footer Area  =================-->
         <%@include file="footer.jsp" %>
         <!--================ End footer Area  =================-->
+        </c:if>
+        <c:if test="${sessionScope.sale!=null || sessionScope.admin!=null}">
+            <%@include file="notallowpage.jsp" %>
+        </c:if>
     </body>
 </html>

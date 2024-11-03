@@ -278,7 +278,7 @@ public class OderDAO extends DBContext {
         List<OrderDetail> orderDetailsList = new ArrayList<>();
 
         // Câu truy vấn để lấy chi tiết đơn hàng theo orderId
-        String orderDetailQuery = "SELECT Quantity, UnitPrice, ProductDetailId FROM OrderDetail WHERE OrderId = ?";
+        String orderDetailQuery = "SELECT Quantity, UnitPrice, ProductDetailId, Id FROM OrderDetail WHERE OrderId = ?";
         UserDAO user = new UserDAO();
         try (
                 PreparedStatement preparedStatement = connection.prepareStatement(orderDetailQuery)) {
@@ -292,6 +292,7 @@ public class OderDAO extends DBContext {
                     orderDetail.setUnitPrice((int) resultSet.getDouble("UnitPrice"));
                     int id = resultSet.getInt("ProductDetailId");
                     orderDetail.setProductDetail(user.getProductDetailById(id));
+                    orderDetail.setId(resultSet.getInt("Id"));
                     orderDetailsList.add(orderDetail);
                 }
             }
@@ -507,20 +508,20 @@ public class OderDAO extends DBContext {
                 + "SET Phone = ?, Address = ?, Name = ? "
                 + "WHERE Id = (SELECT TOP(1) Id FROM [Order] WHERE UserId = ? ORDER BY Id DESC)";
 
-        try {
-            PreparedStatement st = connection.prepareStatement(sql);
+        try (PreparedStatement st = connection.prepareStatement(sql)) {
             st.setString(1, newPhone);    // Đặt giá trị cho Phone
             st.setString(2, newAddress);  // Đặt giá trị cho Address
             st.setString(3, newUsername); // Đặt giá trị cho Name (username)
             st.setInt(4, userId);         // Đặt giá trị cho UserId
 
             int rowsUpdated = st.executeUpdate();
+            System.out.println("Rows updated: " + rowsUpdated); // Log số dòng đã cập nhật
 
-            if (rowsUpdated > 0) {
-                return true; // Cập nhật thành công
-            }
+            return rowsUpdated > 0; // Cập nhật thành công
+        } catch (SQLException e) {
+            e.printStackTrace(); // In ra thông báo lỗi
         } catch (Exception e) {
-            e.printStackTrace();
+            e.printStackTrace(); // In ra thông báo lỗi
         }
         return false; // Cập nhật thất bại
     }
@@ -659,12 +660,24 @@ public class OderDAO extends DBContext {
     public List<OrderDetail> getOrderDetailsByUserAndOrder(int userId, int orderId) throws SQLException {
         List<OrderDetail> orderDetailsList = new ArrayList<>();
 
+    public List<OrderDetail> getOrderDetailsByUserAndOrder(int userId, int orderId) throws SQLException {
+        List<OrderDetail> orderDetailsList = new ArrayList<>();
+
+        // Câu truy vấn lấy OrderDetail theo UserId và OrderId
+        String sql = "SELECT od.Id, od.OrderId, od.ProductDetailId, od.Quantity, od.UnitPrice "
+                + "FROM OrderDetail od "
+                + "JOIN [Order] o ON od.OrderId = o.Id "
+                + "WHERE o.UserId = ? AND o.Id = ?";
         // Câu truy vấn lấy OrderDetail theo UserId và OrderId
         String sql = "SELECT od.Id, od.OrderId, od.ProductDetailId, od.Quantity, od.UnitPrice "
                 + "FROM OrderDetail od "
                 + "JOIN [Order] o ON od.OrderId = o.Id "
                 + "WHERE o.UserId = ? AND o.Id = ?";
 
+        try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+            // Gán giá trị cho các tham số trong câu truy vấn
+            preparedStatement.setInt(1, userId);
+            preparedStatement.setInt(2, orderId);
         try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
             // Gán giá trị cho các tham số trong câu truy vấn
             preparedStatement.setInt(1, userId);
@@ -676,7 +689,16 @@ public class OderDAO extends DBContext {
                     // Tạo đối tượng OrderDetail và gán các giá trị từ ResultSet
                     OrderDetail orderDetail = new OrderDetail();
                     orderDetail.setId(resultSet.getInt("Id"));
+            // Thực thi câu truy vấn và lấy kết quả
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                while (resultSet.next()) {
+                    // Tạo đối tượng OrderDetail và gán các giá trị từ ResultSet
+                    OrderDetail orderDetail = new OrderDetail();
+                    orderDetail.setId(resultSet.getInt("Id"));
 
+                    // Gán đối tượng Order
+                    Order order = getOrderById(resultSet.getInt("OrderId"));
+                    orderDetail.setOrder(order);
                     // Gán đối tượng Order
                     Order order = getOrderById(resultSet.getInt("OrderId"));
                     orderDetail.setOrder(order);
@@ -684,7 +706,13 @@ public class OderDAO extends DBContext {
                     // Gán đối tượng ProductDetail
                     ProductDetail productDetail = getProductDetailById(resultSet.getInt("ProductDetailId"));
                     orderDetail.setProductDetail(productDetail);
+                    // Gán đối tượng ProductDetail
+                    ProductDetail productDetail = getProductDetailById(resultSet.getInt("ProductDetailId"));
+                    orderDetail.setProductDetail(productDetail);
 
+                    // Gán các trường còn lại
+                    orderDetail.setQuantity(resultSet.getInt("Quantity"));
+                    orderDetail.setUnitPrice(resultSet.getInt("UnitPrice"));
                     // Gán các trường còn lại
                     orderDetail.setQuantity(resultSet.getInt("Quantity"));
                     orderDetail.setUnitPrice(resultSet.getInt("UnitPrice"));
@@ -694,7 +722,17 @@ public class OderDAO extends DBContext {
                 }
             }
         }
+                    // Thêm OrderDetail vào danh sách
+                    orderDetailsList.add(orderDetail);
+                }
+            }
+        }
 
+        return orderDetailsList;
+    }
+
+    public ProductDetail getProductDetailById(int productDetailId) {
+        ProductDetail productDetail = null;
         return orderDetailsList;
     }
 
@@ -711,7 +749,20 @@ public class OderDAO extends DBContext {
                 + "JOIN [Configuration] cfg ON pd.[ConfigurationId] = cfg.[Id] \n"
                 + "JOIN [Product] p ON pd.[ProductId] = p.[Id] \n"
                 + "WHERE pd.[Id] = ?";
+        String sql = "SELECT pd.[Id], pd.[ProductId], p.[Name] AS ProductName, \n"
+                + "       pd.[ColorId], c.[Name] AS ColorName, \n"
+                + "       pd.[ConfigurationId], cfg.[Name] AS ConfigurationName, \n"
+                + "       pd.[Price], pd.[Quantity], pd.[ShortDescription], \n"
+                + "       pd.[Description], pd.[Status] \n"
+                + "FROM [ProductDetail] pd \n"
+                + "JOIN [Color] c ON pd.[ColorId] = c.[Id] \n"
+                + "JOIN [Configuration] cfg ON pd.[ConfigurationId] = cfg.[Id] \n"
+                + "JOIN [Product] p ON pd.[ProductId] = p.[Id] \n"
+                + "WHERE pd.[Id] = ?";
 
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            // Gán tham số productDetailId vào câu truy vấn
+            ps.setInt(1, productDetailId);
         try (PreparedStatement ps = connection.prepareStatement(sql)) {
             // Gán tham số productDetailId vào câu truy vấn
             ps.setInt(1, productDetailId);
@@ -720,7 +771,16 @@ public class OderDAO extends DBContext {
                 if (rs.next()) {
                     productDetail = new ProductDetail();
                     productDetail.setId(rs.getInt("Id"));
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    productDetail = new ProductDetail();
+                    productDetail.setId(rs.getInt("Id"));
 
+                    // Thiết lập đối tượng Product
+                    Product product = new Product();
+                    product.setId(rs.getInt("ProductId"));
+                    product.setName(rs.getString("ProductName"));
+                    productDetail.setProduct(product);
                     // Thiết lập đối tượng Product
                     Product product = new Product();
                     product.setId(rs.getInt("ProductId"));
@@ -732,7 +792,17 @@ public class OderDAO extends DBContext {
                     color.setId(rs.getInt("ColorId"));
                     color.setName(rs.getString("ColorName"));
                     productDetail.setColor(color);
+                    // Thiết lập đối tượng Color
+                    Color color = new Color();
+                    color.setId(rs.getInt("ColorId"));
+                    color.setName(rs.getString("ColorName"));
+                    productDetail.setColor(color);
 
+                    // Thiết lập đối tượng Configuration
+                    Configuration config = new Configuration();
+                    config.setId(rs.getInt("ConfigurationId"));
+                    config.setName(rs.getString("ConfigurationName"));
+                    productDetail.setConfiguration(config);
                     // Thiết lập đối tượng Configuration
                     Configuration config = new Configuration();
                     config.setId(rs.getInt("ConfigurationId"));
@@ -749,7 +819,19 @@ public class OderDAO extends DBContext {
             }
         } catch (SQLException ex) {
         }
+                    // Thiết lập các thuộc tính khác
+                    productDetail.setPrice(rs.getInt("Price"));
+                    productDetail.setQuantity(rs.getInt("Quantity"));
+                    productDetail.setShortDescription(rs.getString("ShortDescription"));
+                    productDetail.setDescription(rs.getString("Description"));
+                    productDetail.setStatus(rs.getString("Status"));
+                }
+            }
+        } catch (SQLException ex) {
+        }
 
+        return productDetail;
+    }
         return productDetail;
     }
 
