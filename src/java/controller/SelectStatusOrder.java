@@ -36,7 +36,7 @@ public class SelectStatusOrder extends HttpServlet {
         OderDAO oDAO = new OderDAO();
         List<Order> listOrder = null;
         if (op.equals("all")) {
-           listOrder = oDAO.getAllOrder();
+           listOrder = oDAO.getAllOrder("wait");
         }else {
            listOrder = oDAO.getOrderByOrderStatus(op);
         }

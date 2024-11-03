@@ -5,6 +5,7 @@
 package model;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 /**
  *
@@ -27,7 +28,8 @@ public class Order {
     private LocalDateTime EndDate;
     private String OrderStatus;
     private String Note;
-
+    private int saleID;
+    
     public Order() {
     }
 
@@ -68,6 +70,27 @@ public class Order {
         this.Note = Note;
     }
 
+    public Order(int Id, User User, String Name, String Address, String Phone, LocalDateTime OrderDate, Voucher Voucher, int TotalAmountBefore, int DiscountAmount, int TotalAmountAfter, String PaymentMethod, String PaymentStatus, String VnPayTransactionId, LocalDateTime EndDate, String OrderStatus, String Note, int saleID) {
+        this.Id = Id;
+        this.User = User;
+        this.Name = Name;
+        this.Address = Address;
+        this.Phone = Phone;
+        this.OrderDate = OrderDate;
+        this.Voucher = Voucher;
+        this.TotalAmountBefore = TotalAmountBefore;
+        this.DiscountAmount = DiscountAmount;
+        this.TotalAmountAfter = TotalAmountAfter;
+        this.PaymentMethod = PaymentMethod;
+        this.PaymentStatus = PaymentStatus;
+        this.VnPayTransactionId = VnPayTransactionId;
+        this.EndDate = EndDate;
+        this.OrderStatus = OrderStatus;
+        this.Note = Note;
+        this.saleID = saleID;
+    }
+
+    
 
     public int getId() {
         return Id;
@@ -196,6 +219,16 @@ public class Order {
 
     public void setNote(String Note) {
         this.Note = Note;
+    }
+    
+    public String getOrderDateAsDateString() {
+        DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd-MM-yyyy"); // Định dạng ngày yyyy-MM-dd
+        return OrderDate.format(dateFormatter);
+    }
+    
+    public String getOrderDateAsTimeString() {
+        DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm:ss"); // Định dạng giờ
+        return OrderDate.format(timeFormatter);
     }
 
     @Override

@@ -5,7 +5,6 @@
 
 package controller;
 
-import dal.CartDAOS;
 import dal.ImageDAOS;
 import dal.OderDAO;
 import java.io.IOException;
@@ -17,7 +16,6 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
 import java.util.List;
-import model.CartItem;
 import model.Image;
 import model.Order;
 import model.OrderDetail;
@@ -26,8 +24,8 @@ import model.OrderDetail;
  *
  * @author ADMIN
  */
-@WebServlet(name="ViewOrderDetail", urlPatterns={"/viewOrderDetail"})
-public class ViewOrderDetail extends HttpServlet {
+@WebServlet(name="BillOfOrder", urlPatterns={"/billOfOrder"})
+public class BillOfOrder extends HttpServlet {
    
     /** 
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code> methods.
@@ -38,14 +36,14 @@ public class ViewOrderDetail extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
-        response.setContentType("text/html;charset=UTF-8");
-        String id_raw = request.getParameter("id");
-        int id = Integer.parseInt(id_raw);
+        String odID_raw = request.getParameter("odID");
+        int odID = Integer.parseInt(odID_raw);
         
         OderDAO oDAO = new OderDAO();
-        List<OrderDetail> listOrderDetail = oDAO.getAllOrdetailByID(id);
+        Order order = oDAO.getOrderByID(odID);
+        List<OrderDetail> listOrderDetail = oDAO.getAllOrdetailByID(order.getId());
+       
         
-      
         ImageDAOS iDAO = new ImageDAOS();
         List<Image> listImages = new ArrayList<>();
 
@@ -55,9 +53,10 @@ public class ViewOrderDetail extends HttpServlet {
             listImages.add(image); // Thêm hình ảnh vào danh sách
         }
         
+        request.setAttribute("order", order);
         request.setAttribute("listImages", listImages);
         request.setAttribute("listOrderDetail", listOrderDetail);
-        request.getRequestDispatcher("vieworderdetail.jsp").forward(request, response);
+        request.getRequestDispatcher("billOrder.jsp").forward(request, response);
     } 
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

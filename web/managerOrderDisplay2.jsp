@@ -218,8 +218,7 @@
 
     </head>
     <body>
-        <c:if test="${sessionScope.sale!=null}">
-        <%@include file="sidebar2.jsp" %>
+        <%@include file="sidebar.jsp" %>
 
         <div class="col-md-10 content">
             <h2>Manage Order</h2>
@@ -320,6 +319,7 @@
                     </tr>
                 </thead>
                 <tbody>
+
                     <c:forEach items="${listOrder}" var="o">
                         <tr>
                             <td>
@@ -369,75 +369,62 @@
                                 <c:if test="${!o.getNote().isEmpty()}">${o.getNote()}</c:if>
                                 </td>
 
-                            <c:if test="${action == 'wait'}">
-                        <form action="changeStatusOrder" method="get">
-                            <td>
-                                <button name="action" value="accepted"
-                                        class="action-button accepted-button">Accepted
-                                </button>
-                                <button name="action" value="rejected"
-                                        class="action-button rejected-button">Rejected
-                                </button>
-                            </td>
-                            <input name="oid" type="hidden" value="${o.getId()}"/>
-                        </form>
-                    </c:if>
+                            <c:choose>
+                                <c:when test="${orderStatusMap[o.id] == 'wait'}">
+                                    <td>
+                                        <form action="changeStatusOrder" method="get">
+                                            <button name="action" value="accepted" class="action-button accepted-button">Accepted</button>
+                                            <button name="action" value="rejected" class="action-button rejected-button">Rejected</button>
+                                            <input name="oid" type="hidden" value="${o.id}" />
+                                        </form>
+                                    </td>
+                                </c:when>
 
-                    <c:if test="${action == 'rejected'}">
-                        <form action="changeStatusOrderDoneAndDelete" method="get">
-                            <td>
-                                <button name="op" value="rejected"
-                                        class="action-button rejected-button">Delete
-                                </button>
-                            </td>
-                            <input name="oid" type="hidden" value="${o.getId()}"/>
-                        </form>
-                    </c:if>
+                                <c:when test="${orderStatusMap[o.id] == 'rejected'}">
+                                    <td>
+                                        <form action="changeStatusOrderDoneAndDelete" method="get">
+                                            <button name="op" value="rejected" class="action-button rejected-button">Delete</button>
+                                            <input name="oid" type="hidden" value="${o.id}" />
+                                        </form>
+                                    </td>
+                                </c:when>
 
-                    <c:if test="${action == 'accepted'}">
-                        <form action="changeStatusOrder" method="post">
-                            <td>
-                                <button name="action" value="intransit"
-                                        class="action-button accepted-button">In Transit
-                                </button>
-                            </td>
-                            <input name="oid" type="hidden" value="${o.getId()}" />
-                        </form>
-                    </c:if>
+                                <c:when test="${orderStatusMap[o.id] == 'accepted'}">
+                                    <td>
+                                        <form action="changeStatusOrder" method="post">
+                                            <button name="action" value="intransit" class="action-button accepted-button">In Transit</button>
+                                            <input name="oid" type="hidden" value="${o.id}" />
+                                        </form>
+                                    </td>
+                                </c:when>
 
-                    <c:if test="${action == 'intransit'}">
-                        <form action="changeStatusOrderDoneAndDelete" method="post">
-                            <td>
-                                <button name="action" value="done"
-                                        class="action-button accepted-button">Done
-                                </button>
-                                <button name="action" value="failed"
-                                        class="action-button rejected-button">Shipment Failed
-                                </button>
-                            </td>
-                            <input name="oid" type="hidden" value="${o.getId()}" />
-                        </form>
-                    </c:if>
+                                <c:when test="${orderStatusMap[o.id] == 'intransit'}">
+                                    <td>
+                                        <form action="changeStatusOrderDoneAndDelete" method="post">
+                                            <button name="action" value="done" class="action-button accepted-button">Done</button>
+                                            <button name="action" value="failed" class="action-button rejected-button">Shipment Failed</button>
+                                            <input name="oid" type="hidden" value="${o.id}" />
+                                        </form>
+                                    </td>
+                                </c:when>
 
-                    <c:if test="${action == 'failed'}">
-                        <form action="changeStatusOrderDoneAndDelete" method="get">
-                            <td>
-                                <button name="op" value="failed"
-                                        class="action-button rejected-button">Delete
-                                </button>
-                            </td>
-                            <input name="oid" type="hidden" value="${o.getId()}" />
-                        </form>
-                    </c:if>
-                    </tr>
-                </c:forEach>
+                                <c:when test="${orderStatusMap[o.id] == 'failed'}">
+                                    <td>
+                                        <form action="changeStatusOrderDoneAndDelete" method="get">
+                                            <button name="op" value="failed" class="action-button rejected-button">Delete</button>
+                                            <input name="oid" type="hidden" value="${o.id}" />
+                                        </form>
+                                    </td>
+                                </c:when>
+
+                                <c:when test="${orderStatusMap[o.id] == 'done'}">
+                                    <td>None</td>
+                                </c:when>
+                            </c:choose>
+                        </tr>
+                    </c:forEach>
                 </tbody>
             </table>
         </div>
-            </c:if>
-        <c:if test="${sessionScope.admin!=null || sessionScope.user!=null || (sessionScope.user==null && 
-                      sessionScope.sale==null && sessionScope.admin==null)}">
-            <%@include file="notallowpage.jsp" %>
-        </c:if>
     </body>
 </html>

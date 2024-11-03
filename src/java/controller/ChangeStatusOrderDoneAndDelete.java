@@ -12,15 +12,13 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import java.time.LocalDateTime;
-import model.Order;
 
 /**
  *
  * @author ADMIN
  */
-@WebServlet(name = "ChangeStatusOrder", urlPatterns = {"/changeStatusOrder"})
-public class ChangeStatusOrder extends HttpServlet {
+@WebServlet(name = "ChangeStatusOrderDoneAndDelete", urlPatterns = {"/changeStatusOrderDoneAndDelete"})
+public class ChangeStatusOrderDoneAndDelete extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -33,7 +31,19 @@ public class ChangeStatusOrder extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        
+        response.setContentType("text/html;charset=UTF-8");
+        try (PrintWriter out = response.getWriter()) {
+            /* TODO output your page here. You may use following sample code. */
+            out.println("<!DOCTYPE html>");
+            out.println("<html>");
+            out.println("<head>");
+            out.println("<title>Servlet ChangeStatusOrderDoneAndDelete</title>");
+            out.println("</head>");
+            out.println("<body>");
+            out.println("<h1>Servlet ChangeStatusOrderDoneAndDelete at " + request.getContextPath() + "</h1>");
+            out.println("</body>");
+            out.println("</html>");
+        }
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
@@ -49,17 +59,23 @@ public class ChangeStatusOrder extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         String oid_raw = request.getParameter("oid");
-        String action = request.getParameter("action");
-        OderDAO oDAO = new OderDAO();
+        String op = request.getParameter("op");
+
         int oid = Integer.parseInt(oid_raw);
-        if (action.equals("accepted")) {
-            oDAO.changeOrderStatus(action, oid);
-        }else if(action.equals("rejected")){
-            oDAO.changeOrderStatus(action, oid);
+        OderDAO oDAO = new OderDAO();
+
+        oDAO.deleteOrderDetail(oid);
+        oDAO.deleteOrder(oid);
+
+        if (op.equals("failed")) {
+            String action = "failed";
+            request.setAttribute("action", action);
+            response.sendRedirect("selectOrderbyStatus?action=" + action);
+        } else if (op.equals("rejected")) {
+            String action = "rejected";
+            request.setAttribute("action", action);
+            response.sendRedirect("selectOrderbyStatus?action=" + action);
         }
-        action = "wait";
-        request.setAttribute("action", action);
-        response.sendRedirect("selectOrderbyStatus?action=" + action);
     }
 
     /**
@@ -77,11 +93,13 @@ public class ChangeStatusOrder extends HttpServlet {
         String action = request.getParameter("action");
         OderDAO oDAO = new OderDAO();
         int oid = Integer.parseInt(oid_raw);
-        if (action.equals("intransit")) {
+        if (action.equals("done")) {
+            oDAO.changeOrderStatus(action, oid);
+        } else if (action.equals("failed")) {
             oDAO.changeOrderStatus(action, oid);
         }
-        
-        action = "accepted";
+
+        action = "intransit";
         request.setAttribute("action", action);
         response.sendRedirect("selectOrderbyStatus?action=" + action);
     }

@@ -70,6 +70,52 @@ public class SendMailSSL {
             throw new RuntimeException(e);
         }
     }
+    
+    public void sendOrderConfirmation(String recipientEmail, int orderDetailsID) {
+        // Cấu hình SMTP cho xác nhận đơn hàng
+        Properties props = new Properties();
+        props.put("mail.smtp.auth", "true");
+        props.put("mail.smtp.host", MailConfig.HOST_NAME);
+        props.put("mail.smtp.socketFactory.port", MailConfig.SSL_PORT);
+        props.put("mail.smtp.socketFactory.class", "javax.net.ssl.SSLSocketFactory");
+        props.put("mail.smtp.port", MailConfig.SSL_PORT);
+
+        Session session = Session.getDefaultInstance(props, new javax.mail.Authenticator() {
+            protected PasswordAuthentication getPasswordAuthentication() {
+                return new PasswordAuthentication(MailConfig.APP_EMAIL, MailConfig.APP_PASSWORD);
+            }
+        });
+
+        try {
+            MimeMessage message = new MimeMessage(session);
+            message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(recipientEmail));
+            message.setSubject("Order Confirmation");
+
+            String htmlContent = "<div style='font-family: Arial, sans-serif; padding: 20px; background-color: #f0f4f8;'>"
+                + "<div style='max-width: 600px; margin: 0 auto; background-color: #ffffff; border-radius: 8px; box-shadow: 0 0 10px rgba(0,0,0,0.1);'>"
+                + "<div style='background-color: #003366; color: white; padding: 10px 20px; border-top-left-radius: 8px; border-top-right-radius: 8px;'>"
+                + "<h2 style='margin: 0;'>Order Confirmation</h2>"
+                + "</div>"
+                + "<div style='padding: 20px;'>"
+                + "<p style='font-size: 16px;'>Dear customer,</p>"
+                + "<p style='font-size: 16px;'>Thank you for your order! Please visit the <a href='http://localhost:9999/LaptopShop/billOfOrder?odID=" + orderDetailsID + "'>Link</a> to view and check the original invoice:</p>"
+                + "</div>"
+                + "<div style='background-color: #e0e0e0; padding: 10px; text-align: center; border-bottom-left-radius: 8px; border-bottom-right-radius: 8px;'>"
+                + "<p style='font-size: 14px; color: #555;'>We appreciate your business and hope you enjoy your purchase. If you have any questions, feel free to contact us.</p>"
+                + "</div>"
+                + "</div>"
+                + "</div>";
+
+            message.setContent(htmlContent, "text/html; charset=utf-8");
+            Transport.send(message);
+
+            System.out.println("Order confirmation email sent successfully");
+        } catch (MessagingException e) {
+            e.printStackTrace();
+            throw new RuntimeException(e);
+        }
+    }
+
  public void sendNewPassword(String recipientEmail, String newPassword) {
         // Lấy thuộc tính cấu hình SMTP
         Properties props = new Properties();

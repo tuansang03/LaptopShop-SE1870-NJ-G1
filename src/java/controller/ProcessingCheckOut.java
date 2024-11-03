@@ -15,10 +15,16 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
+import java.util.UUID;
 import model.CartItem;
+import model.SendMailSSL;
 import model.SendMailSSL;
 import model.User;
 import model.Voucher;
@@ -88,18 +94,23 @@ public class ProcessingCheckOut extends HttpServlet {
             int quantityVoucher = voucher.getQuantity();
             vDAO.updateQuantityVoucher((quantityVoucher - 1), Integer.parseInt(voucherID_raw));
 
+            //tăng số lượng voucher đã sử dụng
+            int usedVoucher = voucher.getUsedQuantity();
+            vDAO.updateUsedQuantityVoucher((usedVoucher + 1), Integer.parseInt(voucherID_raw));
+
         }
 
         OderDAO oDAO = new OderDAO();
         if (paymentMethod.equals("Nhan Hang Thanh Toan")) {
+            int sallerID = oDAO.getSallerMinOrder();
             if (voucherID_raw == null) {
-                oDAO.insertOrderOfCODNoVoucher(user.getId(), name, address, phone, dateTimeLocal, totalBeforeDiscount, (totalAfterDiscount == 0) ? totalBeforeDiscount : totalBeforeDiscount, paymentMethod, message == null ? null : message);
+                oDAO.insertOrderOfCODNoVoucher(user.getId(), name, address, phone, dateTimeLocal, totalBeforeDiscount, (totalAfterDiscount == 0) ? totalBeforeDiscount : totalBeforeDiscount, paymentMethod, message == null ? null : message, sallerID);
                 cDAO.deleteProductAfterCheckOut(cid);
             } else {
                 int discountAmount = (totalBeforeDiscount - totalAfterDiscount);
                 int voucherID = Integer.parseInt(voucherID_raw);
 
-                oDAO.insertOrderOfCOD(user.getId(), name, address, phone, dateTimeLocal, voucherID, totalBeforeDiscount, discountAmount, totalAfterDiscount, paymentMethod, message == null ? null : message);
+                oDAO.insertOrderOfCOD(user.getId(), name, address, phone, dateTimeLocal, voucherID, totalBeforeDiscount, discountAmount, totalAfterDiscount, paymentMethod, message == null ? null : message, sallerID);
                 cDAO.deleteProductAfterCheckOut(cid);
             }
          
@@ -108,7 +119,9 @@ public class ProcessingCheckOut extends HttpServlet {
             for (int i = 0; i < cartItem.size(); i++) {
                 oDAO.insertOrderDetail(oid, pid[i], qlt[i], unitPrice[i]);
             }
-            response.sendRedirect("home");
+            SendMailSSL mailSender = new SendMailSSL();
+            mailSender.sendOrderConfirmation(email, oid);
+            response.sendRedirect("orderSuccess.jsp");
         } else if (paymentMethod.equals("Payment")) {
             int arrRan[] = new int[5];
             //random code qr
@@ -141,16 +154,26 @@ public class ProcessingCheckOut extends HttpServlet {
 
             request.setAttribute("code", code);
 
+
             if (totalAfterDiscount == 0) {
                 totalAfterDiscount = totalBeforeDiscount;
             }
             String totalDiscountStr = String.valueOf(totalAfterDiscount);
+
+            request.setAttribute("email", email);
+            request.setAttribute("name", name);
+            request.setAttribute("address", address);
+            request.setAttribute("phone", phone);
+            request.setAttribute("totalPriceBeforeDiscount_raw", totalPriceBeforeDiscount_raw);
+            request.setAttribute("message", message);
+            request.setAttribute("voucherID_raw", voucherID_raw);
             request.setAttribute("paymentData", totalDiscountStr);
             request.getRequestDispatcher("payment").forward(request, response);
+            //response.sendRedirect("payment");
         }
     }
 
-    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
+// <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
      * Handles the HTTP <code>GET</code> method.
      *
