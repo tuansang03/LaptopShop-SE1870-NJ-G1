@@ -88,35 +88,36 @@ public class submitComment extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         HttpSession session = request.getSession();
-        String commentContent = request.getParameter("commentContent");
+String commentContent = request.getParameter("commentContent");
 
-        int productDetailId = (int) session.getAttribute("pId");
-        User u = (User) session.getAttribute("user");
-        ProductDetailDAO pDao = new ProductDetailDAO();
-        int productId = pDao.getProductIdByProductDetailId(productDetailId);
-        if (!isCommentLengthValid(commentContent)) {
-            request.setAttribute("msg", "Please enter comment length < 200 character");
-            ProductDAO pDAO = new ProductDAO();
-            CommentDAO c = new CommentDAO();
-            ArrayList<Comment> cList = c.readAllComment();
-            ProductDAO p = new ProductDAO();
-            ArrayList pList = p.getAllProduct();
+int productDetailId = (int) session.getAttribute("pId");
+User u = (User) session.getAttribute("user");
+ProductDetailDAO pDao = new ProductDetailDAO();
+int productId = pDao.getProductIdByProductDetailId(productDetailId);
 
-            request.setAttribute("pList", pList);
-            request.setAttribute("commentList", cList);
-            request.getRequestDispatcher("manageComment.jsp").forward(request, response);
+if (!isCommentLengthValid(commentContent)) {
+    request.setAttribute("msg", "Please enter comment length < 200 character");
+    ProductDAO pDAO = new ProductDAO();
+    CommentDAO c = new CommentDAO();
+    ArrayList<Comment> cList = c.readAllComment();
+    ProductDAO p = new ProductDAO();
+    ArrayList pList = p.getAllProduct();
 
-            return;
-        }
-       
-        CommentDAO c = new CommentDAO();
-        boolean flag = c.insertComment(u, commentContent, productId);
-        if (flag) {
-            setProductDetails(request, productDetailId);
-            request.setAttribute("success", "Added comment");
-            // Chuyển tiếp yêu cầu tới trang single-product.jsp
-            request.getRequestDispatcher("single-product.jsp").forward(request, response);
-        }
+    request.setAttribute("pList", pList);
+    request.setAttribute("commentList", cList);
+    request.getRequestDispatcher("manageComment.jsp").forward(request, response);
+    return;
+}
+
+CommentDAO c = new CommentDAO();
+boolean flag = c.insertComment(u, commentContent, productId);
+
+if (flag) {
+    // Thay vì forward, chúng ta sử dụng sendRedirect
+    
+    response.sendRedirect("information?productId=" + productDetailId);
+}
+
     }
 
     private void setProductDetails(HttpServletRequest request, int productDetailId) {

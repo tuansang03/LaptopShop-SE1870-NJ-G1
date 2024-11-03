@@ -268,7 +268,7 @@ public class OderDAO extends DBContext {
         List<OrderDetail> orderDetailsList = new ArrayList<>();
 
         // Câu truy vấn để lấy chi tiết đơn hàng theo orderId
-        String orderDetailQuery = "SELECT Quantity, UnitPrice, ProductDetailId FROM OrderDetail WHERE OrderId = ?";
+        String orderDetailQuery = "SELECT Quantity, UnitPrice, ProductDetailId, Id FROM OrderDetail WHERE OrderId = ?";
         UserDAO user = new UserDAO();
         try (
                 PreparedStatement preparedStatement = connection.prepareStatement(orderDetailQuery)) {
@@ -282,6 +282,7 @@ public class OderDAO extends DBContext {
                     orderDetail.setUnitPrice((int) resultSet.getDouble("UnitPrice"));
                     int id = resultSet.getInt("ProductDetailId");
                     orderDetail.setProductDetail(user.getProductDetailById(id));
+                    orderDetail.setId(resultSet.getInt("Id"));
                     orderDetailsList.add(orderDetail);
                 }
             }

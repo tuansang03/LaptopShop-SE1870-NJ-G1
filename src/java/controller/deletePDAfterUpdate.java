@@ -5,6 +5,7 @@
 
 package controller;
 
+import dal.ImageDAO;
 import dal.ProductDetailDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -13,7 +14,9 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+import java.io.File;
 import java.util.ArrayList;
+import model.Image;
 import model.ProductDetail;
 
 /**
@@ -58,39 +61,59 @@ public class deletePDAfterUpdate extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
         HttpSession session = request.getSession();
-        String id = request.getParameter("id");
-        int id1 = 0;
-        try {
-            id1 = Integer.parseInt(id);
-        } catch (Exception e) {
-            // Log lỗi nếu cần thiết
-        }
+String id = request.getParameter("id");
+int id1 = 0;
+try {
+    id1 = Integer.parseInt(id);
+} catch (Exception e) {
+    // Log lỗi nếu cần thiết
+}
 
 // Lấy productId từ session
-        int productId = (int) session.getAttribute("updateProductId");
+int productId = (int) session.getAttribute("updateProductId");
 
 // Lấy danh sách ProductDetail hiện tại
-        ProductDetailDAO pD = new ProductDetailDAO();
-        ArrayList<ProductDetail> pDList = pD.getAllProductDetailById(productId);
+ProductDetailDAO pD = new ProductDetailDAO();
+ArrayList<ProductDetail> pDList = pD.getAllProductDetailById(productId);
 
 // Kiểm tra nếu chỉ còn 1 sản phẩm thì không cho phép xóa
-        if (pDList.size() <= 1) {
-            // Nếu chỉ còn 1 sản phẩm, không cho phép xóa và chuyển hướng lại trang với thông báo lỗi
-            session.setAttribute("errorMessage", "You cannot delete the last product variant.");
-            response.sendRedirect("viewDetail.jsp");
-        } else {
-            // Nếu có nhiều hơn 1 sản phẩm, thực hiện hành động xóa
-            ProductDetailDAO dao = new ProductDetailDAO();
-            dao.deletePDById(id1);
+if (pDList.size() <= 1) {
+    // Nếu chỉ còn 1 sản phẩm, không cho phép xóa và chuyển hướng lại trang với thông báo lỗi
+    session.setAttribute("errorMessage", "You cannot delete the last product variant.");
+    response.sendRedirect("viewDetail.jsp");
+} else {
+    // Nếu có nhiều hơn 1 sản phẩm, thực hiện hành động xóa
+    ProductDetailDAO dao = new ProductDetailDAO();
 
-            // Xóa danh sách cũ và cập nhật danh sách mới sau khi xóa
-            session.removeAttribute("pDList");
-            ArrayList<ProductDetail> updatedPDList = pD.getAllProductDetailById(productId);
-            session.setAttribute("pDList", updatedPDList);
+    // Lấy danh sách ảnh trước khi xóa
+    ImageDAO imageDAO = new ImageDAO();
+    ArrayList<Image> images = imageDAO.getAllImageByPDId(id1); // Lấy danh sách ảnh của ProductDetail cần xóa
 
-            // Chuyển hướng lại trang
-            response.sendRedirect("viewDetail.jsp");
+    // Xóa file ảnh vật lý
+    for (Image image : images) {
+        String imagePath = getServletContext().getRealPath("/images/" + image.getImage()); // Đường dẫn tới ảnh
+        File file = new File(imagePath);
+        if (file.exists()) {
+            if (file.delete()) {
+                System.out.println("Deleted file: " + imagePath);
+            } else {
+                System.out.println("Failed to delete file: " + imagePath);
+            }
         }
+    }
+
+    // Xóa ProductDetail khỏi cơ sở dữ liệu
+    dao.deletePDById(id1);
+
+    // Xóa danh sách cũ và cập nhật danh sách mới sau khi xóa
+    session.removeAttribute("pDList");
+    ArrayList<ProductDetail> updatedPDList = pD.getAllProductDetailById(productId);
+    session.setAttribute("pDList", updatedPDList);
+
+    // Chuyển hướng lại trang
+    response.sendRedirect("viewDetail.jsp");
+}
+
     } 
 
     /** 

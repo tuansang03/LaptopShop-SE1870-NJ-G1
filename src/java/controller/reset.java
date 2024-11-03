@@ -8,19 +8,20 @@ import dal.UserDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
-import jakarta.servlet.http.Cookie;
+import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
-import static model.PasswordUtil.hashPassword;
-import model.User;
+import java.util.Random;
+import model.SendMailSSL;
 
 /**
  *
  * @author ADMIN
  */
-public class login extends HttpServlet {
+@WebServlet(name = "reset", urlPatterns = {"/reset"})
+public class reset extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -39,10 +40,10 @@ public class login extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet login</title>");
+            out.println("<title>Servlet reset</title>");
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet login at " + request.getContextPath() + "</h1>");
+            out.println("<h1>Servlet reset at " + request.getContextPath() + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
@@ -60,20 +61,54 @@ public class login extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        Cookie arr[] = request.getCookies();
-        if (arr != null) {
-            for (Cookie cookie : arr) {
-                if (cookie.getName().equals("userC")) {
-                    request.setAttribute("usernameC", cookie.getValue());
+        String username = request.getParameter("username");
+        String email = request.getParameter("email");
+        HttpSession session = request.getSession();
+        session.setAttribute("email", email);
+        session.setAttribute("username", username);
+        response.sendRedirect("resetpassword.jsp");
+    }
 
-                }
-                if (cookie.getName().equals("passC")) {
-                    request.setAttribute("passC", cookie.getValue());
-                }
+    public String getRandom() {
+        Random rd = new Random();
+
+        // Chữ cái hoa từ A đến Z (65 - 90 trong mã ASCII)
+        char letter = (char) (rd.nextInt(26) + 'A');
+        // Ký tự ngẫu nhiên từ ! đến ~ trong mã ASCII (33 - 126)
+        char specialChar = (char) (rd.nextInt(94) + 33);
+        // Số từ 0 đến 9
+        int number = rd.nextInt(10);
+
+        // Tạo chuỗi ngẫu nhiên ít nhất 8 ký tự
+        StringBuilder randomString = new StringBuilder();
+        randomString.append(letter).append(specialChar).append(number);
+
+        // Bổ sung thêm các ký tự ngẫu nhiên cho đến khi đủ 8 ký tự
+        while (randomString.length() < 8) {
+            int choice = rd.nextInt(3);
+            switch (choice) {
+                case 0:
+                    randomString.append((char) (rd.nextInt(26) + 'A')); // Chữ cái hoa
+                    break;
+                case 1:
+                    randomString.append((char) (rd.nextInt(94) + 33)); // Ký tự đặc biệt
+                    break;
+                case 2:
+                    randomString.append(rd.nextInt(10)); // Số
+                    break;
             }
-
         }
-        request.getRequestDispatcher("login.jsp").forward(request, response);
+
+        // Trộn ngẫu nhiên các ký tự trong chuỗi
+        char[] charArray = randomString.toString().toCharArray();
+        for (int i = 0; i < charArray.length; i++) {
+            int randomIndex = rd.nextInt(charArray.length);
+            char temp = charArray[i];
+            charArray[i] = charArray[randomIndex];
+            charArray[randomIndex] = temp;
+        }
+
+        return new String(charArray);
     }
 
     /**
@@ -87,43 +122,7 @@ public class login extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        String username = request.getParameter("username");
-        String password = request.getParameter("password");
-        String remember = request.getParameter("rememberMe");
-        UserDAO dao = new UserDAO();
-        String hashedPassword = hashPassword(password);
-        User u = dao.UserLogin(username, hashedPassword);
-        HttpSession session = request.getSession();
-        session.setMaxInactiveInterval(30 * 60); // 30 phút = 1800 giây
-        if ("true".equals(remember)) {
-            Cookie uC = new Cookie("userC", username);
-            Cookie p = new Cookie("passC", password);
-            uC.setMaxAge(60 * 60);
-            p.setMaxAge(60 * 60);
-            response.addCookie(uC);
-            response.addCookie(p);
-        }
-        if (u != null) {
-            if (u.getStatus().equalsIgnoreCase("ban")) {
-                session.setAttribute("ban", u);
-                response.sendRedirect("ban.jsp");
-                return;
-            }
-            if (u.getRole().getId() == 3) {
-                session.setAttribute("user", u);
-                response.sendRedirect("home");
-            } else if (u.getRole().getId() == 2) {
-                session.setAttribute("sale", u);
-                response.sendRedirect("SaleStatisticController2?service=listall");
-            } else if (u.getRole().getId() == 1) {
-                session.setAttribute("admin", u);
-                response.sendRedirect("readProduct");
-            }
-
-        } else {
-            request.setAttribute("error", "Incorrect username or password");
-            request.getRequestDispatcher("login.jsp").forward(request, response);
-        }
+        processRequest(request, response);
     }
 
     /**
