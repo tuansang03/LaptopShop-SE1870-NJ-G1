@@ -4,7 +4,8 @@
     Author     : PHONG
 --%>
 
-<%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@page contentType="text/html" pageEncoding="UTF-8"%>  
 <!DOCTYPE html>
 <html>
     <head>
@@ -12,10 +13,36 @@
         <title>Manage Return</title>
     </head>
     <body>
-        <%@include file="sidebar.jsp" %>
+        <c:if test="${sessionScope.sale!=null}">
+        <%@include file="sidebar2.jsp" %>
 
         <div class="col-md-10 content">
             <h2>Manage Return</h2>
+            <div style="display: flex; align-items: center">
+                <label>Return Status:</label>
+                <form action="showreturnrequestbystatus" style="width: 100%;"  class="form-inline mb-3">
+                    <select onchange="this.form.submit()" name="op" style="
+                            margin-left: 10px;
+                            text-align: center;
+                            height: 48px;
+                            width: 10%;
+                            color: black;
+                            border: 2px solid #28a745;
+                            background-color: white;
+                            border-radius: 4px;
+                            padding: 5px;
+                            font-size: 16px;
+                            cursor: pointer;
+                            outline: none;
+                            ">
+                        <option ${op.equals('all') ? 'selected':''} value="all">All</option>
+                        <option ${op.equals('wait') ? 'selected':''} value="wait">Wait</option>
+                        <option ${op.equals('denied') ? 'selected':''} value="denied">Denied</option>
+                        <option ${op.equals('accepted') ? 'selected':''} value="accepted">Accepted</option>
+                    </select>
+                </form>
+
+            </div>
             <table border="1">
                 <thead>
                     <tr>
@@ -31,31 +58,45 @@
                 </thead>
                 <tbody>
                     <c:forEach items="${list}" var="i">
-    <tr>
-        <td>${i.id}</td>
-         <td>${i.getOder().getId()}</td><!-- Kiểm tra lại 'oder', có thể bạn muốn dùng 'order' -->
-        <td>${i.returnDate}</td>
-        <td>${i.totalReturnAmount}</td>
-        <td>${i.reason}</td>
-        <td>${i.refundMethod}</td>
-        <td>${i.refundStatus}</td>
-        <td>
-            <form action="changestatusreturn" method="get">
-                <select name="status" onchange="this.form.submit()">
-                    <option ${i.returnStatus == 'wait' ? 'selected' : ''} value="wait">Wait</option>
-                    <option ${i.returnStatus == 'denied' ? 'selected' : ''} value="denied">Denied</option>
-                    <option ${i.returnStatus == 'accepted' ? 'selected' : ''} value="accepted">Accepted</option>
-                </select>
-                <input type="hidden" value="${i.id}" name="rid"/>
-            </form>
-        </td>
-    </tr>
-</c:forEach>
+                        <tr>
+                            <td>${i.id}</td>
+                            <td>${i.getOder().getId()}</td><!-- Kiểm tra lại 'oder', có thể bạn muốn dùng 'order' -->
+                            <td>${i.returnDate}</td>
+                            <td>${i.totalReturnAmount}</td>
+                            <td>${i.reason}</td>
+                            <td>${i.refundMethod}</td>
+                            <td>
+                                <form action="changestatusrefund" method="get">
+                                    <select name="status" onchange="this.form.submit()">
+                                        <option ${i.refundStatus == 'wait' ? 'selected' : ''} value="wait">Wait</option>
+                                        <option ${i.refundStatus == 'denied' ? 'selected' : ''} value="denied">Denied</option>
+                                        <option ${i.refundStatus == 'accepted' ? 'selected' : ''} value="accepted">Accepted</option>
+                                    </select>
+                                    <input type="hidden" value="${i.id}" name="rid"/>
+                                </form>
+                            </td>
+                            <td>
+                                <form action="changestatusreturn" method="get">
+                                    <select name="status" onchange="this.form.submit()">
+                                        <option ${i.returnStatus == 'wait' ? 'selected' : ''} value="wait">Wait</option>
+                                        <option ${i.returnStatus == 'denied' ? 'selected' : ''} value="denied">Denied</option>
+                                        <option ${i.returnStatus == 'accepted' ? 'selected' : ''} value="accepted">Accepted</option>
+                                    </select>
+                                    <input type="hidden" value="${i.id}" name="rid"/>
+                                </form>
+                            </td>
+                        </tr>
+                    </c:forEach>
 
 
                 </tbody>
             </table>
 
         </div>
+                    </c:if>
+        <c:if test="${sessionScope.admin!=null || sessionScope.user!=null || (sessionScope.user==null && 
+                      sessionScope.sale==null && sessionScope.admin==null)}">
+            <%@include file="notallowpage.jsp" %>
+        </c:if>
     </body>
 </html>

@@ -26,6 +26,8 @@
 
     </head>
     <body>
+         <c:if test="${sessionScope.user!=null || (sessionScope.user==null && 
+                      sessionScope.sale==null && sessionScope.admin==null)}">
 
 
         <style>
@@ -203,7 +205,7 @@
 
                                 <li class="nav-item">
                                     <!--                                    da edit o day-->
-                                    <a href="loadProductCart">
+                                    <a href=${sessionScope.user!=null?"loadProductCart":"login"}>
                                         <button>
 
                                             <i class="ti-shopping-cart"></i><span class="nav-shop__circle"><%= quantity%></span>
@@ -282,5 +284,7 @@
                 </nav>
             </div>
         </header>
+                                </c:if>
+       
     </body>
 </html>

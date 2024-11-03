@@ -1,5 +1,6 @@
-<%@ page language="java" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@page contentType="text/html" pageEncoding="UTF-8"%>  
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -60,6 +61,7 @@
         </style>
     </head>
     <body>
+        <c:if test="${sessionScope.user!=null}">
         <!--================ Start Header Menu Area =================-->
         <%@include file="header.jsp" %>
         <!--================ End Header Menu Area =================-->
@@ -107,5 +109,9 @@
         <script src="vendors/owl-carousel/owl.carousel.min.js"></script>
         <script src="vendors/nice-select/jquery.nice-select.min.js"></script>
         <script src="js/main.js"></script>
+        </c:if>
+        <c:if test="${sessionScope.sale!=null || sessionScope.admin!=null}">
+            <%@include file="notallowpage.jsp" %>
+        </c:if>
     </body>
 </html>

@@ -36,6 +36,7 @@
     </style>
 </head>
 <body>
+    <c:if test="${sessionScope.admin!=null}">
     <div class="col-md-10 content">
         <h2>Manage Staff</h2>
 
@@ -143,5 +144,10 @@
             }
         </style>
     </div>
+            </c:if>
+    <c:if test="${sessionScope.sale!=null || sessionScope.user!=null || (sessionScope.user==null && 
+                      sessionScope.sale==null && sessionScope.admin==null)}">
+            <%@include file="notallowpage.jsp" %>
+        </c:if>
 </body>
 </html>

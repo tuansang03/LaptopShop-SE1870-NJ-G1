@@ -106,14 +106,72 @@ public class ProfileManage extends HttpServlet {
                     }
                 }
 
-//                     }
+                boolean seeAll = false;
+                List<OrderDetail> listFilter2 = new ArrayList<>();
+                if(request.getParameter("see").equalsIgnoreCase("all")){
+                    seeAll = true;
+                    request.setAttribute("orderListInfo", listFilter);
+                }
+                else if(request.getParameter("see").equalsIgnoreCase("wait")){
+                    for (int i = 0; i < listFilter.size(); i++) {
+                        OrderDetail get = listFilter.get(i);
+                        if(get.getOrder().getOrderStatus().equalsIgnoreCase("wait")){
+                            listFilter2.add(get);
+                        }
+                    }
+                    request.setAttribute("orderListInfo", listFilter2);
+                }
+                else if(request.getParameter("see").equalsIgnoreCase("done")){
+                    for (int i = 0; i < listFilter.size(); i++) {
+                        OrderDetail get = listFilter.get(i);
+                        if(get.getOrder().getOrderStatus().equalsIgnoreCase("done")){
+                            listFilter2.add(get);
+                        }
+                    }
+                }
+                  else if(request.getParameter("see").equalsIgnoreCase("rejected")){
+                    for (int i = 0; i < listFilter.size(); i++) {
+                        OrderDetail get = listFilter.get(i);
+                        if(get.getOrder().getOrderStatus().equalsIgnoreCase("rejected")){
+                            listFilter2.add(get);
+                        }
+                    }
+                }
+                  else if(request.getParameter("see").equalsIgnoreCase("accepted")){
+                    for (int i = 0; i < listFilter.size(); i++) {
+                        OrderDetail get = listFilter.get(i);
+                        if(get.getOrder().getOrderStatus().equalsIgnoreCase("accepted")){
+                            listFilter2.add(get);
+                        }
+                    }
+                }  else if(request.getParameter("see").equalsIgnoreCase("intransit")){
+                    for (int i = 0; i < listFilter.size(); i++) {
+                        OrderDetail get = listFilter.get(i);
+                        if(get.getOrder().getOrderStatus().equalsIgnoreCase("intransit")){
+                            listFilter2.add(get);
+                        }
+                    }
+                }
+                  else if(request.getParameter("see").equalsIgnoreCase("failed")){
+                    for (int i = 0; i < listFilter.size(); i++) {
+                        OrderDetail get = listFilter.get(i);
+                        if(get.getOrder().getOrderStatus().equalsIgnoreCase("failed")){
+                            listFilter2.add(get);
+                        }
+                    }
+                }
+                if(!seeAll){
+                     request.setAttribute("orderListInfo", listFilter2);
+                }
+                      
                 request.setAttribute("orderDAO", order);
+                request.setAttribute("imageDAO", image);
 
             } catch (SQLException ex) {
                 Logger.getLogger(ProfileManage.class.getName()).log(Level.SEVERE, null, ex);
             }
 //                     request.setAttribute("image", listImage);
-            request.setAttribute("orderListInfo", listFilter);
+            
             request.getRequestDispatcher("userprofile.jsp?profile=ordermanage").forward(request, response);
         }
         if ("orderdetail".equals(profile)) {
@@ -141,7 +199,7 @@ public class ProfileManage extends HttpServlet {
                 Logger.getLogger(ProfileManage.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
-  
+
 //   
     }
 
@@ -153,6 +211,10 @@ public class ProfileManage extends HttpServlet {
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
      */
+
+    
+    
+    
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -209,7 +271,6 @@ public class ProfileManage extends HttpServlet {
             }
             // Băm mật khẩu mới
             String hashedNewPassword = hashPassword(newPassword);
-
             // Cập nhật mật khẩu mới
             userDAO.updatePassword(currentUser.getUserName(), hashedNewPassword);
 //
@@ -224,6 +285,21 @@ public class ProfileManage extends HttpServlet {
             String email = request.getParameter("email");
             String phone = request.getParameter("phone");
             String username = request.getParameter("username");
+
+            // Kiểm tra thông tin người dùng
+            String validationResult = validateUserInfo(name, phone, adress);
+            if (validationResult != null) {
+                  OderDAO order = new OderDAO();
+                User getCurrentUser = (User) session.getAttribute("user");
+                Order newOrder = order.getOneOrderNewest(getCurrentUser.getId());
+                request.setAttribute("adress", newOrder.getAddress());
+                request.setAttribute("phone", newOrder.getPhone());
+                request.setAttribute("mess", "Update Successful!");
+                request.setAttribute("error2", validationResult);
+                request.getRequestDispatcher("userprofile.jsp?profile=info").forward(request, response);
+                return;
+            }
+
             UserDAO userDAO = new UserDAO();
             OderDAO order = new OderDAO();
             User getCurrentUser = (User) session.getAttribute("user");
@@ -235,10 +311,29 @@ public class ProfileManage extends HttpServlet {
             Order newOrder = order.getOneOrderNewest(getCurrentUser.getId());
             request.setAttribute("adress", newOrder.getAddress());
             request.setAttribute("phone", newOrder.getPhone());
-            request.setAttribute("mess", "Update Succesful!");
+            request.setAttribute("mess", "Update Successful!");
             request.getRequestDispatcher("userprofile.jsp?profile=info").forward(request, response);
         }
 
+    }
+
+    public String validateUserInfo(String name, String phone, String address) {
+        // Kiểm tra tên
+        if (name == null || name.isEmpty() || name.length() > 50) {
+            return "Name must be less than 50 characters."; // Thông báo lỗi khi tên quá dài hoặc rỗng
+        }
+
+        // Kiểm tra số điện thoại
+        if (phone == null || phone.length() != 10 || !phone.matches("\\d{10}")) {
+            return "Phone number must be exactly 10 digits."; // Thông báo lỗi khi số điện thoại không hợp lệ
+        }
+
+        // Kiểm tra địa chỉ
+        if (address == null || address.isEmpty() || address.length() > 120) {
+            return "Address must be less than 120 characters."; // Thông báo lỗi khi địa chỉ quá dài hoặc rỗng
+        }
+
+        return null; // Nếu tất cả hợp lệ
     }
 
     /**

@@ -304,7 +304,7 @@
             <div class="row">
                 <div class="col-md-2 sidebar">
                     <div class="logo">
-                        <a href="home"> <img src="" alt="Logo"></a> 
+                        <a  <img src="" alt="Logo"></a> 
                     </div>
 
 
@@ -314,26 +314,24 @@
 
 
 
-                    <a href="CustomerManageController?service=listall"><i class="fas fa-users"></i> Manage User</a>
+                    
                     <a href="CustomerManageController?service=listallstaff"><i class="fas fa-calendar"></i> Manage Staff</a>
                     <a href="BrandController?service=listall"><i class="fas fa-calendar"></i> Manage Brand</a>
                     
                     <a href="ConfigurationManageController?service=listall"><i class="fas fa-calendar"></i> Manage Configuration</a>
                     <a href="CategoryController?service=listall"><i class="fas fa-server"></i> Manage Category</a>
-                    <a href="postmanage?service=listall"><i class="fas fa-server"></i> Manage Post</a>
+                    <a href="ColorController?service=listall"><i class="fas fa-server"></i> Manage Color</a>
+                    
                     <a href="StatisticController?service=listall"><i class="fas fa-calendar"></i> Statistic</a>
                     
                     <a href="voucherManager"><i class="fas fa-server"></i> Manage Voucher</a>
-                    
-                    <a href="managerOrder"><i class="fas fa-object-group"></i> Manager Order</a>
-                    <a href="readComment"><i class="fas fa-object-group"></i> Manage Comment</a>
-                    <a href="showreturnrequest"><i class="fas fa-object-group"></i> Manage Return</a>
+                   
                     <a href="updateAccountPage.jsp"><i class="fas fa-upload  "></i>Update Account</a>
                     <div class="user">
 
-                        <p>Xin chào ${sessionScope.admin.fullName}</p>
+                        <p>Hello ${sessionScope.admin.fullName}</p>
 
-                        <a href="logout"><i class="fas fa-sign-out-alt"></i> Đăng xuất</a>
+                        <a href="logout"><i class="fas fa-sign-out-alt"></i> Logout</a>
                     </div>
                 </div>
                 </html>

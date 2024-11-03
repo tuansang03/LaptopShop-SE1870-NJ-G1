@@ -11,6 +11,7 @@
         <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
         <style>
+            <c:if test="${sessionScope.admin!=null}">
             .img-preview {
                 width: 80px;
                 height: 80px;
@@ -219,6 +220,10 @@ function confirmDelete(productId) {
             </form>
         </div>
 
-
+</c:if>
+        <c:if test="${sessionScope.sale!=null || sessionScope.user!=null || (sessionScope.user==null && 
+                      sessionScope.sale==null && sessionScope.admin==null)}">
+            <%@include file="notallowpage.jsp" %>
+        </c:if>
     </body>
 </html>

@@ -15,6 +15,7 @@
         <link rel="stylesheet" href="assets/css/main.css">
     </head>
     <body>
+        <c:if test="${sessionScope.admin!=null}">
 
         <div class="container-fluid mt-5">
             <h2>Add New Product</h2>
@@ -100,5 +101,10 @@
                 }
             });
         </script>
+        </c:if>
+        <c:if test="${sessionScope.sale!=null || sessionScope.user!=null ||(sessionScope.user==null && 
+                      sessionScope.sale==null && sessionScope.admin==null) }">
+            <%@include file="notallowpage.jsp" %>
+        </c:if>
     </body>
 </html>

@@ -4,7 +4,10 @@
     Author     : ADMIN
 --%>
 
-<%@page contentType="text/html" pageEncoding="UTF-8"%>
+
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@page contentType="text/html" pageEncoding="UTF-8"%>  
 <!DOCTYPE html>
 <html>
     <head>
@@ -57,6 +60,8 @@
 
     </head>
     <body>
+        <c:if test="${sessionScope.user!=null || (sessionScope.user==null && 
+                      sessionScope.sale==null && sessionScope.admin==null)}">
         <footer class="footer">
             <div class="footer-area">
                 <div class="container">
@@ -95,5 +100,7 @@
                 </div>
             </div>
         </footer>
+        </c:if>
+  
     </body>
 </html>

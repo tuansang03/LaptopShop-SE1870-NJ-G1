@@ -1,3 +1,4 @@
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
@@ -46,6 +47,8 @@
         </style>
     </head>
     <body>
+        <c:if test="${sessionScope.admin!=null}">
+        
         <%@include file="sidebar.jsp" %>
 
 
@@ -131,5 +134,10 @@
         </div>
         <script src='./tinymce/tinymce.min.js'></script>
         <script src='./js/tinyMceConfig.js'></script>
+        </c:if>
+        <c:if test="${sessionScope.sale!=null || sessionScope.user!=null ||(sessionScope.user==null && 
+                      sessionScope.sale==null && sessionScope.admin==null) }">
+            <%@include file="notallowpage.jsp" %>
+        </c:if>
     </body>
 </html>

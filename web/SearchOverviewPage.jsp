@@ -1,3 +1,7 @@
+
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -177,6 +181,8 @@
     </style>
 </head>
 <body>
+        <c:if test="${sessionScope.user!=null || (sessionScope.user==null && 
+                      sessionScope.sale==null && sessionScope.admin==null)}">
     <%@include file="header.jsp" %>
     <main>
         <section id="search-results">
@@ -238,5 +244,9 @@
             </div>
         </section>
     </main>
+                        </c:if>
+        <c:if test="${sessionScope.sale!=null || sessionScope.admin!=null}">
+            <%@include file="notallowpage.jsp" %>
+        </c:if>
 </body>
 </html>

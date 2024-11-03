@@ -26,7 +26,9 @@ import model.ProductList;
 import model.ProductList;
 import model.*;
 import java.text.DecimalFormat;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 /**
  *
@@ -384,7 +386,7 @@ public class ProductDAO extends DBContext {
 
     public List<Image> getImageById(int id) {
         List<Image> list = new ArrayList<>();
-       String sql = "SELECT i.Id, i.ProductDetailId, i.FeedbackId, i.Image\n"
+        String sql = "SELECT i.Id, i.ProductDetailId, i.FeedbackId, i.Image\n"
                 + "FROM Product p\n"
                 + "JOIN ProductDetail pd ON pd.ProductId = p.Id\n"
                 + "JOIN Image i ON i.ProductDetailId = pd.Id\n"
@@ -863,13 +865,65 @@ public class ProductDAO extends DBContext {
                     Order o = new Order();
                     o.setId(re.getInt("OrderId"));
                     c.setOder(o);
-                     
+
                     c.setTotalReturnAmount(re.getInt("TotalReturnAmount"));
                     c.setReason(re.getString("Reason"));
                     c.setRefundMethod(re.getString("RefundMethod"));
                     c.setRefundStatus(re.getString("RefundStatus"));
                     c.setReturnStatus(re.getString("ReturnStatus"));
-                    
+                    String returnDateStr = re.getString("ReturnDate");
+                    if (returnDateStr != null && !returnDateStr.isEmpty()) {
+                        LocalDateTime returnDate;
+                        if (returnDateStr.length() == 10) { // Chuỗi chỉ chứa ngày, định dạng "yyyy-MM-dd"
+                            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+                            returnDate = LocalDate.parse(returnDateStr, formatter).atStartOfDay(); // Đặt thời gian là 00:00:00
+                        } else { // Chuỗi chứa cả ngày và thời gian, định dạng "yyyy-MM-dd HH:mm:ss"
+                            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+                            returnDate = LocalDateTime.parse(returnDateStr, formatter);
+                        }
+                        c.setReturnDate(returnDate);
+                    }
+
+                    list.add(c);
+                }
+            }
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+        return list;
+    }
+    
+    public List<Return> listReturnByStatus(String status) {
+        List<Return> list = new ArrayList<>();
+        String sql = "SELECT * FROM [Return] WHERE ReturnStatus=?";
+        try (PreparedStatement st = connection.prepareStatement(sql)) {
+            st.setString(1, status);
+            try (ResultSet re = st.executeQuery()) {
+                while (re.next()) {
+                    Return c = new Return();
+                    c.setId(re.getInt("Id"));
+                    Order o = new Order();
+                    o.setId(re.getInt("OrderId"));
+                    c.setOder(o);
+
+                    c.setTotalReturnAmount(re.getInt("TotalReturnAmount"));
+                    c.setReason(re.getString("Reason"));
+                    c.setRefundMethod(re.getString("RefundMethod"));
+                    c.setRefundStatus(re.getString("RefundStatus"));
+                    c.setReturnStatus(re.getString("ReturnStatus"));
+                    String returnDateStr = re.getString("ReturnDate");
+                    if (returnDateStr != null && !returnDateStr.isEmpty()) {
+                        LocalDateTime returnDate;
+                        if (returnDateStr.length() == 10) { // Chuỗi chỉ chứa ngày, định dạng "yyyy-MM-dd"
+                            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+                            returnDate = LocalDate.parse(returnDateStr, formatter).atStartOfDay(); // Đặt thời gian là 00:00:00
+                        } else { // Chuỗi chứa cả ngày và thời gian, định dạng "yyyy-MM-dd HH:mm:ss"
+                            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+                            returnDate = LocalDateTime.parse(returnDateStr, formatter);
+                        }
+                        c.setReturnDate(returnDate);
+                    }
+
                     list.add(c);
                 }
             }
@@ -922,10 +976,21 @@ public class ProductDAO extends DBContext {
         } catch (Exception e) {
         }
     }
+    
+    public void changeRefundStatus(String op, int id) {
+        String sql = "UPDATE [dbo].[Return] SET[RefundStatus] = ? WHERE Id = ?";
+        try {
+            PreparedStatement st = connection.prepareStatement(sql);
+            st.setString(1, op);
+            st.setInt(2, id);
+            st.executeUpdate();
+        } catch (Exception e) {
+        }
+    }
 
     public static void main(String[] args) {
-        ProductDAO p = new ProductDAO();
-        List<Return> l = p.listReturn();
-        System.out.println(l);
+        ProductDAO d = new ProductDAO();
+        List<Return> l = d.listReturn();
+        System.out.println(l.get(0).getReturnDate());
     }
 }

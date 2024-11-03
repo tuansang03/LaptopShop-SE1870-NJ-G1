@@ -19,7 +19,8 @@
         <link rel="stylesheet" href="assets/css/main.css">
     </head>
     <body>
-        <%@include file="sidebar.jsp" %>
+        <c:if test="${sessionScope.sale!=null}">
+        <%@include file="sidebar2.jsp" %>
 
         <div class="col-md-10 content">
             <h2>Manage Post</h2>
@@ -72,7 +73,7 @@
                         <td>${p.getId()}</td>
                         <td>${p.getUser().getUserName()}</td>
 
-                        <td >
+                        <td style="height: 100%; width: 80%">
                             <div class="row needToFix">
 
 
@@ -96,31 +97,23 @@
                                     }
 
                                 </style>
-
-                                <h4>${mess}</h4>
-                                <div class="post tach">
-                                    <div class="card card-blog">
+                                <div class="post tach" >
+                                    <div class="card card-blog" >
                                         <div class="row no-gutters" style="width: 100%">
                                             <!-- Cột hiển thị hình ảnh thumbnail -->
-                                            <div class="col-md-6 dip">
+                                            <div class="col-md-2 dip">
                                                 <div class="card-blog__img">
-                                                    <img style="width: 100%" class="card-img rounded-0" src="${p.thumbnail}" alt="${p.tittle}">
+                                                    <img style="width: 100%; height: 150px" class="card-img rounded-0" src="${p.thumbnail}" alt="${p.tittle}">
                                                 </div>
                                             </div>
                                             <!-- Cột hiển thị thông tin bài viết -->
-                                            <div class="col-md-6">
+                                            <div class="col-md-9">
                                                 <div class="card-body">
-                                                    <ul class="card-blog__info">
-                                                        <c:if test="${p.brand.name ne 'None'}">
-                                                            <li><i class="bx bx-laptop"></i> ${p.brand.name}</li>
-                                                            </c:if>
-
-                                                        <li><i class="bx bx-calendar"></i> ${p.publishDate}</li>
-                                                    </ul>
+                                                   
                                                     <h4 class="card-blog__title">
-                                                        <a href="postdetail?id=${p.id}">${p.tittle}</a>
+                                                        <a href="postdetail?id=${p.id}"style="font-size: 70%">${p.tittle}</a>
                                                     </h4>
-                                                    <p>${p.shortContent}</p>
+                                                        <p style="font-size: 15px">${p.shortContent}</p>
                                                 </div>
                                             </div>
                                         </div>
@@ -190,6 +183,10 @@
                 window.location.href = 'postmanage?id=' + postId + '&service=updatePostRequest';
             }
         </script>
-
+        </c:if>
+        <c:if test="${sessionScope.admin!=null || sessionScope.user!=null || (sessionScope.user==null && 
+                      sessionScope.sale==null && sessionScope.admin==null)}">
+            <%@include file="notallowpage.jsp" %>
+        </c:if>
     </body>
 </html>

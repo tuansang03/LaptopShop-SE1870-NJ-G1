@@ -82,9 +82,10 @@
     </script>
 </head>
 <body>
+    <c:if test="${sessionScope.user!=null }">
     <div class="container mt-5">
         <h2>Chi tiết đơn hàng</h2>
-
+<form action="ReturnController" method="get" onsubmit="return handleFormSubmit()" enctype="multipart/form-data">
         <table class="table table-bordered table-hover">
             <thead class="thead-dark">
                 <tr>
@@ -103,8 +104,9 @@
                                 <td id="unitPrice_${product.productDetail.product.id}_${status.index}">${product.unitPrice}</td>
                                 <td>
                                     <button type="button" onclick="decreaseQuantity('${product.productDetail.product.id}_${status.index}')" class="btn btn-danger btn-sm">-</button>
-                                    <input type="number" id="quantity_${product.productDetail.product.id}_${status.index}" value="${product.quantity}" min="0" max="${product.quantity}" readonly style="width: 50px; text-align: center;">
+                                    <input name="orderDetailId_${product.id}" type="number" id="quantity_${product.productDetail.product.id}_${status.index}" value="${product.quantity}" min="0" max="${product.quantity}" readonly style="width: 50px; text-align: center;">
                                     <button type="button" onclick="updateQuantity('${product.productDetail.product.id}_${status.index}', ${product.quantity})" class="btn btn-success btn-sm">+</button>
+                                    
                                 </td>
                                 <td id="refundAmount_${product.productDetail.product.id}_${status.index}">${product.quantity * product.unitPrice}</td>
                             </tr>
@@ -126,7 +128,7 @@
         </table>
 
         <h4>Lý do hoàn hàng</h4>
-        <form action="ReturnController" method="get" onsubmit="return handleFormSubmit()" enctype="multipart/form-data">
+<!--        <form action="ReturnController" method="get" onsubmit="return handleFormSubmit()" enctype="multipart/form-data">-->
             <input type="hidden" name="service" value="returnDone">
             <input type="hidden" name="money" id="hiddenRefundAmount">
 
@@ -160,5 +162,9 @@
             return validateForm();
         }
     </script>
+    </c:if>
+        <c:if test="${sessionScope.sale!=null || sessionScope.admin!=null}">
+            <%@include file="notallowpage.jsp" %>
+        </c:if>
 </body>
 </html>

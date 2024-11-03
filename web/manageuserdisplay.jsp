@@ -18,7 +18,7 @@
     <link rel="stylesheet" href="assets/css/nice-select.css">
     <link rel="stylesheet" href="assets/css/main.css">
 
-    <%@include file="sidebar.jsp" %>
+    <%@include file="sidebar2.jsp" %>
     <style>
         .status-icon {
             font-size: 24px;
@@ -32,6 +32,7 @@
     </style>
 </head>
 <body>
+    <c:if test="${sessionScope.sale!=null}">
     <div class="col-md-10 content">
         <h2>Manage Users</h2>
 
@@ -137,5 +138,10 @@
             }
         </style>
     </div>
+            </c:if>
+        <c:if test="${sessionScope.admin!=null || sessionScope.user!=null || (sessionScope.user==null && 
+                      sessionScope.sale==null && sessionScope.admin==null)}">
+            <%@include file="notallowpage.jsp" %>
+        </c:if>
 </body>
 </html>

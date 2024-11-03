@@ -4,8 +4,9 @@
     Author     : ADMIN
 --%>
 
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@page contentType="text/html" pageEncoding="UTF-8"%>  
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -24,9 +25,9 @@
   <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-  
+  <%@include file="header.jsp" %>
   <!--================ Start Header Menu Area =================-->
-	<%@include file="header.jsp" %>
+
 	<!--================ End Header Menu Area =================-->
 
 
