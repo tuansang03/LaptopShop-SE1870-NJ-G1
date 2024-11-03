@@ -568,7 +568,7 @@
                                                 ${o.productDetail.configuration.name} (${o.productDetail.color.name}) x ${o.getQuantity()}</div></a>
                                     </div>
                                     <div style="padding-left: 1.7%;"> Unit price: &nbsp;<fmt:formatNumber value="${o.getUnitPrice()}" type="number"/>đ</div>
-                                    <div style="padding-left: 1.7%;"> Total price: &nbsp;<fmt:formatNumber value="${(o.getUnitPrice() * o.getQuantity())}" type="number"/>đ</div>
+                                    <div style="padding-left: 1.7%;"> Total price: &nbsp;<fmt:formatNumber value="${(o.getUnitPrice() * o.getQuantity())}" type="number"/>đ <a href="seefeedback?orderdetailid=${o.id}">Feedback</a></div>
                                 </c:forEach>
 
 
