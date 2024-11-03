@@ -61,7 +61,7 @@ public class GiveFeedback extends HttpServlet {
             throws ServletException, IOException {
         FeedbackDAOS dao = new FeedbackDAOS();
         String feedback = null;
-        int rating=-1;
+        int rating = -1;
         int uid = Integer.parseInt(request.getParameter("uid"));
         int odid = Integer.parseInt(request.getParameter("orderdetailid"));
         try {
@@ -69,18 +69,26 @@ public class GiveFeedback extends HttpServlet {
         } catch (Exception e) {
             String error = "";
         }
-        
+
         try {
             feedback = request.getParameter("feedback");
         } catch (Exception e) {
         }
-        dao.addFeedBack(uid, odid, rating, feedback);
-        Feedback myfeedback = dao.getFeedbackById(odid);
         OrderDetail orderdetail = dao.getOrderDetail(odid);
+        String message = null;
+        if (orderdetail.getOrder().getOrderStatus().compareToIgnoreCase("done") == 0) {
+            dao.addFeedBack(uid, odid, rating, feedback);
+            message="Feedback successfully!";
+        } else {
+            message = "Can not feedback when order is not done!";
+        }
+
+        Feedback myfeedback = dao.getFeedbackById(odid);
+
         request.setAttribute("orderdetail", orderdetail);
         request.setAttribute("myfeedback", myfeedback);
         request.setAttribute("odid", odid);
-        request.setAttribute("message", "Feedback successfully!");
+        request.setAttribute("message", message);
         request.getRequestDispatcher("feedback.jsp").forward(request, response);
 
     }

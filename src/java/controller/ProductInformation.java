@@ -102,11 +102,13 @@ public class ProductInformation extends HttpServlet {
         
         FeedbackDAOS fdao = new FeedbackDAOS();
         List<Feedback> feedbacklist = fdao.getFeedbackByProduct(id);
+        List<Integer> ratingcount = fdao.getRatingCount(id);
         int numsale = fdao.getSaleNumber(id);
         double rating = fdao.getRatingPoint(id);
         
         request.setAttribute("feedbacklist", feedbacklist);
         request.setAttribute("rating", rating);
+        request.setAttribute("ratingcount", ratingcount);
         request.setAttribute("number", feedbacklist.size());
         request.setAttribute("numsale", numsale);
         request.getRequestDispatcher("single-product.jsp").forward(request, response);

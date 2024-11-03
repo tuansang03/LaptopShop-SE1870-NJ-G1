@@ -263,37 +263,37 @@
                                 </c:forEach>
                             </div>
 
-                        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-                        <script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js"></script>
+                            <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+                            <script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js"></script>
 
-                        <script>
-                            $(document).ready(function () {
-                                // Initialize the main image carousel
-                                var mainCarousel = $('.s_Product_carousel').owlCarousel({
-                                    items: 1,
-                                    loop: true,
-                                    dots: false,
-                                    nav: true,
-                                    navText: ['<span>&lt;</span>', '<span>&gt;</span>'],
-                                    autoplay: false
-                                });
+                            <script>
+                                $(document).ready(function () {
+                                    // Initialize the main image carousel
+                                    var mainCarousel = $('.s_Product_carousel').owlCarousel({
+                                        items: 1,
+                                        loop: true,
+                                        dots: false,
+                                        nav: true,
+                                        navText: ['<span>&lt;</span>', '<span>&gt;</span>'],
+                                        autoplay: false
+                                    });
 
-                                // Initialize the thumbnail carousel
-                                var thumbnailCarousel = $('.thumbnail-carousel').owlCarousel({
-                                    items: 4,
-                                    margin: 10,
-                                    dots: false,
-                                    nav: true,
-                                    autoplay: false
-                                });
+                                    // Initialize the thumbnail carousel
+                                    var thumbnailCarousel = $('.thumbnail-carousel').owlCarousel({
+                                        items: 4,
+                                        margin: 10,
+                                        dots: false,
+                                        nav: true,
+                                        autoplay: false
+                                    });
 
-                                // Sync thumbnail click with the main carousel
-                                thumbnailCarousel.on('click', '.owl-item', function () {
-                                    var index = $(this).index(); // Get the index of the clicked thumbnail
-                                    mainCarousel.trigger('to.owl.carousel', index); // Move to the corresponding main image
+                                    // Sync thumbnail click with the main carousel
+                                    thumbnailCarousel.on('click', '.owl-item', function () {
+                                        var index = $(this).index(); // Get the index of the clicked thumbnail
+                                        mainCarousel.trigger('to.owl.carousel', index); // Move to the corresponding main image
+                                    });
                                 });
-                            });
-                        </script>
+                            </script>
 
                         </body>
 
@@ -340,13 +340,13 @@
                                 ${sale}
                             </h5>
                             <p>${detail.shortDescription}</p>
-                            
+
                             <div class="card_area d-flex align-items-center">
                                 <a class="button primary-btn" href="addtocart?pid=${detail.product.id}&&colorid=${detail.color.id}&&confid=${detail.configuration.id}">Add to Cart</a>
                                 <a class="icon_btn" href="addtowishlist?pid=${detail.id}&&uid=${user.id}"><i class="lnr lnr lnr-heart"></i></a>
                             </div>
 
-                            
+
 
 
                             <div class="card_area d-flex align-items-center">
@@ -400,136 +400,201 @@
                                         </tr>    
                                     </c:forEach>
 
-                                                    </tbody>
-                                                </table>
-                                            </div>
-                                        </div>
-                                        <div class="tab-pane fade" id="contact" role="tabpanel" aria-labelledby="contact-tab">
-                                            <div class="row">
-                                                <div class="col-lg-6">
-                                                    <div class="comment_list">
-                                                        <!-- Vòng lặp để duyệt qua danh sách bình luận -->
-                                                        <c:forEach items="${commentList}" var="comment">
-                                                            <!-- Kiểm tra nếu RepplyCommentId là NULL (bình luận chính) -->
-                                                            <c:if test="${comment.repplyCommentId == null}">
-                                                                <div class="review_item">
-                                                                    <div class="media">
-                                                                        <div class="media-body">
-                                                                            <!-- Tên người dùng -->
-                                                                            <h4>${comment.user.fullName} <c:if test="${comment.user.role.id == 2}">(Saler)</c:if></h4>
-                                                                            <!-- Ngày bình luận -->
-                                                                            <h5>
-                                                                                <fmt:formatDate value="${comment.commentDate}" pattern="dd/MM/yyyy HH:mm" />
-                                                                               
-                                                                            </h5>
-                                                                        </div>
-                                                                    </div>
-                                                                    <!-- Nội dung bình luận -->
-                                                                    <p>${comment.commentContent}</p>
-                                                                </div>
-
-                                                                <!-- Vòng lặp lồng kiểm tra các phản hồi cho bình luận chính này -->
-                                                                <div class="replies">
-                                                                    <c:forEach items="${commentList}" var="reply">
-                                                                        <!-- Kiểm tra nếu RepplyCommentId của bình luận này trùng với Id của bình luận chính -->
-                                                                        <c:if test="${reply.repplyCommentId == comment.id}">
-                                                                            <div class="review_item reply">
-                                                                                <div class="media">
-                                                                                    <div class="media-body">
-                                                                                        <!-- Hiển thị thêm nhãn "Reply" -->
-                                                                                        <h4>${reply.user.fullName}<c:if test="${reply.user.role.id == 2}">(Saler)</c:if> <span style="font-size: 12px; color: #007bff;">(Reply)</span></h4>
-                                                                                        <h5><fmt:formatDate value="${reply.commentDate}" pattern="dd/MM/yyyy HH:mm" /></h5>
-                                                                                    </div>
-                                                                                </div>
-                                                                                <p>${reply.commentContent}</p>
-                                                                            </div>
-                                                                        </c:if>
-                                                                    </c:forEach>
-                                                                </div>
-                                                                <hr><!-- Phân cách giữa các comment -->
-                                                            </c:if>
-                                                        </c:forEach>
-                                                    </div>
-
-
-
-
-                                                </div>
-
-                                                <div class="col-lg-6">
-                                                    <div class="review_box p-4 shadow-sm border rounded">
-                                                        <h4 class="mb-4">Post a Comment</h4>
-                                                        <form action="submitComment" method="post">
-                                                            <!-- Comment Content -->
-                                                            <div class="form-group mb-3">
-                                                                <label for="commentContent" class="form-label">Comment</label>
-                                                                <textarea class="form-control" id="commentContent" name="commentContent" rows="4" placeholder="Write your comment here..." required></textarea>
-                                                            </div>
-
-                                                            <!-- Submit Button -->
-                                                            <div class="text-end">
-                                                                <button type="submit" class="btn btn-primary">Submit</button>
-                                                            </div>
-                                                        </form>
-                                                    </div>
-                                                </div>
-
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                </div>
+                                </tbody>
+                            </table>
                         </div>
-                        </section>
-                        <!--================End Product Description Area =================-->
+                    </div>
+                    <div class="tab-pane fade" id="contact" role="tabpanel" aria-labelledby="contact-tab">
+                        <div class="row">
+                            <div class="col-lg-6">
+                                <div class="comment_list">
+                                    <!-- Vòng lặp để duyệt qua danh sách bình luận -->
+                                    <c:forEach items="${commentList}" var="comment">
+                                        <!-- Kiểm tra nếu RepplyCommentId là NULL (bình luận chính) -->
+                                        <c:if test="${comment.repplyCommentId == null}">
+                                            <div class="review_item">
+                                                <div class="media">
+                                                    <div class="media-body">
+                                                        <!-- Tên người dùng -->
+                                                        <h4>${comment.user.fullName} <c:if test="${comment.user.role.id == 2}">(Saler)</c:if></h4>
+                                                            <!-- Ngày bình luận -->
+                                                            <h5>
+                                                            <fmt:formatDate value="${comment.commentDate}" pattern="dd/MM/yyyy HH:mm" />
 
-        <!--================ Start related Product area =================-->  
-        <section class="related-product-area section-margin--small mt-0">
-            <div class="container">
-                <div class="section-intro pb-60px">
-                    <h2><span class="section-intro__style">Related Product</span></h2>
-                </div>
-                <div class="product-carousel-container">
-                    <!-- Nút mũi tên để trượt sang trái -->
-                    <button class="carousel-prev" onclick="scrollLeft()">❮</button>
-
-                                    <div class="product-carousel">
-                                        <c:forEach var="p" items="${listproduct}">
-                                            <a href="information?productId=${p.detail}" class="product-link">
-                                                <div class="product-item">
-                                                    <img src="${pageContext.request.contextPath}/images/${p.img}" alt="${p.name}">
-                                                    <div class="brand">${p.brand}</div>
-                                                    <h4>${p.name}</h4>
-                                                    <p>Giá: ${p.price}</p>
+                                                        </h5>
+                                                    </div>
                                                 </div>
-                                            </a>
-                                        </c:forEach>
-                                        <c:if test="${empty listproduct}">
-                                            <p>Không có sản phẩm nào để hiển thị.</p>
-                                        </c:if>
-                                    </div>
+                                                <!-- Nội dung bình luận -->
+                                                <p>${comment.commentContent}</p>
+                                            </div>
 
-                                    <!-- Nút mũi tên để trượt sang phải -->
-                                    <button class="carousel-next" onclick="scrollRight()">❯</button>
+                                            <!-- Vòng lặp lồng kiểm tra các phản hồi cho bình luận chính này -->
+                                            <div class="replies">
+                                                <c:forEach items="${commentList}" var="reply">
+                                                    <!-- Kiểm tra nếu RepplyCommentId của bình luận này trùng với Id của bình luận chính -->
+                                                    <c:if test="${reply.repplyCommentId == comment.id}">
+                                                        <div class="review_item reply">
+                                                            <div class="media">
+                                                                <div class="media-body">
+                                                                    <!-- Hiển thị thêm nhãn "Reply" -->
+                                                                    <h4>${reply.user.fullName}<c:if test="${reply.user.role.id == 2}">(Saler)</c:if> <span style="font-size: 12px; color: #007bff;">(Reply)</span></h4>
+                                                                    <h5><fmt:formatDate value="${reply.commentDate}" pattern="dd/MM/yyyy HH:mm" /></h5>
+                                                                </div>
+                                                            </div>
+                                                            <p>${reply.commentContent}</p>
+                                                        </div>
+                                                    </c:if>
+                                                </c:forEach>
+                                            </div>
+                                            <hr><!-- Phân cách giữa các comment -->
+                                        </c:if>
+                                    </c:forEach>
                                 </div>
+
+
+
 
                             </div>
-                        </section>
-                        <!--================ end related Product area =================-->  	
 
-                        <!--================ Start footer Area  =================-->	
-                        <%@include file="footer.jsp" %>
-                        <!--================ End footer Area  =================-->
+                            <div class="col-lg-6">
+                                <div class="review_box p-4 shadow-sm border rounded">
+                                    <h4 class="mb-4">Post a Comment</h4>
+                                    <form action="submitComment" method="post">
+                                        <!-- Comment Content -->
+                                        <div class="form-group mb-3">
+                                            <label for="commentContent" class="form-label">Comment</label>
+                                            <textarea class="form-control" id="commentContent" name="commentContent" rows="4" placeholder="Write your comment here..." required></textarea>
+                                        </div>
+
+                                        <!-- Submit Button -->
+                                        <div class="text-end">
+                                            <button type="submit" class="btn btn-primary">Submit</button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <div class="tab-pane fade" id="review" role="tabpanel" aria-labelledby="review-tab">
+                        <div class="row">
+                            <div class="col-lg-6">
+                                <div class="comment_list">
+                                    <!-- Vòng lặp để duyệt qua danh sách bình luận -->
+                                    <c:forEach items="${feedbacklist}" var="feedback">
+                                        <!-- Kiểm tra nếu RepplyCommentId là NULL (bình luận chính) -->
+                                        <c:if test="${feedback.getReplyFeedbackId() == 0}">
+                                            <div class="review_item">
+                                                <div class="media">
+                                                    <div class="media-body">
+                                                        <!-- Tên người dùng -->
+                                                        <h4>${feedback.getUser().getFullName()} ${feedback.getRating()}&#9733; </h4>
+                                                        <!-- Ngày bình luận -->
+                                                        <h5>
+                                                            <fmt:formatDate value="${feedback.getFeedbackDate()}" pattern="dd/MM/yyyy HH:mm" />
+
+                                                        </h5>
+                                                    </div>
+                                                </div>
+                                                <!-- Nội dung bình luận -->
+                                                <p>${feedback.getFeedbackContent()}</p>
+                                            </div>
+
+                                            <!-- Vòng lặp lồng kiểm tra các phản hồi cho bình luận chính này -->
+                                            <div class="replies">
+                                                <c:forEach items="${feedbacklist}" var="reply">
+                                                    <!-- Kiểm tra nếu RepplyCommentId của bình luận này trùng với Id của bình luận chính -->
+                                                    <c:if test="${reply.getReplyFeedbackId() == feedback.getId()}">
+                                                        <div class="review_item reply">
+                                                            <div class="media">
+                                                                <div class="media-body">
+                                                                    <!-- Hiển thị thêm nhãn "Reply" -->
+                                                                    <h4>${reply.getUser().getFullName()}<c:if test="${reply.getUser().getRole().getId() == 2}">(Saler)</c:if> <span style="font-size: 12px; color: #007bff;">(Reply)</span></h4>
+                                                                    <h5><fmt:formatDate value="${reply.commentDate}" pattern="dd/MM/yyyy HH:mm" /></h5>
+                                                                </div>
+                                                            </div>
+                                                            <p>${reply.getFeedbackContent()}</p>
+                                                        </div>
+                                                    </c:if>
+                                                </c:forEach>
+                                            </div>
+                                            <hr><!-- Phân cách giữa các comment -->
+                                        </c:if>
+                                    </c:forEach>
+                                </div>
+                            </div>
+
+                            <div class="col-lg-6">
+                                Rating: ${rating}<span style="color: gold;">&#9733;</span>
+                                <c:forEach var="i" begin="0" end="4">
+                                    <h4>
+                                        <c:forEach var="j" begin="0" end="4">
+                                            <span style="color: ${j < (5 - i) ? 'gold' : 'gray'};">&#9733;</span> 
+                                        </c:forEach>
+                                         ${5-i} Star (${ratingcount.get(i)} rated)
+                                    </h4>
+                                </c:forEach>
+
+                            </div>
+
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+    </section>
+    <!--================End Product Description Area =================-->
+
+    <!--================ Start related Product area =================-->  
+    <section class="related-product-area section-margin--small mt-0">
+        <div class="container">
+            <div class="section-intro pb-60px">
+                <h2><span class="section-intro__style">Related Product</span></h2>
+            </div>
+            <div class="product-carousel-container">
+                <!-- Nút mũi tên để trượt sang trái -->
+                <button class="carousel-prev" onclick="scrollLeft()">❮</button>
+
+                <div class="product-carousel">
+                    <c:forEach var="p" items="${listproduct}">
+                        <a href="information?productId=${p.detail}" class="product-link">
+                            <div class="product-item">
+                                <img src="${pageContext.request.contextPath}/images/${p.img}" alt="${p.name}">
+                                <div class="brand">${p.brand}</div>
+                                <h4>${p.name}</h4>
+                                <p>Giá: ${p.price}</p>
+                            </div>
+                        </a>
+                    </c:forEach>
+                    <c:if test="${empty listproduct}">
+                        <p>Không có sản phẩm nào để hiển thị.</p>
+                    </c:if>
+                </div>
+
+                <!-- Nút mũi tên để trượt sang phải -->
+                <button class="carousel-next" onclick="scrollRight()">❯</button>
+            </div>
+
+        </div>
+    </section>
+    <!--================ end related Product area =================-->  	
+
+    <!--================ Start footer Area  =================-->	
+    <%@include file="footer.jsp" %>
+    <!--================ End footer Area  =================-->
 
 
 
-                        <script src="vendors/jquery/jquery-3.2.1.min.js"></script>
-                        <script src="vendors/bootstrap/bootstrap.bundle.min.js"></script>
-                        <script src="vendors/skrollr.min.js"></script>
-                        <script src="vendors/owl-carousel/owl.carousel.min.js"></script>
-                        <script src="vendors/nice-select/jquery.nice-select.min.js"></script>
-                        <script src="vendors/jquery.ajaxchimp.min.js"></script>
-                        <script src="vendors/mail-script.js"></script>
-                        <script src="js/main.js"></script>
-                        </body>
-                        </html>
+    <script src="vendors/jquery/jquery-3.2.1.min.js"></script>
+    <script src="vendors/bootstrap/bootstrap.bundle.min.js"></script>
+    <script src="vendors/skrollr.min.js"></script>
+    <script src="vendors/owl-carousel/owl.carousel.min.js"></script>
+    <script src="vendors/nice-select/jquery.nice-select.min.js"></script>
+    <script src="vendors/jquery.ajaxchimp.min.js"></script>
+    <script src="vendors/mail-script.js"></script>
+    <script src="js/main.js"></script>
+</body>
+</html>

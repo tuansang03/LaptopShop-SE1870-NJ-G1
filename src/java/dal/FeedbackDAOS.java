@@ -154,7 +154,7 @@ public class FeedbackDAOS extends ProductDAO {
             try (ResultSet re = st.executeQuery()) {
                 if (re.next()) {
                     double r = re.getDouble("trungbinh");
-                    return r;
+                    return Math.round(r * 10.0) / 10.0;
                 }
             }
         } catch (SQLException e) {
@@ -180,9 +180,107 @@ public class FeedbackDAOS extends ProductDAO {
         return 0;
     }
 
+    public List<Integer> getRatingCount(int id) {
+        List<Integer> list = new ArrayList();
+        String sql = "SELECT COUNT(*) AS Count\n"
+                + "FROM Feedback f\n"
+                + "JOIN OrderDetail od ON od.Id = f.OrderDetailId\n"
+                + "JOIN ProductDetail pd ON pd.Id = od.ProductDetailId\n"
+                + "WHERE pd.Id IN (\n"
+                + "    SELECT Id \n"
+                + "    FROM ProductDetail \n"
+                + "    WHERE ProductId = (\n"
+                + "        SELECT ProductId \n"
+                + "        FROM ProductDetail \n"
+                + "        WHERE Id = ?\n"
+                + "    )\n"
+                + ") AND f.Rating = 5\n"
+                + "\n"
+                + "UNION ALL\n"
+                + "\n"
+                + "SELECT COUNT(*) AS Count\n"
+                + "FROM Feedback f\n"
+                + "JOIN OrderDetail od ON od.Id = f.OrderDetailId\n"
+                + "JOIN ProductDetail pd ON pd.Id = od.ProductDetailId\n"
+                + "WHERE pd.Id IN (\n"
+                + "    SELECT Id \n"
+                + "    FROM ProductDetail \n"
+                + "    WHERE ProductId = (\n"
+                + "        SELECT ProductId \n"
+                + "        FROM ProductDetail \n"
+                + "        WHERE Id = ?\n"
+                + "    )\n"
+                + ") AND f.Rating = 4\n"
+                + "\n"
+                + "UNION ALL\n"
+                + "\n"
+                + "SELECT COUNT(*) AS Count\n"
+                + "FROM Feedback f\n"
+                + "JOIN OrderDetail od ON od.Id = f.OrderDetailId\n"
+                + "JOIN ProductDetail pd ON pd.Id = od.ProductDetailId\n"
+                + "WHERE pd.Id IN (\n"
+                + "    SELECT Id \n"
+                + "    FROM ProductDetail \n"
+                + "    WHERE ProductId = (\n"
+                + "        SELECT ProductId \n"
+                + "        FROM ProductDetail \n"
+                + "        WHERE Id = ?\n"
+                + "    )\n"
+                + ") AND f.Rating = 3\n"
+                + "\n"
+                + "UNION ALL\n"
+                + "\n"
+                + "SELECT COUNT(*) AS Count\n"
+                + "FROM Feedback f\n"
+                + "JOIN OrderDetail od ON od.Id = f.OrderDetailId\n"
+                + "JOIN ProductDetail pd ON pd.Id = od.ProductDetailId\n"
+                + "WHERE pd.Id IN (\n"
+                + "    SELECT Id \n"
+                + "    FROM ProductDetail \n"
+                + "    WHERE ProductId = (\n"
+                + "        SELECT ProductId \n"
+                + "        FROM ProductDetail \n"
+                + "        WHERE Id = ?\n"
+                + "    )\n"
+                + ") AND f.Rating = 2\n"
+                + "\n"
+                + "UNION ALL\n"
+                + "\n"
+                + "SELECT COUNT(*) AS Count\n"
+                + "FROM Feedback f\n"
+                + "JOIN OrderDetail od ON od.Id = f.OrderDetailId\n"
+                + "JOIN ProductDetail pd ON pd.Id = od.ProductDetailId\n"
+                + "WHERE pd.Id IN (\n"
+                + "    SELECT Id \n"
+                + "    FROM ProductDetail \n"
+                + "    WHERE ProductId = (\n"
+                + "        SELECT ProductId \n"
+                + "        FROM ProductDetail \n"
+                + "        WHERE Id = ?\n"
+                + "    )\n"
+                + ") AND f.Rating = 1;";
+        try (PreparedStatement st = connection.prepareStatement(sql)) {
+            st.setInt(1, id);
+            st.setInt(2, id);
+            st.setInt(3, id);
+            st.setInt(4, id);
+            st.setInt(5, id);
+
+            try (ResultSet rs = st.executeQuery()) {
+                while (rs.next()) {
+                    int i = rs.getInt("Count");
+                    list.add(i);
+                }
+            }
+        } catch (SQLException e) {
+        }
+        return list;
+        
+    }
+
     public static void main(String[] args) {
         FeedbackDAOS dao = new FeedbackDAOS();
-        int i = dao.getSaleNumber(16);
-        System.out.println(i);
+        List<Feedback> list = dao.getFeedbackByProduct(13);
+        System.out.println(list.get(0).getRating());
     }
 }

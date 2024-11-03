@@ -64,10 +64,15 @@ public class SeeFeedback extends HttpServlet {
         Feedback myfeedback = dao.getFeedbackById(odid);
         OrderDetail orderdetail = dao.getOrderDetail(odid);
         Image productimage = dao.getImageByProductDetailId(orderdetail.getProductDetail().getId());
+        String message=null;
+        if (orderdetail.getOrder().getOrderStatus().compareToIgnoreCase("done") != 0){
+            message="You cannot give feedback when the order has not been delivered successfully!";
+        }
         
         request.setAttribute("orderdetail", orderdetail);
         request.setAttribute("myfeedback", myfeedback);
         request.setAttribute("productimage", productimage);
+        request.setAttribute("message", message);
         request.getRequestDispatcher("feedback.jsp").forward(request, response);
     }
 
