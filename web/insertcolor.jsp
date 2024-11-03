@@ -5,9 +5,8 @@
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>ADMIN System</title>
+        <title>Add Post</title>
         <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
-        <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet">
         <link rel="shortcut icon" href="assets/img/logo/favicon.svg">
         <link rel="stylesheet" href="assets/css/bootstrap.min.css">
         <link rel="stylesheet" href="assets/css/font-awesome.css">
@@ -17,54 +16,65 @@
         <link rel="stylesheet" href="assets/css/swiper-bundle.min.css">
         <link rel="stylesheet" href="assets/css/nice-select.css">
         <link rel="stylesheet" href="assets/css/main.css">
-<c:if test="${sessionScope.sale!=null}">
-        <%@include file="sidebar2.jsp" %>
+    </head>
+    <body>
+        
+        <%@include file="sidebar.jsp" %>
 
 
-    <div class="col-md-10 content">
-        <h2>Quản Lý Sản Phẩm</h2>
-        <table>
-            <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>Hình Ảnh</th>
-                    <th>Tên</th>
-                    <th>Mô Tả</th>
-                    <th>Giá</th>
-                    <th>Tồn Kho</th>
-                    <th>Danh Mục</th>
-                    <th>Hành Động</th>
-                </tr>
-            </thead>
+        <div class="col-md-10 content">
+            <h2>Add New Color</h2>
+            <form action="ColorController" method="get">
+                <table class="table table-bordered" style="width: 80%;">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>
+                                <input type="text" name="color" placeholder="Enter new Color" required class="form-control" maxlength="50">
 
-            <tbody>
-                
-            </tbody>
-        </table>
-        <div>
+                                
+                            </td>
 
 
 
-            <div class="list-page">
-                <div class="item">
-                    <c:if test="${tag > 1}">
-                        <a href="manageProduct?index=${tag - 1}"><i class="fa fa-long-arrow-left"></i><-</a>
-                    </c:if>
-                    <c:forEach begin="1" end="${endPage}" var="i">
-                        <a class="${tag == i ? 'active' : ''}" href="manageProduct?index=${i}">${i}</a>
-                    </c:forEach>
-                    <c:if test="${tag < endPage}">
-                        <a href="manageProduct?index=${tag + 1}"><i class="fa fa-long-arrow-right">-></i></a>
-                    </c:if>
-                </div>
-            </div>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <!-- Input ẩn để gửi thêm biến service với giá trị addBrand -->
+                <input type="hidden" name="service" value="addColor">
+
+                <button type="submit" class="btn btn-primary">Add </button>
+
+                <c:if test="${not empty mess}">
+                    <span class="text-success">${mess}</span>
+                </c:if>
+            </form>
 
         </div>
+        <script src='./tinymce/tinymce.min.js'></script>
+        <script src='./js/tinyMceConfig.js'></script>
+
         <style>
             .list-page {
                 display: flex;
                 justify-content: center;
                 margin-top: 20px;
+            }
+            .select{
+                width: 100%;
+                display: flex;
+                justify-content: center;
+                gap: 3%;
+                margin-top: 1%;
+            }
+            .select select{
+                width: 48.3%;
+                padding: 0.5%;
             }
 
             .list-page .item {
@@ -90,13 +100,8 @@
             .list-page .item a:hover {
                 background-color: #f0f0f0;
             }
-
         </style>
-    </div>
-</c:if>
-        <c:if test="${sessionScope.admin!=null || sessionScope.user!=null || (sessionScope.user==null && 
-                      sessionScope.sale==null && sessionScope.admin==null)}">
-            <%@include file="notallowpage.jsp" %>
-        </c:if>
-</body>
+      
+    
+    </body>
 </html>
