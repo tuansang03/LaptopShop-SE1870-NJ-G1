@@ -5,6 +5,7 @@
 
 package controller;
 
+import dal.ImageDAO;
 import dal.ProductDAO;
 import dal.ProductDetailDAO;
 import java.io.IOException;
@@ -13,7 +14,9 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import java.io.File;
 import java.util.ArrayList;
+import model.Image;
 import model.ProductDetail;
 
 /**
@@ -57,24 +60,48 @@ public class deleteProduct extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
-        String productId= request.getParameter("id");
-        int productId1=0;
-        
-      
-        try{
-            productId1=Integer.parseInt(productId);
-        }catch(NumberFormatException e){
-            
+      String productId = request.getParameter("id");
+int productId1 = 0;
+
+try {
+    productId1 = Integer.parseInt(productId);
+} catch (NumberFormatException e) {
+    // Xử lý lỗi nếu cần
+}
+
+ProductDetailDAO dao = new ProductDetailDAO();
+ArrayList<ProductDetail> pDList = dao.getAllProductDetailById(productId1);
+
+// Khởi tạo ImageDAO để lấy danh sách ảnh
+ImageDAO imageDAO = new ImageDAO();
+
+for (ProductDetail productDetail : pDList) {
+    // Lấy danh sách ảnh của productDetail
+    ArrayList<Image> images = imageDAO.getAllImageByPDId(productDetail.getId());
+
+    // Xóa file ảnh vật lý
+    for (Image image : images) {
+        String imagePath = getServletContext().getRealPath("/images/" + image.getImage()); // Đường dẫn tới ảnh
+        File file = new File(imagePath);
+        if (file.exists()) {
+            if (file.delete()) {
+                System.out.println("Deleted file: " + imagePath);
+            } else {
+                System.out.println("Failed to delete file: " + imagePath);
+            }
         }
-        ProductDetailDAO dao = new ProductDetailDAO();
-          ArrayList<ProductDetail> pDList = dao.getAllProductDetailById(productId1);
-          
-          for (ProductDetail productDetail : pDList) {
-            dao.deletePDById(productDetail.getId());
-        }
-          ProductDAO pDao = new ProductDAO();
-          pDao.deleteById(productId1);
-          response.sendRedirect("readProduct");
+    }
+    
+    // Xóa ProductDetail khỏi cơ sở dữ liệu
+    dao.deletePDById(productDetail.getId());
+}
+
+// Sau khi đã xóa tất cả ProductDetail, xóa sản phẩm
+ProductDAO pDao = new ProductDAO();
+pDao.deleteById(productId1);
+
+// Chuyển hướng đến trang sản phẩm
+response.sendRedirect("readProduct");
     } 
 
     /** 

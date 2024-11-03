@@ -241,7 +241,113 @@
                                     font-weight: bold;
                                 }
 
+                                /* Phần nền mờ cho overlay */
+                                /* Nền mờ cho overlay */
+                                #overlay {
+                                    display: none; /* Ẩn mặc định */
+                                    position: fixed;
+                                    top: 0;
+                                    left: 0;
+                                    width: 100%;
+                                    height: 100%;
+                                    background-color: rgba(0, 0, 0, 0.6); /* Màu nền mờ */
+                                    z-index: 1000;
+                                    overflow-y: auto; /* Cho phép cuộn khi nội dung dài */
+                                }
+
+                                /* Nội dung popup */
+                                .popup_content {
+                                    background-color: #fff;
+                                    margin: 5% auto;
+                                    padding: 20px;
+                                    border-radius: 10px;
+                                    width: 70%;
+                                    box-shadow: 0px 4px 16px rgba(0, 0, 0, 0.3);
+                                    z-index: 1001;
+                                    margin-top: 100px;
+                                }
+
+                                /* Nút đóng */
+                                .close_btn {
+                                    float: right;
+                                    font-size: 24px;
+                                    font-weight: bold;
+                                    cursor: pointer;
+                                }
+
+                                .close_btn:hover {
+                                    color: red;
+                                }
+
+                                /* Căn chỉnh các bình luận */
+                                .comment_list {
+                                    max-height: 500px;
+                                    overflow-y: auto; /* Cuộn cho danh sách bình luận nếu quá dài */
+                                    padding: 10px;
+                                }
+
+                                /* Giao diện mỗi bình luận */
+                                .review_item {
+                                    background-color: #f9f9f9;
+                                    padding: 15px;
+                                    margin-bottom: 10px;
+                                    border-radius: 8px;
+                                    box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.1);
+                                }
+
+                                .review_item h4 {
+                                    margin: 0;
+                                    font-size: 16px;
+                                    color: #333;
+                                }
+
+                                .review_item h5 {
+                                    margin: 5px 0;
+                                    font-size: 14px;
+                                    color: #999;
+                                }
+
+                                .review_item p {
+                                    font-size: 14px;
+                                    color: #555;
+                                }
+
+                                /* Giao diện cho phản hồi */
+                                .review_item.reply {
+                                    background-color: #eef1f7;
+                                    margin-left: 20px;
+                                    padding-left: 20px;
+                                    border-left: 2px solid #007bff;
+                                }
+
+                                .reply h4 {
+                                    font-size: 15px;
+                                    color: #007bff;
+                                }
+
+                                .reply span {
+                                    font-size: 12px;
+                                    color: #555;
+                                }
+
+                                /* Nút Show All */
+                                #showAllBtn {
+                                    background-color: #007bff;
+                                    color: white;
+                                    padding: 10px 20px;
+                                    border: none;
+                                    border-radius: 5px;
+                                    cursor: pointer;
+                                    font-size: 14px;
+                                }
+
+                                #showAllBtn:hover {
+                                    background-color: #0056b3;
+                                }
+
+
                             </style>
+
                         </head>
 
 
@@ -265,7 +371,20 @@
 
                             <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
                             <script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js"></script>
+                            <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+                            <script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js"></script>
 
+                            <script>
+                                $(document).ready(function () {
+                                    // Initialize the main image carousel
+                                    var mainCarousel = $('.s_Product_carousel').owlCarousel({
+                                        items: 1,
+                                        loop: true,
+                                        dots: false,
+                                        nav: true,
+                                        navText: ['<span>&lt;</span>', '<span>&gt;</span>'],
+                                        autoplay: false
+                                    });
                             <script>
                                 $(document).ready(function () {
                                     // Initialize the main image carousel
@@ -286,7 +405,22 @@
                                         nav: true,
                                         autoplay: false
                                     });
+                                    // Initialize the thumbnail carousel
+                                    var thumbnailCarousel = $('.thumbnail-carousel').owlCarousel({
+                                        items: 4,
+                                        margin: 10,
+                                        dots: false,
+                                        nav: true,
+                                        autoplay: false
+                                    });
 
+                                    // Sync thumbnail click with the main carousel
+                                    thumbnailCarousel.on('click', '.owl-item', function () {
+                                        var index = $(this).index(); // Get the index of the clicked thumbnail
+                                        mainCarousel.trigger('to.owl.carousel', index); // Move to the corresponding main image
+                                    });
+                                });
+                            </script>
                                     // Sync thumbnail click with the main carousel
                                     thumbnailCarousel.on('click', '.owl-item', function () {
                                         var index = $(this).index(); // Get the index of the clicked thumbnail
@@ -345,6 +479,7 @@
                                 <a class="button primary-btn" href="addtocart?pid=${detail.product.id}&&colorid=${detail.color.id}&&confid=${detail.configuration.id}">Add to Cart</a>
                                 <a class="icon_btn" href="addtowishlist?pid=${detail.id}&&uid=${user.id}"><i class="lnr lnr lnr-heart"></i></a>
                             </div>
+
 
 
 
@@ -455,6 +590,7 @@
 
 
                             </div>
+                            </div>
 
                             <div class="col-lg-6">
                                 <div class="review_box p-4 shadow-sm border rounded">
@@ -465,7 +601,23 @@
                                             <label for="commentContent" class="form-label">Comment</label>
                                             <textarea class="form-control" id="commentContent" name="commentContent" rows="4" placeholder="Write your comment here..." required></textarea>
                                         </div>
+                            <div class="col-lg-6">
+                                <div class="review_box p-4 shadow-sm border rounded">
+                                    <h4 class="mb-4">Post a Comment</h4>
+                                    <form action="submitComment" method="post">
+                                        <!-- Comment Content -->
+                                        <div class="form-group mb-3">
+                                            <label for="commentContent" class="form-label">Comment</label>
+                                            <textarea class="form-control" id="commentContent" name="commentContent" rows="4" placeholder="Write your comment here..." required></textarea>
+                                        </div>
 
+                                        <!-- Submit Button -->
+                                        <div class="text-end">
+                                            <button type="submit" class="btn btn-primary">Submit</button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
                                         <!-- Submit Button -->
                                         <div class="text-end">
                                             <button type="submit" class="btn btn-primary">Submit</button>
@@ -557,7 +709,31 @@
             <div class="product-carousel-container">
                 <!-- Nút mũi tên để trượt sang trái -->
                 <button class="carousel-prev" onclick="scrollLeft()">❮</button>
+    <!--================ Start related Product area =================-->  
+    <section class="related-product-area section-margin--small mt-0">
+        <div class="container">
+            <div class="section-intro pb-60px">
+                <h2><span class="section-intro__style">Related Product</span></h2>
+            </div>
+            <div class="product-carousel-container">
+                <!-- Nút mũi tên để trượt sang trái -->
+                <button class="carousel-prev" onclick="scrollLeft()">❮</button>
 
+                <div class="product-carousel">
+                    <c:forEach var="p" items="${listproduct}">
+                        <a href="information?productId=${p.detail}" class="product-link">
+                            <div class="product-item">
+                                <img src="${pageContext.request.contextPath}/images/${p.img}" alt="${p.name}">
+                                <div class="brand">${p.brand}</div>
+                                <h4>${p.name}</h4>
+                                <p>Giá: ${p.price}</p>
+                            </div>
+                        </a>
+                    </c:forEach>
+                    <c:if test="${empty listproduct}">
+                        <p>Không có sản phẩm nào để hiển thị.</p>
+                    </c:if>
+                </div>
                 <div class="product-carousel">
                     <c:forEach var="p" items="${listproduct}">
                         <a href="information?productId=${p.detail}" class="product-link">
@@ -577,6 +753,9 @@
                 <!-- Nút mũi tên để trượt sang phải -->
                 <button class="carousel-next" onclick="scrollRight()">❯</button>
             </div>
+                <!-- Nút mũi tên để trượt sang phải -->
+                <button class="carousel-next" onclick="scrollRight()">❯</button>
+            </div>
 
         </div>
     </section>
@@ -585,9 +764,22 @@
     <!--================ Start footer Area  =================-->	
     <%@include file="footer.jsp" %>
     <!--================ End footer Area  =================-->
+    <!--================ Start footer Area  =================-->	
+    <%@include file="footer.jsp" %>
+    <!--================ End footer Area  =================-->
 
 
 
+    <script src="vendors/jquery/jquery-3.2.1.min.js"></script>
+    <script src="vendors/bootstrap/bootstrap.bundle.min.js"></script>
+    <script src="vendors/skrollr.min.js"></script>
+    <script src="vendors/owl-carousel/owl.carousel.min.js"></script>
+    <script src="vendors/nice-select/jquery.nice-select.min.js"></script>
+    <script src="vendors/jquery.ajaxchimp.min.js"></script>
+    <script src="vendors/mail-script.js"></script>
+    <script src="js/main.js"></script>
+</body>
+</html>
     <script src="vendors/jquery/jquery-3.2.1.min.js"></script>
     <script src="vendors/bootstrap/bootstrap.bundle.min.js"></script>
     <script src="vendors/skrollr.min.js"></script>

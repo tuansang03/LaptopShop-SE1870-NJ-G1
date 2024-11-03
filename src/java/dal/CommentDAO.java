@@ -40,10 +40,11 @@ public class CommentDAO extends DBContext {
     public ArrayList<Comment> getCommentByProductId(int productId) {
         ArrayList<Comment> cList = new ArrayList<>();
         String sql = "select * from Comment c\n"
-                + "               \n"
-                + "				join [User] u on c.UserId = u.Id \n"
-                + "				join [Product] p on p.Id = c.ProductId\n"
-                + "				where ProductId = ?";
+                + "                              \n"
+                + "                			join [User] u on c.UserId = u.Id \n"
+                + "               			    join [Product] p on p.Id = c.ProductId\n"
+                + "                				where ProductId = ?\n"
+                + "								order by CommentDate desc";
         try {
             PreparedStatement pre = connection.prepareStatement(sql);
             pre.setInt(1, productId);
@@ -77,11 +78,11 @@ public class CommentDAO extends DBContext {
 
     public ArrayList<Comment> readAllComment() {
         ArrayList<Comment> cList = new ArrayList<>();
-        String sql = "SELECT *\n"
-                + "FROM Comment c\n"
-                + "JOIN [User] u ON c.UserId = u.Id \n"
-                + "JOIN [Product] p ON c.ProductId = p.Id \n"
-                + "ORDER BY p.Id;";
+        String sql = "SELECT *\n" +
+"                FROM Comment c\n" +
+"                JOIN [User] u ON c.UserId = u.Id \n" +
+"                JOIN [Product] p ON c.ProductId = p.Id \n" +
+"                ORDER BY p.Id,c.CommentDate desc;";
         try {
             PreparedStatement pre = connection.prepareStatement(sql);
             ResultSet rs = pre.executeQuery();

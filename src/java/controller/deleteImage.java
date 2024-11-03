@@ -13,6 +13,7 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -63,43 +64,66 @@ public class deleteImage extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-       String imageId = request.getParameter("imageId");
+      String imageId = request.getParameter("imageId");
 
 try {
     // Chuyển đổi imageId từ String sang int
     int imageIdInt = Integer.parseInt(imageId);
 
-    // Gọi DAO để xóa ảnh theo imageId
+    // Gọi DAO để lấy thông tin ảnh trước khi xóa
     ImageDAO imageDAO = new ImageDAO();
-    boolean isDeleted = imageDAO.deleteImageById(imageIdInt);
+    Image image = imageDAO.getImageById(imageIdInt); // Giả sử bạn có phương thức này
 
-    if (isDeleted) {
-        // Lấy session hiện tại
-        HttpSession session = request.getSession();
+    if (image != null) {
+        // Lấy đường dẫn file ảnh từ đối tượng Image
+        String imagePath = getServletContext().getRealPath("/images/"+ image.getImage()); // Giả sử thuộc tính này chứa đường dẫn file ảnh
 
-        // Lấy productId từ session
-        int productId = (int) session.getAttribute("updateProductId");
-
-        // Lấy danh sách ProductDetail hiện tại
-        ProductDetailDAO pD = new ProductDetailDAO();
-        ArrayList<ProductDetail> pDList = pD.getAllProductDetailById(productId); // Giả sử bạn có phương thức này
-
-        // Cập nhật danh sách ảnh cho từng ProductDetail
-        Map<Integer, ArrayList<Image>> imgListMap = new HashMap<>();
-        for (ProductDetail productDetail : pDList) {
-            ArrayList<Image> images = imageDAO.getAllImageByPDId(productDetail.getId());
-            imgListMap.put(productDetail.getId(), images); // Cập nhật danh sách ảnh
+        // Xóa file vật lý khỏi server
+        File file = new File(imagePath);
+        if (file.exists()) {
+            if (file.delete()) {
+                System.out.println("File deleted successfully: " + imagePath);
+            } else {
+                System.out.println("Failed to delete file: " + imagePath);
+            }
+        } else {
+            System.out.println("File does not exist: " + imagePath);
         }
 
-        // Cập nhật lại vào session
-        session.setAttribute("imgListMap", imgListMap);
-        session.setAttribute("pDList", pDList);
+        // Xóa ảnh khỏi database
+        boolean isDeleted = imageDAO.deleteImageById(imageIdInt);
 
-        // Chuyển hướng lại trang chi tiết sản phẩm
-        response.sendRedirect("viewDetail.jsp");
+        if (isDeleted) {
+            // Lấy session hiện tại
+            HttpSession session = request.getSession();
+
+            // Lấy productId từ session
+            int productId = (int) session.getAttribute("updateProductId");
+
+            // Lấy danh sách ProductDetail hiện tại
+            ProductDetailDAO pD = new ProductDetailDAO();
+            ArrayList<ProductDetail> pDList = pD.getAllProductDetailById(productId); // Giả sử bạn có phương thức này
+
+            // Cập nhật danh sách ảnh cho từng ProductDetail
+            Map<Integer, ArrayList<Image>> imgListMap = new HashMap<>();
+            for (ProductDetail productDetail : pDList) {
+                ArrayList<Image> images = imageDAO.getAllImageByPDId(productDetail.getId());
+                imgListMap.put(productDetail.getId(), images); // Cập nhật danh sách ảnh
+            }
+
+            // Cập nhật lại vào session
+            session.setAttribute("imgListMap", imgListMap);
+            session.setAttribute("pDList", pDList);
+
+            // Chuyển hướng lại trang chi tiết sản phẩm
+            response.sendRedirect("viewDetail.jsp");
+        } else {
+            // Xử lý khi không xóa thành công, có thể gửi thông báo lỗi
+            request.setAttribute("errorMessage", "Failed to delete the image.");
+            request.getRequestDispatcher("viewDetail.jsp").forward(request, response);
+        }
     } else {
-        // Xử lý khi không xóa thành công, có thể gửi thông báo lỗi
-        request.setAttribute("errorMessage", "Failed to delete the image.");
+        request.setAttribute("errorMessage", "Image not found.");
         request.getRequestDispatcher("viewDetail.jsp").forward(request, response);
     }
 } catch (NumberFormatException e) {
@@ -111,10 +135,6 @@ try {
     request.setAttribute("errorMessage", "An error occurred while deleting the image.");
     request.getRequestDispatcher("viewDetail.jsp").forward(request, response);
 }
-
-        
-
-    
 
     }
 
