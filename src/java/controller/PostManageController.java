@@ -120,7 +120,7 @@ public class PostManageController extends HttpServlet {
             UserDAO dao = new UserDAO();
             List<Post> postList = dao.getAllPostListD();
             HttpSession session = request.getSession();
-            User userSession = (User) (session.getAttribute("user"));
+            User userSession = (User) (session.getAttribute("sale"));
             int id = postList.size() + 1;
             int userId = userSession.getId();
             User user = dao.getUserByIdD(userId);

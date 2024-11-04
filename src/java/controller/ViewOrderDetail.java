@@ -5,6 +5,8 @@
 
 package controller;
 
+import dal.CartDAOS;
+import dal.ImageDAOS;
 import dal.OderDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -13,7 +15,11 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import java.util.ArrayList;
 import java.util.List;
+import model.CartItem;
+import model.Image;
+import model.Order;
 import model.OrderDetail;
 
 /**
@@ -39,6 +45,17 @@ public class ViewOrderDetail extends HttpServlet {
         OderDAO oDAO = new OderDAO();
         List<OrderDetail> listOrderDetail = oDAO.getAllOrdetailByID(id);
         
+      
+        ImageDAOS iDAO = new ImageDAOS();
+        List<Image> listImages = new ArrayList<>();
+
+        for (int i = 0; i < listOrderDetail.size(); i++) {
+            int productDetailId = listOrderDetail.get(i).getProductDetail().getId();
+            Image image = iDAO.getOneImageByProductDetailID(productDetailId);
+            listImages.add(image); // Thêm hình ảnh vào danh sách
+        }
+        
+        request.setAttribute("listImages", listImages);
         request.setAttribute("listOrderDetail", listOrderDetail);
         request.getRequestDispatcher("vieworderdetail.jsp").forward(request, response);
     } 

@@ -60,7 +60,7 @@ public class login extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-Cookie arr[] = request.getCookies();
+        Cookie arr[] = request.getCookies();
         if (arr != null) {
             for (Cookie cookie : arr) {
                 if (cookie.getName().equals("userC")) {
@@ -70,7 +70,7 @@ Cookie arr[] = request.getCookies();
                 if (cookie.getName().equals("passC")) {
                     request.setAttribute("passC", cookie.getValue());
                 }
-            }   
+            }
 
         }
         request.getRequestDispatcher("login.jsp").forward(request, response);
@@ -94,7 +94,7 @@ Cookie arr[] = request.getCookies();
         String hashedPassword = hashPassword(password);
         User u = dao.UserLogin(username, hashedPassword);
         HttpSession session = request.getSession();
-         session.setMaxInactiveInterval(30 * 60); // 30 phút = 1800 giây
+        session.setMaxInactiveInterval(30 * 60); // 30 phút = 1800 giây
         if ("true".equals(remember)) {
             Cookie uC = new Cookie("userC", username);
             Cookie p = new Cookie("passC", password);
@@ -104,7 +104,7 @@ Cookie arr[] = request.getCookies();
             response.addCookie(p);
         }
         if (u != null) {
-            if(u.getStatus().equalsIgnoreCase("ban")){
+            if (u.getStatus().equalsIgnoreCase("ban")) {
                 session.setAttribute("ban", u);
                 response.sendRedirect("ban.jsp");
                 return;
@@ -114,12 +114,13 @@ Cookie arr[] = request.getCookies();
                 response.sendRedirect("home");
             } else if (u.getRole().getId() == 2) {
                 session.setAttribute("sale", u);
+                response.sendRedirect("SaleStatisticController2?service=listall");
             } else if (u.getRole().getId() == 1) {
                 session.setAttribute("admin", u);
-                response.sendRedirect("admindashboard.jsp");
+                response.sendRedirect("readProduct");
             }
-            
-        }else{
+
+        } else {
             request.setAttribute("error", "Incorrect username or password");
             request.getRequestDispatcher("login.jsp").forward(request, response);
         }

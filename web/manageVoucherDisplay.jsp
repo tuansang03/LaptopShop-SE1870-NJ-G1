@@ -1,5 +1,6 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -19,6 +20,7 @@
         <link rel="stylesheet" href="assets/css/main.css">
     </head>
     <body>
+        <c:if test="${sessionScope.admin!=null}">
         <%@include file="sidebar.jsp" %>
 
         <div class="col-md-10 content">
@@ -67,6 +69,7 @@
                         <th>Name</th>
                         <th>DiscountPercent</th>
                         <th>Quantity</th>
+                        <th>UsedQuantity</th>
                         <th>StartDate</th>
                         <th>EndDate</th>
                         <th>MinValue</th>
@@ -83,9 +86,10 @@
                             <td>${v.getName()}</td>
                             <td>${v.getDiscountPercent()}</td>
                             <td>${v.getQuantity()}</td>
+                            <td>${v.getUsedQuantity()}</td>
                             <td>${v.getStartDate()}</td>
                             <td>${v.getEndDate()}</td>
-                            <td>${v.getMinValue()}</td>
+                            <td><fmt:formatNumber value="${v.minValue}" /></td>
                             <c:if test="${v.getStatus() == 1}">
                                 <td><span class="text-success status-icon"">&#10003;</span></span></td>
                             </c:if>
@@ -111,5 +115,10 @@
                 </tbody>
             </table>
         </div>
+                    </c:if>
+        <c:if test="${sessionScope.sale!=null || sessionScope.user!=null || (sessionScope.user==null && 
+                      sessionScope.sale==null && sessionScope.admin==null)}">
+            <%@include file="notallowpage.jsp" %>
+        </c:if>
     </body>
 </html>

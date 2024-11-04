@@ -33,8 +33,7 @@ public class ChangeStatusOrder extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        response.setContentType("text/html;charset=UTF-8");
-
+        
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
@@ -49,14 +48,18 @@ public class ChangeStatusOrder extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        String opPaymentStatus = request.getParameter("opPaymentStatus");
         String oid_raw = request.getParameter("oid");
-        int oid = Integer.parseInt(oid_raw);
-
+        String action = request.getParameter("action");
         OderDAO oDAO = new OderDAO();
-
-        oDAO.changePaymentStatus(opPaymentStatus, oid);
-        response.sendRedirect("managerOrder");
+        int oid = Integer.parseInt(oid_raw);
+        if (action.equals("accepted")) {
+            oDAO.changeOrderStatus(action, oid);
+        }else if(action.equals("rejected")){
+            oDAO.changeOrderStatus(action, oid);
+        }
+        action = "wait";
+        request.setAttribute("action", action);
+        response.sendRedirect("selectOrderbyStatus?action=" + action);
     }
 
     /**
@@ -70,27 +73,17 @@ public class ChangeStatusOrder extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        String opOrderStatus = request.getParameter("opOrderStatus");
         String oid_raw = request.getParameter("oid");
-        int oid = Integer.parseInt(oid_raw);
-
+        String action = request.getParameter("action");
         OderDAO oDAO = new OderDAO();
-
-        Order order = oDAO.getOrderByID(oid);
-
-        if (order.getPaymentMethod().equals("Payment")
-                && (order.getPaymentStatus().equals("fail")
-                || order.getPaymentStatus().equals("pending"))) {
-            
-            request.setAttribute("error", "The failed or pending payment status cannot be changed to Accepted or Done");
-            request.getRequestDispatcher("managerOrder").forward(request, response);
-            return;
+        int oid = Integer.parseInt(oid_raw);
+        if (action.equals("intransit")) {
+            oDAO.changeOrderStatus(action, oid);
         }
-
-        oDAO.changeOrderStatus(opOrderStatus, oid);
-
-        request.setAttribute("oid", oid);
-        request.getRequestDispatcher("managerOrder").forward(request, response);
+        
+        action = "accepted";
+        request.setAttribute("action", action);
+        response.sendRedirect("selectOrderbyStatus?action=" + action);
     }
 
     /**
