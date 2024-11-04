@@ -173,6 +173,24 @@ public class UserManageController extends HttpServlet {
             request.setAttribute("listStaff", listUser);
             request.getRequestDispatcher("managestaffdisplay.jsp").forward(request, response);
         }
+        
+        if (service.equalsIgnoreCase("addStaff")){
+            response.sendRedirect("addstaff.jsp");
+        }
+        
+        if(service.equalsIgnoreCase("addStaff2")){
+            String userName = request.getParameter("userName");
+            UserDAO userDao = new UserDAO();
+            boolean check = userDao.changeUserRoleId(userName,2);
+            if(check == true){
+                request.setAttribute("mess", "Add Staff successfull!");
+                request.getRequestDispatcher("addstaff.jsp").forward(request, response);
+            }
+            else{
+                request.setAttribute("mess", "User Name not found!");
+                request.getRequestDispatcher("addstaff.jsp").forward(request, response);
+            }
+        }
 
     }
 
