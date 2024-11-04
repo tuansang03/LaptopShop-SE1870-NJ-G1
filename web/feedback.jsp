@@ -183,61 +183,63 @@
                     </c:if>
 
                     <c:if test="${orderdetail.getOrder().getOrderStatus() == 'done'}">
-                    
-                    
-                    <div class="feedback-card"> <!-- Feedback card starts here -->
-                        <c:if test="${!empty myfeedback}">
-                            <div class="star-rating">
-                                <input type="radio" id="star5" name="rating" value="5" disabled />
-                                <label for="star5">&#9733;</label>
-                                <input type="radio" id="star4" name="rating" value="4" disabled />
-                                <label for="star4">&#9733;</label>
-                                <input type="radio" id="star3" name="rating" value="3" disabled />
-                                <label for="star3">&#9733;</label>
-                                <input type="radio" id="star2" name="rating" value="2" disabled />
-                                <label for="star2">&#9733;</label>
-                                <input type="radio" id="star1" name="rating" value="1" disabled />
-                                <label for="star1">&#9733;</label>
-                                Rating:
-                            </div>
-                            Feedback date: ${myfeedback.getFeedbackDate()}<br>
 
-                            <script>
+
+                        <div class="feedback-card"> <!-- Feedback card starts here -->
+                            <c:if test="${!empty myfeedback}">
+                                <div class="star-rating">
+                                    <input type="radio" id="star5" name="rating" value="5" disabled />
+                                    <label for="star5">&#9733;</label>
+                                    <input type="radio" id="star4" name="rating" value="4" disabled />
+                                    <label for="star4">&#9733;</label>
+                                    <input type="radio" id="star3" name="rating" value="3" disabled />
+                                    <label for="star3">&#9733;</label>
+                                    <input type="radio" id="star2" name="rating" value="2" disabled />
+                                    <label for="star2">&#9733;</label>
+                                    <input type="radio" id="star1" name="rating" value="1" disabled />
+                                    <label for="star1">&#9733;</label>
+                                    Rating:
+                                </div>
+                                Feedback date: ${myfeedback.getFeedbackDate()}<br>
+
+                                <script>
                                 let ratingValue = ${myfeedback.getRating()};
                                 if (ratingValue >= 1 && ratingValue <= 5) {
                                     document.getElementById('star' + ratingValue).checked = true;
                                 }
-                            </script>
+                                </script>
 
-                            <label>Your feedback:</label>
-                            <textarea name="feedback" class="input-feedback" placeholder="${myfeedback.getFeedbackContent()}" disabled ></textarea>
-                        </c:if>
-                        <c:if test="${empty myfeedback}">
-                            <form action="feedback" method="get" onsubmit="validateForm(event)">
-                                <div class="star-rating">
-                                    <input type="radio" id="star5" name="rating" value="5" required />
-                                    <label for="star5">&#9733;</label>
-                                    <input type="radio" id="star4" name="rating" value="4" />
-                                    <label for="star4">&#9733;</label>
-                                    <input type="radio" id="star3" name="rating" value="3" />
-                                    <label for="star3">&#9733;</label>
-                                    <input type="radio" id="star2" name="rating" value="2" />
-                                    <label for="star2">&#9733;</label>
-                                    <input type="radio" id="star1" name="rating" value="1" />
-                                    <label for="star1">&#9733;</label>
-                                    Rating:
-                                </div>
-                                <div id="rating-error" class="error-message"></div>
+                                <label>Your feedback:</label>
+                                <textarea name="feedback" class="input-feedback" placeholder="${myfeedback.getFeedbackContent()}" disabled ></textarea>
+                            </c:if>
+                            ${number}
+                            
+                            <c:if test="${empty myfeedback}">
+                                <form action="feedback" method="get" onsubmit="validateForm(event)">
+                                    <div class="star-rating">
+                                        <input type="radio" id="star5" name="rating" value="5" required />
+                                        <label for="star5">&#9733;</label>
+                                        <input type="radio" id="star4" name="rating" value="4" />
+                                        <label for="star4">&#9733;</label>
+                                        <input type="radio" id="star3" name="rating" value="3" />
+                                        <label for="star3">&#9733;</label>
+                                        <input type="radio" id="star2" name="rating" value="2" />
+                                        <label for="star2">&#9733;</label>
+                                        <input type="radio" id="star1" name="rating" value="1" />
+                                        <label for="star1">&#9733;</label>
+                                        Rating:
+                                    </div>
+                                    <div id="rating-error" class="error-message"></div>
 
-                                <textarea name="feedback" class="input-feedback" placeholder="Feedback (max 300 characters)" maxlength="300" required></textarea>
-                                
+                                    <textarea name="feedback" class="input-feedback" placeholder="Feedback (max 300 characters)" maxlength="300" required></textarea>
 
-                                <input type="hidden" value="${user.id}" name="uid"/>
-                                <input type="hidden" value="${orderdetail.id}" name="orderdetailid"/>
-                                <input type="submit" value="Save" />
-                            </form>
-                        </c:if>
-                    </div> <!-- Feedback card ends here -->
+
+                                    <input type="hidden" value="${user.id}" name="uid"/>
+                                    <input type="hidden" value="${orderdetail.id}" name="orderdetailid"/>
+                                    <input type="submit" value="Save" />
+                                </form>
+                            </c:if>
+                        </div> <!-- Feedback card ends here -->
                     </c:if>
 
                 </div>

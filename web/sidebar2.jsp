@@ -324,6 +324,7 @@
                     <a href="postmanage?service=listall"><i class="'bx bx-detail"></i> Manage Post</a>
                     <a href="selectOrderbyStatus?action=wait"><i  class='bx bx-cart-alt'></i> Manager Order</a>
                     <a href="readComment"><i class="bx bx-comment"></i> Manage Comment</a>
+                    <a href="feedbackmanager"><i></i>&#9733; Manage Feedback</a>
                    
 <!--                    <a href="orderManage"><i class="fas fa-object-group"></i> Quản lý đơn hàng</a>
 
