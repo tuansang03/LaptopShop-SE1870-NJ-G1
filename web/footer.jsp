@@ -120,13 +120,12 @@ df-messenger .chat-wrapper {
             </div>
         </footer>
         </c:if>
-  
+      <script src="https://app.tudongchat.com/js/chatbox.js"></script>
+<script>
+  const tudong_chatbox = new TuDongChat('zedpco5vntJR0Zlv7ZoPT');
+  tudong_chatbox.initial();
+</script>
     </body>
-    <script src="https://www.gstatic.com/dialogflow-console/fast/messenger/bootstrap.js?v=1"></script>
-<df-messenger
-  intent="WELCOME"
-  chat-title="LaptopShop"
-  agent-id="618e0042-fe69-4333-80ac-5f0e0c7e9e9f"
-  language-code="en"
-></df-messenger>
+
+
 </html>

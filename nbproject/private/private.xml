@@ -32,5 +32,11 @@
         <group>
             <file>file:/D:/SWP391/LaptopShop-SE1870-NJ-G1/web/single-product.jsp</file>
         </group>
+        <group>
+            <file>file:/E:/SWP%20iter2%20clone/LaptopShop-SE1870-NJ-G1/web/single-product.jsp</file>
+            <file>file:/E:/SWP%20iter2%20clone/LaptopShop-SE1870-NJ-G1/src/java/dal/DBContext.java</file>
+            <file>file:/E:/SWP%20iter2%20clone/LaptopShop-SE1870-NJ-G1/web/login.jsp</file>
+            <file>file:/E:/SWP%20iter2%20clone/LaptopShop-SE1870-NJ-G1/src/java/model/GoogleLogin.java</file>
+        </group>
     </open-files>
 </project-private>
