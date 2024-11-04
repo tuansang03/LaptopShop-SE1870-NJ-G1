@@ -18,7 +18,7 @@
     <link rel="stylesheet" href="assets/css/nice-select.css">
     <link rel="stylesheet" href="assets/css/main.css">
 
-    <%@include file="sidebar2.jsp" %>
+    <%@include file="sidebar.jsp" %>
 </head>
 <body>
 <div class="col-md-10 content">
@@ -31,8 +31,19 @@
             <option value="brand">Calculated by Brand</option>
             <option value="month">Calculated by Month</option>
             <option value="top5Product">Top 5 Product</option> <!-- Thêm lựa chọn Top 5 Product -->
+            <option value="workProductivity">Work Productivity</option> <!-- Thêm lựa chọn Work Productivity -->
         </select>
     </div>
+    
+        <% int defaultYear = (Integer) request.getAttribute("year"); %>
+    <div class="form-group mt-4">
+    <form action="SaleStatisticController2" method="get">
+        <label for="yearInput">Enter Year:</label>
+        <input type="number" id="yearInput" name="year" class="form-control" placeholder="Year" required value="${year}">
+        <input type="hidden" name="service" value="listallz" >
+        <button type="submit" class="btn btn-primary mt-2">Submit</button>
+    </form>
+</div>
 
     <!-- Biểu đồ số sản phẩm bán được theo thương hiệu -->
     <h3>Product Count by Brand</h3>
@@ -171,6 +182,12 @@
                 document.getElementById("monthlyRevenueChart").style.display = "none";
                 document.getElementById("monthlyRevenueTitle").style.display = "none"; // Ẩn tiêu đề
                 window.location.href = 'SaleStatisticController2?service=top5Product';  // Chuyển hướng đến servlet xử lý Top 5 Product
+            } else if (selectedType === "workProductivity") {
+                document.getElementById("productChart").style.display = "none";
+                document.getElementById("revenueChart").style.display = "none";
+                document.getElementById("monthlyRevenueChart").style.display = "none";
+                document.getElementById("monthlyRevenueTitle").style.display = "none"; // Ẩn tiêu đề
+                window.location.href = 'SaleStatisticController2?service=myWork';  // Chuyển hướng đến servlet xử lý Work Productivity
             }
         }
     </script>
