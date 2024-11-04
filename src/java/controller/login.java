@@ -114,7 +114,7 @@ public class login extends HttpServlet {
                 response.sendRedirect("home");
             } else if (u.getRole().getId() == 2) {
                 session.setAttribute("sale", u);
-                response.sendRedirect("SaleStatisticController2?service=listall");
+                response.sendRedirect("sidebar2.jsp");
             } else if (u.getRole().getId() == 1) {
                 session.setAttribute("admin", u);
                 response.sendRedirect("readProduct");

@@ -634,7 +634,7 @@
                         </div>
                     </div>
 
-                    <div class="tab-pane fade" id="review" role="tabpanel" aria-labelledby="review-tab">
+                   <div class="tab-pane fade" id="review" role="tabpanel" aria-labelledby="review-tab">
                         <div class="row">
                             <div class="col-lg-6">
                                 <div class="comment_list">
@@ -674,13 +674,13 @@
                                             <div class="replies">
                                                 <c:forEach items="${feedbacklist}" var="reply">
                                                     <!-- Kiểm tra nếu RepplyCommentId của bình luận này trùng với Id của bình luận chính -->
-                                                    <c:if test="${reply.getReplyFeedbackId() == feedback.getId()}">
+<c:if test="${reply.getReplyFeedbackId() == feedback.getId()}">
                                                         <div class="review_item reply">
                                                             <div class="media">
                                                                 <div class="media-body">
                                                                     <!-- Hiển thị thêm nhãn "Reply" -->
-                                                                    <h4>${reply.user.fullName}<c:if test="${reply.user.role.id == 2}">(Saler)</c:if> <span style="font-size: 12px; color: #007bff;">(Reply)</span></h4>
-                                                                    <h5><fmt:formatDate value="${reply.commentDate}" pattern="dd/MM/yyyy HH:mm" /></h5>
+                                                                    <h4>${reply.getUser().getFullName()}<c:if test="${reply.getUser().getRole().getId()== 2}">(Saler)</c:if> <span style="font-size: 12px; color: #007bff;">(Reply)</span></h4>
+                                                                    <h5><fmt:formatDate value="${reply.getFeedbackDate()}" pattern="dd/MM/yyyy HH:mm" /></h5>
                                                                 </div>
                                                             </div>
                                                             <p>${reply.getFeedbackContent()}</p>

@@ -18,7 +18,7 @@
     <link rel="stylesheet" href="assets/css/nice-select.css">
     <link rel="stylesheet" href="assets/css/main.css">
 
-    <%@include file="sidebar.jsp" %>
+    <%@include file="sidebar2.jsp" %>
 </head>
 <body>
 <div class="col-md-10 content">

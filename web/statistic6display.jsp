@@ -17,7 +17,7 @@
         <link rel="stylesheet" href="assets/css/nice-select.css">
         <link rel="stylesheet" href="assets/css/main.css">
 
-        <%@include file="sidebar.jsp" %>
+        <%@include file="sidebar2.jsp" %>
         <style>
             .content {
                 padding: 20px;

@@ -203,17 +203,52 @@
                                 Feedback date: ${myfeedback.getFeedbackDate()}<br>
 
                                 <script>
-                                let ratingValue = ${myfeedback.getRating()};
-                                if (ratingValue >= 1 && ratingValue <= 5) {
-                                    document.getElementById('star' + ratingValue).checked = true;
-                                }
+                                    let ratingValue = ${myfeedback.getRating()};
+                                    if (ratingValue >= 1 && ratingValue <= 5) {
+                                        document.getElementById('star' + ratingValue).checked = true;
+                                    }
                                 </script>
 
                                 <label>Your feedback:</label>
                                 <textarea name="feedback" class="input-feedback" placeholder="${myfeedback.getFeedbackContent()}" disabled ></textarea>
                             </c:if>
-                            ${number}
-                            
+
+                            <style>
+                                .reply-section {
+                                    background-color: #f9f9f9;
+                                    padding: 15px;
+                                    border-radius: 8px;
+                                    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+                                    margin-bottom: 15px;
+                                }
+                                .reply-header {
+                                    font-size: 0.9rem;
+                                    color: #555;
+                                    display: flex;
+                                    justify-content: space-between;
+                                    align-items: center;
+                                    margin-bottom: 5px;
+                                }
+                                .reply-content {
+                                    font-size: 1rem;
+                                    color: #333;
+                                    line-height: 1.6;
+                                }
+                            </style>
+
+                            <c:forEach items="${listreply}" var="r">
+                                <div class="reply-section">
+                                    <div class="reply-header">
+                                        <span><strong>${r.getUser().getFullName()}</strong> (Saler) Reply</span>
+                                        <span>${r.getFeedbackDate()}</span>
+                                    </div>
+                                    <div class="reply-content">
+                                        ${r.getFeedbackContent()}
+                                    </div>
+                                </div>
+                            </c:forEach>
+
+
                             <c:if test="${empty myfeedback}">
                                 <form action="feedback" method="get" onsubmit="validateForm(event)">
                                     <div class="star-rating">

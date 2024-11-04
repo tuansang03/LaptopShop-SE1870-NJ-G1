@@ -323,7 +323,7 @@
                     <a href="ColorController?service=listall"><i class="fas fa-server"></i> Manage Color</a>
                     
                     <a href="StatisticController?service=listall"><i class="fas fa-calendar"></i> Statistic</a>
-                    <a href="SaleStatisticController2?service=listall"><i class="fas fa-calendar"></i> Statistic</a>
+                   
                     
                     <a href="voucherManager"><i class="fas fa-server"></i> Manage Voucher</a>
                    

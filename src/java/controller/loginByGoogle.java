@@ -94,7 +94,7 @@ public class loginByGoogle extends HttpServlet {
                 response.sendRedirect("home");
             } else if (user.getRole().getId() == 2) {
                 session.setAttribute("sale", user);
-                response.sendRedirect("admindashboard.jsp");
+                response.sendRedirect("SaleStatisticController2?service=listall");
             } else if (user.getRole().getId() == 1) {
                 session.setAttribute("admin", user);
                 response.sendRedirect("admindashboard.jsp");

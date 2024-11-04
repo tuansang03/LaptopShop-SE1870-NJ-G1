@@ -319,7 +319,7 @@
                     
 
 
-                    <a href="SaleStatisticController2?service=listall"><i class="bx bxs-objects-vertical-bottom"></i> Statistic</a>
+                    <a href="SaleStatisticController2?service=listall"><i class="fas fa-calendar"></i> Statistic</a>
                     <a href="CustomerManageController?service=listall"><i class="fas fa-users"></i> Manage User</a>
                     <a href="postmanage?service=listall"><i class="'bx bx-detail"></i> Manage Post</a>
                     <a href="selectOrderbyStatus?action=wait"><i  class='bx bx-cart-alt'></i> Manager Order</a>
