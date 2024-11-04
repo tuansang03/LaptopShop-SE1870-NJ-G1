@@ -1,0 +1,17 @@
+<component name="libraryTable">
+  <library name="lib2">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/lib/jcommander-1.82.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/javax.mail-1.6.2.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/gson-2.3.1.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/jakarta.servlet.jsp.jstl-2.0.0.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/activation-1.1.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/hy.common.zxing-3.4.4.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/sqljdbc42.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/jakarta.servlet.jsp.jstl-api-2.0.0.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/jaxb-api-2.1.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

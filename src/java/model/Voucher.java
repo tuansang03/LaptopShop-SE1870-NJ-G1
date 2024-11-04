@@ -21,6 +21,7 @@ public class Voucher {
     private Date EndDate;
     private int MinValue;
     private String Status;
+    private int UsedQuantity;
 
     public Voucher() {
     }
@@ -49,6 +50,22 @@ public class Voucher {
         this.MinValue = MinValue;
         this.Status = Status;
     }
+
+    public Voucher(int id, String Code, String Name, int DiscountPercent, int Quantity, Date StartDate, Date EndDate, int MinValue, String Status, int UsedQuantity) {
+        this.id = id;
+        this.Code = Code;
+        this.Name = Name;
+        this.DiscountPercent = DiscountPercent;
+        this.Quantity = Quantity;
+        this.Image = Image;
+        this.StartDate = StartDate;
+        this.EndDate = EndDate;
+        this.MinValue = MinValue;
+        this.Status = Status;
+        this.UsedQuantity = UsedQuantity;
+    }
+    
+    
 
     public int getId() {
         return id;
@@ -129,10 +146,22 @@ public class Voucher {
 
     public void setStatus(String Status) {
         this.Status = Status;
-    }    
+    } 
+
+    public int getUsedQuantity() {
+        return UsedQuantity;
+    }
+
+    public void setUsedQuantity(int UsedQuantity) {
+        this.UsedQuantity = UsedQuantity;
+    }
 
     @Override
     public String toString() {
-        return "Voucher{" + "id=" + id + ", Code=" + Code + ", Name=" + Name + ", DiscountPercent=" + DiscountPercent + ", Quantity=" + Quantity + ", Image=" + Image + ", StartDate=" + StartDate + ", EndDate=" + EndDate + ", MinValue=" + MinValue + ", Status=" + Status + '}';
+        return "Voucher{" + "id=" + id + ", Code=" + Code + ", Name=" + Name + ", DiscountPercent=" + DiscountPercent + ", Quantity=" + Quantity + ", Image=" + Image + ", StartDate=" + StartDate + ", EndDate=" + EndDate + ", MinValue=" + MinValue + ", Status=" + Status + ", UsedQuantity=" + UsedQuantity + '}';
     }
+    
+    
+
+    
 }

@@ -27,7 +27,7 @@ import model.Product;
 public class OderDAO extends DBContext {
 
     public void insertOrderOfCODNoVoucher(int uid, String name, String address, String phone,
-            LocalDateTime odate, int totalAmountBeFore, int totalAmountAfter, String paymentMethod, String note) {
+            LocalDateTime odate, int totalAmountBeFore, int totalAmountAfter, String paymentMethod, String note, int saleID) {
         String sql = "INSERT INTO [dbo].[Order]\n"
                 + "           ([UserId]\n"
                 + "           ,[Name]\n"
@@ -38,9 +38,10 @@ public class OderDAO extends DBContext {
                 + "           ,[TotalAmountAfter]\n"
                 + "           ,[PaymentMethod]\n"
                 + "           ,[OrderStatus]\n"
-                + "           ,[Note])\n"
+                + "           ,[Note]\n"
+                + "           ,[SaleId])\n"
                 + "     VALUES\n"
-                + "           (?, ?, ?, ?, ?, ?, ?, ?, 'wait', ?)";
+                + "           (?, ?, ?, ?, ?, ?, ?, ?, 'wait', ?, ?)";
         try {
             PreparedStatement st = connection.prepareStatement(sql);
             st.setInt(1, uid);
@@ -52,6 +53,7 @@ public class OderDAO extends DBContext {
             st.setInt(7, totalAmountAfter);
             st.setString(8, paymentMethod);
             st.setString(9, note);
+            st.setInt(10, saleID);
             st.executeUpdate();
 
         } catch (Exception e) {
@@ -60,7 +62,7 @@ public class OderDAO extends DBContext {
 
     public void insertOrderOfCOD(int uid, String name, String address, String phone,
             LocalDateTime odate, int voucherID, int totalAmountBeFore, int discountAmount,
-            int totalAmountAfter, String paymentMethod, String note) {
+            int totalAmountAfter, String paymentMethod, String note, int saleID) {
         String sql = "INSERT INTO [dbo].[Order]\n"
                 + "           ([UserId]\n"
                 + "           ,[Name]\n"
@@ -73,9 +75,10 @@ public class OderDAO extends DBContext {
                 + "           ,[TotalAmountAfter]\n"
                 + "           ,[PaymentMethod]\n"
                 + "           ,[OrderStatus]\n"
-                + "           ,[Note])\n"
+                + "           ,[Note]\n"
+                + "           ,[SaleId])\n"
                 + "     VALUES\n"
-                + "           (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'wait', ?)";
+                + "           (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'wait', ?, ?)";
         try {
             PreparedStatement st = connection.prepareStatement(sql);
             st.setInt(1, uid);
@@ -89,6 +92,7 @@ public class OderDAO extends DBContext {
             st.setInt(9, totalAmountAfter);
             st.setString(10, paymentMethod);
             st.setString(11, note);
+            st.setInt(12, saleID);
             st.executeUpdate();
 
         } catch (Exception e) {
@@ -97,7 +101,7 @@ public class OderDAO extends DBContext {
 
     public void insertOrderOfPaymentNoVoucher(int uid, String name, String address, String phone,
             LocalDateTime odate, int totalAmountBeFore, int totalAmountAfter,
-            String paymentMethod, String VnPayId, String note) {
+            String paymentMethod, String paymentStatus, String VnPayId, String note, int saleID) {
         String sql = "INSERT INTO [dbo].[Order]\n"
                 + "           ([UserId]\n"
                 + "           ,[Name]\n"
@@ -110,9 +114,10 @@ public class OderDAO extends DBContext {
                 + "           ,[PaymentStatus]\n"
                 + "           ,[VnPayTransactionId]\n"
                 + "           ,[OrderStatus]\n"
-                + "           ,[Note])\n"
+                + "           ,[Note]\n"
+                + "           ,[SaleId])\n"
                 + "     VALUES\n"
-                + "           (?, ?, ?, ?, ?, ?, ?, ?, 'pending', ?,'wait', ?)";
+                + "           (?, ?, ?, ?, ?, ?, ?, ?, ?, ?,'wait', ?, ?)";
         try {
             PreparedStatement st = connection.prepareStatement(sql);
             st.setInt(1, uid);
@@ -123,8 +128,10 @@ public class OderDAO extends DBContext {
             st.setInt(6, totalAmountBeFore);
             st.setInt(7, totalAmountAfter);
             st.setString(8, paymentMethod);
-            st.setString(9, VnPayId);
-            st.setString(10, note);
+            st.setString(9, paymentStatus);
+            st.setString(10, VnPayId);
+            st.setString(11, note);
+            st.setInt(12, saleID);
             st.executeUpdate();
 
         } catch (Exception e) {
@@ -134,7 +141,7 @@ public class OderDAO extends DBContext {
     public void insertOrderOfPayment(int uid, String name, String address, String phone,
             LocalDateTime odate, int voucherID, int totalAmountBeFore,
             int discountAmount, int totalAmountAfter,
-            String paymentMethod, String VnPayId, String note) {
+            String paymentMethod, String paymentStatus, String VnPayId, String note, int saleID) {
         String sql = "INSERT INTO [dbo].[Order]\n"
                 + "           ([UserId]\n"
                 + "           ,[Name]\n"
@@ -149,9 +156,10 @@ public class OderDAO extends DBContext {
                 + "           ,[PaymentStatus]\n"
                 + "           ,[VnPayTransactionId]\n"
                 + "           ,[OrderStatus]\n"
-                + "           ,[Note])\n"
+                + "           ,[Note]\n"
+                + "           ,[SaleId])\n"
                 + "     VALUES\n"
-                + "           (?, ?, ?, ?, ?, ?, ?, ?, ?, ?,'pending', ?,'wait', ?)";
+                + "           (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,'wait', ?, ?)";
         try {
             PreparedStatement st = connection.prepareStatement(sql);
             st.setInt(1, uid);
@@ -164,8 +172,10 @@ public class OderDAO extends DBContext {
             st.setInt(8, discountAmount);
             st.setInt(9, totalAmountAfter);
             st.setString(10, paymentMethod);
-            st.setString(11, VnPayId);
-            st.setString(12, note);
+            st.setString(11, paymentStatus);
+            st.setString(12, VnPayId);
+            st.setString(13, note);
+            st.setInt(14, saleID);
             st.executeUpdate();
 
         } catch (Exception e) {
@@ -493,14 +503,13 @@ public class OderDAO extends DBContext {
         return null;
     }
 
-    public boolean updateNewestOrderContactInfo(int userId, String newPhone, String newAddress, String newUsername) {
+    public boolean updateNewestOrderContactInfo(int userId, String newUsername) {
         String sql = "UPDATE [Order] "
                 + "SET Phone = ?, Address = ?, Name = ? "
                 + "WHERE Id = (SELECT TOP(1) Id FROM [Order] WHERE UserId = ? ORDER BY Id DESC)";
 
         try (PreparedStatement st = connection.prepareStatement(sql)) {
-            st.setString(1, newPhone);    // Đặt giá trị cho Phone
-            st.setString(2, newAddress);  // Đặt giá trị cho Address
+
             st.setString(3, newUsername); // Đặt giá trị cho Name (username)
             st.setInt(4, userId);         // Đặt giá trị cho UserId
 
@@ -516,11 +525,24 @@ public class OderDAO extends DBContext {
         return false; // Cập nhật thất bại
     }
 
-    public List<Order> getAllOrder() {
-        String sql = "SELECT * FROM [Order]";
+    public List<Order> getAllOrder(String op) {
+        String sql = "SELECT * FROM [Order] WHERE OrderStatus ";
         List<Order> listOrder = new ArrayList<>();
 
         try {
+            if (op.equals("wait")) {
+                sql += "LIKE 'wait'";
+            } else if (op.equals("rejected")) {
+                sql += "LIKE 'rejected'";
+            } else if (op.equals("accepted")) {
+                sql += "LIKE 'accepted'";
+            } else if (op.equals("intransit")) {
+                sql += "LIKE 'intransit'";
+            } else if (op.equals("failed")) {
+                sql += "LIKE 'failed'";
+            } else if (op.equals("done")) {
+                sql += "LIKE 'done'";
+            }
             PreparedStatement st = connection.prepareStatement(sql);
             ResultSet rs = st.executeQuery();
 
@@ -634,6 +656,7 @@ public class OderDAO extends DBContext {
         return listODetail;
     }
 
+
     public List<OrderDetail> getOrderDetailsByUserAndOrder(int userId, int orderId) throws SQLException {
         List<OrderDetail> orderDetailsList = new ArrayList<>();
 
@@ -666,6 +689,9 @@ public class OderDAO extends DBContext {
                     // Gán các trường còn lại
                     orderDetail.setQuantity(resultSet.getInt("Quantity"));
                     orderDetail.setUnitPrice(resultSet.getInt("UnitPrice"));
+                    // Gán các trường còn lại
+                    orderDetail.setQuantity(resultSet.getInt("Quantity"));
+                    orderDetail.setUnitPrice(resultSet.getInt("UnitPrice"));
 
                     // Thêm OrderDetail vào danh sách
                     orderDetailsList.add(orderDetail);
@@ -689,11 +715,9 @@ public class OderDAO extends DBContext {
                 + "JOIN [Configuration] cfg ON pd.[ConfigurationId] = cfg.[Id] \n"
                 + "JOIN [Product] p ON pd.[ProductId] = p.[Id] \n"
                 + "WHERE pd.[Id] = ?";
-
         try (PreparedStatement ps = connection.prepareStatement(sql)) {
             // Gán tham số productDetailId vào câu truy vấn
             ps.setInt(1, productDetailId);
-
             try (ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) {
                     productDetail = new ProductDetail();
@@ -704,19 +728,16 @@ public class OderDAO extends DBContext {
                     product.setId(rs.getInt("ProductId"));
                     product.setName(rs.getString("ProductName"));
                     productDetail.setProduct(product);
-
                     // Thiết lập đối tượng Color
                     Color color = new Color();
                     color.setId(rs.getInt("ColorId"));
                     color.setName(rs.getString("ColorName"));
                     productDetail.setColor(color);
-
                     // Thiết lập đối tượng Configuration
                     Configuration config = new Configuration();
                     config.setId(rs.getInt("ConfigurationId"));
                     config.setName(rs.getString("ConfigurationName"));
                     productDetail.setConfiguration(config);
-
                     // Thiết lập các thuộc tính khác
                     productDetail.setPrice(rs.getInt("Price"));
                     productDetail.setQuantity(rs.getInt("Quantity"));
@@ -727,7 +748,6 @@ public class OderDAO extends DBContext {
             }
         } catch (SQLException ex) {
         }
-
         return productDetail;
     }
 
@@ -777,12 +797,164 @@ public class OderDAO extends DBContext {
         }
     }
 
+    public void deleteOrderDetail(int oid) {
+        String sql = "DELETE FROM [dbo].[OrderDetail] WHERE OrderId = ?";
+        try {
+            PreparedStatement st = connection.prepareStatement(sql);
+            st.setInt(1, oid);
+            st.executeUpdate();
+        } catch (Exception e) {
+        }
+    }
+
+    public void deleteOrder(int id) {
+        String sql = "DELETE FROM [dbo].[Order] WHERE Id = ?";
+        try {
+            PreparedStatement st = connection.prepareStatement(sql);
+            st.setInt(1, id);
+            st.executeUpdate();
+        } catch (Exception e) {
+        }
+    }
+
+    public int totalOrderByOrderStatus(String status) {
+        String sql = "SELECT COUNT(ID) FROM [Order] WHERE OrderStatus LIKE ?";
+        int totalOrders = 0;
+        try {
+            PreparedStatement st = connection.prepareStatement(sql);
+            st.setString(1, status);
+            ResultSet rs = st.executeQuery();
+
+            if (rs.next()) {
+                totalOrders = rs.getInt(1);
+            }
+
+        } catch (Exception e) {
+        }
+        return totalOrders;
+    }
+
+    public int totalAmountByOrderStatus(String status) {
+        String sql = "SELECT SUM(TotalAmountAfter) FROM [Order] WHERE OrderStatus LIKE ?";
+        int totalAmount = 0;
+        try {
+            PreparedStatement st = connection.prepareStatement(sql);
+            st.setString(1, status);
+            ResultSet rs = st.executeQuery();
+
+            if (rs.next()) {
+                totalAmount = rs.getInt(1);
+            }
+
+        } catch (Exception e) {
+        }
+        return totalAmount;
+    }
+
+    public int getSallerMinOrder() {
+        String sql = "SELECT TOP 1 u.Id, COUNT(o.Id) AS OrderCount\n"
+                + "FROM [User] u\n"
+                + "LEFT JOIN [Order] o ON u.Id = o.SaleId\n"
+                + "WHERE u.RoleId = 2\n"
+                + "GROUP BY u.Id\n"
+                + "ORDER BY OrderCount ASC";
+        int saleid = 0;
+        try {
+            PreparedStatement st = connection.prepareStatement(sql);
+            ResultSet rs = st.executeQuery();
+
+            if (rs.next()) {
+                saleid = rs.getInt(1);
+            }
+        } catch (Exception e) {
+        }
+        return saleid;
+    }
+
+    public List<Order> searchOrderByUserNameAndDate(String userName,
+            String startDate, String endDate) {
+        
+        String sql = "SELECT * FROM [Order] o ";
+        List<Order> listOrder = new ArrayList<>();
+        try {
+
+            if (startDate.equals("Null") && endDate.equals("Null") && userName.equals("Null")) {
+                sql += "";
+            } else if (startDate.equals("Null") && endDate.equals("Null")) {
+                sql += " WHERE (o.[name] LIKE ?)";
+            } else if (userName.equals("Null") && endDate.equals("Null")) {
+                sql += " WHERE (o.OrderDate >= ?)";
+            } else if (userName.equals("Null") && startDate.equals("Null")) {
+                sql += " WHERE (o.OrderDate <= ?)";
+            } else if (endDate.equals("Null")) {
+                sql += " WHERE (o.[name] LIKE ? AND o.OrderDate >= ?)";
+            } else if (startDate.equals("Null")) {
+                sql += " WHERE (o.[name] LIKE ? AND o.OrderDate <= ?)";
+            } else if (userName.equals("Null")) {
+                sql += " WHERE (o.OrderDate BETWEEN ? AND ?)";
+            } else {
+                sql += " WHERE (o.[name] LIKE ? AND o.OrderDate BETWEEN ? AND ?)";
+            }
+
+            PreparedStatement st = connection.prepareStatement(sql);
+
+            if (startDate.equals("Null") && endDate.equals("Null") && userName.equals("Null")) {
+                //ResultSet rs = st.executeQuery();
+            } else if (startDate.equals("Null") && endDate.equals("Null")) {
+                st.setString(1, "%" + userName + "%");
+            } else if (userName.equals("Null") && endDate.equals("Null")) {
+                st.setString(1, startDate);
+            } else if (userName.equals("Null") && startDate.equals("Null")) {
+                st.setString(1, endDate);
+            } else if (endDate.equals("Null")) {
+                st.setString(1, "%" + userName + "%");
+                st.setString(2, startDate);
+            } else if (startDate.equals("Null")) {
+                st.setString(1, "%" + userName + "%");
+                st.setString(2, endDate);
+            } else if (userName.equals("Null")) {
+                st.setString(1, startDate);
+                st.setString(2, endDate);
+            } else {
+                st.setString(1, "%" + userName + "%");
+                st.setString(2, startDate);
+                st.setString(3, endDate);
+            }
+            ResultSet rs = st.executeQuery();
+            
+            while (rs.next()) {
+                UserDAO uDAO = new UserDAO();
+                VoucherDAO vDAO = new VoucherDAO();
+                LocalDateTime aendDate = rs.getTimestamp("EndDate") != null ? rs.getTimestamp("EndDate").toLocalDateTime() : null;
+                Order o = new Order(rs.getInt("Id"),
+                        uDAO.getUserByIdD(rs.getInt("UserID")),
+                        rs.getString("Name"),
+                        rs.getString("Address"),
+                        rs.getString("Phone"),
+                        rs.getTimestamp("OrderDate").toLocalDateTime(),
+                        vDAO.getVoucherByID(rs.getInt("VoucherID")),
+                        rs.getInt("TotalAmountBefore"),
+                        rs.getInt("DiscountAmount"),
+                        rs.getInt("TotalAmountAfter"),
+                        rs.getString("PaymentMethod"),
+                        rs.getString("PaymentStatus"),
+                        rs.getString("VnPayTransactionId"),
+                        aendDate,
+                        rs.getString("OrderStatus"),
+                        rs.getString("Note"));
+                listOrder.add(o);
+            }
+            
+        } catch (Exception e) {
+        }
+        return listOrder;
+    }
+
     public static void main(String[] args) {
         OderDAO o = new OderDAO();
 
-        //List<OrderDetail> l = o.getAllOrdetailByID(1);
-        //System.out.println(l);
-        o.updateEnddate(LocalDateTime.now(), 27);
+        List<Order> a = o.searchOrderByUserNameAndDate("23", "Null", "Null");
+        System.out.println(a.size());
 
     }
 }

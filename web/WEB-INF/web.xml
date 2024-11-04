@@ -191,4 +191,18 @@
         <servlet-name>deleteImage</servlet-name>
         <url-pattern>/deleteImage</url-pattern>
     </servlet-mapping>    
+    
+    <servlet>
+        <servlet-name>ProcessingCheckOut</servlet-name>
+        <servlet-class>controller.ProcessingCheckOut</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>ProcessingCheckOut</servlet-name>
+        <url-pattern>/processingCheckOut</url-pattern>
+    </servlet-mapping>
+    
+    
+    
+    
 </web-app>

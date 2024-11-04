@@ -95,32 +95,18 @@
                                       <a href="#">Lifestyle</a>-->
                                   </div>
                                   <ul class="blog_meta list">
-                                      <li>
-                                          <a href="#">${o.user.userName}
-                                              <i class="lnr lnr-user"></i>
-                                          </a>
-                                      </li>
+                                      
                                       <li>
                                           <a href="#">${o.publishDate}
                                               <i class="lnr lnr-calendar-full"></i>
-                                          </a>
-                                      </li>
-                                      <li>
-                                          <a href="#">...
-                                              <i class="lnr lnr-eye"></i>
-                                          </a>
-                                      </li>
-                                      <li>
-                                          <a href="#">...
-                                              <i class="lnr lnr-bubble"></i>
                                           </a>
                                       </li>
                                   </ul>
                               </div>
                           </div>
                           <div class="col-md-9">
-                              <div class="blog_post">
-                                  <img src="${o.thumbnail}" alt="">
+                              <div class="blog_post" style="">
+                                  <img style="width: 100%" src="${o.thumbnail}" alt="">
                                   <div class="blog_details">
                                       <a href="postdetail?id=${o.getId()}">
                                           <h2>${o.tittle}</h2>

@@ -28,6 +28,14 @@ public class Address {
         this.userid = userid;
     }
 
+    public Address(int id, String namereceive, String phonenumber, String address, boolean isdefault) {
+        this.id = id;
+        this.namereceive = namereceive;
+        this.phonenumber = phonenumber;
+        this.address = address;
+        this.isdefault = isdefault;
+    }
+
     public int getId() {
         return id;
     }
@@ -74,6 +82,11 @@ public class Address {
 
     public void setUserid(User userid) {
         this.userid = userid;
+    }
+
+    @Override
+    public String toString() {
+        return "Address{" + "id=" + id + ", namereceive=" + namereceive + ", phonenumber=" + phonenumber + ", address=" + address + ", isdefault=" + isdefault + ", userid=" + userid + '}';
     }
     
 }

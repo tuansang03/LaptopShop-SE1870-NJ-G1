@@ -36,6 +36,7 @@
                 <thead>
                     <tr>
                         <th>ID</th>
+                        <th>Image</th>
                         <th>Product Name</th>
                         <th>Brand</th>
                         <th>Color</th>
@@ -48,12 +49,21 @@
                     <c:forEach items="${listOrderDetail}" var="odt">
                         <tr>
                             <td>${odt.getId()}</td>
+                            <td>
+                                <c:forEach items="${listImages}" var="i">
+                                    <div class="d-flex">
+                                        <c:if test="${odt.getProductDetail().getId() == i.getProductDetail().getId()}">
+                                            <img style="width: 100px" src="${pageContext.request.contextPath}/images/${i.getImage()}" alt="">
+                                        </c:if>
+                                    </div>
+                                </c:forEach>
+                            </td>
                             <td>${odt.getProductDetail().getProduct().getName()}</td>
                             <td>${odt.getProductDetail().getProduct().getBrand().getName()}</td>
                             <td>${odt.getProductDetail().getColor().getName()}</td>
                             <td>${odt.getProductDetail().getConfiguration().getName()}</td>
                             <td>${odt.getQuantity()}</td>
-                            <td>${odt.getUnitPrice()}</td>
+                            <td><fmt:formatNumber value="${odt.getUnitPrice()}" pattern="#,###" /></td>
                         </tr>
                     </c:forEach>
                 </tbody>
