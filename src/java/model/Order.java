@@ -248,12 +248,12 @@ public class Order {
     public void setNote(String Note) {
         this.Note = Note;
     }
-
+    
     public String getOrderDateAsDateString() {
         DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd-MM-yyyy"); // Định dạng ngày yyyy-MM-dd
         return OrderDate.format(dateFormatter);
     }
-
+    
     public String getOrderDateAsTimeString() {
         DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm:ss"); // Định dạng giờ
         return OrderDate.format(timeFormatter);

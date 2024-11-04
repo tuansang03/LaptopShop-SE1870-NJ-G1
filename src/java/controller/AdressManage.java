@@ -4,7 +4,7 @@
  */
 package controller;
 
-import dal.OderDAO;
+import dal.AddressDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -12,13 +12,17 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
+import java.util.List;
+import model.Address;
+import model.User;
 
 /**
  *
- * @author ADMIN
+ * @author kieud
  */
-@WebServlet(name = "ChangeStatusOrderDoneAndDelete", urlPatterns = {"/changeStatusOrderDoneAndDelete"})
-public class ChangeStatusOrderDoneAndDelete extends HttpServlet {
+@WebServlet(name = "AdressManage", urlPatterns = {"/address"})
+public class AdressManage extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -37,10 +41,10 @@ public class ChangeStatusOrderDoneAndDelete extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet ChangeStatusOrderDoneAndDelete</title>");
+            out.println("<title>Servlet AdressManage</title>");            
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet ChangeStatusOrderDoneAndDelete at " + request.getContextPath() + "</h1>");
+            out.println("<h1>Servlet AdressManage at " + request.getContextPath() + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
@@ -58,24 +62,27 @@ public class ChangeStatusOrderDoneAndDelete extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        String oid_raw = request.getParameter("oid");
-        String op = request.getParameter("op");
-
-        int oid = Integer.parseInt(oid_raw);
-        OderDAO oDAO = new OderDAO();
-
-        oDAO.deleteOrderDetail(oid);
-        oDAO.deleteOrder(oid);
-
-        if (op.equals("failed")) {
-            String action = "failed";
-            request.setAttribute("action", action);
-            response.sendRedirect("selectOrderbyStatus?action=" + action);
-        } else if (op.equals("rejected")) {
-            String action = "rejected";
-            request.setAttribute("action", action);
-            response.sendRedirect("selectOrderbyStatus?action=" + action);
+        HttpSession session = request.getSession();
+        User getCurrentUser = (User) session.getAttribute("user");
+        String mess = "";
+        String action = request.getParameter("action");
+        AddressDAO address = new AddressDAO();
+        if ("default".equals(action)) {
+            List<Address> list = address.getAddressesByUserId(getCurrentUser.getId());
+            request.setAttribute("addresses", list);
+            request.getRequestDispatcher("adressmanage.jsp").forward(request, response);
+        } else if ("edit".equals(action)) {
+            
+        } else if ("addNew".equals(action)) {
+            response.sendRedirect("addnewadress.jsp");
+        }  else if ("delete".equals(action)) {
+            int addressId = Integer.parseInt(request.getParameter("id"));
+            address.deleteAddress(addressId);
+            mess = "Delete succesful !";
+            request.setAttribute("mess", mess);
+            request.getRequestDispatcher("address?id=" + getCurrentUser.getId() + "&action=default").forward(request, response);
         }
+        
     }
 
     /**
@@ -89,20 +96,25 @@ public class ChangeStatusOrderDoneAndDelete extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        String oid_raw = request.getParameter("oid");
+         HttpSession session = request.getSession();
+        User getCurrentUser = (User) session.getAttribute("user");
+        String mess = "";
         String action = request.getParameter("action");
-        OderDAO oDAO = new OderDAO();
-        int oid = Integer.parseInt(oid_raw);
-        if (action.equals("done")) {
-            oDAO.changeOrderStatus(action, oid);
-        } else if (action.equals("failed")) {
-            oDAO.changeOrderStatus(action, oid);
-        }
-
-        action = "intransit";
-        request.setAttribute("action", action);
-        response.sendRedirect("selectOrderbyStatus?action=" + action);
+        AddressDAO address = new AddressDAO();
+        if ("add".equals(action)) {
+            List<Address> list = address.getAddressesByUserId(getCurrentUser.getId());
+            String name = request.getParameter("name");
+            String phone = request.getParameter("phone");
+            String address2 = request.getParameter("address");
+            Address address1 = new Address(list.size()+1, name, phone, address2, false);
+            address.insertAddress(address1, getCurrentUser.getId());
+            mess = "Insert Succesful !";
+            request.setAttribute("mess", mess);
+            response.sendRedirect("address?id=" + getCurrentUser.getId() + "&action=default");
     }
+
+    }
+//        processRequest(request, response);
 
     /**
      * Returns a short description of the servlet.

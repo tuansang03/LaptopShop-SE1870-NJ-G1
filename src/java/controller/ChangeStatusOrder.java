@@ -35,6 +35,7 @@ public class ChangeStatusOrder extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         
+        
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
@@ -63,6 +64,14 @@ public class ChangeStatusOrder extends HttpServlet {
         } else if (action.equals("rejected")) {
             oDAO.changeOrderStatus(action, oid);
             oDAO.updateRejected(formattedDateTime, oid);
+        }
+        action = "wait";
+        request.setAttribute("action", action);
+        response.sendRedirect("selectOrderbyStatus?action=" + action);
+        if (action.equals("accepted")) {
+            oDAO.changeOrderStatus(action, oid);
+        }else if(action.equals("rejected")){
+            oDAO.changeOrderStatus(action, oid);
         }
         action = "wait";
         request.setAttribute("action", action);
@@ -103,6 +112,13 @@ public class ChangeStatusOrder extends HttpServlet {
             request.setAttribute("action", action);
             response.sendRedirect("selectOrderbyStatus?action=" + action);
         }
+        if (action.equals("intransit")) {
+            oDAO.changeOrderStatus(action, oid);
+        }
+        
+        action = "accepted";
+        request.setAttribute("action", action);
+        response.sendRedirect("selectOrderbyStatus?action=" + action);
     }
 
     /**

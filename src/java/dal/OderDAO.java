@@ -503,14 +503,13 @@ public class OderDAO extends DBContext {
         return null;
     }
 
-    public boolean updateNewestOrderContactInfo(int userId, String newPhone, String newAddress, String newUsername) {
+    public boolean updateNewestOrderContactInfo(int userId, String newUsername) {
         String sql = "UPDATE [Order] "
                 + "SET Phone = ?, Address = ?, Name = ? "
                 + "WHERE Id = (SELECT TOP(1) Id FROM [Order] WHERE UserId = ? ORDER BY Id DESC)";
 
         try (PreparedStatement st = connection.prepareStatement(sql)) {
-            st.setString(1, newPhone);    // Đặt giá trị cho Phone
-            st.setString(2, newAddress);  // Đặt giá trị cho Address
+
             st.setString(3, newUsername); // Đặt giá trị cho Name (username)
             st.setInt(4, userId);         // Đặt giá trị cho UserId
 
