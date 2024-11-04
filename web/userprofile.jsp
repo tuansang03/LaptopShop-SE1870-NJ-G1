@@ -142,6 +142,8 @@
                             <ul style="background: #f9f9f9; border: 1px solid gray; border-radius: 10px; padding: 15px; ">
                                 <li><a href="profile?profile=info" class="option">Profile Information</a></li>
                                 <li><a href="profile?profile=ordermanage&see=all" class="option">Order Manage</a></li>
+                                <li><a href="updatepassword.jsp" class="option">Account manage</a></li>
+                                <li><a href="address?id=${sessionScope.user.id}&action=default" class="option">Address Manager</a></li>
                             </ul>
                         </div>
                         <div class="col-md-1.5 border-right">
@@ -151,8 +153,6 @@
                         </div>
                         <!--CHo nay node de code de phan truong hop khi nguoi dung chon cac tuy chon-->
                         <div class="col-md-6 border-right ">
-
-
                             <form action="profile?profile=info&action=change" method="post">
                                 <div class="p-3 py-5">
                                     <div class="d-flex justify-content-between align-items-center mb-3">
@@ -180,58 +180,7 @@
                                     </div>
                                     <div class="row mt-3">
                                         
-                                        <div class="col-md-6">
-                                            <label class="labels">Password</label>
-                                            <input type="text" class="form-control" maxlength="50" value="**************" placeholder="enter password" readonly> <a href="profile?profile=info&action=x" >Change Password</a>
-                                            <style>
-                                                .xx{
-                                                    margin-top: 15px !important;
-                                                    border-radius: 0px !important;
-                                                }
-                                            </style>
-
-                                            </form>
-                                            <c:if test="${param.action eq 'x'}"><br/>
-                                                <form action="profile?profile=info&action=x" method="post" style="margin-top: 15px">
-                                                    <div style="border: 0.2px solid gray; padding: 20px;">
-
-                                                        Change Password
-                                                        <input id="c1"  value="${currentPassword}" type="password" class="form-control xx" required placeholder="enter current password" name="currentPassword">
-                                                        <div id="seepassword" style="cursor: pointer">See</div>
-                                                        <input  value="${newPassword}" type="password" class="form-control xx" required placeholder="enter new password" name="newPassword"> 
-                                                        <input  value="${confirmPassword}" type="password" class="form-control xx" required placeholder="enter new password again" name="confirmPassword"> 
-                                                        <div style="display: flex; justify-content: center; ">
-                                                            <a href="profile?profile=info" type="submit" style="padding-left: 20px;text-align: center;width: 100%;border: none;width: 50%; background-color: #efa79al; border: 1px solid gray " class="xx">Cancel</a>
-
-                                                            <button type="submit" style="padding-left: 20px;text-align: center;width: 100%;border: none; width: 50%; background-color:#a0ceff" class="xx">Save</button>
-
-                                                        </div>                        
-
-                                                    </div>
-                                                    <script>
-
-                                                        document.getElementById('seepassword').addEventListener('click', function () {
-                                                            const passwordfield = document.getElementById('c1');
-
-
-                                                            if (passwordfield.type === "password") {
-                                                                passwordfield.type = "text";
-                                                            } else {
-                                                                passwordfield.type = "password";
-                                                            }
-                                                        });
-                                                    </script>
-
-
-                                                    <div>
-                                                        <h5 style="color: tomato">${error}</h5>
-                                                        <h5 style="color: #5cb99a">${message}</h5>
-                                                    </div>
-                                                </form>
-                                            </c:if>
-
-
-                                        </div>
+                                       
                                     </div>
                                     <div class="mt-5 text-center">
                                         <button class="btn btn-primary profile-button" type="submit">Save Profile</button>
@@ -345,6 +294,8 @@
                                         <ul style="background: #f9f9f9; border: 1px solid gray; border-radius: 10px; padding: 15px;">
                                 <li><a href="profile?profile=info" class="option">Profile Information</a></li>
                                 <li><a href="profile?profile=ordermanage&see=all" class="option">Order Manage</a></li>
+                                 <li><a href="updatepassword.jsp" class="option">Account manage</a></li>
+                                <li><a href="address?id=${sessionScope.user.id}&action=default" class="option">Address Manager</a></li>
                             </ul>
                         </div>
                                     <div>
@@ -365,7 +316,7 @@
                                 </table>
                                     </div>
                                 </div>
-                                <table style="width: 50%; align-items: center; text-align: center; margin: 0px auto;">
+                                <table style="width: 55%; align-items: center; text-align: center; margin: 0px auto;">
                                     <thead>
                                         <tr>
                                             
@@ -409,45 +360,86 @@
                                                                 <c:set var="color" value="#3b8704"></c:set>
                                                             </c:if>
                                                
-                                                <c:forEach items="${listOrder}" var="o1" varStatus="cao">
-                                                    <c:set var="count" value="${cao.index + 1}" />
-                                                    <c:set var="image" value="${imageDAO.getOneImageByProductDetailID(o1.getProductDetail().getId())}" />
+    <c:forEach items="${listOrder}" var="o1" varStatus="status">
+    
+    <c:if test="${status.index == 0}">
+        <c:set var="image" value="${imageDAO.getOneImageByProductDetailID(o1.getProductDetail().getId())}" />
+        
+        <div style="display: flex;">
+           
+            
+            <div style="display: flex; width: 100%" >
+                <div style="width: 20%; border-right 1px solid gray">
+                    <div>
+                        <p style="font-size: 12px">#${o.getOrder().getId()}</p>
+                    </div>
+                    <div>
+                        <p style="font-size: 12px">Status &nbsp;
+                           
+                            
+                            <span style="font-size: 13px;font-family: monospace; margin-left: 40px; color: ${color}; font-weight: bold"> ${o.getOrder().getOrderStatus().toUpperCase()}</span></p>
+                        <p>
+                            <div style="display: flex">
+                                                              
+                                <div style="margin: 0 auto ; color: black; font-weight: 200; margin-left: 10px"> <p style="font-size: 12px;">Total </p> </div>
+                                                                <div> 
+                                                                 <div style=" color: #EE4D2D; border-bottom: 1px solid gray; font-size: 12px; margin-right:  20px"><fmt:formatNumber value="${o.order.totalAmountAfter}" type="number"/>₫</div>
+                                                                  </div>                                                             
+                                                            </div>
+                        </p>
+                    </div>
+                </div>
+                <div style="width: 80%; display: flex; border-left: 1px solid gray; padding-left: 20px">
+                     <div style="width: 110px; height: 80px">
+                <img style="width: 100%; height: 100%;" src="${pageContext.request.contextPath}/images/${image.image}">
+            </div>
+            <div style="width: 88%; margin-left: 15px;">
+                <div>
+                    <h5 class="product_name" style="font-size: 13px; color: #002752; font-family: Nunito, sans-serif;">
+                        <a href="profile?profile=orderdetail&id=${o.order.id}">
+                            ${o1.productDetail.product.name} ${o1.productDetail.configuration.name} (${o1.productDetail.color.name})
+                        </a>
+                    </h5>
+                </div>
+                <div>
+                    <p style="font-size: 11px; color: black;">${o1.productDetail.product.category.name}</p>
+                    <p style="font-size: 11px">Type: ${o1.productDetail.configuration.name}</p>
+                </div>
+                <div style="display: flex; gap: 100%">
 
-                                                    <div style="display: flex;">
-                                                        <div style="width: 110px; height: 80px"><img style="width: 100%; height: 100%;" src="${pageContext.request.contextPath}/images/${image.image}"></div>
-                                                        <div style="width: 88%; margin-left: 15px;">
-                                                          
-                                                            
-                                                            <div><h5 class="product_name" 
-                                                                style="font-size: 13px; color: #002752 !important; font-family: Nunito, sans-serif !important;">
-                                                                    <a href="profile?profile=orderdetail&id=${o.order.id}">${o1.productDetail.product.name} 
-                                                                
-                                                                ${o1.productDetail.configuration.name} (${o1.productDetail.color.name})</a>
-                                                            </h5></div>
-                                                                <div><p style="font-size: 11px; color: black;font-style: var; padding: 0">${o1.productDetail.product.category.name} </p>
-                                                                <p style="font-size: 11px">Type: ${o1.productDetail.configuration.name} </p></div>
-                                                                <div></div>
-                                                            <div style="display: flex; gap: 70%">
-                                                                <div>
-                                                                    <h5 style="font-size: 12px; font-weight: 200 !important">x${o1.quantity}</h5>
-                                                                </div>
-                                                                <div>
-                                                                    <h5 style="font-size: 11px; font-weight: 100"><fmt:formatNumber value="${(o1.unitPrice * o1.quantity)}" type="number"/>₫</h5>
-                                                                </div>
-                                                            </div>
-  
-                                                        </div>
-                                                        <br>
-                                                    </div>
-                                                                <hr style="width: 60%"><!-- comment -->
-                                                </c:forEach>
-                                                                                                                          <div style="display: flex">
-                                                                <hr><!-- comment -->
-                                                                <div style="margin: 0 auto ; color: black; font-weight: 200;"> Total Price: </div>
-                                                                <div><!-- comment -->
-                                                                 <div style=" color: #EE4D2D; border-bottom: 1px solid gray;"><fmt:formatNumber value="${o.order.totalAmountAfter}" type="number"/>₫</div>
-                                                                <!-- comment --></div>                                                             
-                                                            </div>
+                    
+                </div>
+            </div>
+                </div>
+            </div>
+        </div>
+        <hr style="width: 60%;" />
+    </c:if>
+
+    
+    <c:if test="${status.index > 0}">
+        <p style="font-size: 10px; text-align: center">Tap "See order detail" to see all ordered products</p>
+    </c:if>
+</c:forEach>
+
+
+<style>
+    .buton:hover{
+        background: #6db3ec;
+        color: white;
+    }
+    
+    </style>
+<button class="buton" style=" margin-left: 44%; border: 1px solid gray;font-size: 13px;border-radius: 5px !important;"><a style="color: black; padding: 1px; " href="profile?profile=orderdetail&id=${o.order.id}">See Order Detail</a></button>
+
+
+<script>
+    function showMoreItems() {
+       
+    }
+</script>
+
+<!--                                                  
                                             </td>
 <!--
                                             <td>${o.quantity}</td>
@@ -617,7 +609,7 @@
                                     </div>
                                     <div class="h4">${currentOrder.getOrderDate()}</div>
                                     <c:if test="${currentOrderDetail.getOrder().getOrderStatus() eq 'wait'}">
-                                        <c:set var="colorOrder" value="#a9a927"/>
+                                        <c:set var="colorOrder" value="gray"/>
                                     </c:if>
                                     <c:if test="${currentOrderDetail.getOrder().getOrderStatus() eq 'accepted'}">
                                         <c:set var="colorOrder" value="#5cb99a"/>
@@ -650,20 +642,37 @@
                                         <c:if test="${not empty imamgeList}">
                                             <c:set var="image" value="${imamgeList[status.index]}" />
                                         </c:if>
-                                        <div class="d-flex justify-content-start align-items-center list py-1">
-                                            <div><b></b></div>
-                                            <div class="mx-3">
-                                                <c:if test="${not empty image}">
-                                                    <img src="${pageContext.request.contextPath}/images/${image.getImage()}" alt="Product Image" width="90" height="80"/>
-                                                </c:if>
+                                        <div class="order-container d-flex flex-column">
+    <div class="d-flex justify-content-start align-items-center list py-2" style="width: 100%; border-bottom: 1px solid #ddd; padding-bottom: 10px;">
+        
+        <div class="image-container mx-3">
+            <c:if test="${not empty image}">
+                <img src="${pageContext.request.contextPath}/images/${image.getImage()}" alt="Product Image" width="90" height="80" style="border-radius: 5px; object-fit: cover;"/>
+            </c:if>
+        </div>
 
-                                            </div>
+        <a href="information?productId=${o.productDetail.id}" style="text-decoration: none; color: inherit; width: 100%;">
+            <div class="order-item" style="width: 100%; font-size: 13px; line-height: 1.5; color: #6db3ec;">
+                <b>${o.productDetail.product.name} ${o.productDetail.product.category.name}</b>
+                ${o.productDetail.configuration.name} (${o.productDetail.color.name}}
+                <br><p style="font-weight: 300; color: black; margin-top: 8px">x${o.getQuantity()}</p><br/>
+            </div>
+        </a>
+    </div>
 
-                                            <a href="information?productId=${o.productDetail.id}"><div class="order-item">${o.productDetail.product.name} ${o.productDetail.product.category.name}<br/>
-                                                    ${o.productDetail.configuration.name} (${o.productDetail.color.name}) x ${o.getQuantity()}</div></a>
-                                        </div>
-                                        <div style="padding-left: 1.7%;"> Unit price: &nbsp;<fmt:formatNumber value="${o.getUnitPrice()}" type="number"/>đ</div>
-                                        <div style="padding-left: 1.7%;"> Total price: &nbsp;<fmt:formatNumber value="${(o.getUnitPrice() * o.getQuantity())}" type="number"/>đ <a href="seefeedback?orderdetailid=${o.id}">Feedback</a></div>
+    <!-- Giá sản phẩm -->
+    <div class="price-details" style="display: flex; justify-content: space-between; align-items: center; padding: 5px 0;">
+        <div style="font-size: 14px; color: #555;"> 
+            <span style="font-weight: bold;">Unit price  </span> <fmt:formatNumber value="${o.getUnitPrice()}" type="number"/>đ
+        </div>
+        <div style="font-size: 14px; color: #555;"> 
+        </div>
+        <div>
+            <a href="seefeedback?orderdetailid=${o.id}" class="feedback-link" style="font-size: 14px; color: #007bff; text-decoration: underline;">Feedback</a>
+        </div>
+    </div>
+</div>
+
                                     </c:forEach>
 
 

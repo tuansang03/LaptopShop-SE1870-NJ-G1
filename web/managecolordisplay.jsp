@@ -35,8 +35,12 @@
 
         <!-- Thông báo -->
         <c:if test="${not empty mess}">
-            <div class="alert ${mess == 'Delete successful' ? 'alert-success' : 'alert-danger'}">
-                ${mess}
+            <div>
+                <c:if test="${mess == 'Add Color successful!' || mess == 'Delete successfull!' ||mess == 'Update successfull!!'}">
+                    <c:set var="color" value="#2dad2d"></c:set>
+                </c:if>
+                
+                <div style="background-color: ${color}; color: Black; padding: 10px">${mess}</div>
             </div>
         </c:if>
 
@@ -109,7 +113,7 @@
 <script>
     function editBrand(brandId) {
         // Chuyển hướng trực tiếp đến servlet mà không cần xác nhận
-        window.location.href = 'BrandController?id=' + brandId + '&service=updateBrandRequest';
+        window.location.href = 'ColorController?id=' + brandId + '&service=updateColorRequest';
     }
 </script>
 

@@ -84,8 +84,6 @@ public class ProfileManage extends HttpServlet {
             Order getOrder = order.getNewestOrder(getCurrentUser.getId());
             request.setAttribute("orderInfo", getOrder);
             Order newOrder = order.getOneOrderNewest(getCurrentUser.getId());
-            request.setAttribute("adress", newOrder.getAddress());
-            request.setAttribute("phone", newOrder.getPhone());
             request.getRequestDispatcher("userprofile.jsp?profile=info").forward(request, response);
 
         }
@@ -235,7 +233,7 @@ public class ProfileManage extends HttpServlet {
                 request.setAttribute("currentPassword", currentPassword);
                 request.setAttribute("newPassword", newPassword);
                 request.setAttribute("confirmPassword", confirmPassword);
-                request.getRequestDispatcher("userprofile.jsp?profile=info&action=x").forward(request, response);
+                request.getRequestDispatcher("updatepassword.jsp").forward(request, response);
                 return;
             }
 //
@@ -246,7 +244,7 @@ public class ProfileManage extends HttpServlet {
                 request.setAttribute("currentPassword", currentPassword);
                 request.setAttribute("newPassword", newPassword);
                 request.setAttribute("confirmPassword", confirmPassword);
-                request.getRequestDispatcher("userprofile.jsp?profile=info&action=x").forward(request, response);
+                request.getRequestDispatcher("updatepassword.jsp").forward(request, response);
                 return;
             }
 
@@ -256,7 +254,7 @@ public class ProfileManage extends HttpServlet {
                 request.setAttribute("currentPassword", currentPassword);
                 request.setAttribute("newPassword", newPassword);
                 request.setAttribute("confirmPassword", confirmPassword);
-                request.getRequestDispatcher("userprofile.jsp?profile=info&action=x").forward(request, response);
+                request.getRequestDispatcher("updatepassword.jsp").forward(request, response);
                 return;
             }
 //
@@ -266,7 +264,7 @@ public class ProfileManage extends HttpServlet {
                 request.setAttribute("currentPassword", currentPassword);
                 request.setAttribute("newPassword", newPassword);
                 request.setAttribute("confirmPassword", confirmPassword);
-                request.getRequestDispatcher("userprofile.jsp?profile=info&action=x").forward(request, response);
+                request.getRequestDispatcher("updatepassword.jsp").forward(request, response);
                 return;
             }
             // Băm mật khẩu mới
@@ -276,24 +274,22 @@ public class ProfileManage extends HttpServlet {
 //
             // Thông báo thành công
             request.setAttribute("message", "Password change successful");
-            request.getRequestDispatcher("userprofile.jsp?profile=info&action=x").forward(request, response);
+            request.getRequestDispatcher("updatepassword.jsp").forward(request, response);
 //        }
         }       // DOI THONG TIN NGUOI DUNG
         if (action.equalsIgnoreCase("change")) {
-            String adress = request.getParameter("adress");
+            
             String name = request.getParameter("name");
             String email = request.getParameter("email");
-            String phone = request.getParameter("phone");
+            
             String username = request.getParameter("username");
 
             // Kiểm tra thông tin người dùng
-            String validationResult = validateUserInfo(name, phone, adress);
+            String validationResult = validateUserInfo(name);
             if (validationResult != null) {
                   OderDAO order = new OderDAO();
                 User getCurrentUser = (User) session.getAttribute("user");
                 Order newOrder = order.getOneOrderNewest(getCurrentUser.getId());
-                request.setAttribute("adress", newOrder.getAddress());
-                request.setAttribute("phone", newOrder.getPhone());
                 request.setAttribute("mess", "Update Successful!");
                 request.setAttribute("error2", validationResult);
                 request.getRequestDispatcher("userprofile.jsp?profile=info").forward(request, response);
@@ -307,7 +303,7 @@ public class ProfileManage extends HttpServlet {
             getCurrentUser.setFullName(name);
             userDAO.updateUser2(getCurrentUser);
 
-            order.updateNewestOrderContactInfo(getCurrentUser.getId(), phone, adress, username);
+            order.updateNewestOrderContactInfo(getCurrentUser.getId(), username);
             Order newOrder = order.getOneOrderNewest(getCurrentUser.getId());
             request.setAttribute("adress", newOrder.getAddress());
             request.setAttribute("phone", newOrder.getPhone());
@@ -317,23 +313,12 @@ public class ProfileManage extends HttpServlet {
 
     }
 
-    public String validateUserInfo(String name, String phone, String address) {
+    public String validateUserInfo(String name) {
         // Kiểm tra tên
         if (name == null || name.isEmpty() || name.length() > 50) {
             return "Name must be less than 50 characters."; // Thông báo lỗi khi tên quá dài hoặc rỗng
         }
-
-        // Kiểm tra số điện thoại
-        if (phone == null || phone.length() != 10 || !phone.matches("\\d{10}")) {
-            return "Phone number must be exactly 10 digits."; // Thông báo lỗi khi số điện thoại không hợp lệ
-        }
-
-        // Kiểm tra địa chỉ
-        if (address == null || address.isEmpty() || address.length() > 120) {
-            return "Address must be less than 120 characters."; // Thông báo lỗi khi địa chỉ quá dài hoặc rỗng
-        }
-
-        return null; // Nếu tất cả hợp lệ
+               return null; // Nếu tất cả hợp lệ
     }
 
     /**

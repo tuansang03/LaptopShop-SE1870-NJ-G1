@@ -5,22 +5,24 @@
 package controller;
 
 import dal.OderDAO;
+import dal.UserDAO;
 import java.io.IOException;
+import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import java.time.LocalDateTime;
-import java.util.List;
-import model.Order;
+
+import jakarta.servlet.http.HttpSession;
+import model.User;
 
 /**
  *
- * @author ADMIN
+ * @author LocPham
  */
-@WebServlet(name = "ManagerOrder", urlPatterns = {"/managerOrder"})
-public class ManagerOrder extends HttpServlet {
+@WebServlet(name = "VerifyOTPServlet1", urlPatterns = {"/VerifyOTPServlet1"})
+public class VerifyOTPServlet1 extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -34,21 +36,7 @@ public class ManagerOrder extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-//        OderDAO oDAO = new OderDAO();
-//        List<Order> listOrder = oDAO.getAllOrder("wait");
-//
-//        Integer oid = (Integer) request.getAttribute("oid");
-//
-//        if (!(oid == null)) {
-//            Order order = oDAO.getOrderByID(oid);
-//            if (order.getOrderStatus().equals("done")) {
-//                oDAO.updateEnddate(LocalDateTime.now(), oid);
-//            }
-//        }
-//
-//        request.setAttribute("action", "wait");
-//        request.setAttribute("listOrder", listOrder);
-//        request.getRequestDispatcher("managerOrderDisplay.jsp").forward(request, response);
+
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
@@ -63,7 +51,24 @@ public class ManagerOrder extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        String oid_raw = request.getParameter("oid");
+        String op = request.getParameter("op");
+
+        int oid = Integer.parseInt(oid_raw);
+        OderDAO oDAO = new OderDAO();
+
+        oDAO.deleteOrderDetail(oid);
+        oDAO.deleteOrder(oid);
+
+        if (op.equals("failed")) {
+            String action = "failed";
+            request.setAttribute("action", action);
+            response.sendRedirect("selectOrderbyStatus?action=" + action);
+        } else if (op.equals("rejected")) {
+            String action = "rejected";
+            request.setAttribute("action", action);
+            response.sendRedirect("selectOrderbyStatus?action=" + action);
+        }
     }
 
     /**
@@ -77,7 +82,25 @@ public class ManagerOrder extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+
+        String otpInput = request.getParameter("otp");
+        HttpSession session = request.getSession();
+        String otpStored = (String) session.getAttribute("otp");
+
+        if (otpStored != null && otpStored.equals(otpInput)) {
+            // OTP hợp lệ, chuyển hướng đến trang tiếp theo
+            User u = (User) session.getAttribute("uRegister");
+            UserDAO dao = new UserDAO();
+            dao.insertUserStaff(u);
+            session.removeAttribute("uRegister");
+            session.removeAttribute("otp");
+            request.setAttribute("success", "Register successfully!");
+//        request.getRequestDispatcher("login.jsp").forward(request, response);
+        } else {
+            // OTP không hợp lệ, trả về trang OTP với thông báo lỗi
+            request.setAttribute("error", "Invalid OTP. Please try again.");
+            request.getRequestDispatcher("otp_verification1.jsp").forward(request, response);
+        }
     }
 
     /**

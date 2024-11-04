@@ -13,6 +13,7 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import model.Order;
 
 /**
@@ -34,6 +35,7 @@ public class ChangeStatusOrder extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         
+        
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
@@ -52,6 +54,20 @@ public class ChangeStatusOrder extends HttpServlet {
         String action = request.getParameter("action");
         OderDAO oDAO = new OderDAO();
         int oid = Integer.parseInt(oid_raw);
+        LocalDateTime date = LocalDateTime.now();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        String formattedDateTime = date.format(formatter);
+
+        if (action.equals("accepted")) {
+            oDAO.changeOrderStatus(action, oid);
+            oDAO.updateAccepteDate(formattedDateTime, oid);
+        } else if (action.equals("rejected")) {
+            oDAO.changeOrderStatus(action, oid);
+            oDAO.updateRejected(formattedDateTime, oid);
+        }
+        action = "wait";
+        request.setAttribute("action", action);
+        response.sendRedirect("selectOrderbyStatus?action=" + action);
         if (action.equals("accepted")) {
             oDAO.changeOrderStatus(action, oid);
         }else if(action.equals("rejected")){
@@ -75,8 +91,27 @@ public class ChangeStatusOrder extends HttpServlet {
             throws ServletException, IOException {
         String oid_raw = request.getParameter("oid");
         String action = request.getParameter("action");
+        String code = request.getParameter("code");
         OderDAO oDAO = new OderDAO();
         int oid = Integer.parseInt(oid_raw);
+        LocalDateTime date = LocalDateTime.now();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        String formattedDateTime = date.format(formatter);
+        if (code.trim() == null || code.trim().isEmpty()) {
+            action = "accepted";
+            request.setAttribute("action", action);
+            request.setAttribute("error", "Tracking code not empty");
+            request.getRequestDispatcher("selectOrderbyStatus?action=").forward(request, response);
+        } else {
+            if (action.equals("intransit")) {
+                oDAO.changeOrderStatus(action, oid);
+                oDAO.addTrackingCode(code, oid);
+                oDAO.updateIntransitDate(formattedDateTime, oid);
+            }
+            action = "accepted";
+            request.setAttribute("action", action);
+            response.sendRedirect("selectOrderbyStatus?action=" + action);
+        }
         if (action.equals("intransit")) {
             oDAO.changeOrderStatus(action, oid);
         }

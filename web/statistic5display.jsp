@@ -18,7 +18,7 @@
         <link rel="stylesheet" href="assets/css/nice-select.css">
         <link rel="stylesheet" href="assets/css/main.css">
 
-        <%@include file="sidebar2.jsp" %>
+        <%@include file="sidebar.jsp" %>
     </head>
     <body>
         <div class="col-md-10 content">
@@ -30,16 +30,17 @@
                 <select id="revenueType" class="form-control" onchange="updateChartType()">
                     <option value="brand" <c:if test="${action == null}">selected</c:if>>Calculated by Brand</option>
                     <option value="month" <c:if test="${action != null}">selected</c:if>>Calculated by Month</option>
-                        <option value="top5Product">Top 5 Products</option> <!-- Thêm tùy chọn Top 5 Products -->
-                    </select>
-                </div>
+                    <option value="top5Product">Top 5 Products</option> <!-- Thêm tùy chọn Top 5 Products -->
+                    <option value="myWork">Work Productivity</option> <!-- Thêm tùy chọn Work Productivity -->
+                </select>
+            </div>
 
-                <!-- Form nhập năm, chỉ hiện khi chọn "Calculated by Month" -->
-                <div id="yearInput" class="form-group" style="display:none;">
-                    <label for="year">Enter Year:</label>
-                    <input type="number" id="year" class="form-control" placeholder="Enter year" 
-                           value="<c:out value='${year != null ? year : java.time.Year.now().getValue()}'/>"
-                    min="1900" max="<%= java.time.Year.now().getValue() %>" required>
+            <!-- Form nhập năm, chỉ hiện khi chọn "Calculated by Month" -->
+            <div id="yearInput" class="form-group" style="display:none;">
+                <label for="year">Enter Year:</label>
+                <input type="number" id="year" class="form-control" placeholder="Enter year" 
+                       value="<c:out value='${year != null ? year : java.time.Year.now().getValue()}'/>"
+                min="1900" max="<%= java.time.Year.now().getValue() %>" required>
                 <div id="yearError" style="color: red; display: none;">Please enter a valid year (1900 - <%= java.time.Year.now().getValue() %>).</div>
                 <button class="btn btn-primary mt-2" onclick="submitYear()">Submit</button>
             </div>
@@ -113,6 +114,8 @@
                         document.getElementById("yearInput").style.display = "block";  // Hiển thị form nhập năm
                     } else if (selectedType === "top5Product") {
                         window.location.href = 'SaleStatisticController2?service=top5Product';  // Chuyển hướng đến servlet xử lý top 5 sản phẩm
+                    } else if (selectedType === "myWork") { // Thêm xử lý cho tùy chọn Work Productivity
+                        window.location.href = 'SaleStatisticController2?service=myWork';  // Chuyển hướng đến servlet xử lý Work Productivity
                     }
                 }
 

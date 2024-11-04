@@ -12,17 +12,22 @@
     </editor-bookmarks>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group name="Group 20240613-10:26:14">
-            <file>file:/D:/demoSWp391/LaptopShop-SE1870-NJ-G1/src/java/dal/CategoryDAOS.java</file>
-            <file>file:/D:/demoSWp391/LaptopShop-SE1870-NJ-G1/web/userprofile.jsp</file>
-            <file>file:/D:/demoSWp391/LaptopShop-SE1870-NJ-G1/web/insertpostdisplay.jsp</file>
-            <file>file:/D:/demoSWp391/LaptopShop-SE1870-NJ-G1/src/java/controller/ProfileManage.java</file>
-            <file>file:/D:/demoSWp391/LaptopShop-SE1870-NJ-G1/web/insertcolor.jsp</file>
-            <file>file:/D:/demoSWp391/LaptopShop-SE1870-NJ-G1/src/java/dal/ConfigurationDAO.java</file>
-            <file>file:/D:/demoSWp391/LaptopShop-SE1870-NJ-G1/src/java/dal/ColorDAO.java</file>
-            <file>file:/D:/demoSWp391/LaptopShop-SE1870-NJ-G1/src/java/controller/ConfigurationManageController.java</file>
-            <file>file:/D:/demoSWp391/LaptopShop-SE1870-NJ-G1/src/java/controller/ColorController.java</file>
-            <file>file:/D:/demoSWp391/LaptopShop-SE1870-NJ-G1/web/changePassword.jsp</file>
-            <file>file:/D:/demoSWp391/LaptopShop-SE1870-NJ-G1/web/managecolordisplay.jsp</file>
+            <file>file:/D:/SWP3911/LaptopShop-SE1870-NJ-G1/web/blog.jsp</file>
+            <file>file:/D:/SWP3911/LaptopShop-SE1870-NJ-G1/web/userprofile.jsp</file>
+            <file>file:/D:/SWP3911/LaptopShop-SE1870-NJ-G1/src/java/controller/ColorController.java</file>
+            <file>file:/D:/SWP3911/LaptopShop-SE1870-NJ-G1/web/managecolordisplay.jsp</file>
+            <file>file:/D:/SWP3911/LaptopShop-SE1870-NJ-G1/src/java/dal/OderDAO.java</file>
+            <file>file:/D:/SWP3911/LaptopShop-SE1870-NJ-G1/src/java/controller/ProfileManage.java</file>
+            <file>file:/D:/SWP3911/LaptopShop-SE1870-NJ-G1/src/java/dal/DBContext.java</file>
+            <file>file:/D:/SWP3911/LaptopShop-SE1870-NJ-G1/src/java/model/Order.java</file>
+        </group>
+        <group>
+            <file>file:/F:/SWP_Project/it3/LaptopShop-SE1870-NJ-G1/src/java/model/Order.java</file>
+            <file>file:/F:/SWP_Project/it3/LaptopShop-SE1870-NJ-G1/src/java/controller/SelectOrderbyStatus.java</file>
+            <file>file:/F:/SWP_Project/it3/LaptopShop-SE1870-NJ-G1/web/vieworderdetail.jsp</file>
+            <file>file:/F:/SWP_Project/it3/LaptopShop-SE1870-NJ-G1/src/java/controller/SearchOrder.java</file>
+            <file>file:/F:/SWP_Project/it3/LaptopShop-SE1870-NJ-G1/src/java/dal/OderDAO.java</file>
+            <file>file:/F:/SWP_Project/it3/LaptopShop-SE1870-NJ-G1/web/managerOrderDisplay.jsp</file>
         </group>
         <group>
             <file>file:/D:/SWP391/LaptopShop-SE1870-NJ-G1/web/single-product.jsp</file>

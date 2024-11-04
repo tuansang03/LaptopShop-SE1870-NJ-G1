@@ -52,4 +52,34 @@ public class ColorDAO extends DBContext {
         }
         return false; // Trả về false nếu có lỗi xảy ra
     }
+    public boolean updateColor(int id, String name) {
+    String sql = "UPDATE Color SET Name = ? WHERE id = ?";
+    try (PreparedStatement stm = connection.prepareStatement(sql)) {
+        stm.setString(1, name);
+        stm.setInt(2, id);
+        int rowsUpdated = stm.executeUpdate();
+        return rowsUpdated > 0;
+    } catch (SQLException ex) {
+        Logger.getLogger(ColorDAO.class.getName()).log(Level.SEVERE, null, ex);
+    }
+    return false;
+}
+
+public Color findColorById(int id) {
+    String sql = "SELECT * FROM Color WHERE id = ?";
+    try (PreparedStatement stm = connection.prepareStatement(sql)) {
+        stm.setInt(1, id);
+        ResultSet rs = stm.executeQuery();
+        if (rs.next()) {
+            Color color = new Color();
+            color.setId(rs.getInt("id"));
+            color.setName(rs.getString("Name"));
+            return color;
+        }
+    } catch (SQLException ex) {
+        Logger.getLogger(ColorDAO.class.getName()).log(Level.SEVERE, null, ex);
+    }
+    return null;
+}
+
 }

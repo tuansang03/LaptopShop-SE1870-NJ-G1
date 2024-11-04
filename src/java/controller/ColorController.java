@@ -2,7 +2,6 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
  */
-
 package controller;
 
 import dal.BrandDAO;
@@ -27,36 +26,39 @@ import model.User;
  *
  * @author kieud
  */
-@WebServlet(name="ColorController", urlPatterns={"/ColorController"})
+@WebServlet(name = "ColorController", urlPatterns = {"/ColorController"})
 public class ColorController extends HttpServlet {
-   
-    /** 
-     * Processes requests for both HTTP <code>GET</code> and <code>POST</code> methods.
+
+    /**
+     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
+     * methods.
+     *
      * @param request servlet request
      * @param response servlet response
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-    throws ServletException, IOException {
+            throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
             /* TODO output your page here. You may use following sample code. */
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet ColorController</title>");  
+            out.println("<title>Servlet ColorController</title>");
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet ColorController at " + request.getContextPath () + "</h1>");
+            out.println("<h1>Servlet ColorController at " + request.getContextPath() + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
-    } 
+    }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
-    /** 
+    /**
      * Handles the HTTP <code>GET</code> method.
+     *
      * @param request servlet request
      * @param response servlet response
      * @throws ServletException if a servlet-specific error occurs
@@ -64,7 +66,7 @@ public class ColorController extends HttpServlet {
      */
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
-    throws ServletException, IOException {
+            throws ServletException, IOException {
         String service = request.getParameter("service");
         if (service == null) {
             service = "listall";
@@ -78,34 +80,34 @@ public class ColorController extends HttpServlet {
             request.setAttribute("listColor", listColor);
             request.getRequestDispatcher("managecolordisplay.jsp").forward(request, response);
         }
-        if (service.equalsIgnoreCase("updateBrandRequest")) {
+        if (service.equalsIgnoreCase("updateColorRequest")) {
             int id = Integer.parseInt(request.getParameter("id"));
-            BrandDAO brandDAO = new BrandDAO();
-            Brand brand = brandDAO.getBrandById(id);
-            request.setAttribute("updatebranddisplay", brand);
-            request.getRequestDispatcher("updatebranddisplay.jsp").forward(request, response);
+            ColorDAO color = new ColorDAO();
+            Color col = color.findColorById(id);
+            request.setAttribute("updateColordisplay", col);
+            request.getRequestDispatcher("updatecolordisplay.jsp").forward(request, response);
         }
         if (service.equalsIgnoreCase("updatedone")) {
-            BrandDAO brandDAO = new BrandDAO();
+            ColorDAO color = new ColorDAO();
             int id = Integer.parseInt(request.getParameter("id"));
             String name = request.getParameter("name");
-            Brand brand = new Brand(id, name);
-            boolean checkUpdate = brandDAO.updateBrand(brand);
+
+            boolean checkUpdate = color.updateColor(id, name);
 //            Brand brand1 = brandDAO.getBrandById(id);
 //            request.setAttribute("updatebranddisplay", brand1);
             if (checkUpdate == true) {
-                Brand brandAfterUpdate = brandDAO.getBrandById(id);
+                Color colorAfterUpdate = color.findColorById(id);
                 String mess = "Update successfull!!";
                 request.setAttribute("mess", mess);
-                request.setAttribute("updatebranddisplay", brandAfterUpdate);
+                request.setAttribute("ColorController?service=listall", colorAfterUpdate);
             } else {
-                Brand brandAfterUpdate = brandDAO.getBrandById(id);
+                Color colorAfterUpdate = color.findColorById(id);
                 String mess = "Update failed!";
                 request.setAttribute("mess", mess);
-                request.setAttribute("updatebranddisplay", brandAfterUpdate);
+                request.setAttribute("ColorController?service=listall", colorAfterUpdate);
             }
 
-            request.getRequestDispatcher("updatebranddisplay.jsp").forward(request, response);
+            request.getRequestDispatcher("ColorController?service=listall").forward(request, response);
 
         }
 
@@ -114,40 +116,61 @@ public class ColorController extends HttpServlet {
             int id = Integer.parseInt(request.getParameter("id"));
 
             // Gọi DAO để xóa brand
-             ColorDAO colorDAO = new ColorDAO();
+            ColorDAO colorDAO = new ColorDAO();
             boolean isDeleted = colorDAO.deleteColor(id);
 
             // Kiểm tra xem xóa thành công hay không
             if (isDeleted) {
-                request.setAttribute("mess", "Delete successfull!"); 
-            } 
+                request.setAttribute("mess", "Delete successfull!");
+            }
+            if (!isDeleted) {
+                request.setAttribute("mess", "You can't delete this color because there is a product using this color ");
+            }
 
             // Sau khi xóa, điều hướng về trang danh sách brand hoặc trang bạn muốn
-            request.getRequestDispatcher("managecolordisplay.jsp?service=listall").forward(request, response);
+            request.getRequestDispatcher("ColorController?service=listall").forward(request, response);
         }
         if (service.equalsIgnoreCase("addColorRequest")) {
             // Chỉ hiển thị trang thêm cấu hình
             request.getRequestDispatcher("insertcolor.jsp").forward(request, response);
-        }
-         
-        else if (service.equalsIgnoreCase("addColor")) {
+        } else if (service.equalsIgnoreCase("addColor")) {
             String name = request.getParameter("color");
-           
-            ColorDAO colorDAO = new ColorDAO();
-                boolean check = colorDAO.insertColor(name);
 
+            ColorDAO colorDAO = new ColorDAO();
+            List<Color> listColor = colorDAO.getAllColor();
+            boolean colorExists = false;
+
+            // Kiểm tra xem màu đã tồn tại chưa
+            for (Color color : listColor) {
+                if (color.getName().equalsIgnoreCase(name)) {
+                    colorExists = true;
+                    break;
+                }
+            }
+
+            if (colorExists) {
+                // Nếu màu đã tồn tại, hiển thị thông báo
+                request.setAttribute("mess", "Color is available");
+            } else {
+                // Nếu màu không tồn tại, thêm màu và hiển thị thông báo thành công
+                boolean check = colorDAO.insertColor(name);
                 if (check) {
                     request.setAttribute("mess", "Add Color successful!");
-                     request.getRequestDispatcher("insertcolor.jsp").forward(request, response);
-                } 
-            } 
-            // Chuyển tiếp đến trang để hiển thị thông báo
-           
-        }
-    
+                } else {
+                    request.setAttribute("mess", "Add Color failed!");
+                }
+            }
 
-    /** 
+            // Chuyển hướng về trang danh sách màu
+            request.getRequestDispatcher("ColorController?service=listall").forward(request, response);
+        }
+
+        // Chuyển tiếp đến trang để hiển thị thông báo
+    }
+
+    /**
      * Handles the HTTP <code>POST</code> method.
+     *
      * @param request servlet request
      * @param response servlet response
      * @throws ServletException if a servlet-specific error occurs
@@ -155,12 +178,13 @@ public class ColorController extends HttpServlet {
      */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
-    throws ServletException, IOException {
+            throws ServletException, IOException {
         processRequest(request, response);
     }
 
-    /** 
+    /**
      * Returns a short description of the servlet.
+     *
      * @return a String containing servlet description
      */
     @Override

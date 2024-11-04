@@ -63,7 +63,7 @@ public class ResendOTP extends HttpServlet {
          String email=user.getEmail();
          if (email == null) {
             request.setAttribute("error", "Session expired or email not found.");
-            request.getRequestDispatcher("otp_verification.jsp").forward(request, response);
+            request.getRequestDispatcher("otp_verification1.jsp").forward(request, response);
             return;
         }
           try {
@@ -80,7 +80,7 @@ public class ResendOTP extends HttpServlet {
             
             // Thông báo thành công
             request.setAttribute("message", "A new OTP has been sent to your email.");
-            request.getRequestDispatcher("otp_verification.jsp").forward(request, response);
+            request.getRequestDispatcher("otp_verification1.jsp").forward(request, response);
         } catch (Exception e) {
             request.setAttribute("error", "Failed to send OTP. Please try again.");
         }

@@ -6,6 +6,7 @@
 package controller;
 
 import dal.OderDAO;
+import dal.UserDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -13,8 +14,10 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import java.util.List;
 import model.Order;
+import model.User;
 
 /**
  *
@@ -32,11 +35,15 @@ public class SelectStatusOrder extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
+        HttpSession session = request.getSession();
+        User user = (User) session.getAttribute("sale");
+        UserDAO uDAO = new UserDAO();
+        int saleid = uDAO.getUserByIdD(user.getId()).getId();
         String op = request.getParameter("op");
         OderDAO oDAO = new OderDAO();
         List<Order> listOrder = null;
         if (op.equals("all")) {
-           listOrder = oDAO.getAllOrder("wait");
+           listOrder = oDAO.getAllOrder("wait", saleid);
         }else {
            listOrder = oDAO.getOrderByOrderStatus(op);
         }
