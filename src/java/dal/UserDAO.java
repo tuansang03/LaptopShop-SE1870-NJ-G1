@@ -80,7 +80,8 @@ public class UserDAO extends DBContext {
 
         return isUpdated; // Trả về kết quả cập nhật
     }
-        public boolean updateUser2(User u) {
+
+    public boolean updateUser2(User u) {
         String sql = "UPDATE [User] SET fullName = ?, email = ?, Username = ? WHERE id = ?";
         boolean isUpdated = false;
 
@@ -124,11 +125,9 @@ public class UserDAO extends DBContext {
             Logger.getLogger(UserDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
-       
-   public int insertUser2(User user) {
-    int userId = -1;  // Biến lưu userId mới
-     String sql = "INSERT INTO [dbo].[User]\n"
+
+    public void insertUserStaff(User user) {
+        String sql = "INSERT INTO [dbo].[User]\n"
                 + "           ([Username]\n"
                 + "          ,[Password]\n"
                 + "          ,[Fullname]\n"
@@ -151,35 +150,37 @@ public class UserDAO extends DBContext {
             Logger.getLogger(UserDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-     public void insertUserStaff(User user) {
+
+    public int insertUser2(User user) {
+        int userId = -1;  // Biến lưu userId mới
         String sql = "INSERT INTO [dbo].[User]\n"
                 + "          (?,?,?,?,3,'active')";
-    
-    try {
-        // Sử dụng RETURN_GENERATED_KEYS để lấy userId vừa thêm
-        PreparedStatement pre = connection.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS);
-        
-        // Thiết lập các giá trị cho câu lệnh SQL
-        pre.setString(1, user.getUserName());
+
+        try {
+            // Sử dụng RETURN_GENERATED_KEYS để lấy userId vừa thêm
+            PreparedStatement pre = connection.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS);
+
+            // Thiết lập các giá trị cho câu lệnh SQL
+            pre.setString(1, user.getUserName());
             pre.setString(2, user.getPassword());
             pre.setString(3, user.getFullName());
             pre.setString(4, user.getEmail());
-        
-        // Thực thi câu lệnh
-        pre.executeUpdate();
-        
-        // Lấy userId vừa được thêm
-        ResultSet rs = pre.getGeneratedKeys();
-        if (rs.next()) {
-            userId = rs.getInt(1);  // Lấy giá trị khóa chính
+
+            // Thực thi câu lệnh
+            pre.executeUpdate();
+
+            // Lấy userId vừa được thêm
+            ResultSet rs = pre.getGeneratedKeys();
+            if (rs.next()) {
+                userId = rs.getInt(1);  // Lấy giá trị khóa chính
+            }
+
+        } catch (SQLException ex) {
+            Logger.getLogger(UserDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
-    } catch (SQLException ex) {
-        Logger.getLogger(UserDAO.class.getName()).log(Level.SEVERE, null, ex);
+
+        return userId;  // Trả về userId hoặc -1 nếu thất bại
     }
-    
-    return userId;  // Trả về userId hoặc -1 nếu thất bại
-}
 
     public boolean isMailDuplicate(User user) {
         String sql = "SELECT COUNT(*) FROM [User] WHERE email = ?";
@@ -441,7 +442,6 @@ public class UserDAO extends DBContext {
         return list;
     }
 
-
     public List<Post> getNewestPostListD() {
 
         List<Post> list = new ArrayList<>();
@@ -616,16 +616,15 @@ public class UserDAO extends DBContext {
                 newProduct.setPrice(rs.getInt("Price"));
                 newProduct.setQuantity(rs.getInt("Quantity"));
 
-            newProduct.setShortDescription(rs.getString("ShortDescription"));
-            newProduct.setDescription(rs.getString("Description"));
-            newProduct.setStatus(rs.getString("Status"));
+                newProduct.setShortDescription(rs.getString("ShortDescription"));
+                newProduct.setDescription(rs.getString("Description"));
+                newProduct.setStatus(rs.getString("Status"));
+            }
+        } catch (SQLException e) {
+            System.out.println(e);
         }
-    } catch (SQLException e) {
-        System.out.println(e);
+        return newProduct;
     }
-    return newProduct;
-}
-
 
     public List<Image> getPictureList() {
         List<Image> list = new ArrayList<>();
@@ -686,8 +685,8 @@ public class UserDAO extends DBContext {
         }
         return list;
     }
-    
-public Post getPostById(int id) {
+
+    public Post getPostById(int id) {
 
         String sql = "SELECT [Id], [UserId], [BrandId], [CategoryId], [Title], "
                 + "[ShortContent], [FullContent], [Thumbnail], [PublishDate] "
@@ -895,24 +894,24 @@ public Post getPostById(int id) {
 
         return users;
     }
-public int[] getMinMaxPostId() {
-    int[] minMax = new int[2];
-    String sql = "SELECT MIN([Id]) AS minId, MAX([Id]) AS maxId FROM [dbo].[Post]";
 
-    try {
-        PreparedStatement st = connection.prepareStatement(sql);
-        ResultSet rs = st.executeQuery();
+    public int[] getMinMaxPostId() {
+        int[] minMax = new int[2];
+        String sql = "SELECT MIN([Id]) AS minId, MAX([Id]) AS maxId FROM [dbo].[Post]";
 
-        if (rs.next()) {
-            minMax[0] = rs.getInt("minId"); // Lấy id nhỏ nhất
-            minMax[1] = rs.getInt("maxId"); // Lấy id lớn nhất
+        try {
+            PreparedStatement st = connection.prepareStatement(sql);
+            ResultSet rs = st.executeQuery();
+
+            if (rs.next()) {
+                minMax[0] = rs.getInt("minId"); // Lấy id nhỏ nhất
+                minMax[1] = rs.getInt("maxId"); // Lấy id lớn nhất
+            }
+        } catch (SQLException e) {
+            System.out.println(e);
         }
-    } catch (SQLException e) {
-        System.out.println(e);
+        return minMax;
     }
-    return minMax;
-}
-
 
     public List<User> getUserByRoleId(int roleId) {
         PreparedStatement stm = null;
@@ -1031,14 +1030,14 @@ public int[] getMinMaxPostId() {
 
         return users;
     }
-    
+
     public boolean changeUserRoleId(String userName, int newRoleId) {
         String sql = "UPDATE [User] SET roleId = ?,Status = 'unban' WHERE userName = ?";;
-        
+
         try (PreparedStatement ps = connection.prepareStatement(sql)) {
             ps.setInt(1, newRoleId);
             ps.setString(2, userName);
-            
+
             int rowsUpdated = ps.executeUpdate();
             return rowsUpdated > 0; // Trả về true nếu có ít nhất 1 bản ghi được cập nhật
         } catch (SQLException e) {
@@ -1047,70 +1046,68 @@ public int[] getMinMaxPostId() {
         }
     }
 
-   public boolean isEmailMatchUsername(String email, String username) {
-    String sql = "SELECT * FROM [User] WHERE email = ? AND username = ?";
-    try {
-        PreparedStatement pre = connection.prepareStatement(sql);
-        pre.setString(1, email);    // Đặt email vào vị trí dấu ? đầu tiên
-        pre.setString(2, username); // Đặt username vào vị trí dấu ? thứ hai
+    public boolean isEmailMatchUsername(String email, String username) {
+        String sql = "SELECT * FROM [User] WHERE email = ? AND username = ?";
+        try {
+            PreparedStatement pre = connection.prepareStatement(sql);
+            pre.setString(1, email);    // Đặt email vào vị trí dấu ? đầu tiên
+            pre.setString(2, username); // Đặt username vào vị trí dấu ? thứ hai
 
-        ResultSet rs = pre.executeQuery();
-        // Nếu tìm thấy một hàng, nghĩa là email và username khớp nhau
-        if (rs.next()) {
-            return true;
+            ResultSet rs = pre.executeQuery();
+            // Nếu tìm thấy một hàng, nghĩa là email và username khớp nhau
+            if (rs.next()) {
+                return true;
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(UserDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
-    } catch (SQLException ex) {
-        Logger.getLogger(UserDAO.class.getName()).log(Level.SEVERE, null, ex);
+        return false; // Trả về false nếu không tìm thấy
     }
-    return false; // Trả về false nếu không tìm thấy
-}
 
-   
- public boolean resetPassword(String username, String email , String newPassword) {
-    // Câu lệnh SQL để cập nhật mật khẩu mới
-    String sql = "UPDATE [User] SET [Password] = ? WHERE username = ? AND Email = ?";
-    
-    try {
-        PreparedStatement pre = connection.prepareStatement(sql);
-        
-        // Mã hóa mật khẩu mới (nếu cần), ví dụ: mã hóa bằng BCrypt hoặc bất kỳ phương pháp nào bạn muốn
-        // Ở đây mình sẽ sử dụng mật khẩu trực tiếp, nhưng bạn có thể thay đổi nếu cần
-        String hashedPassword = hashPassword(newPassword);  
-        
-        // Thiết lập giá trị cho câu lệnh SQL
-        pre.setString(1, hashedPassword);
-        pre.setString(2, username);
-        pre.setString(3, email);
-        // Thực thi cập nhật
-        int result = pre.executeUpdate();
-        
-        // Nếu cập nhật thành công, trả về true
-        return result > 0;
-        
-    } catch (SQLException ex) {
-        Logger.getLogger(UserDAO.class.getName()).log(Level.SEVERE, null, ex);
+    public boolean resetPassword(String username, String email, String newPassword) {
+        // Câu lệnh SQL để cập nhật mật khẩu mới
+        String sql = "UPDATE [User] SET [Password] = ? WHERE username = ? AND Email = ?";
+
+        try {
+            PreparedStatement pre = connection.prepareStatement(sql);
+
+            // Mã hóa mật khẩu mới (nếu cần), ví dụ: mã hóa bằng BCrypt hoặc bất kỳ phương pháp nào bạn muốn
+            // Ở đây mình sẽ sử dụng mật khẩu trực tiếp, nhưng bạn có thể thay đổi nếu cần
+            String hashedPassword = hashPassword(newPassword);
+
+            // Thiết lập giá trị cho câu lệnh SQL
+            pre.setString(1, hashedPassword);
+            pre.setString(2, username);
+            pre.setString(3, email);
+            // Thực thi cập nhật
+            int result = pre.executeUpdate();
+
+            // Nếu cập nhật thành công, trả về true
+            return result > 0;
+
+        } catch (SQLException ex) {
+            Logger.getLogger(UserDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        // Nếu có lỗi xảy ra, trả về false
+        return false;
     }
-    
-    // Nếu có lỗi xảy ra, trả về false
-    return false;
-}
 
-public User getUserByEmail(String email) {
-    String sql = "SELECT * FROM [User] WHERE email = ?";  // Truy vấn SQL lấy user dựa trên email
-    
-    
-    try {
-        // Chuẩn bị câu lệnh SQL
-        PreparedStatement pre = connection.prepareStatement(sql);
-        
-        // Gán giá trị cho biến email trong câu lệnh SQL
-        pre.setString(1, email);
-        
-        // Thực thi câu lệnh và nhận kết quả
-        ResultSet rs = pre.executeQuery();
-        
-        // Xử lý kết quả trả về từ ResultSet
-        if (rs.next()) {
+    public User getUserByEmail(String email) {
+        String sql = "SELECT * FROM [User] WHERE email = ?";  // Truy vấn SQL lấy user dựa trên email
+
+        try {
+            // Chuẩn bị câu lệnh SQL
+            PreparedStatement pre = connection.prepareStatement(sql);
+
+            // Gán giá trị cho biến email trong câu lệnh SQL
+            pre.setString(1, email);
+
+            // Thực thi câu lệnh và nhận kết quả
+            ResultSet rs = pre.executeQuery();
+
+            // Xử lý kết quả trả về từ ResultSet
+            if (rs.next()) {
                 User u = new User();
                 u.setId(rs.getInt(1));
                 u.setUserName(rs.getString(2));
@@ -1123,15 +1120,13 @@ public User getUserByEmail(String email) {
                 u.setStatus(rs.getString(7));
                 return u;
             }
-    } catch (SQLException ex) {
-        Logger.getLogger(UserDAO.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (SQLException ex) {
+            Logger.getLogger(UserDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        return null;  // Trả về đối tượng User hoặc null nếu không tìm thấy
     }
-    
-    return null;  // Trả về đối tượng User hoặc null nếu không tìm thấy
-}
 
-
- 
     public static void main(String[] args) {
         UserDAO dao = new UserDAO();
         System.out.println(dao.getUserByEmail("trantienminh204@gmail.com"));
