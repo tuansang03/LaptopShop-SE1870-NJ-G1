@@ -122,6 +122,31 @@ public class UserDAO extends DBContext {
             Logger.getLogger(UserDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
+    
+        public void insertUserStaff(User user) {
+        String sql = "INSERT INTO [dbo].[User]\n"
+                + "           ([Username]\n"
+                + "          ,[Password]\n"
+                + "          ,[Fullname]\n"
+                + "           \n"
+                + "           ,[Email]\n"
+                + "           \n"
+                + "           ,[RoleId],\n"
+                + "		   [Status]\n"
+                + "           )\n"
+                + "    VALUES\n"
+                + "          (?,?,?,?,2,'active')";
+        try {
+            PreparedStatement pre = connection.prepareStatement(sql);
+            pre.setString(1, user.getUserName());
+            pre.setString(2, user.getPassword());
+            pre.setString(3, user.getFullName());
+            pre.setString(4, user.getEmail());
+            pre.executeQuery();
+        } catch (SQLException ex) {
+            Logger.getLogger(UserDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
 
     public boolean isMailDuplicate(User user) {
         String sql = "SELECT COUNT(*) FROM [User] WHERE email = ?";
@@ -973,10 +998,25 @@ public int[] getMinMaxPostId() {
 
         return users;
     }
+    
+    public boolean changeUserRoleId(String userName, int newRoleId) {
+        String sql = "UPDATE [User] SET roleId = ?,Status = 'unban' WHERE userName = ?";;
+        
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setInt(1, newRoleId);
+            ps.setString(2, userName);
+            
+            int rowsUpdated = ps.executeUpdate();
+            return rowsUpdated > 0; // Trả về true nếu có ít nhất 1 bản ghi được cập nhật
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
 
 //    public static void main(String[] args) {
 //        UserDAO dao = new UserDAO();
-//        System.out.println(dao.deleteUserById(4));
+//        System.out.println(dao.changeUserRoleId("loc",2));
 //    }
 
 }

@@ -12,89 +12,101 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import model.UserSales;
 
 /**
  *
  * @author LocPham
  */
 public class StatisticDAO extends DBContext {
-
-    public int countProductsByBrandNameAndOrderStatusDone(String brandName) {
-        String sql = "SELECT SUM(od.[Quantity]) AS ProductCount "
-                + "FROM [Order] o "
-                + "JOIN [OrderDetail] od ON o.[Id] = od.[OrderId] "
-                + "JOIN [ProductDetail] pd ON od.[ProductDetailId] = pd.[Id] "
-                + "JOIN [Product] p ON pd.[ProductId] = p.[Id] "
-                + "JOIN [Brand] b ON p.[BrandId] = b.[Id] "
-                + "WHERE b.[Name] = ? AND o.[OrderStatus] = 'done';";  // Tìm kiếm theo tên thương hiệu và trạng thái đơn hàng
-
-        PreparedStatement ps = null;
-        ResultSet rs = null;
-        int count = 0;
-
-        try {
-            ps = connection.prepareStatement(sql);
-            ps.setString(1, brandName);  // Thiết lập tên thương hiệu vào câu lệnh SQL
-            rs = ps.executeQuery();
-
-            if (rs.next()) {
-                count = rs.getInt("ProductCount");  // Lấy tổng số lượng sản phẩm từ cột đầu tiên
-            }
-        } catch (SQLException ex) {
-            Logger.getLogger(ProductDAO.class.getName()).log(Level.SEVERE, null, ex);
-        } finally {
-            try {
-                if (rs != null) {
-                    rs.close();
-                }
-                if (ps != null) {
-                    ps.close();
-                }
-            } catch (SQLException e) {
-                Logger.getLogger(ProductDAO.class.getName()).log(Level.SEVERE, null, e);
-            }
-        }
-        return count;  // Trả về tổng số lượng sản phẩm bán ra cho thương hiệu với trạng thái đơn hàng là "done"
-
+    
+    public StatisticDAO(Connection connection) {
+        super(connection); // Gọi constructor của DBContext với mock connection
+    }
+    
+     public StatisticDAO() {
+        super(); // Gọi constructor mặc định của DBContext
     }
 
-    public int calculateRevenueByBrand(String brandName) {
-        String sql = "SELECT SUM(od.[Quantity] * pd.[Price]) AS TotalRevenue "
-                + "FROM [Order] o "
-                + "JOIN [OrderDetail] od ON o.[Id] = od.[OrderId] "
-                + "JOIN [ProductDetail] pd ON od.[ProductDetailId] = pd.[Id] "
-                + "JOIN [Product] p ON pd.[ProductId] = p.[Id] "
-                + "JOIN [Brand] b ON p.[BrandId] = b.[Id] "
-                + "WHERE b.[Name] = ? AND o.[OrderStatus] = 'done';";  // Lọc theo tên thương hiệu và trạng thái "done"
+public int countProductsByBrandNameAndOrderStatusDone(String brandName, int year) {
+    String sql = "SELECT SUM(od.[Quantity]) AS ProductCount "
+               + "FROM [Order] o "
+               + "JOIN [OrderDetail] od ON o.[Id] = od.[OrderId] "
+               + "JOIN [ProductDetail] pd ON od.[ProductDetailId] = pd.[Id] "
+               + "JOIN [Product] p ON pd.[ProductId] = p.[Id] "
+               + "JOIN [Brand] b ON p.[BrandId] = b.[Id] "
+               + "WHERE b.[Name] = ? AND o.[OrderStatus] = 'done' AND YEAR(o.[OrderDate]) = ?;";  // Thêm điều kiện năm
 
-        PreparedStatement ps = null;
-        ResultSet rs = null;
-        int totalRevenue = 0;  // Khởi tạo biến để lưu doanh thu
+    PreparedStatement ps = null;
+    ResultSet rs = null;
+    int count = 0;
 
-        try {
-            ps = connection.prepareStatement(sql);
-            ps.setString(1, brandName);  // Thiết lập tên thương hiệu vào câu lệnh SQL
-            rs = ps.executeQuery();
+    try {
+        ps = connection.prepareStatement(sql);
+        ps.setString(1, brandName);  // Thiết lập tên thương hiệu
+        ps.setInt(2, year);  // Thiết lập năm
+        rs = ps.executeQuery();
 
-            if (rs.next()) {
-                totalRevenue = rs.getInt("TotalRevenue");  // Lấy tổng doanh thu từ cột "TotalRevenue"
-            }
-        } catch (SQLException ex) {
-            Logger.getLogger(ProductDAO.class.getName()).log(Level.SEVERE, null, ex);
-        } finally {
-            try {
-                if (rs != null) {
-                    rs.close();
-                }
-                if (ps != null) {
-                    ps.close();
-                }
-            } catch (SQLException e) {
-                Logger.getLogger(ProductDAO.class.getName()).log(Level.SEVERE, null, e);
-            }
+        if (rs.next()) {
+            count = rs.getInt("ProductCount");  // Lấy tổng số lượng sản phẩm từ cột "ProductCount"
         }
-        return totalRevenue;  // Trả về tổng doanh thu cho thương hiệu cụ thể
+    } catch (SQLException ex) {
+        Logger.getLogger(ProductDAO.class.getName()).log(Level.SEVERE, null, ex);
+    } finally {
+        try {
+            if (rs != null) {
+                rs.close();
+            }
+            if (ps != null) {
+                ps.close();
+            }
+        } catch (SQLException e) {
+            Logger.getLogger(ProductDAO.class.getName()).log(Level.SEVERE, null, e);
+        }
     }
+    return count;  // Trả về tổng số lượng sản phẩm bán ra cho thương hiệu với trạng thái đơn hàng là "done" và năm đã chỉ định
+}
+
+
+  public int calculateRevenueByBrandAndYear(String brandName, int year) {
+    String sql = "SELECT SUM(od.[Quantity] * pd.[Price]) AS TotalRevenue "
+               + "FROM [Order] o "
+               + "JOIN [OrderDetail] od ON o.[Id] = od.[OrderId] "
+               + "JOIN [ProductDetail] pd ON od.[ProductDetailId] = pd.[Id] "
+               + "JOIN [Product] p ON pd.[ProductId] = p.[Id] "
+               + "JOIN [Brand] b ON p.[BrandId] = b.[Id] "
+               + "WHERE b.[Name] = ? AND o.[OrderStatus] = 'done' AND YEAR(o.[OrderDate]) = ?;";  // Lọc theo thương hiệu, trạng thái và năm
+
+    PreparedStatement ps = null;
+    ResultSet rs = null;
+    int totalRevenue = 0;  // Khởi tạo biến để lưu doanh thu
+
+    try {
+        ps = connection.prepareStatement(sql);
+        ps.setString(1, brandName);  // Thiết lập tên thương hiệu vào câu lệnh SQL
+        ps.setInt(2, year);          // Thiết lập năm vào câu lệnh SQL
+        rs = ps.executeQuery();
+
+        if (rs.next()) {
+            totalRevenue = rs.getInt("TotalRevenue");  // Lấy tổng doanh thu từ cột "TotalRevenue"
+        }
+    } catch (SQLException ex) {
+        Logger.getLogger(ProductDAO.class.getName()).log(Level.SEVERE, null, ex);
+    } finally {
+        try {
+            if (rs != null) {
+                rs.close();
+            }
+            if (ps != null) {
+                ps.close();
+            }
+        } catch (SQLException e) {
+            Logger.getLogger(ProductDAO.class.getName()).log(Level.SEVERE, null, e);
+        }
+    }
+    return totalRevenue;  // Trả về tổng doanh thu cho thương hiệu cụ thể theo năm
+}
+
 
     public int[] calculateMonthlyRevenueForYear(int year) {
         String sql = "SELECT MONTH(o.[OrderDate]) AS Month, "
@@ -210,22 +222,25 @@ public class StatisticDAO extends DBContext {
         return monthlyProductSales;  // Trả về mảng số lượng sản phẩm bán được theo tháng
     }
 
-    public List<ProductSales> getTopSellingProducts() {
-        List<ProductSales> topSellingProducts = new ArrayList<>();
-        String sql = "SELECT TOP 5 \n"
-                + "    p.Id AS ProductId, \n"
-                + "    p.Name AS ProductName, \n"
-                + "    SUM(od.Quantity) AS TotalSold \n"
-                + "FROM OrderDetail od \n"
-                + "JOIN ProductDetail pd ON od.ProductDetailId = pd.Id \n"
-                + "JOIN Product p ON pd.ProductId = p.Id \n"
-                + "JOIN [Order] o ON od.OrderId = o.Id \n"
-                + "WHERE o.OrderStatus = 'done' \n"
-                + "GROUP BY p.Id, p.Name \n"
-                + "ORDER BY TotalSold DESC;";
+public List<ProductSales> getTopSellingProducts(int year) {
+    List<ProductSales> topSellingProducts = new ArrayList<>();
+    String sql = "SELECT TOP 5 \n"
+            + "    p.Id AS ProductId, \n"
+            + "    p.Name AS ProductName, \n"
+            + "    SUM(od.Quantity) AS TotalSold \n"
+            + "FROM OrderDetail od \n"
+            + "JOIN ProductDetail pd ON od.ProductDetailId = pd.Id \n"
+            + "JOIN Product p ON pd.ProductId = p.Id \n"
+            + "JOIN [Order] o ON od.OrderId = o.Id \n"
+            + "WHERE o.OrderStatus = 'done' \n"
+            + "  AND YEAR(o.OrderDate) = ? \n"
+            + "GROUP BY p.Id, p.Name \n"
+            + "ORDER BY TotalSold DESC;";
 
-        try (PreparedStatement stmt = connection.prepareStatement(sql); ResultSet rs = stmt.executeQuery()) {
+    try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+        stmt.setInt(1, year);  // Set giá trị của tham số year
 
+        try (ResultSet rs = stmt.executeQuery()) {
             while (rs.next()) {
                 int productId = rs.getInt("ProductId");
                 String productName = rs.getString("ProductName");
@@ -233,11 +248,13 @@ public class StatisticDAO extends DBContext {
 
                 topSellingProducts.add(new ProductSales(productId, productName, totalSold));
             }
-        } catch (SQLException e) {
-            e.printStackTrace();
         }
-        return topSellingProducts;
+    } catch (SQLException e) {
+        e.printStackTrace();
     }
+    return topSellingProducts;
+}
+
 
     // Lớp ProductSales để lưu trữ thông tin về sản phẩm bán chạy
     public static class ProductSales {
@@ -278,9 +295,130 @@ public class StatisticDAO extends DBContext {
         }
 
     }
+    
+ public List<UserSales> getTop3UsersWithDoneOrdersAndRoleId2(int year, int month) {
+    List<UserSales> topUsers = new ArrayList<>();
+    String sql = """
+            SELECT TOP 3 
+                U.Id AS UserId, 
+                U.Username AS UserName, 
+                U.Fullname AS FullName, 
+                COUNT(O.Id) AS TotalOrders
+            FROM [User] U
+            JOIN [Order] O ON U.Id = O.UserId
+            WHERE O.OrderStatus = 'done' 
+                AND U.RoleId = 2
+                AND YEAR(O.OrderDate) = ? 
+                AND MONTH(O.OrderDate) = ?
+            GROUP BY U.Id, U.Username, U.Fullname
+            ORDER BY TotalOrders DESC;
+            """;
+
+    try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+        stmt.setInt(1, year);
+        stmt.setInt(2, month);
+
+        try (ResultSet rs = stmt.executeQuery()) {
+            while (rs.next()) {
+                int userId = rs.getInt("UserId");
+                String userName = rs.getString("UserName");
+                String fullName = rs.getString("FullName");
+                int totalOrders = rs.getInt("TotalOrders");
+
+                // Tạo đối tượng UserSales và thêm vào danh sách
+                topUsers.add(new UserSales(userId, userName, fullName, totalOrders));
+            }
+        }
+    } catch (SQLException e) {
+        e.printStackTrace();
+    }
+
+    return topUsers;
+}
+ 
+public List<Integer> calculateMonthlyDoneOrdersForUser(int userId, int year) {
+    String sql = """
+            WITH Months AS (
+                SELECT 1 AS Month
+                UNION ALL
+                SELECT 2
+                UNION ALL
+                SELECT 3
+                UNION ALL
+                SELECT 4
+                UNION ALL
+                SELECT 5
+                UNION ALL
+                SELECT 6
+                UNION ALL
+                SELECT 7
+                UNION ALL
+                SELECT 8
+                UNION ALL
+                SELECT 9
+                UNION ALL
+                SELECT 10
+                UNION ALL
+                SELECT 11
+                UNION ALL
+                SELECT 12
+            )
+            SELECT m.Month, 
+                   COALESCE(COUNT(o.Id), 0) AS TotalDoneOrders
+            FROM Months m
+            LEFT JOIN [Order] o ON MONTH(o.OrderDate) = m.Month 
+                AND YEAR(o.OrderDate) = ?
+                AND o.OrderStatus = 'done'
+                AND o.UserId = ?
+            GROUP BY m.Month
+            ORDER BY m.Month;
+            """;
+
+    PreparedStatement ps = null;
+    ResultSet rs = null;
+    List<Integer> monthlyDoneOrders = new ArrayList<>();  // Mảng để lưu số lượng đơn hàng hoàn thành cho 12 tháng
+
+    try {
+        ps = connection.prepareStatement(sql);
+        ps.setInt(1, year);   // Thiết lập năm vào câu lệnh SQL
+        ps.setInt(2, userId); // Thiết lập UserId vào câu lệnh SQL
+        rs = ps.executeQuery();
+
+        while (rs.next()) {
+            int month = rs.getInt("Month");
+            int totalDoneOrders = rs.getInt("TotalDoneOrders");  // Lấy số lượng đơn hàng hoàn thành
+
+            // Thêm số lượng đơn hàng hoàn thành vào mảng theo tháng (giảm 1 vì tháng bắt đầu từ 1)
+            monthlyDoneOrders.add(totalDoneOrders);
+        }
+    } catch (SQLException ex) {
+        ex.printStackTrace();
+    } finally {
+        try {
+            if (rs != null) {
+                rs.close();
+            }
+            if (ps != null) {
+                ps.close();
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+    return monthlyDoneOrders;  // Trả về mảng số lượng đơn hàng hoàn thành theo tháng
+}
+
+
+ 
+ 
+
+
+
+    
+    
 
     public static void main(String[] args) {
         StatisticDAO dao = new StatisticDAO();
-        System.out.println(dao.getTopSellingProducts().toString());
+        System.out.println(dao.getTop3UsersWithDoneOrdersAndRoleId2(2024,10));
     }
 }

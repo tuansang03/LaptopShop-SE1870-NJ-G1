@@ -13,12 +13,14 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import java.util.ArrayList;
 import java.util.List;
 import model.Brand;
 import model.BrandProductCount;
 import model.BrandProductPrice;
 import model.RevenueAndQuantitySold;
+import model.User;
 
 /**
  *
@@ -70,11 +72,17 @@ public class SaleStatisticController2 extends HttpServlet {
         if (service == null) {
             service = "listall";
         }
+        
+        if(service.equalsIgnoreCase("listall")){
+            response.sendRedirect("statistic4display.jsp");
+        }
 
-        if (service.equalsIgnoreCase("listall")) {
+        if (service.equalsIgnoreCase("listallz")) {
             StatisticDAO statisticDAO = new StatisticDAO();
             BrandDAO brandDao = new BrandDAO();
             List<Brand> listBrand = brandDao.getAll();
+            String year_raw = request.getParameter("year");
+            int year = Integer.parseInt(year_raw);
 
             // Sử dụng List để lưu trữ số lượng sản phẩm theo từng thương hiệu
             List<BrandProductCount> brandProductCounts = new ArrayList<>();
@@ -82,17 +90,18 @@ public class SaleStatisticController2 extends HttpServlet {
 
             for (Brand brand : listBrand) {
                 String brandName = brand.getName();
-                int productCount = statisticDAO.countProductsByBrandNameAndOrderStatusDone(brandName);
+                int productCount = statisticDAO.countProductsByBrandNameAndOrderStatusDone(brandName,year);
                 brandProductCounts.add(new BrandProductCount(brandName, productCount));
             }
 
             for (Brand brand : listBrand) {
                 String brandName = brand.getName();
-                int price = statisticDAO.calculateRevenueByBrand(brandName);
+                int price = statisticDAO.calculateRevenueByBrandAndYear(brandName,year);
                 brandProductPrice.add(new BrandProductPrice(brandName, price));
             }
 
             // Lưu dữ liệu vào request
+            request.setAttribute(service, year);
             request.setAttribute("brandProductCounts", brandProductCounts);
             request.setAttribute("brandProductPrice", brandProductPrice);
 
@@ -122,13 +131,44 @@ public class SaleStatisticController2 extends HttpServlet {
             request.getRequestDispatcher("statistic5display.jsp").forward(request, response);
         }
 
-        if (service.equalsIgnoreCase("top5Product")) {
-            StatisticDAO statisticDAO = new StatisticDAO();
-            List<StatisticDAO.ProductSales> list = statisticDAO.getTopSellingProducts();
+         if(service.equalsIgnoreCase("top5Product")){
+//            StatisticDAO statisticDAO = new StatisticDAO();
+//            List<ProductSales> list = statisticDAO.getTopSellingProducts();
+////            list = statisticDAO.getTopSellingProducts();
+//            request.setAttribute("list", list);
+//            request.setAttribute("action2", "action2");
+//            request.getRequestDispatcher("statistic3display.jsp").forward(request, response);
+response.sendRedirect("statistic6display.jsp");
+        }
+         
+          if(service.equalsIgnoreCase("list")){
+            int year = Integer.parseInt(request.getParameter("year"));
+         StatisticDAO statisticDAO = new StatisticDAO();
+            List<StatisticDAO.ProductSales> list = statisticDAO.getTopSellingProducts(year);
 //            list = statisticDAO.getTopSellingProducts();
             request.setAttribute("list", list);
             request.setAttribute("action2", "action2");
+                  request.setAttribute("year", year);
             request.getRequestDispatcher("statistic6display.jsp").forward(request, response);
+      
+        }
+
+        if (service.equalsIgnoreCase("myWork")) {
+            request.setAttribute("action", "actionz");
+            request.getRequestDispatcher("statistic8display.jsp").forward(request, response);
+        }
+
+        if (service.equalsIgnoreCase("myWorkDone")) {
+            String year_raw = request.getParameter("year");
+            int year = Integer.parseInt(year_raw);
+            StatisticDAO dao = new StatisticDAO();
+            HttpSession session = request.getSession();
+            User user = (User) session.getAttribute("sale");
+            List<Integer> monthlyDoneOrders = dao.calculateMonthlyDoneOrdersForUser(user.getId(), year);
+            request.setAttribute("action", "actionz");
+            request.setAttribute("list", monthlyDoneOrders);
+            request.setAttribute("year", year);
+            request.getRequestDispatcher("statistic8display.jsp").forward(request, response);
         }
     }
 
@@ -144,6 +184,7 @@ public class SaleStatisticController2 extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         processRequest(request, response);
+
     }
 
     /**

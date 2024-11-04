@@ -3,9 +3,17 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/E:/SWP391%20clone/LaptopShop-SE1870-NJ-G1/src/java/controller/deleteProduct.java</file>
-            <file>file:/E:/SWP391%20clone/LaptopShop-SE1870-NJ-G1/src/java/dal/ProductDAO.java</file>
-            <file>file:/E:/SWP391%20clone/LaptopShop-SE1870-NJ-G1/src/java/dal/ProductDetailDAO.java</file>
+            <file>file:/D:/iter2_done/LaptopShop-SE1870-NJ-G1/web/statisticdisplay.jsp</file>
+            <file>file:/D:/iter2_done/LaptopShop-SE1870-NJ-G1/src/java/dal/UserDAO.java</file>
+            <file>file:/D:/iter2_done/LaptopShop-SE1870-NJ-G1/web/otp_verification1.jsp</file>
+            <file>file:/D:/iter2_done/LaptopShop-SE1870-NJ-G1/web/sidebar.jsp</file>
+            <file>file:/D:/iter2_done/LaptopShop-SE1870-NJ-G1/src/java/controller/StatisticController.java</file>
+            <file>file:/D:/iter2_done/LaptopShop-SE1870-NJ-G1/src/java/controller/VerifyOTPServlet1.java</file>
+            <file>file:/D:/iter2_done/LaptopShop-SE1870-NJ-G1/src/java/controller/VerifyOTPServlet.java</file>
+            <file>file:/D:/iter2_done/LaptopShop-SE1870-NJ-G1/web/statistic2display.jsp</file>
+            <file>file:/D:/iter2_done/LaptopShop-SE1870-NJ-G1/web/addstaff.jsp</file>
+            <file>file:/D:/iter2_done/LaptopShop-SE1870-NJ-G1/src/java/controller/register1.java</file>
+            <file>file:/D:/iter2_done/LaptopShop-SE1870-NJ-G1/web/otp_verification.jsp</file>
         </group>
     </open-files>
 </project-private>

@@ -322,11 +322,13 @@
                     <a href="CategoryController?service=listall"><i class="fas fa-server"></i> Manage Category</a>
                     <a href="postmanage?service=listall"><i class="fas fa-server"></i> Manage Post</a>
                     <a href="StatisticController?service=listall"><i class="fas fa-calendar"></i> Statistic</a>
+                    <a href="SaleStatisticController2?service=listall"><i class="fas fa-calendar"></i> Statistic</a>
                     
                     <a href="voucherManager"><i class="fas fa-server"></i> Manage Voucher</a>
                     
                     <a href="managerOrder"><i class="fas fa-object-group"></i> Manager Order</a>
                     <a href="readComment"><i class="fas fa-object-group"></i> Manage Comment</a>
+                    <a href="showreturnrequest"><i class="fas fa-object-group"></i> Manage Return</a>
                     <a href="updateAccountPage.jsp"><i class="fas fa-upload  "></i>Update Account</a>
                     <div class="user">
 
