@@ -4,6 +4,9 @@
  */
 package controller;
 
+import dal.FeedbackDAOS;
+import model.*;
+import java.util.List;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -11,15 +14,13 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import model.*;
-import dal.FeedbackDAOS;
-import java.util.List;
+
 /**
  *
  * @author PHONG
  */
-@WebServlet(name = "SeeFeedback", urlPatterns = {"/seefeedback"})
-public class SeeFeedback extends HttpServlet {
+@WebServlet(name = "FeedbackManager", urlPatterns = {"/feedbackmanager"})
+public class FeedbackManager extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -38,10 +39,10 @@ public class SeeFeedback extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet SeeFeedback</title>");            
+            out.println("<title>Servlet FeedbackManager</title>");            
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet SeeFeedback at " + request.getContextPath() + "</h1>");
+            out.println("<h1>Servlet FeedbackManager at " + request.getContextPath() + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
@@ -60,27 +61,18 @@ public class SeeFeedback extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         FeedbackDAOS dao = new FeedbackDAOS();
-        int odid = Integer.parseInt(request.getParameter("orderdetailid"));
-        Feedback myfeedback = dao.getFeedbackById(odid);
-        OrderDetail orderdetail = dao.getOrderDetail(odid);
-        Image productimage = dao.getImageByProductDetailId(orderdetail.getProductDetail().getId());
-        String message=null;
-        if (orderdetail.getOrder().getOrderStatus().compareToIgnoreCase("done") != 0){
-            message="You cannot give feedback when the order has not been delivered successfully!";
+        String rateselect="all";
+        try{
+            rateselect = request.getParameter("op");
+        }catch (Exception e){
         }
-        if (myfeedback!=null){
-        List<Feedback> listreply = dao.getListReplyFeedback(myfeedback.getId());
-        request.setAttribute("listreply", listreply);
-        request.setAttribute("number", listreply.size());
-        }
-        
-        
-        request.setAttribute("orderdetail", orderdetail);
-        request.setAttribute("myfeedback", myfeedback);
-        request.setAttribute("productimage", productimage);
-        request.setAttribute("message", message);
-        
-        request.getRequestDispatcher("feedback.jsp").forward(request, response);
+        List<Feedback> feedbacklist = dao.getAllFeedback(rateselect);
+        List<Feedback> feedbackreply = dao.getAllFeedbackReply();
+        request.setAttribute("feedbacklist", feedbacklist);
+        request.setAttribute("feedbackreply", feedbackreply);
+        request.setAttribute("op", rateselect);
+        request.setAttribute("total", feedbacklist.size());
+        request.getRequestDispatcher("managefeedback.jsp").forward(request, response);
     }
 
     /**
@@ -96,4 +88,15 @@ public class SeeFeedback extends HttpServlet {
             throws ServletException, IOException {
         processRequest(request, response);
     }
+
+    /**
+     * Returns a short description of the servlet.
+     *
+     * @return a String containing servlet description
+     */
+    @Override
+    public String getServletInfo() {
+        return "Short description";
+    }// </editor-fold>
+
 }
