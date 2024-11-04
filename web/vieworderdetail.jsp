@@ -26,7 +26,7 @@
         <link rel="stylesheet" href="assets/css/main.css">
     </head>
     <body>
-        <%@include file="sidebar.jsp" %>
+        <%@include file="sidebar2.jsp" %>
 
         <div class="col-md-10 content">
             <h2>View OrderDetail</h2>

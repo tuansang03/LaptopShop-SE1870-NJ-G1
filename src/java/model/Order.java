@@ -12,6 +12,7 @@ import java.time.format.DateTimeFormatter;
  * @author ADMIN
  */
 public class Order {
+
     private int Id;
     private User User;
     private String Name;
@@ -29,7 +30,12 @@ public class Order {
     private String OrderStatus;
     private String Note;
     private int saleID;
-    
+    private LocalDateTime RejectDate;
+    private LocalDateTime AcceptedDate;
+    private LocalDateTime IntransitDate;
+    private LocalDateTime ShipmentFailedDate;
+    private String Trackingcode;
+
     public Order() {
     }
 
@@ -90,7 +96,30 @@ public class Order {
         this.saleID = saleID;
     }
 
-    
+    public Order(int Id, User User, String Name, String Address, String Phone, LocalDateTime OrderDate, Voucher Voucher, int TotalAmountBefore, int DiscountAmount, int TotalAmountAfter, String PaymentMethod, String PaymentStatus, String VnPayTransactionId, LocalDateTime EndDate, String OrderStatus, String Note, int saleID, LocalDateTime RejectDate, LocalDateTime AcceptedDate, LocalDateTime IntransitDate, LocalDateTime ShipmentFailedDate, String Trackingcode) {
+        this.Id = Id;
+        this.User = User;
+        this.Name = Name;
+        this.Address = Address;
+        this.Phone = Phone;
+        this.OrderDate = OrderDate;
+        this.Voucher = Voucher;
+        this.TotalAmountBefore = TotalAmountBefore;
+        this.DiscountAmount = DiscountAmount;
+        this.TotalAmountAfter = TotalAmountAfter;
+        this.PaymentMethod = PaymentMethod;
+        this.PaymentStatus = PaymentStatus;
+        this.VnPayTransactionId = VnPayTransactionId;
+        this.EndDate = EndDate;
+        this.OrderStatus = OrderStatus;
+        this.Note = Note;
+        this.saleID = saleID;
+        this.RejectDate = RejectDate;
+        this.AcceptedDate = AcceptedDate;
+        this.IntransitDate = IntransitDate;
+        this.ShipmentFailedDate = ShipmentFailedDate;
+        this.Trackingcode = Trackingcode;
+    }
 
     public int getId() {
         return Id;
@@ -131,8 +160,6 @@ public class Order {
     public void setPhone(String Phone) {
         this.Phone = Phone;
     }
-
-    
 
     public Voucher getVoucher() {
         return Voucher;
@@ -213,6 +240,7 @@ public class Order {
     public void setOrderStatus(String OrderStatus) {
         this.OrderStatus = OrderStatus;
     }
+
     public String getNote() {
         return Note;
     }
@@ -228,6 +256,89 @@ public class Order {
     
     public String getOrderDateAsTimeString() {
         DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm:ss"); // Định dạng giờ
+        return OrderDate.format(timeFormatter);
+    }
+
+    public String getOrderDateAsDateString() {
+        DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd-MM-yyyy"); // Định dạng ngày yyyy-MM-dd
+        return OrderDate.format(dateFormatter);
+    }
+
+    public String getOrderDateAsTimeString() {
+        DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm:ss"); // Định dạng giờ
+        return OrderDate.format(timeFormatter);
+    }
+
+    public int getSaleID() {
+        return saleID;
+    }
+
+    public void setSaleID(int saleID) {
+        this.saleID = saleID;
+    }
+
+    public LocalDateTime getRejectDate() {
+        return RejectDate;
+    }
+
+    public void setRejectDate(LocalDateTime RejectDate) {
+        this.RejectDate = RejectDate;
+    }
+
+    public LocalDateTime getAcceptedDate() {
+        return AcceptedDate;
+    }
+
+    public void setAcceptedDate(LocalDateTime AcceptedDate) {
+        this.AcceptedDate = AcceptedDate;
+    }
+
+    public LocalDateTime getIntransitDate() {
+        return IntransitDate;
+    }
+
+    public void setIntransitDate(LocalDateTime IntransitDate) {
+        this.IntransitDate = IntransitDate;
+    }
+
+    public LocalDateTime getShipmentFailedDate() {
+        return ShipmentFailedDate;
+    }
+
+    public void setShipmentFailedDate(LocalDateTime ShipmentFailedDate) {
+        this.ShipmentFailedDate = ShipmentFailedDate;
+    }
+
+    public String getTrackingcode() {
+        return Trackingcode;
+    }
+
+    public void setTrackingcode(String Trackingcode) {
+        this.Trackingcode = Trackingcode;
+    }
+
+    public String getRejectDateAsDateTimeString() {
+        return RejectDate != null ? RejectDate.format(DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss")) : null;
+    }
+
+    public String getAcceptedDateAsDateTimeString() {
+        return AcceptedDate != null ? AcceptedDate.format(DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss")) : null;
+    }
+
+    public String getIntransitDateAsDateTimeString() {
+        return IntransitDate != null ? IntransitDate.format(DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss")) : null;
+    }
+
+    public String getShipmentFailedDateAsDateTimeString() {
+        return ShipmentFailedDate != null ? ShipmentFailedDate.format(DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss")) : null;
+    }
+    
+    public String getDoneDateAsDateTimeString() {
+        return EndDate != null ? EndDate.format(DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss")) : null;
+    }
+    
+    public String getOrderDateAsDateTimeString() {
+        DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss"); // Định dạng giờ
         return OrderDate.format(timeFormatter);
     }
 

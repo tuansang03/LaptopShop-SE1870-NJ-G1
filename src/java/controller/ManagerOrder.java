@@ -34,21 +34,21 @@ public class ManagerOrder extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        OderDAO oDAO = new OderDAO();
-        List<Order> listOrder = oDAO.getAllOrder("wait");
-
-        Integer oid = (Integer) request.getAttribute("oid");
-
-        if (!(oid == null)) {
-            Order order = oDAO.getOrderByID(oid);
-            if (order.getOrderStatus().equals("done")) {
-                oDAO.updateEnddate(LocalDateTime.now(), oid);
-            }
-        }
-
-        request.setAttribute("action", "wait");
-        request.setAttribute("listOrder", listOrder);
-        request.getRequestDispatcher("managerOrderDisplay.jsp").forward(request, response);
+//        OderDAO oDAO = new OderDAO();
+//        List<Order> listOrder = oDAO.getAllOrder("wait");
+//
+//        Integer oid = (Integer) request.getAttribute("oid");
+//
+//        if (!(oid == null)) {
+//            Order order = oDAO.getOrderByID(oid);
+//            if (order.getOrderStatus().equals("done")) {
+//                oDAO.updateEnddate(LocalDateTime.now(), oid);
+//            }
+//        }
+//
+//        request.setAttribute("action", "wait");
+//        request.setAttribute("listOrder", listOrder);
+//        request.getRequestDispatcher("managerOrderDisplay.jsp").forward(request, response);
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

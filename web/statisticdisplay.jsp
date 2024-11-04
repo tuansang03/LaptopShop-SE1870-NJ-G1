@@ -30,8 +30,19 @@
         <select id="revenueType" class="form-control" onchange="updateChartType()">
             <option value="brand">Calculated by Brand</option>
             <option value="month">Calculated by Month</option>
-            <option value="top5Product">Top 5 Product</option> <!-- Thêm lựa chọn Top 5 Product -->
+            <option value="top5Product">Top 5 Product</option>
+            <option value="top5Staff">Top 3 Staff</option> <!-- Thêm lựa chọn Top 5 Saler -->
         </select>
+     <div class="form-group mt-4">
+        <form action="StatisticController" method="get" onsubmit="return validateYear()">
+            <label for="yearInput">Enter Year:</label>
+            <% int currentYear = java.time.Year.now().getValue(); %>
+            <input type="number" id="yearInput" name="year" class="form-control" 
+                   placeholder="Enter Year (1900 - present)" required 
+                   value="${year}" min="1900" max="<%= currentYear %>">
+            <input type="hidden" name="service" value="listallz">
+            <button type="submit" class="btn btn-primary mt-2">Submit</button>
+        </form>
     </div>
 
     <!-- Biểu đồ số sản phẩm bán được theo thương hiệu -->
@@ -85,7 +96,6 @@
     <canvas id="revenueChart" style="width:100%;max-width:600px"></canvas>
 
     <script>
-        // Lấy dữ liệu từ đối tượng brandProductPrice truyền từ Servlet
         const revenueLabels = [];
         const revenueValues = [];
 
@@ -115,12 +125,11 @@
         });
     </script>
 
-    <!-- Biểu đồ doanh thu theo tháng (chỉ hiển thị khi chọn "Calculated by Month") -->
+    <!-- Biểu đồ doanh thu theo tháng -->
     <h3 class="mt-5" id="monthlyRevenueTitle" style="display:none;">Revenue by Month</h3>
     <canvas id="monthlyRevenueChart" style="width:100%;max-width:600px; display:none;"></canvas>
 
     <script>
-        // Lấy dữ liệu từ đối tượng monthlyRevenueCounts truyền từ Servlet
         const monthLabels = [];
         const monthValues = [];
 
@@ -149,7 +158,6 @@
             }
         });
 
-        // Hàm để chuyển đổi giữa các biểu đồ
         function updateChartType() {
             const selectedType = document.getElementById("revenueType").value;
 
@@ -157,51 +165,29 @@
                 document.getElementById("productChart").style.display = "block";
                 document.getElementById("revenueChart").style.display = "block";
                 document.getElementById("monthlyRevenueChart").style.display = "none";
-                document.getElementById("monthlyRevenueTitle").style.display = "none"; // Ẩn tiêu đề
-                window.location.href = 'StatisticController?service=listall';  // Chuyển hướng đến servlet xử lý brand
+                document.getElementById("monthlyRevenueTitle").style.display = "none";
+                window.location.href = 'StatisticController?service=listall';
             } else if (selectedType === "month") {
                 document.getElementById("productChart").style.display = "none";
                 document.getElementById("revenueChart").style.display = "none";
                 document.getElementById("monthlyRevenueChart").style.display = "block";
-                document.getElementById("monthlyRevenueTitle").style.display = "block"; // Hiển thị tiêu đề
-                window.location.href = 'StatisticController?service=monthlyRevenue';  // Chuyển hướng đến servlet xử lý tháng
+                document.getElementById("monthlyRevenueTitle").style.display = "block";
+                window.location.href = 'StatisticController?service=monthlyRevenue';
             } else if (selectedType === "top5Product") {
                 document.getElementById("productChart").style.display = "none";
                 document.getElementById("revenueChart").style.display = "none";
                 document.getElementById("monthlyRevenueChart").style.display = "none";
-                document.getElementById("monthlyRevenueTitle").style.display = "none"; // Ẩn tiêu đề
-                window.location.href = 'StatisticController?service=top5Product';  // Chuyển hướng đến servlet xử lý Top 5 Product
+                document.getElementById("monthlyRevenueTitle").style.display = "none";
+                window.location.href = 'StatisticController?service=top5Product';
+            } else if (selectedType === "top5Staff") {
+                document.getElementById("productChart").style.display = "none";
+                document.getElementById("revenueChart").style.display = "none";
+                document.getElementById("monthlyRevenueChart").style.display = "none";
+                document.getElementById("monthlyRevenueTitle").style.display = "none";
+                window.location.href = 'StatisticController?service=top5Staff'; // Chuyển hướng đến top 5 Saler
             }
         }
     </script>
-
-    <style>
-        .list-page {
-            display: flex;
-            justify-content: center;
-            margin-top: 20px;
-        }
-        .list-page .item {
-            display: flex;
-            align-items: center;
-        }
-        .list-page .item a {
-            text-decoration: none;
-            color: #333;
-            padding: 5px 10px;
-            margin: 0 2px;
-            border: 1px solid #ccc;
-            border-radius: 3px;
-        }
-        .list-page .item a.active {
-            background-color: #007bff;
-            color: #fff;
-            border-color: #007bff;
-        }
-        .list-page .item a:hover {
-            background-color: #f0f0f0;
-        }
-    </style>
 </div>
 </body>
 </html>

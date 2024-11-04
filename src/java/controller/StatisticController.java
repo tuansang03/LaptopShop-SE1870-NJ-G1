@@ -20,6 +20,7 @@ import model.Brand;
 import model.BrandProductCount;
 import model.BrandProductPrice;
 import model.RevenueAndQuantitySold;
+import model.UserSales;
 
 /**
  *
@@ -71,8 +72,14 @@ public class StatisticController extends HttpServlet {
         if (service == null) {
             service = "listall";
         }
+        
+        if(service.equalsIgnoreCase("listall")){
+            response.sendRedirect("statisticdisplay.jsp");
+        }
 
-        if (service.equalsIgnoreCase("listall")) {
+        if (service.equalsIgnoreCase("listallz")) {
+            String year_raw =request.getParameter("year");
+            int year = Integer.parseInt(year_raw);
             StatisticDAO statisticDAO = new StatisticDAO();
             BrandDAO brandDao = new BrandDAO();
             List<Brand> listBrand = brandDao.getAll();
@@ -83,18 +90,19 @@ public class StatisticController extends HttpServlet {
 
             for (Brand brand : listBrand) {
                 String brandName = brand.getName();
-                int productCount = statisticDAO.countProductsByBrandNameAndOrderStatusDone(brandName);
+                int productCount = statisticDAO.countProductsByBrandNameAndOrderStatusDone(brandName,year);
                 brandProductCounts.add(new BrandProductCount(brandName, productCount));
             }
             
             for (Brand brand : listBrand) {
                 String brandName = brand.getName();
-                int price = statisticDAO.calculateRevenueByBrand(brandName);
+                int price = statisticDAO.calculateRevenueByBrandAndYear(brandName,year);
                 brandProductPrice.add(new BrandProductPrice(brandName, price));
             }
 
 
             // Lưu dữ liệu vào request
+            request.setAttribute("year", year);
             request.setAttribute("brandProductCounts", brandProductCounts);
              request.setAttribute("brandProductPrice", brandProductPrice);
 
@@ -126,12 +134,46 @@ public class StatisticController extends HttpServlet {
         }
         
         if(service.equalsIgnoreCase("top5Product")){
-            StatisticDAO statisticDAO = new StatisticDAO();
-            List<ProductSales> list = statisticDAO.getTopSellingProducts();
+//            StatisticDAO statisticDAO = new StatisticDAO();
+//            List<ProductSales> list = statisticDAO.getTopSellingProducts();
+////            list = statisticDAO.getTopSellingProducts();
+//            request.setAttribute("list", list);
+//            request.setAttribute("action2", "action2");
+//            request.getRequestDispatcher("statistic3display.jsp").forward(request, response);
+request.setAttribute("action2", "action2");
+response.sendRedirect("statistic3display.jsp");
+        }
+        
+        if(service.equalsIgnoreCase("top5Staff")){
+            request.setAttribute("action", "actionz");
+            request.getRequestDispatcher("statistic7display.jsp").forward(request, response);
+        }
+        
+        if(service.equalsIgnoreCase("list")){
+            int year = Integer.parseInt(request.getParameter("year"));
+         StatisticDAO statisticDAO = new StatisticDAO();
+            List<ProductSales> list = statisticDAO.getTopSellingProducts(year);
 //            list = statisticDAO.getTopSellingProducts();
             request.setAttribute("list", list);
             request.setAttribute("action2", "action2");
+                  request.setAttribute("year", year);
             request.getRequestDispatcher("statistic3display.jsp").forward(request, response);
+      
+        }
+        
+        if(service.equalsIgnoreCase("top3Staff")){
+            String year_raw = request.getParameter("year");
+            int year = Integer.parseInt(year_raw);
+            String month_raw = request.getParameter("month");
+            int month = Integer.parseInt(month_raw);
+            StatisticDAO dao = new StatisticDAO();
+            List<UserSales> list = new ArrayList<>();
+            list = dao.getTop3UsersWithDoneOrdersAndRoleId2(year, month);
+            request.setAttribute("year", year);
+            request.setAttribute("month", month);
+            request.setAttribute("list", list);
+            request.setAttribute("action", "actionz");
+            request.getRequestDispatcher("statistic7display.jsp").forward(request, response);
         }
     }
     
