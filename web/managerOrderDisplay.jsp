@@ -21,6 +21,12 @@
         <link rel="stylesheet" href="assets/css/nice-select.css">
         <link rel="stylesheet" href="assets/css/main.css">
 
+        <script>
+            function doDeleteOrder() {
+                return confirm("Do you want to delete this order?");
+            }
+        </script>
+
         <style>
             /* Bố cục cho container chính */
             div[style*="display: flex"] {
@@ -217,8 +223,7 @@
         </style>
 
     </head>
-    <body>
-        <c:if test="${sessionScope.sale!=null}">
+    <body style="padding: 0">
         <%@include file="sidebar2.jsp" %>
 
         <div class="col-md-10 content">
@@ -229,8 +234,8 @@
                     <button name="action" value="wait" style="outline: none">
                         <div class="${action == 'wait' ? 'backgroundSelect': 'background'}">
                             <h5>Processing</h5>
-                            <h6>Total Order:${totalOrderWait} </h6>
-                            <h6>Total Money:
+                            <h6 style="font-size: 11px">Total Order:${totalOrderWait} </h6>
+                            <h6 style="font-size: 11px">Total Money:
                                 <fmt:formatNumber value="${totalAmountWait}" pattern="#,###" />
                             </h6>
                         </div>
@@ -238,8 +243,8 @@
                     <button name="action" value="rejected" style="outline: none">
                         <div class="${action == 'rejected' ? 'backgroundSelect': 'background'}">
                             <h5>Rejected</h5>
-                            <h6>Total Order:${totalOrderRejected} </h6>
-                            <h6>Total Money:
+                            <h6 style="font-size: 11px">Total Order:${totalOrderRejected} </h6>
+                            <h6 style="font-size: 11px">Total Money:
                                 <fmt:formatNumber value="${totalAmountRejected}" pattern="#,###" />
                             </h6>
                         </div>
@@ -247,8 +252,8 @@
                     <button name="action" value="accepted" style="outline: none">
                         <div class="${action == 'accepted' ? 'backgroundSelect': 'background'}">
                             <h5>Accepted</h5>
-                            <h6>Total Order:${totalOrderAccepted} </h6>
-                            <h6>Total Money:
+                            <h6 style="font-size: 11px">Total Order:${totalOrderAccepted} </h6>
+                            <h6 style="font-size: 11px">Total Money:
                                 <fmt:formatNumber value="${totalAmountAccepted}" pattern="#,###" />
                             </h6>
                         </div>
@@ -256,8 +261,8 @@
                     <button name="action" value="intransit" style="outline: none">
                         <div class="${action == 'intransit' ? 'backgroundSelect': 'background'}">
                             <h5>In Transit</h5>
-                            <h6>Total Order:${totalOrderIntransit} </h6>
-                            <h6>Total Money:
+                            <h6 style="font-size: 11px">Total Order:${totalOrderIntransit} </h6>
+                            <h6 style="font-size: 11px">Total Money:
                                 <fmt:formatNumber value="${totalAmountIntransit}" pattern="#,###" />
                             </h6>
                         </div>
@@ -265,8 +270,8 @@
                     <button name="action" value="failed" style="outline: none">
                         <div class="${action == 'failed' ? 'backgroundSelect': 'background'}">
                             <h5>Shipment Failed</h5>
-                            <h6>Total Order:${totalOrderFailed} </h6>
-                            <h6>Total Money:
+                            <h6 style="font-size: 11px">Total Order:${totalOrderFailed} </h6>
+                            <h6 style="font-size: 11px">Total Money:
                                 <fmt:formatNumber value="${totalAmountFailed}" pattern="#,###" />
                             </h6>
                         </div>
@@ -274,8 +279,8 @@
                     <button name="action" value="done" style="outline: none">
                         <div class="${action == 'done' ? 'backgroundSelect': 'background'}">
                             <h5>Done</h5>
-                            <h6>Total Order:${totalOrderDone} </h6>
-                            <h6>Total Money:
+                            <h6 style="font-size: 11px">Total Order:${totalOrderDone} </h6>
+                            <h6 style="font-size: 11px">Total Money:
                                 <fmt:formatNumber value="${totalAmountDone}" pattern="#,###" />
                             </h6>
                         </div>
@@ -312,7 +317,28 @@
                         <th>Payment<br>Status</th>
                         <th>VNPayID</th>
                         <th>Order Date</th>
-                        <th>Order Time</th>
+                        <!--                        <th>Order Time</th>-->
+
+                        <c:if test="${action == 'rejected'}">
+                            <th>Reject Date</th>
+                            </c:if>
+
+                        <c:if test="${action == 'accepted'}">
+                            <th>Accepted Date</th>
+                            <th>Tracking Code</th>
+                            </c:if>    
+
+                        <c:if test="${action == 'intransit'}">
+                            <th>InTransit Date</th>
+                            </c:if>
+
+                        <c:if test="${action == 'failed'}">
+                            <th>Shipment Date</th>
+                            </c:if>
+                            <c:if test="${action == 'done'}">
+                            <th>Date End</th>
+                            </c:if>
+
                         <th>Note</th>
                             <c:if test="${action != 'done'}">
                             <th>Actions</th>
@@ -359,11 +385,43 @@
                                 </c:if>
                             </td>
                             <td>
-                                ${o.getOrderDateAsDateString()}
+                                ${o.getOrderDateAsDateTimeString()}
                             </td>
-                            <td>
-                                ${o.getOrderDateAsTimeString()}
-                            </td>
+                            <!--                            <td>
+                            ${o.getOrderDateAsTimeString()}
+                        </td>-->
+
+                            <c:if test="${action == 'rejected'}">
+                                <td>${o.getRejectDateAsDateTimeString()}</td>
+                            </c:if>
+
+                            <c:if test="${action == 'accepted'}">
+                                <td>
+                                    ${o.getAcceptedDateAsDateTimeString()}
+                                </td>
+                                <td>
+                                    <input style="width: 60px" type="text" id="codeInput" required name="code"/>
+                                </td>
+                            </c:if>
+
+                            <c:if test="${action == 'intransit'}">
+                                <td>
+                                    ${o.getIntransitDateAsDateTimeString()}
+                                </td>
+                            </c:if> 
+
+                            <c:if test="${action == 'failed'}">
+                                <td>
+                                    ${o.getShipmentFailedDateAsDateTimeString()}
+                                </td>
+                            </c:if>
+
+                            <c:if test="${action == 'done'}">
+                                <td>
+                                    ${o.getDoneDateAsDateTimeString()}
+                                </td>
+                            </c:if>
+
                             <td>
                                 <c:if test="${o.getNote().isEmpty() || o.getNote() == null}">None</c:if>
                                 <c:if test="${!o.getNote().isEmpty()}">${o.getNote()}</c:if>
@@ -384,9 +442,11 @@
                     </c:if>
 
                     <c:if test="${action == 'rejected'}">
-                        <form action="changeStatusOrderDoneAndDelete" method="get">
+                        <form action="changeStatusOrderDoneAndDelete" method="get" >
                             <td>
-                                <button name="op" value="rejected"
+                                <button onclick="if (doDeleteOrder()) {
+                                            this.form.submit();
+                                        }" name="op" value="rejected"
                                         class="action-button rejected-button">Delete
                                 </button>
                             </td>
@@ -395,23 +455,29 @@
                     </c:if>
 
                     <c:if test="${action == 'accepted'}">
-                        <form action="changeStatusOrder" method="post">
+                        <form action="changeStatusOrder" method="post" onsubmit="copyCodeToForm()">
                             <td>
                                 <button name="action" value="intransit"
                                         class="action-button accepted-button">In Transit
                                 </button>
                             </td>
                             <input name="oid" type="hidden" value="${o.getId()}" />
+                            <input type="hidden" id="hiddenCodeInput" name="code"/>
                         </form>
                     </c:if>
-
+                    <script>
+                        function copyCodeToForm() {
+                            var codeValue = document.getElementById("codeInput").value;
+                            document.getElementById("hiddenCodeInput").value = codeValue;
+                        }
+                    </script>
                     <c:if test="${action == 'intransit'}">
                         <form action="changeStatusOrderDoneAndDelete" method="post">
                             <td>
-                                <button name="action" value="done"
+                                <button style="font-size: 10px" name="action" value="done"
                                         class="action-button accepted-button">Done
                                 </button>
-                                <button name="action" value="failed"
+                                <button style="font-size: 10px" name="action" value="failed"
                                         class="action-button rejected-button">Shipment Failed
                                 </button>
                             </td>
@@ -420,9 +486,11 @@
                     </c:if>
 
                     <c:if test="${action == 'failed'}">
-                        <form action="changeStatusOrderDoneAndDelete" method="get">
+                        <form action="changeStatusOrderDoneAndDelete" method="get" >
                             <td>
-                                <button name="op" value="failed"
+                                <button onclick="if (doDeleteOrder()) {
+                                            this.form.submit();
+                                        }" name="op" value="failed"
                                         class="action-button rejected-button">Delete
                                 </button>
                             </td>
@@ -434,10 +502,5 @@
                 </tbody>
             </table>
         </div>
-            </c:if>
-        <c:if test="${sessionScope.admin!=null || sessionScope.user!=null || (sessionScope.user==null && 
-                      sessionScope.sale==null && sessionScope.admin==null)}">
-            <%@include file="notallowpage.jsp" %>
-        </c:if>
     </body>
 </html>

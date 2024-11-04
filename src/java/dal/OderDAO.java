@@ -526,31 +526,37 @@ public class OderDAO extends DBContext {
         return false; // Cập nhật thất bại
     }
 
-    public List<Order> getAllOrder(String op) {
+    public List<Order> getAllOrder(String op, int saleID) {
         String sql = "SELECT * FROM [Order] WHERE OrderStatus ";
         List<Order> listOrder = new ArrayList<>();
 
         try {
             if (op.equals("wait")) {
-                sql += "LIKE 'wait'";
+                sql += "LIKE 'wait' AND SaleId = ?";
             } else if (op.equals("rejected")) {
-                sql += "LIKE 'rejected'";
+                sql += "LIKE 'rejected' AND SaleId = ?";
             } else if (op.equals("accepted")) {
-                sql += "LIKE 'accepted'";
+                sql += "LIKE 'accepted' AND SaleId = ?";
             } else if (op.equals("intransit")) {
-                sql += "LIKE 'intransit'";
+                sql += "LIKE 'intransit' AND SaleId = ?";
             } else if (op.equals("failed")) {
-                sql += "LIKE 'failed'";
+                sql += "LIKE 'failed' AND SaleId = ?";
             } else if (op.equals("done")) {
-                sql += "LIKE 'done'";
+                sql += "LIKE 'done' AND SaleId = ?";
             }
             PreparedStatement st = connection.prepareStatement(sql);
+            st.setInt(1, saleID);
             ResultSet rs = st.executeQuery();
 
             while (rs.next()) {
                 UserDAO uDAO = new UserDAO();
                 VoucherDAO vDAO = new VoucherDAO();
                 LocalDateTime endDate = rs.getTimestamp("EndDate") != null ? rs.getTimestamp("EndDate").toLocalDateTime() : null;
+                LocalDateTime RejectDate = rs.getTimestamp("RejectDate") != null ? rs.getTimestamp("RejectDate").toLocalDateTime() : null;
+                LocalDateTime AcceptedDate = rs.getTimestamp("AcceptedDate") != null ? rs.getTimestamp("AcceptedDate").toLocalDateTime() : null;
+                LocalDateTime IntransitDate = rs.getTimestamp("IntransitDate") != null ? rs.getTimestamp("IntransitDate").toLocalDateTime() : null;
+                LocalDateTime ShipmentFailedDate = rs.getTimestamp("ShipmentFailedDate") != null ? rs.getTimestamp("ShipmentFailedDate").toLocalDateTime() : null;
+
                 Order o = new Order(rs.getInt("Id"),
                         uDAO.getUserByIdD(rs.getInt("UserID")),
                         rs.getString("Name"),
@@ -566,7 +572,14 @@ public class OderDAO extends DBContext {
                         rs.getString("VnPayTransactionId"),
                         endDate,
                         rs.getString("OrderStatus"),
-                        rs.getString("Note"));
+                        rs.getString("Note"),
+                        rs.getInt("SaleId"),
+                        RejectDate,
+                        AcceptedDate,
+                        IntransitDate,
+                        ShipmentFailedDate,
+                        rs.getString("Trackingcode"));
+
                 listOrder.add(o);
             }
 
@@ -818,12 +831,13 @@ public class OderDAO extends DBContext {
         }
     }
 
-    public int totalOrderByOrderStatus(String status) {
-        String sql = "SELECT COUNT(ID) FROM [Order] WHERE OrderStatus LIKE ?";
+    public int totalOrderByOrderStatus(String status, int saleID) {
+        String sql = "SELECT COUNT(ID) FROM [Order] WHERE OrderStatus LIKE ? AND SaleId = ?";
         int totalOrders = 0;
         try {
             PreparedStatement st = connection.prepareStatement(sql);
             st.setString(1, status);
+            st.setInt(2, saleID);
             ResultSet rs = st.executeQuery();
 
             if (rs.next()) {
@@ -835,12 +849,13 @@ public class OderDAO extends DBContext {
         return totalOrders;
     }
 
-    public int totalAmountByOrderStatus(String status) {
-        String sql = "SELECT SUM(TotalAmountAfter) FROM [Order] WHERE OrderStatus LIKE ?";
+    public int totalAmountByOrderStatus(String status, int saleID) {
+        String sql = "SELECT SUM(TotalAmountAfter) FROM [Order] WHERE OrderStatus LIKE ? AND SaleId = ?";
         int totalAmount = 0;
         try {
             PreparedStatement st = connection.prepareStatement(sql);
             st.setString(1, status);
+            st.setInt(2, saleID);
             ResultSet rs = st.executeQuery();
 
             if (rs.next()) {
@@ -873,53 +888,60 @@ public class OderDAO extends DBContext {
     }
 
     public List<Order> searchOrderByUserNameAndDate(String userName,
-            String startDate, String endDate) {
+            String startDate, String endDate, int saleID) {
         
         String sql = "SELECT * FROM [Order] o ";
         List<Order> listOrder = new ArrayList<>();
         try {
 
             if (startDate.equals("Null") && endDate.equals("Null") && userName.equals("Null")) {
-                sql += "";
+                sql += " WHERE SaleID = ?";
             } else if (startDate.equals("Null") && endDate.equals("Null")) {
-                sql += " WHERE (o.[name] LIKE ?)";
+                sql += " WHERE (o.[name] LIKE ?) AND SaleID = ?";
             } else if (userName.equals("Null") && endDate.equals("Null")) {
-                sql += " WHERE (o.OrderDate >= ?)";
+                sql += " WHERE (o.OrderDate >= ?) AND SaleID = ?";
             } else if (userName.equals("Null") && startDate.equals("Null")) {
-                sql += " WHERE (o.OrderDate <= ?)";
+                sql += " WHERE (o.OrderDate <= ?) AND SaleID = ?";
             } else if (endDate.equals("Null")) {
-                sql += " WHERE (o.[name] LIKE ? AND o.OrderDate >= ?)";
+                sql += " WHERE (o.[name] LIKE ? AND o.OrderDate >= ?) AND SaleID = ?";
             } else if (startDate.equals("Null")) {
-                sql += " WHERE (o.[name] LIKE ? AND o.OrderDate <= ?)";
+                sql += " WHERE (o.[name] LIKE ? AND o.OrderDate <= ?) AND SaleID = ?";
             } else if (userName.equals("Null")) {
-                sql += " WHERE (o.OrderDate BETWEEN ? AND ?)";
+                sql += " WHERE (o.OrderDate BETWEEN ? AND ?) AND SaleID = ?";
             } else {
-                sql += " WHERE (o.[name] LIKE ? AND o.OrderDate BETWEEN ? AND ?)";
+                sql += " WHERE (o.[name] LIKE ? AND o.OrderDate BETWEEN ? AND ?) AND SaleID = ?";
             }
 
             PreparedStatement st = connection.prepareStatement(sql);
 
             if (startDate.equals("Null") && endDate.equals("Null") && userName.equals("Null")) {
-                //ResultSet rs = st.executeQuery();
+                st.setInt(1, saleID);
             } else if (startDate.equals("Null") && endDate.equals("Null")) {
                 st.setString(1, "%" + userName + "%");
+                st.setInt(2, saleID);
             } else if (userName.equals("Null") && endDate.equals("Null")) {
                 st.setString(1, startDate);
+                st.setInt(2, saleID);
             } else if (userName.equals("Null") && startDate.equals("Null")) {
                 st.setString(1, endDate);
+                st.setInt(2, saleID);
             } else if (endDate.equals("Null")) {
                 st.setString(1, "%" + userName + "%");
                 st.setString(2, startDate);
+                st.setInt(3, saleID);
             } else if (startDate.equals("Null")) {
                 st.setString(1, "%" + userName + "%");
                 st.setString(2, endDate);
+                st.setInt(3, saleID);
             } else if (userName.equals("Null")) {
                 st.setString(1, startDate);
                 st.setString(2, endDate);
+                st.setInt(3, saleID);
             } else {
                 st.setString(1, "%" + userName + "%");
                 st.setString(2, startDate);
                 st.setString(3, endDate);
+                st.setInt(4, saleID);
             }
             ResultSet rs = st.executeQuery();
             
@@ -950,12 +972,85 @@ public class OderDAO extends DBContext {
         }
         return listOrder;
     }
+    
+    public void updateAccepteDate(String date, int id) {
+        String sql = "UPDATE [dbo].[Order] SET [AcceptedDate] = ? WHERE Id = ?";
+
+        try {
+            PreparedStatement st = connection.prepareStatement(sql);
+            st.setString(1, date);
+            st.setInt(2, id);
+            st.executeUpdate();
+        } catch (Exception e) {
+        }
+    }
+
+    public void addTrackingCode(String code, int id) {
+        String sql = "UPDATE [dbo].[Order] SET [Trackingcode] = ? WHERE Id = ?";
+
+        try {
+            PreparedStatement st = connection.prepareStatement(sql);
+            st.setString(1, code);
+            st.setInt(2, id);
+            st.executeUpdate();
+        } catch (Exception e) {
+        }
+    }
+
+    public void updateIntransitDate(String date, int id) {
+        String sql = "UPDATE [dbo].[Order] SET [IntransitDate] = ? WHERE Id = ?";
+
+        try {
+            PreparedStatement st = connection.prepareStatement(sql);
+            st.setString(1, date);
+            st.setInt(2, id);
+            st.executeUpdate();
+        } catch (Exception e) {
+        }
+    }
+
+    public void updateRejected(String date, int id) {
+        String sql = "UPDATE [dbo].[Order] SET [RejectDate] = ? WHERE Id = ?";
+
+        try {
+            PreparedStatement st = connection.prepareStatement(sql);
+            st.setString(1, date);
+            st.setInt(2, id);
+            st.executeUpdate();
+        } catch (Exception e) {
+        }
+    }
+
+    public void updateShipmentFailedDate(String date, int id) {
+        String sql = "UPDATE [dbo].[Order] SET [ShipmentFailedDate] = ? WHERE Id = ?";
+
+        try {
+            PreparedStatement st = connection.prepareStatement(sql);
+            st.setString(1, date);
+            st.setInt(2, id);
+            st.executeUpdate();
+        } catch (Exception e) {
+        }
+    }
+
+    public void updateDoneDate(String date, int id) {
+        String sql = "UPDATE [dbo].[Order] SET [EndDate] = ? WHERE Id = ?";
+
+        try {
+            PreparedStatement st = connection.prepareStatement(sql);
+            st.setString(1, date);
+            st.setInt(2, id);
+            st.executeUpdate();
+        } catch (Exception e) {
+        }
+    }
+
 
     public static void main(String[] args) {
         OderDAO o = new OderDAO();
 
-        List<Order> a = o.searchOrderByUserNameAndDate("23", "Null", "Null");
-        System.out.println(a.size());
+//        List<Order> a = o.searchOrderByUserNameAndDate("23", "Null", "Null");
+//        System.out.println(a.size());
 
     }
 }

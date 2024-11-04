@@ -12,7 +12,8 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 /**
  *
  * @author ADMIN
@@ -93,10 +94,15 @@ public class ChangeStatusOrderDoneAndDelete extends HttpServlet {
         String action = request.getParameter("action");
         OderDAO oDAO = new OderDAO();
         int oid = Integer.parseInt(oid_raw);
+        LocalDateTime date = LocalDateTime.now();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        String formattedDateTime = date.format(formatter);
         if (action.equals("done")) {
             oDAO.changeOrderStatus(action, oid);
+            oDAO.updateDoneDate(formattedDateTime, oid);
         } else if (action.equals("failed")) {
             oDAO.changeOrderStatus(action, oid);
+            oDAO.updateShipmentFailedDate(formattedDateTime, oid);
         }
 
         action = "intransit";

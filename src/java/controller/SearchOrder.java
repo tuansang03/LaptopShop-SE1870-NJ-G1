@@ -5,6 +5,7 @@
 package controller;
 
 import dal.OderDAO;
+import dal.UserDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -12,8 +13,10 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import java.util.List;
 import model.Order;
+import model.User;
 
 /**
  *
@@ -36,6 +39,16 @@ public class SearchOrder extends HttpServlet {
         String search = request.getParameter("searchOrder");
         String startDate = request.getParameter("startDate");
         String endDate = request.getParameter("endDate");
+        
+        HttpSession session = request.getSession();
+        User user = (User) session.getAttribute("sale");
+        if (user == null) {
+            request.getRequestDispatcher("notallowpage.jsp").forward(request, response);
+        }
+
+        UserDAO uDAO = new UserDAO();
+        int saleid = uDAO.getUserByIdD(user.getId()).getId();
+        
         //String action = request.getParameter("action");
         OderDAO oDAO = new OderDAO();
         List<Order> listOrder = null;
@@ -43,31 +56,31 @@ public class SearchOrder extends HttpServlet {
             && (startDate == null || startDate.isEmpty()) 
             && (endDate == null || endDate.isEmpty())){
         //dung yen
-        listOrder = oDAO.searchOrderByUserNameAndDate("Null", "Null", "Null");
+        listOrder = oDAO.searchOrderByUserNameAndDate("Null", "Null", "Null", saleid);
         }else if((startDate == null || startDate.isEmpty()) 
             && (endDate == null || endDate.isEmpty())){
             //Search
-           listOrder = oDAO.searchOrderByUserNameAndDate(search, "Null", "Null");
+           listOrder = oDAO.searchOrderByUserNameAndDate(search, "Null", "Null", saleid);
         }else if((search == null || search.isEmpty()) 
             && (endDate == null || endDate.isEmpty())) {
             //Start
-           listOrder = oDAO.searchOrderByUserNameAndDate("Null", startDate, "Null");
+           listOrder = oDAO.searchOrderByUserNameAndDate("Null", startDate, "Null", saleid);
         }else if((search == null || search.isEmpty())
             && (startDate == null || startDate.isEmpty())) {
             //End
-           listOrder = oDAO.searchOrderByUserNameAndDate("Null", "Null", endDate);
+           listOrder = oDAO.searchOrderByUserNameAndDate("Null", "Null", endDate, saleid);
         }else if((endDate == null || endDate.isEmpty())) {
             //Search + Start
-           listOrder = oDAO.searchOrderByUserNameAndDate(search, startDate, "Null");
+           listOrder = oDAO.searchOrderByUserNameAndDate(search, startDate, "Null", saleid);
         }else if((startDate == null || startDate.isEmpty())) {
             //Search + End
-           listOrder = oDAO.searchOrderByUserNameAndDate(search, "Null", endDate);
+           listOrder = oDAO.searchOrderByUserNameAndDate(search, "Null", endDate, saleid);
         }else if((search == null || search.isEmpty())) {
             //Start + End
-           listOrder = oDAO.searchOrderByUserNameAndDate("Null", startDate, endDate);
+           listOrder = oDAO.searchOrderByUserNameAndDate("Null", startDate, endDate, saleid);
         } else {
             //ALL
-           listOrder = oDAO.searchOrderByUserNameAndDate(search, startDate, endDate);
+           listOrder = oDAO.searchOrderByUserNameAndDate(search, startDate, endDate, saleid);
         }
         request.setAttribute("listOrderOfSearch", listOrder);
         
