@@ -40,6 +40,29 @@ public class FeedbackDAOS extends ProductDAO {
         return null;
     }
 
+    public Feedback getFeedback(int id) {
+        String sql = "SELECT * FROM Feedback where Id = ?";
+        try {
+            PreparedStatement st = connection.prepareStatement(sql);
+            st.setInt(1, id);
+            ResultSet rs = st.executeQuery();
+            if (rs.next()) {
+                Feedback f = new Feedback(
+                        rs.getInt("Id"),
+                        getUser(rs.getInt("UserId")),
+                        getOrderDetail(rs.getInt("OrderDetailId")),
+                        rs.getInt("Rating"),
+                        rs.getString("FeedbackContent"),
+                        rs.getDate("FeedbackDate"),
+                        rs.getInt("ReplyFeedbackId"));
+                return f;
+            }
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
+        return null;
+    }
+
     public OrderDetail getOrderDetail(int id) {
         String sql = "SELECT * FROM [OrderDetail] WHERE Id = ?";
         try (PreparedStatement st = connection.prepareStatement(sql)) {
@@ -275,12 +298,124 @@ public class FeedbackDAOS extends ProductDAO {
         } catch (SQLException e) {
         }
         return list;
-        
+
+    }
+
+    public List<Feedback> getAllFeedback(String r) {
+        List<Feedback> list = new ArrayList<>();
+        String sql = "SELECT * FROM Feedback";
+
+        // Nếu r khác null và không phải là "all", thêm điều kiện WHERE Rating = ?
+        if (r != null && !r.equals("all")) {
+            sql += " WHERE Rating = ?";
+        }
+
+        sql += " ORDER BY Id DESC";
+
+        try (PreparedStatement st = connection.prepareStatement(sql)) {
+            // Nếu r khác null và không phải là "all", thiết lập tham số cho câu lệnh SQL
+            if (r != null && !r.equals("all")) {
+                st.setString(1, r);
+            }
+
+            try (ResultSet rs = st.executeQuery()) {
+                while (rs.next()) {
+                    Feedback f = new Feedback(
+                            rs.getInt("Id"),
+                            getUser(rs.getInt("UserId")),
+                            getOrderDetail(rs.getInt("OrderDetailId")),
+                            rs.getInt("Rating"),
+                            rs.getString("FeedbackContent"),
+                            rs.getDate("FeedbackDate"),
+                            rs.getInt("ReplyFeedbackId")
+                    );
+                    if (f.getReplyFeedbackId() == 0) {
+                        list.add(f);
+                    }
+
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return list;
+    }
+
+    public List<Feedback> getAllFeedbackReply() {
+        List<Feedback> list = new ArrayList<>();
+        String sql = "SELECT * FROM Feedback";
+        try (PreparedStatement st = connection.prepareStatement(sql)) {
+            try (ResultSet rs = st.executeQuery()) {
+                while (rs.next()) {
+                    Feedback f = new Feedback(
+                            rs.getInt("Id"),
+                            getUser(rs.getInt("UserId")),
+                            getOrderDetail(rs.getInt("OrderDetailId")),
+                            rs.getInt("Rating"),
+                            rs.getString("FeedbackContent"),
+                            rs.getDate("FeedbackDate"),
+                            rs.getInt("ReplyFeedbackId")
+                    );
+                    if (f.getReplyFeedbackId() != 0) {
+                        list.add(f);
+                    }
+
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return list;
+    }
+
+    public List<Feedback> getListReplyFeedback(int id) {
+        List<Feedback> list = new ArrayList<>();
+        String sql = "SELECT * FROM Feedback WHERE ReplyFeedbackId=?";
+        try (PreparedStatement st = connection.prepareStatement(sql)) {
+            st.setInt(1, id);
+            try (ResultSet rs = st.executeQuery()) {
+                while (rs.next()) {
+                    Feedback f = new Feedback(
+                            rs.getInt("Id"),
+                            getUser(rs.getInt("UserId")),
+                            getOrderDetail(rs.getInt("OrderDetailId")),
+                            rs.getInt("Rating"),
+                            rs.getString("FeedbackContent"),
+                            rs.getDate("FeedbackDate"),
+                            rs.getInt("ReplyFeedbackId")
+                    );
+                    if (f.getReplyFeedbackId() != 0) {
+                        list.add(f);
+                    }
+
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return list;
+    }
+
+    public void addReply(int uid, int rid, String text) {
+        String sql = "INSERT INTO Feedback (UserId, FeedbackContent, ReplyFeedbackId) values (?, ?, ?)";
+        try {
+            PreparedStatement pre = connection.prepareStatement(sql);
+            pre.setInt(1, uid);
+            pre.setString(2, text);
+            pre.setInt(3, rid);
+
+            pre.executeUpdate();
+        } catch (SQLException ex) {
+        }
     }
 
     public static void main(String[] args) {
         FeedbackDAOS dao = new FeedbackDAOS();
-        List<Feedback> list = dao.getFeedbackByProduct(13);
-        System.out.println(list.get(0).getRating());
+        List<Feedback> list = dao.getListReplyFeedback(25);
+        System.out.println(list.size());
+        for(int i=0; i<list.size(); i++){
+            System.out.println(list.get(i).getId()+", "+list.get(i).getReplyFeedbackId()+", ");
+        }
     }
 }

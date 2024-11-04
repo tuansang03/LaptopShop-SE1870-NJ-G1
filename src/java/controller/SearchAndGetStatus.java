@@ -5,6 +5,7 @@
 package controller;
 
 import dal.OderDAO;
+import dal.UserDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -12,10 +13,12 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import model.Order;
+import model.User;
 
 /**
  *
@@ -35,6 +38,11 @@ public class SearchAndGetStatus extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        HttpSession session = request.getSession();
+        User user = (User) session.getAttribute("sale");
+        UserDAO uDAO = new UserDAO();
+        int saleid = uDAO.getUserByIdD(user.getId()).getId();
+        
         List<Order> listOrderOfSearch = (List<Order>) request.getAttribute("listOrderOfSearch");
 
         String search = (String) request.getAttribute("search");
@@ -60,19 +68,19 @@ public class SearchAndGetStatus extends HttpServlet {
         }
         //List<Order> listOrder = oDAO.getAllOrder(op);
 
-        int totalAmountWait = oDAO.totalAmountByOrderStatus("wait");
-        int totalAmountRejected = oDAO.totalAmountByOrderStatus("rejected");
-        int totalAmountAccepted = oDAO.totalAmountByOrderStatus("accepted");
-        int totalAmountIntransit = oDAO.totalAmountByOrderStatus("intransit");
-        int totalAmountFailed = oDAO.totalAmountByOrderStatus("failed");
-        int totalAmountDone = oDAO.totalAmountByOrderStatus("done");
+        int totalAmountWait = oDAO.totalAmountByOrderStatus("wait", saleid);
+        int totalAmountRejected = oDAO.totalAmountByOrderStatus("rejected", saleid);
+        int totalAmountAccepted = oDAO.totalAmountByOrderStatus("accepted", saleid);
+        int totalAmountIntransit = oDAO.totalAmountByOrderStatus("intransit", saleid);
+        int totalAmountFailed = oDAO.totalAmountByOrderStatus("failed", saleid);
+        int totalAmountDone = oDAO.totalAmountByOrderStatus("done", saleid);
 
-        int totalOrderWait = oDAO.totalOrderByOrderStatus("wait");
-        int totalOrderRejected = oDAO.totalOrderByOrderStatus("rejected");
-        int totalOrderAccepted = oDAO.totalOrderByOrderStatus("accepted");
-        int totalOrderIntransit = oDAO.totalOrderByOrderStatus("intransit");
-        int totalOrderFailed = oDAO.totalOrderByOrderStatus("failed");
-        int totalOrderDone = oDAO.totalOrderByOrderStatus("done");
+        int totalOrderWait = oDAO.totalOrderByOrderStatus("wait", saleid);
+        int totalOrderRejected = oDAO.totalOrderByOrderStatus("rejected", saleid);
+        int totalOrderAccepted = oDAO.totalOrderByOrderStatus("accepted", saleid);
+        int totalOrderIntransit = oDAO.totalOrderByOrderStatus("intransit", saleid);
+        int totalOrderFailed = oDAO.totalOrderByOrderStatus("failed", saleid);
+        int totalOrderDone = oDAO.totalOrderByOrderStatus("done", saleid);
 
         request.setAttribute("totalAmountWait", totalAmountWait);
         request.setAttribute("totalAmountRejected", totalAmountRejected);

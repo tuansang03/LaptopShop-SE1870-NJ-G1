@@ -23,16 +23,6 @@
             padding: 20px;
             background-color: #f9f9f9;
         }
-        .chart-wrapper {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 400px;
-        }
-        #myChart {
-            width: 100%;
-            max-width: 600px;
-        }
         .list-page {
             display: flex;
             justify-content: center;
@@ -58,13 +48,15 @@
         .list-page .item a:hover {
             background-color: #f0f0f0;
         }
+        .error-message {
+            color: red;
+            display: none; /* Ẩn thông báo lỗi mặc định */
+        }
     </style>
 </head>
 <body>
     <div class="col-md-10 content">
         <h2>Statistic</h2>
-        
-
 
         <div class="form-group">
             <label for="revenueType">Select Revenue Type:</label>
@@ -72,49 +64,55 @@
                 <option value="brand" <c:if test="${action2 == null || action2 == 'listall'}">selected</c:if>>Calculated by Brand</option>
                 <option value="month" <c:if test="${action2 == 'monthlyRevenue'}">selected</c:if>>Calculated by Month</option>
                 <option value="top5Product" <c:if test="${action2 != null}">selected</c:if>>Top 5 Products</option>
-                <option value="category" <c:if test="${action2 == 'categoryReport'}">selected</c:if>>Top 3 Staff</option>  <!-- Thêm lựa chọn mới -->
+                <c:if test="${action == 'actionz'}">
+                    <option value="workProductivity" selected>Work Productivity</option>
+                </c:if>
+                <c:if test="${action != 'actionz'}">
+                    <option value="workProductivity">Work Productivity</option>
+                </c:if>
             </select>
         </div>
-            
-                        <% int defaultYear = (Integer) request.getAttribute("year"); %>
-    <div class="form-group mt-4">
-    <form action="StatisticController" method="get">
-        <label for="yearInput">Enter Year:</label>
-        <input type="number" id="yearInput" name="year" class="form-control" placeholder="Year" required>
-        <input type="hidden" name="service" value="list" >
-        <button type="submit" class="btn btn-primary mt-2">Submit</button>
-    </form>
-</div>
 
-        <div class="chart-wrapper">
-            <canvas id="myChart"></canvas>
-        </div>
+        <!-- Thêm ô nhập năm và nút submit -->
+        <form action="SaleStatisticController2" method="GET" onsubmit="return validateYear()">
+            <div class="form-group">
+                <label for="searchYear">Enter Year:</label>
+                <input type="number"  value="${year}" id="searchYear" name="year" class="form-control" required>
+                <div id="yearError" class="error-message">Please enter a year between 1900 and the current year.</div> <!-- Phần tử hiển thị thông báo lỗi -->
+            </div>
+            <input type="hidden" name="service" value="myWorkDone">
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </form>
+
+        <!-- Biểu đồ -->
+        <canvas id="myChart" style="width:100%;max-width:600px"></canvas>
     </div>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
-    <script type="text/javascript">
-        const xValues = [];
-        const yValues = [];
-        const barColors = ["#b91d47", "#00aba9", "#2b5797", "#e8c3b9", "#1e7145"];
-
-        <c:forEach var="item" items="${list}">
-            xValues.push("${item.productName}");
-            yValues.push(${item.totalSold});
-        </c:forEach>
+    <script>
+        const xValues = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+                const yValues = [];
+                
+                 <c:forEach var="item" items="${list}">
+                    yValues.push(${item});
+                </c:forEach>
 
         new Chart("myChart", {
-            type: "doughnut",
+            type: "line",
             data: {
                 labels: xValues,
                 datasets: [{
-                    data: yValues,
-                    backgroundColor: barColors
+                    fill: false,
+                    lineTension: 0,
+                    backgroundColor: "rgba(0,0,255,1.0)",
+                    borderColor: "rgba(0,0,255,0.1)",
+                    data: yValues
                 }]
             },
             options: {
-                title: {
-                    display: true,
-                    text: "Top 5 best selling products"
+                legend: {display: false},
+                scales: {
+                    yAxes: [{ticks: {min: 6, max: 16}}],
                 }
             }
         });
@@ -122,14 +120,29 @@
         function updateChartType() {
             const selectedType = document.getElementById("revenueType").value;
             if (selectedType === "brand") {
-                window.location.href = 'StatisticController?service=listall';
+                window.location.href = 'SaleStatisticController2?service=listall';
             } else if (selectedType === "month") {
-                window.location.href = 'StatisticController?service=monthlyRevenue';
+                window.location.href = 'SaleStatisticController2?service=monthlyRevenue';
             } else if (selectedType === "top5Product") {
-                window.location.href = 'StatisticController?service=top5Product';
-            } else if (selectedType === "category") {  // Xử lý lựa chọn mới
-                window.location.href = 'StatisticController?service=top5Staff';
+                window.location.href = 'SaleStatisticController2?service=top5Product';
+            } else if (selectedType === "workProductivity") {
+                window.location.href = 'SaleStatisticController2?service=myWork';
             }
+        }
+
+        function validateYear() {
+            const yearInput = document.getElementById("searchYear");
+            const currentYear = new Date().getFullYear();
+            const enteredYear = parseInt(yearInput.value);
+            const yearError = document.getElementById("yearError");
+
+            if (enteredYear < 1900 || enteredYear > currentYear) {
+                yearError.style.display = "block";
+                return false;
+            } else {
+                yearError.style.display = "none";
+            }
+            return true;
         }
     </script>
 </body>

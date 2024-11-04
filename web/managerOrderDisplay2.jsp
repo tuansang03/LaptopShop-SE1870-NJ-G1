@@ -217,8 +217,8 @@
         </style>
 
     </head>
-    <body>
-        <%@include file="sidebar.jsp" %>
+    <body style="padding: 0">
+        <%@include file="sidebar2.jsp" %>
 
         <div class="col-md-10 content">
             <h2>Manage Order</h2>
@@ -228,8 +228,8 @@
                     <button name="action" value="wait" style="outline: none">
                         <div class="${action == 'wait' ? 'backgroundSelect': 'background'}">
                             <h5>Processing</h5>
-                            <h6>Total Order:${totalOrderWait} </h6>
-                            <h6>Total Money:
+                            <h6 style="font-size: 11px">Total Order:${totalOrderWait} </h6>
+                            <h6 style="font-size: 11px">Total Money:
                                 <fmt:formatNumber value="${totalAmountWait}" pattern="#,###" />
                             </h6>
                         </div>
@@ -237,8 +237,8 @@
                     <button name="action" value="rejected" style="outline: none">
                         <div class="${action == 'rejected' ? 'backgroundSelect': 'background'}">
                             <h5>Rejected</h5>
-                            <h6>Total Order:${totalOrderRejected} </h6>
-                            <h6>Total Money:
+                            <h6 style="font-size: 11px">Total Order:${totalOrderRejected} </h6>
+                            <h6 style="font-size: 11px">Total Money:
                                 <fmt:formatNumber value="${totalAmountRejected}" pattern="#,###" />
                             </h6>
                         </div>
@@ -246,8 +246,8 @@
                     <button name="action" value="accepted" style="outline: none">
                         <div class="${action == 'accepted' ? 'backgroundSelect': 'background'}">
                             <h5>Accepted</h5>
-                            <h6>Total Order:${totalOrderAccepted} </h6>
-                            <h6>Total Money:
+                            <h6 style="font-size: 11px">Total Order:${totalOrderAccepted} </h6>
+                            <h6 style="font-size: 11px">Total Money:
                                 <fmt:formatNumber value="${totalAmountAccepted}" pattern="#,###" />
                             </h6>
                         </div>
@@ -255,8 +255,8 @@
                     <button name="action" value="intransit" style="outline: none">
                         <div class="${action == 'intransit' ? 'backgroundSelect': 'background'}">
                             <h5>In Transit</h5>
-                            <h6>Total Order:${totalOrderIntransit} </h6>
-                            <h6>Total Money:
+                            <h6 style="font-size: 11px">Total Order:${totalOrderIntransit} </h6>
+                            <h6 style="font-size: 11px">Total Money:
                                 <fmt:formatNumber value="${totalAmountIntransit}" pattern="#,###" />
                             </h6>
                         </div>
@@ -264,8 +264,8 @@
                     <button name="action" value="failed" style="outline: none">
                         <div class="${action == 'failed' ? 'backgroundSelect': 'background'}">
                             <h5>Shipment Failed</h5>
-                            <h6>Total Order:${totalOrderFailed} </h6>
-                            <h6>Total Money:
+                            <h6 style="font-size: 11px">Total Order:${totalOrderFailed} </h6>
+                            <h6 style="font-size: 11px">Total Money:
                                 <fmt:formatNumber value="${totalAmountFailed}" pattern="#,###" />
                             </h6>
                         </div>
@@ -273,8 +273,8 @@
                     <button name="action" value="done" style="outline: none">
                         <div class="${action == 'done' ? 'backgroundSelect': 'background'}">
                             <h5>Done</h5>
-                            <h6>Total Order:${totalOrderDone} </h6>
-                            <h6>Total Money:
+                            <h6 style="font-size: 11px">Total Order:${totalOrderDone} </h6>
+                            <h6 style="font-size: 11px">Total Money:
                                 <fmt:formatNumber value="${totalAmountDone}" pattern="#,###" />
                             </h6>
                         </div>
