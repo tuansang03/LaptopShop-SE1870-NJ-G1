@@ -53,8 +53,6 @@ public class ChangeStatusOrder extends HttpServlet {
         String oid_raw = request.getParameter("oid");
         String action = request.getParameter("action");
         OderDAO oDAO = new OderDAO();
-        String action = request.getParameter("action");
-        OderDAO oDAO = new OderDAO();
         int oid = Integer.parseInt(oid_raw);
         LocalDateTime date = LocalDateTime.now();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
@@ -94,8 +92,6 @@ public class ChangeStatusOrder extends HttpServlet {
         String oid_raw = request.getParameter("oid");
         String action = request.getParameter("action");
         String code = request.getParameter("code");
-        OderDAO oDAO = new OderDAO();
-        String action = request.getParameter("action");
         OderDAO oDAO = new OderDAO();
         int oid = Integer.parseInt(oid_raw);
         LocalDateTime date = LocalDateTime.now();
