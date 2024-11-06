@@ -11,23 +11,41 @@
         </file>
     </editor-bookmarks>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
-        <group name="Group 20240613-10:26:14">
-            <file>file:/D:/demoSWp391/LaptopShop-SE1870-NJ-G1/src/java/dal/CategoryDAOS.java</file>
-            <file>file:/D:/demoSWp391/LaptopShop-SE1870-NJ-G1/web/userprofile.jsp</file>
-            <file>file:/D:/demoSWp391/LaptopShop-SE1870-NJ-G1/web/insertpostdisplay.jsp</file>
-            <file>file:/D:/demoSWp391/LaptopShop-SE1870-NJ-G1/src/java/controller/ProfileManage.java</file>
-            <file>file:/D:/demoSWp391/LaptopShop-SE1870-NJ-G1/web/insertcolor.jsp</file>
-            <file>file:/D:/demoSWp391/LaptopShop-SE1870-NJ-G1/src/java/dal/ConfigurationDAO.java</file>
-            <file>file:/D:/demoSWp391/LaptopShop-SE1870-NJ-G1/src/java/dal/ColorDAO.java</file>
-            <file>file:/D:/demoSWp391/LaptopShop-SE1870-NJ-G1/src/java/controller/ConfigurationManageController.java</file>
-            <file>file:/D:/demoSWp391/LaptopShop-SE1870-NJ-G1/src/java/controller/ColorController.java</file>
-            <file>file:/D:/demoSWp391/LaptopShop-SE1870-NJ-G1/web/changePassword.jsp</file>
-            <file>file:/D:/demoSWp391/LaptopShop-SE1870-NJ-G1/web/managecolordisplay.jsp</file>
-        </group>
         <group>
             <file>file:/E:/SWP%20iter2%20clone/LaptopShop-SE1870-NJ-G1/src/java/dal/DBContext.java</file>
             <file>file:/E:/SWP%20iter2%20clone/LaptopShop-SE1870-NJ-G1/src/java/model/Address.java</file>
             <file>file:/E:/SWP%20iter2%20clone/LaptopShop-SE1870-NJ-G1/src/java/controller/loginByGoogle.java</file>
+        </group>
+        <group name="Group 20240613-10:26:14">
+            <file>file:/D:/SWP3910/LaptopShop-SE1870-NJ-G1/src/java/dal/FeedbackDAOS.java</file>
+            <file>file:/D:/SWP3910/LaptopShop-SE1870-NJ-G1/web/checkout.jsp</file>
+            <file>file:/D:/SWP3910/LaptopShop-SE1870-NJ-G1/web/category.jsp</file>
+            <file>file:/D:/SWP3910/LaptopShop-SE1870-NJ-G1/web/complaintdisplay.jsp</file>
+            <file>file:/D:/SWP3910/LaptopShop-SE1870-NJ-G1/src/java/model/Config.java</file>
+            <file>file:/D:/SWP3910/LaptopShop-SE1870-NJ-G1/src/java/controller/ReplyFeedback.java</file>
+            <file>file:/D:/SWP3910/LaptopShop-SE1870-NJ-G1/web/adressmanage.jsp</file>
+            <file>file:/D:/SWP3910/LaptopShop-SE1870-NJ-G1/src/java/model/SendMailSSL.java</file>
+            <file>file:/D:/SWP3910/LaptopShop-SE1870-NJ-G1/web/statistic4display.jsp</file>
+            <file>file:/D:/SWP3910/LaptopShop-SE1870-NJ-G1/web/changePassword.jsp</file>
+            <file>file:/D:/SWP3910/LaptopShop-SE1870-NJ-G1/web/css/main.css</file>
+            <file>file:/D:/SWP3910/LaptopShop-SE1870-NJ-G1/web/footer.jsp</file>
+            <file>file:/D:/SWP3910/LaptopShop-SE1870-NJ-G1/web/feedbackdetail.jsp</file>
+            <file>file:/D:/SWP3910/LaptopShop-SE1870-NJ-G1/web/addnewadress.jsp</file>
+            <file>file:/D:/SWP3910/LaptopShop-SE1870-NJ-G1/web/compare.jsp</file>
+            <file>file:/D:/SWP3910/LaptopShop-SE1870-NJ-G1/src/java/controller/ChangeStatusOrderDoneAndDelete.java</file>
+            <file>file:/D:/SWP3910/LaptopShop-SE1870-NJ-G1/web/index_1.jsp</file>
+            <file>file:/D:/SWP3910/LaptopShop-SE1870-NJ-G1/web/statistic2display.jsp</file>
+            <file>file:/D:/SWP3910/LaptopShop-SE1870-NJ-G1/web/admindashboard.jsp</file>
+            <file>file:/D:/SWP3910/LaptopShop-SE1870-NJ-G1/web/blog.jsp</file>
+            <file>file:/D:/SWP3910/LaptopShop-SE1870-NJ-G1/web/addstaff.jsp</file>
+            <file>file:/D:/SWP3910/LaptopShop-SE1870-NJ-G1/src/java/controller/StatisticController.java</file>
+            <file>file:/D:/SWP3910/LaptopShop-SE1870-NJ-G1/src/java/controller/ChangeStatusOrder.java</file>
+            <file>file:/D:/SWP3910/LaptopShop-SE1870-NJ-G1/web/ban.jsp</file>
+            <file>file:/D:/SWP3910/LaptopShop-SE1870-NJ-G1/web/cart.jsp</file>
+            <file>file:/D:/SWP3910/LaptopShop-SE1870-NJ-G1/web/index.jsp</file>
+            <file>file:/D:/SWP3910/LaptopShop-SE1870-NJ-G1/src/java/controller/SaleStatisticController2.java</file>
+            <file>file:/D:/SWP3910/LaptopShop-SE1870-NJ-G1/web/billOrder.jsp</file>
+            <file>file:/D:/SWP3910/LaptopShop-SE1870-NJ-G1/web/statistic3display.jsp</file>
         </group>
     </open-files>
 </project-private>

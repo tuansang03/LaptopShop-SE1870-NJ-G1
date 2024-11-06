@@ -4,6 +4,7 @@
  */
 package controller;
 
+import dal.AddressDAO;
 import dal.CartDAOS;
 import dal.ImageDAOS;
 import dal.OderDAO;
@@ -17,6 +18,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import java.util.ArrayList;
 import java.util.List;
+import model.Address;
 import model.Cart;
 import model.CartItem;
 import model.Image;
@@ -77,17 +79,18 @@ public class LoadInfoCheckOut extends HttpServlet {
 
         OderDAO oDAO = new OderDAO();
         Order order = oDAO.getOneOrderNewest(user.getId());
+        AddressDAO address = new AddressDAO();
+        Address getDefaultAdress = address.getDefaultAddressByUserId(user.getId());
 
-        if (order != null) {
-            String phone = order.getPhone();
-            String address = order.getAddress();
-            request.setAttribute("phone", phone);
-            request.setAttribute("address", address);
-        }
-
+         String nameReceiveDefault = getDefaultAdress.getNamereceive();
+            String phoneDefault = getDefaultAdress.getPhonenumber();
+            String addressDefault = getDefaultAdress.getAddress();
+            request.setAttribute("phone", phoneDefault);
+            request.setAttribute("address", addressDefault);
+            request.setAttribute("name", nameReceiveDefault);
         request.setAttribute("cartItem", cartItem);
         request.setAttribute("totalPrice", totalPrice);
-        request.setAttribute("name", name);
+        
         request.setAttribute("email", email);
         request.setAttribute("listImages", listImages);
         request.getRequestDispatcher("checkout.jsp").forward(request, response);

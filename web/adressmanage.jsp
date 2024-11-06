@@ -1,3 +1,4 @@
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@page import="java.util.List" %>
 <%@page import="model.Address" %>
@@ -63,6 +64,7 @@
         </style>
     </head>
     <body>
+         <c:if test="${sessionScope.user!=null}">
         <h1>Manage Addresses</h1>
         <div class="container">
             <%
@@ -87,6 +89,12 @@
             <p>No addresses available. Please add a new address.</p>
             <% } %>
         </div>
-            <a href="address?id=${sessionScope.user.id}&action=addNew" class="add-btn">Add New Address</a>
+            <a href="address?id=${sessionScope.user.id}&action=addNew" class="add-btn" style="text-decoration: none; color: white">Add New Address</a>
+            <a href="profile?profile=info" class="add-btn"; style="text-decoration: none; color: white">Back</a>
+</c:if>
+            <c:if test="${sessionScope.sale!=null || sessionScope.admin!=null ||(sessionScope.user==null && 
+                      sessionScope.sale==null && sessionScope.admin==null) }">
+            <%@include file="notallowpage.jsp" %>
+        </c:if>
     </body>
 </html>

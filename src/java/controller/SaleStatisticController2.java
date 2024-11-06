@@ -138,7 +138,8 @@ public class SaleStatisticController2 extends HttpServlet {
 //            request.setAttribute("list", list);
 //            request.setAttribute("action2", "action2");
 //            request.getRequestDispatcher("statistic3display.jsp").forward(request, response);
-response.sendRedirect("statistic6display.jsp");
+            request.setAttribute("action2", "action2");
+            request.getRequestDispatcher("statistic6display.jsp").forward(request, response);
         }
          
           if(service.equalsIgnoreCase("list")){

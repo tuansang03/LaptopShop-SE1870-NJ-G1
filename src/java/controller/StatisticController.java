@@ -141,7 +141,7 @@ public class StatisticController extends HttpServlet {
 //            request.setAttribute("action2", "action2");
 //            request.getRequestDispatcher("statistic3display.jsp").forward(request, response);
 request.setAttribute("action2", "action2");
-response.sendRedirect("statistic3display.jsp");
+request.getRequestDispatcher("statistic3display.jsp").forward(request, response);
         }
         
         if(service.equalsIgnoreCase("top5Staff")){

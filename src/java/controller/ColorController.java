@@ -87,29 +87,43 @@ public class ColorController extends HttpServlet {
             request.setAttribute("updateColordisplay", col);
             request.getRequestDispatcher("updatecolordisplay.jsp").forward(request, response);
         }
-        if (service.equalsIgnoreCase("updatedone")) {
-            ColorDAO color = new ColorDAO();
-            int id = Integer.parseInt(request.getParameter("id"));
-            String name = request.getParameter("name");
+       if (service.equalsIgnoreCase("updatedone")) {
+    ColorDAO color = new ColorDAO();
+    int id = Integer.parseInt(request.getParameter("id"));
+    String name = request.getParameter("name");
 
-            boolean checkUpdate = color.updateColor(id, name);
-//            Brand brand1 = brandDAO.getBrandById(id);
-//            request.setAttribute("updatebranddisplay", brand1);
-            if (checkUpdate == true) {
-                Color colorAfterUpdate = color.findColorById(id);
-                String mess = "Update successfull!!";
-                request.setAttribute("mess", mess);
-                request.setAttribute("ColorController?service=listall", colorAfterUpdate);
-            } else {
-                Color colorAfterUpdate = color.findColorById(id);
-                String mess = "Update failed!";
-                request.setAttribute("mess", mess);
-                request.setAttribute("ColorController?service=listall", colorAfterUpdate);
-            }
+    List<Color> lisCol = color.getAllColor();
 
-            request.getRequestDispatcher("ColorController?service=listall").forward(request, response);
-
+    boolean dupColor = false;
+    for (Color get : lisCol) {
+        if (get.getId() != id && get.getName().equalsIgnoreCase(name)) { // Kiểm tra trùng tên nhưng không trùng ID
+            dupColor = true;
+            break; // Dừng vòng lặp nếu tìm thấy màu trùng
         }
+    }
+
+    if (dupColor) {
+        String mess = "Color is already available!";
+        request.setAttribute("mess", mess);
+        request.getRequestDispatcher("ColorController?service=listall").forward(request, response);
+        return; // Dừng lại để không thực hiện cập nhật
+    }
+
+    boolean checkUpdate = color.updateColor(id, name);
+    
+    if (checkUpdate) {
+        String mess = "Update successful!";
+        request.setAttribute("mess", mess);
+    } else {
+        String mess = "Update failed!";
+        request.setAttribute("mess", mess);
+    }
+
+    Color colorAfterUpdate = color.findColorById(id);
+    request.setAttribute("colorAfterUpdate", colorAfterUpdate); // Thay đổi tên thuộc tính cho rõ ràng
+    request.getRequestDispatcher("ColorController?service=listall").forward(request, response);
+}
+
 
         if (service.equalsIgnoreCase("deleteColor")) {
             // Lấy id của brand từ request

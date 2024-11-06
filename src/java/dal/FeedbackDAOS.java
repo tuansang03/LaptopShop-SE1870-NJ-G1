@@ -397,13 +397,14 @@ public class FeedbackDAOS extends ProductDAO {
         return list;
     }
 
-    public void addReply(int uid, int rid, String text) {
-        String sql = "INSERT INTO Feedback (UserId, FeedbackContent, ReplyFeedbackId) values (?, ?, ?)";
+    public void addReply(int uid, int odid, int rid, String text) {
+        String sql = "INSERT INTO Feedback (UserId, OrderDetailId, FeedbackContent, ReplyFeedbackId) values (?, ?, ?, ?)";
         try {
             PreparedStatement pre = connection.prepareStatement(sql);
             pre.setInt(1, uid);
-            pre.setString(2, text);
-            pre.setInt(3, rid);
+            pre.setInt(2, odid);
+            pre.setString(3, text);
+            pre.setInt(4, rid);
 
             pre.executeUpdate();
         } catch (SQLException ex) {

@@ -72,8 +72,19 @@ public class AdressManage extends HttpServlet {
             request.setAttribute("addresses", list);
             request.getRequestDispatcher("adressmanage.jsp").forward(request, response);
         } else if ("edit".equals(action)) {
+            int id = Integer.parseInt(request.getParameter("id"));
+            Address adresss = new Address();
+            adresss = address.getAddressById(id);
+            request.setAttribute("address", adresss);
+            request.getRequestDispatcher("updateadress.jsp").forward(request, response);
             
-        } else if ("addNew".equals(action)) {
+        } 
+        
+
+        
+        
+        
+        else if ("addNew".equals(action)) {
             response.sendRedirect("addnewadress.jsp");
         }  else if ("delete".equals(action)) {
             int addressId = Integer.parseInt(request.getParameter("id"));
@@ -101,17 +112,89 @@ public class AdressManage extends HttpServlet {
         String mess = "";
         String action = request.getParameter("action");
         AddressDAO address = new AddressDAO();
-        if ("add".equals(action)) {
+  if ("add".equals(action)) {
+    List<Address> list = address.getAddressesByUserId(getCurrentUser.getId());
+    String name = request.getParameter("name");
+    String phone = request.getParameter("phone");
+    String address2 = request.getParameter("address");
+    String isdefault = request.getParameter("default");
+    
+    if (!(phone.matches("^\\d{10}$"))) {
+        mess = "Phone number is a number and must have 10 digits!";
+        request.setAttribute("mess", mess);
+        request.getRequestDispatcher("updateadress.jsp").forward(request, response);
+        return; // Ngừng xử lý sau khi forward
+    }
+    
+    boolean temp = false;
+    if (isdefault != null) {
+        for (Address get : list) {
+            if (get.isIsdefault()) {
+                get.setIsdefault(false);
+                address.updateAddress(get);
+            }
+        }
+        
+        // Thêm địa chỉ mới với isDefault = true
+        Address address1 = new Address(list.size() + 1, name, phone, address2, true);
+        address.insertAddress(address1, getCurrentUser.getId());
+        mess = "Insert Successful!";
+    } else {
+        // Nếu không có địa chỉ mặc định, thêm địa chỉ mới với isDefault = false
+        Address address1 = new Address(list.size() + 1, name, phone, address2, false);
+        address.insertAddress(address1, getCurrentUser.getId());
+        mess = "Insert Successful!";
+    }
+
+    request.setAttribute("mess", mess);
+    response.sendRedirect("address?id=" + getCurrentUser.getId() + "&action=default");
+}
+
+        else if("updateDone".equalsIgnoreCase(action)){
             List<Address> list = address.getAddressesByUserId(getCurrentUser.getId());
+
+            String isdefault = request.getParameter("default");
+            int id = Integer.parseInt(request.getParameter("id"));
             String name = request.getParameter("name");
             String phone = request.getParameter("phone");
-            String address2 = request.getParameter("address");
-            Address address1 = new Address(list.size()+1, name, phone, address2, false);
-            address.insertAddress(address1, getCurrentUser.getId());
-            mess = "Insert Succesful !";
-            request.setAttribute("mess", mess);
-            response.sendRedirect("address?id=" + getCurrentUser.getId() + "&action=default");
-    }
+            String address_raw = request.getParameter("address");
+            
+            if(!(phone.matches("^\\d{10}$"))){
+                mess = "Phone number is a number and must have 10 number !";
+                request.setAttribute("mess", mess);
+                Address adresss = new Address();
+                adresss = address.getAddressById(id);
+            request.setAttribute("address", adresss);
+            request.getRequestDispatcher("updateadress.jsp").forward(request, response);
+            }
+            else{
+                mess = "";
+                 boolean temp = false;
+                if(isdefault!=null){
+                for (int i = 0; i < list.size(); i++) {
+                    Address get = list.get(i);
+                    if(get.isIsdefault()==true){
+                        get.setIsdefault(false);
+                        address.updateAddress(get);
+                    }
+                }
+                temp = true; 
+            }
+                 address.updateAddress(new Address(id, name,
+                    phone, address_raw, 
+                    temp));
+
+                 request.setAttribute("mess", mess);
+            response.sendRedirect("address?id="+ id+"&action=default");
+            }
+            
+            
+            
+            
+            
+           
+            
+        }
 
     }
 //        processRequest(request, response);

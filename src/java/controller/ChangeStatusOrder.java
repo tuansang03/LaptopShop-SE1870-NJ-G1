@@ -48,7 +48,7 @@ public class ChangeStatusOrder extends HttpServlet {
      * @throws IOException if an I/O error occurs
      */
     @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+   protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         String oid_raw = request.getParameter("oid");
         String action = request.getParameter("action");
@@ -64,14 +64,6 @@ public class ChangeStatusOrder extends HttpServlet {
         } else if (action.equals("rejected")) {
             oDAO.changeOrderStatus(action, oid);
             oDAO.updateRejected(formattedDateTime, oid);
-        }
-        action = "wait";
-        request.setAttribute("action", action);
-        response.sendRedirect("selectOrderbyStatus?action=" + action);
-        if (action.equals("accepted")) {
-            oDAO.changeOrderStatus(action, oid);
-        }else if(action.equals("rejected")){
-            oDAO.changeOrderStatus(action, oid);
         }
         action = "wait";
         request.setAttribute("action", action);
@@ -112,15 +104,7 @@ public class ChangeStatusOrder extends HttpServlet {
             request.setAttribute("action", action);
             response.sendRedirect("selectOrderbyStatus?action=" + action);
         }
-        if (action.equals("intransit")) {
-            oDAO.changeOrderStatus(action, oid);
-        }
-        
-        action = "accepted";
-        request.setAttribute("action", action);
-        response.sendRedirect("selectOrderbyStatus?action=" + action);
     }
-
     /**
      * Returns a short description of the servlet.
      *

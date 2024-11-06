@@ -171,6 +171,7 @@
 
                 <form action="replyfeedback" method="GET" class="reply-form">
                     <input type="hidden" value="${feedback.id}" name="fid"/>
+                    <input type="hidden" value="${feedback.orderdetailid.getId()}" name="orderdetailid"/>
                     <input type="text" name="reply" placeholder="Type your reply here..." required/>
                     <input type="submit" value="Reply" />
                 </form>

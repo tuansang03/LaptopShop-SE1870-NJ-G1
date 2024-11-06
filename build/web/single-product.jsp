@@ -453,7 +453,12 @@
                             </h5>
                             <p>${detail.shortDescription}</p>
                             <div class="card_area d-flex align-items-center">
-                                <a class="button primary-btn" href="addtocart?pid=${detail.product.id}&&colorid=${detail.color.id}&&confid=${detail.configuration.id}">Add to Cart</a>
+                                <c:if test="${sessionScope.user != null}">
+                                    <a class="button primary-btn" href="addtocart?pid=${detail.product.id}&&colorid=${detail.color.id}&&confid=${detail.configuration.id}">Add to Cart</a>
+                                </c:if>
+                                    <c:if test="${sessionScope.user == null}">
+                                    <a class="button primary-btn" href="login">Add to Cart</a>
+                                </c:if>
                                 <a class="icon_btn" href="addtowishlist?pid=${detail.id}&&uid=${user.id}"><i class="lnr lnr lnr-heart"></i></a>
                             </div>
 
@@ -613,7 +618,8 @@
 
                             </div>
 
-                            <div class="col-lg-6">
+                                    <c:if test="${sessionScope.user!=null}">
+                                        <div class="col-lg-6">
                                 <div class="review_box p-4 shadow-sm border rounded">
                                     <h4 class="mb-4">Post a Comment</h4>
                                     <form action="submitComment" method="post">
@@ -630,6 +636,25 @@
                                     </form>
                                 </div>
                             </div>
+                                    </c:if>
+                                    
+                                    <c:if test="${sessionScope.user==null}">
+                                        <div class="col-lg-6">
+                                <div class="review_box p-4 shadow-sm border rounded">
+                                    <h4 class="mb-4" >Post a Comment</h4>
+                                    
+                                        <!-- Comment Content -->
+                                        <div class="form-group mb-3">
+                                            <label for="commentContent" class="form-label" style="text-align: center">Login Now to post a comment</label>
+                                           
+                                        </div>
+                                        <div style="text-align: center; padding: 6px; background: #0060ce; ">
+                                            <a href="login" style="color: white">Login</a>
+                                        </div>
+                                        <!-- Submit Button -->
+                                </div>
+                            </div>
+                                    </c:if>
 
                         </div>
                     </div>

@@ -56,7 +56,7 @@
                         yearError.style.display = "block";  // Hiển thị lỗi nếu năm không hợp lệ
                     } else {
                         yearError.style.display = "none";   // Ẩn lỗi nếu năm hợp lệ
-                        window.location.href = 'SaleStatisticController2?service=listByTime&year=' + yearInput;  // Chuyển đến Servlet
+                        window.location.href = 'StatisticController?service=listByTime&year=' + yearInput;  // Chuyển đến Servlet
                     }
                 }
             </script>
@@ -109,13 +109,13 @@
                     const selectedType = document.getElementById("revenueType").value;
                     if (selectedType === "brand") {
                         document.getElementById("yearInput").style.display = "none";  // Ẩn form nhập năm
-                        window.location.href = 'SaleStatisticController2?service=listall';  // Chuyển hướng đến servlet xử lý brand
+                        window.location.href = 'StatisticController?service=listall';  // Chuyển hướng đến servlet xử lý brand
                     } else if (selectedType === "month") {
                         document.getElementById("yearInput").style.display = "block";  // Hiển thị form nhập năm
                     } else if (selectedType === "top5Product") {
-                        window.location.href = 'SaleStatisticController2?service=top5Product';  // Chuyển hướng đến servlet xử lý top 5 sản phẩm
+                        window.location.href = 'StatisticController?service=top5Product';  // Chuyển hướng đến servlet xử lý top 5 sản phẩm
                     } else if (selectedType === "myWork") { // Thêm xử lý cho tùy chọn Work Productivity
-                        window.location.href = 'SaleStatisticController2?service=myWork';  // Chuyển hướng đến servlet xử lý Work Productivity
+                        window.location.href = 'SaleStatisticControlle2?service=myWork';  // Chuyển hướng đến servlet xử lý Work Productivity
                     }
                 }
 

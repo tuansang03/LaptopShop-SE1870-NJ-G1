@@ -12,26 +12,27 @@ import model.Address;
 public class AddressDAO extends DBContext {
 
     // Lấy tất cả địa chỉ dựa trên UserId
-    public ArrayList<Address> getAddressesByUserId(int userId) {
-        ArrayList<Address> addressList = new ArrayList<>();
-        String sql = "SELECT * FROM Address WHERE UserId = ?";
-        try (PreparedStatement pre = connection.prepareStatement(sql)) {
-            pre.setInt(1, userId);
-            ResultSet rs = pre.executeQuery();
-            while (rs.next()) {
-                Address address = new Address();
-                address.setId(rs.getInt("Id"));
-                address.setNamereceive(rs.getString("NameReceive"));
-                address.setPhonenumber(rs.getString("PhoneNumber"));
-                address.setAddress(rs.getString("Address"));
-                address.setIsdefault(rs.getBoolean("IsDefault"));
-                addressList.add(address);
-            }
-        } catch (SQLException ex) {
-            Logger.getLogger(AddressDAO.class.getName()).log(Level.SEVERE, null, ex);
+public ArrayList<Address> getAddressesByUserId(int userId) {
+    ArrayList<Address> addressList = new ArrayList<>();
+    String sql = "SELECT * FROM Address WHERE UserId = ? ORDER BY Id DESC"; // Sắp xếp theo Id giảm dần
+    try (PreparedStatement pre = connection.prepareStatement(sql)) {
+        pre.setInt(1, userId);
+        ResultSet rs = pre.executeQuery();
+        while (rs.next()) {
+            Address address = new Address();
+            address.setId(rs.getInt("Id"));
+            address.setNamereceive(rs.getString("NameReceive"));
+            address.setPhonenumber(rs.getString("PhoneNumber"));
+            address.setAddress(rs.getString("Address"));
+            address.setIsdefault(rs.getBoolean("IsDefault"));
+            addressList.add(address);
         }
-        return addressList;
+    } catch (SQLException ex) {
+        Logger.getLogger(AddressDAO.class.getName()).log(Level.SEVERE, null, ex);
     }
+    return addressList;
+}
+
 
 public boolean insertAddress(Address address, int userId) {
     String sql = "INSERT INTO Address (NameReceive, PhoneNumber, Address, IsDefault, UserId) VALUES (?, ?, ?, ?, ?)";
@@ -81,31 +82,64 @@ public boolean insertAddress(Address address, int userId) {
         return false;
     }
 
-    public ArrayList<Address> findAddressesByUserId(int userId) {
-        ArrayList<Address> addressList = new ArrayList<>();
-        String sql = "SELECT * FROM Address WHERE UserId = ?";
-        try (PreparedStatement stm = connection.prepareStatement(sql)) {
-            stm.setInt(1, userId);
-            ResultSet rs = stm.executeQuery();
-            while (rs.next()) {
-                Address address = new Address();
-                address.setId(rs.getInt("Id"));
-                address.setNamereceive(rs.getString("NameReceive"));
-                address.setPhonenumber(rs.getString("PhoneNumber"));
-                address.setAddress(rs.getString("Address"));
-                address.setIsdefault(rs.getBoolean("IsDefault"));
-                addressList.add(address);
-            }
-        } catch (SQLException ex) {
-            Logger.getLogger(AddressDAO.class.getName()).log(Level.SEVERE, null, ex);
+
+public Address getAddressById(int addressId) {
+    String sql = "SELECT * FROM Address WHERE Id = ?";
+    try (PreparedStatement pre = connection.prepareStatement(sql)) {
+        pre.setInt(1, addressId);
+        ResultSet rs = pre.executeQuery();
+        if (rs.next()) {
+            Address address = new Address();
+            address.setId(rs.getInt("Id"));
+            address.setNamereceive(rs.getString("NameReceive"));
+            address.setPhonenumber(rs.getString("PhoneNumber"));
+            address.setAddress(rs.getString("Address"));
+            address.setIsdefault(rs.getBoolean("IsDefault"));
+            return address;
         }
-        return addressList;
+    } catch (SQLException ex) {
+        Logger.getLogger(AddressDAO.class.getName()).log(Level.SEVERE, null, ex);
     }
-    
-    
+    return null; 
+}
+
+
+public void setIsDefaultToFalseByUserId(int userId) {
+    String sql = "UPDATE Address SET IsDefault = false WHERE UserId = ? AND IsDefault = true";
+    try (PreparedStatement statement = connection.prepareStatement(sql)) {
+        statement.setInt(1, userId);
+        int rowsAffected = statement.executeUpdate();
+        System.out.println("Rows affected: " + rowsAffected);
+    } catch (SQLException e) {
+        e.printStackTrace();
+    }
+}
+public Address getDefaultAddressByUserId(int userId) {
+    String sql = "SELECT * FROM Address WHERE UserId = ? AND IsDefault = 1";
+    try (PreparedStatement pre = connection.prepareStatement(sql)) {
+        pre.setInt(1, userId);
+        ResultSet rs = pre.executeQuery();
+        if (rs.next()) {
+            Address address = new Address();
+            address.setId(rs.getInt("Id"));
+            address.setNamereceive(rs.getString("NameReceive"));
+            address.setPhonenumber(rs.getString("PhoneNumber"));
+            address.setAddress(rs.getString("Address"));
+            address.setIsdefault(rs.getBoolean("IsDefault"));
+            return address; // Trả về địa chỉ có IsDefault = true
+        }
+    } catch (SQLException ex) {
+        Logger.getLogger(AddressDAO.class.getName()).log(Level.SEVERE, null, ex);
+    }
+    return null; // Trả về null nếu không tìm thấy địa chỉ
+}
+
+
+
     public static void main(String[] args) {
         AddressDAO a = new AddressDAO();
-        List<Address> list = a.getAddressesByUserId(7);
-        System.out.println(list);
+        Address aa = new Address();
+        aa = a.getDefaultAddressByUserId(9);
+        System.out.println(aa);
     }
 }

@@ -351,6 +351,11 @@
             </section>
             <!-- ================ Subscribe section end ================= --> 
 
+<div>
+    <a class="tudongchat-icon svelte-3x3xt4" style="position: fixed" href="https://www.facebook.com/KieuDinhDoan"> <!-- Đóng dấu ngoặc kép đúng chỗ -->
+        <img style="width: 100px; height: 62px; position: absolute; left:-75px; top:-150px; margin-bottom: 100px;" src="https://1000logos.net/wp-content/uploads/2021/04/Facebook-logo.png">
+    </a>
+</div>
 
 
         </main>

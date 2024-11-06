@@ -1,6 +1,4 @@
-<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -81,36 +79,27 @@
     </style>
 </head>
 <body>
-     <c:if test="${sessionScope.user!=null}">
-    <h1>Add New Address</h1>
+    <h1>Update address</h1>
     <div class="container">
-        <form action="address?id=${sessionScope.user.id}&action=add" method="post"> <!-- Đường dẫn đến servlet hoặc JSP xử lý thêm địa chỉ -->
+        <form action="address?id=${address.id}&action=updateDone" method="post">
             <label for="name">Name:</label>
-            <input type="text" id="name" name="name" required maxlength="50" value="${address.namereceive}">
+            <input type="text" id="name" name="name" value="${address.namereceive}" required>
 
             <label for="phone">Phone Number:</label>
-            <input type="text" id="phone" name="phone" required value="${address.phonenumber}" >
+            <input type="text" id="phone" name="phone" value="${address.phonenumber}" required>
 
             <label for="address">Address:</label>
-            <input type="text" id="address" name="address" required maxlength="50" value="${address.address}" >
-            
+            <input type="text" id="address" value="${address.address}" name="address" required>
+
             <label for="address"><p style="font-size: 14px">Set as default
                     address <input style="margin: 0; padding: 0;"
                                    type="checkbox" id="default" name="default" ></p></label>
-                        
 
-
-            
-
-            <input type="submit" value="Add Address">
+            <input type="submit" value="Update">
+            <br><!-- comment -->
+            <p>${mess}</p>
         </form>
         <a href="address?id=${sessionScope.user.id}&action=default" class="back-btn">Back to Manage Addresses</a> <!-- Đường dẫn trở lại trang quản lý địa chỉ -->
     </div>
-    
-    </c:if>
-        <c:if test="${sessionScope.sale!=null || sessionScope.admin!=null ||(sessionScope.user==null && 
-                      sessionScope.sale==null && sessionScope.admin==null) }">
-            <%@include file="notallowpage.jsp" %>
-        </c:if>
 </body>
-</html> 
+</html>

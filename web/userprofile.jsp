@@ -142,7 +142,7 @@
                             <ul style="background: #f9f9f9; border: 1px solid gray; border-radius: 10px; padding: 15px; ">
                                 <li><a href="profile?profile=info" class="option">Profile Information</a></li>
                                 <li><a href="profile?profile=ordermanage&see=all" class="option">Order Manage</a></li>
-                                <li><a href="updatepassword.jsp" class="option">Account manage</a></li>
+                                <li><a href="updatepassword.jsp" class="option">Change Password</a></li>
                                 <li><a href="address?id=${sessionScope.user.id}&action=default" class="option">Address Manager</a></li>
                             </ul>
                         </div>
@@ -294,7 +294,7 @@
                                         <ul style="background: #f9f9f9; border: 1px solid gray; border-radius: 10px; padding: 15px;">
                                 <li><a href="profile?profile=info" class="option">Profile Information</a></li>
                                 <li><a href="profile?profile=ordermanage&see=all" class="option">Order Manage</a></li>
-                                 <li><a href="updatepassword.jsp" class="option">Account manage</a></li>
+                                 <li><a href="updatepassword.jsp" class="option">Change Password</a></li>
                                 <li><a href="address?id=${sessionScope.user.id}&action=default" class="option">Address Manager</a></li>
                             </ul>
                         </div>
@@ -417,7 +417,7 @@
     </c:if>
 
     
-    <c:if test="${status.index > 0}">
+    <c:if test="${status.index == 1}">
         <p style="font-size: 10px; text-align: center">Tap "See order detail" to see all ordered products</p>
     </c:if>
 </c:forEach>

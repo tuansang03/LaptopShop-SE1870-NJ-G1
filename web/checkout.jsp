@@ -183,7 +183,7 @@
         <script src="vendors/mail-script.js"></script>
         <script src="js/main.js"></script>
           </c:if>
-        <c:if test="${sessionScope.sale!=null || sessionScope.admin!=null}">
+          <c:if test="${sessionScope.sale!=null || sessionScope.admin!=null || (sessionScope.sale == null && sessionScope.admin == null && sessionScope.user == null) }">
             <%@include file="notallowpage.jsp" %>
         </c:if>
     </body>
