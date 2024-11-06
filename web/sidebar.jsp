@@ -314,7 +314,7 @@
 
 
 
-                    
+                    <a href="CustomerManageController?service=listall"><i class="fas fa-users"></i> Manage User</a>
                     <a href="CustomerManageController?service=listallstaff"><i class="fas fa-calendar"></i> Manage Staff</a>
                     <a href="BrandController?service=listall"><i class="fas fa-calendar"></i> Manage Brand</a>
                     
