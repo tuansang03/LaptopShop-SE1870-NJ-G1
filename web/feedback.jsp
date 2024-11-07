@@ -165,9 +165,9 @@
         <div class="container">
             <div class="row">
                 <div class="col-md-4">
-                    <div class="image-container">
+                    <a class="image-container" href="information?productId=${orderdetail.getProductDetail().getId()}">
                         <img src="${pageContext.request.contextPath}/images/${productimage.image}" alt="Product Image"/>
-                    </div>
+                    </a>
                     <div class="feedback-details">
                         <p><strong>Product Name:</strong> ${orderdetail.getProductDetail().getProduct().name}</p>
                         <p><strong>Brand:</strong> ${orderdetail.getProductDetail().getProduct().brand.name}</p>

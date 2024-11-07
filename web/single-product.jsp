@@ -421,7 +421,7 @@
                                 <li><a class="active" href="listproduct?category%5B%5D=${detail.product.category.name}"><span>Category</span>: ${detail.product.category.name}</a></li>
                             </ul>
                             <br>
-                            Dung lượng:
+                            Storage :
                             <form action="information" method="get">
                                 <c:forEach items="${config}" var="c">
                                     <button type="submit" name="productId" value="${c.id}" 
@@ -456,7 +456,7 @@
                                 <c:if test="${sessionScope.user != null}">
                                     <a class="button primary-btn" href="addtocart?pid=${detail.product.id}&&colorid=${detail.color.id}&&confid=${detail.configuration.id}">Add to Cart</a>
                                 </c:if>
-                                    <c:if test="${sessionScope.user == null}">
+                                <c:if test="${sessionScope.user == null}">
                                     <a class="button primary-btn" href="login">Add to Cart</a>
                                 </c:if>
                                 <a class="icon_btn" href="addtowishlist?pid=${detail.id}&&uid=${user.id}"><i class="lnr lnr lnr-heart"></i></a>
@@ -618,48 +618,48 @@
 
                             </div>
 
-                                    <c:if test="${sessionScope.user!=null}">
-                                        <div class="col-lg-6">
-                                <div class="review_box p-4 shadow-sm border rounded">
-                                    <h4 class="mb-4">Post a Comment</h4>
-                                    <form action="submitComment" method="post">
-                                        <!-- Comment Content -->
-                                        <div class="form-group mb-3">
-                                            <label for="commentContent" class="form-label">Comment</label>
-                                            <textarea class="form-control" id="commentContent" name="commentContent" rows="4" placeholder="Write your comment here..." required></textarea>
-                                        </div>
+                            <c:if test="${sessionScope.user!=null}">
+                                <div class="col-lg-6">
+                                    <div class="review_box p-4 shadow-sm border rounded">
+                                        <h4 class="mb-4">Post a Comment</h4>
+                                        <form action="submitComment" method="post">
+                                            <!-- Comment Content -->
+                                            <div class="form-group mb-3">
+                                                <label for="commentContent" class="form-label">Comment</label>
+                                                <textarea class="form-control" id="commentContent" name="commentContent" rows="4" placeholder="Write your comment here..." required></textarea>
+                                            </div>
 
-                                        <!-- Submit Button -->
-                                        <div class="text-end">
-                                            <button type="submit" class="btn btn-primary">Submit</button>
-                                        </div>
-                                    </form>
+                                            <!-- Submit Button -->
+                                            <div class="text-end">
+                                                <button type="submit" class="btn btn-primary">Submit</button>
+                                            </div>
+                                        </form>
+                                    </div>
                                 </div>
-                            </div>
-                                    </c:if>
-                                    
-                                    <c:if test="${sessionScope.user==null}">
-                                        <div class="col-lg-6">
-                                <div class="review_box p-4 shadow-sm border rounded">
-                                    <h4 class="mb-4" >Post a Comment</h4>
-                                    
+                            </c:if>
+
+                            <c:if test="${sessionScope.user==null}">
+                                <div class="col-lg-6">
+                                    <div class="review_box p-4 shadow-sm border rounded">
+                                        <h4 class="mb-4" >Post a Comment</h4>
+
                                         <!-- Comment Content -->
                                         <div class="form-group mb-3">
                                             <label for="commentContent" class="form-label" style="text-align: center">Login Now to post a comment</label>
-                                           
+
                                         </div>
                                         <div style="text-align: center; padding: 6px; background: #0060ce; ">
                                             <a href="login" style="color: white">Login</a>
                                         </div>
                                         <!-- Submit Button -->
+                                    </div>
                                 </div>
-                            </div>
-                                    </c:if>
+                            </c:if>
 
                         </div>
                     </div>
 
-                   <div class="tab-pane fade" id="review" role="tabpanel" aria-labelledby="review-tab">
+                    <div class="tab-pane fade" id="review" role="tabpanel" aria-labelledby="review-tab">
                         <div class="row">
                             <div class="col-lg-6">
                                 <div class="comment_list">
@@ -699,7 +699,7 @@
                                             <div class="replies">
                                                 <c:forEach items="${feedbacklist}" var="reply">
                                                     <!-- Kiểm tra nếu RepplyCommentId của bình luận này trùng với Id của bình luận chính -->
-<c:if test="${reply.getReplyFeedbackId() == feedback.getId()}">
+                                                    <c:if test="${reply.getReplyFeedbackId() == feedback.getId()}">
                                                         <div class="review_item reply">
                                                             <div class="media">
                                                                 <div class="media-body">
@@ -760,7 +760,7 @@
                         </a>
                     </c:forEach>
                     <c:if test="${empty listproduct}">
-                        <p>Không có sản phẩm nào để hiển thị.</p>
+                        <p>There is no product to show.</p>
                     </c:if>
                 </div>
 

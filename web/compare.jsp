@@ -98,68 +98,79 @@
                             <h3>Compare laptop </h3>
                         </th>
                         <th style="text-align: center; vertical-align: middle; padding: 10px;">
-                            <div style="height: 100%; display: flex; flex-direction: column; justify-content: space-between;" >
-                                <a class="product-link" style="display: block; height: 100%; text-decoration: none; color: inherit;">
-
-                                    <!-- Hiển thị ảnh sản phẩm -->
-                                    <div class="image-container">
-                                        <img src="${pageContext.request.contextPath}/images/${img1.image}" alt="Product Image" style="max-width: 100%; height: auto;">
-                                        <div class="overlay">
-                                            <div class="icon-container">
-                                                <a href="information?productId=${img1.productDetail.id}" class="ti-search"></a>
-                                                <a href="addtocart?pid=${img1.productDetail.product.id}&&colorid=${img1.productDetail.color.id}&&confid=${img1.productDetail.configuration.id}" class="ti-shopping-cart" ></a>
-                                                <a href="addtowishlist?pid=${img1.productDetail.id}&&uid=${user.id}" class="ti-heart"></a>
-                                            </div>
-                                        </div>
-                                    </div>
-
-
-                                    <!-- Hiển thị thương hiệu -->
-                                    <div class="brand">${img1.productDetail.product.brand.name}</div>
-
-                                    <!-- Hiển thị tên sản phẩm -->
-                                    <h5>${img1.productDetail.product.name}</h5>
-                                    <p>Color: ${img1.productDetail.color.name}</p>
-
-                                    <!-- Hiển thị giá tiền -->
-                                    <fmt:formatNumber value="${img1.productDetail.price}" type="number"/>đ
-
-                                </a>
-                            </div>
-                        </th>
-                        <th style="text-align: center; vertical-align: middle; padding: 10px;">
-                            <c:if test="${empty img2}">
+                            <c:if test="${empty img1}">
                                 <button id="openModal">Add product</button>
                             </c:if>
-                            <c:if test="${!empty img2}">
-                                <a style="float: right; font-size: 30px;" href="compare?productid=${img1.productDetail.id}&&productid3=${img3.productDetail.id}" >&times;</a>
+                            <c:if test="${!empty img1}">
+                                <a style="float: right; font-size: 30px;" href="compare?productid2=${img2.productDetail.id}&&productid3=${img3.productDetail.id}" >&times;</a>
                                 <div style="height: 100%; display: flex; flex-direction: column; justify-content: space-between;" >
-                                    <a href="information?productId=${img2.productDetail.id}" class="product-link" style="display: block; height: 100%; text-decoration: none; color: inherit;">
+                                    <a class="product-link" style="display: block; height: 100%; text-decoration: none; color: inherit;">
 
                                         <!-- Hiển thị ảnh sản phẩm -->
                                         <div class="image-container">
-                                            <img src="${pageContext.request.contextPath}/images/${img2.image}" alt="Product Image" style="max-width: 100%; height: auto;">
+                                            <img src="${pageContext.request.contextPath}/images/${img1.image}" alt="Product Image" style="max-width: 100%; height: auto;">
                                             <div class="overlay">
                                                 <div class="icon-container">
-                                                    <a href="information?productId=${img2.productDetail.id}" class="ti-search"></a>
-                                                    <a href="addtocart?pid=${img2.productDetail.product.id}&&colorid=${img2.productDetail.color.id}&&confid=${img2.productDetail.configuration.id}" class="ti-shopping-cart" ></a>
-                                                    <a href="addtowishlist?pid=${img2.productDetail.id}&&uid=${user.id}" class="ti-heart"></a>
+                                                    <a href="information?productId=${img1.productDetail.id}" class="ti-search"></a>
+                                                    <a href="addtocart?pid=${img1.productDetail.product.id}&&colorid=${img1.productDetail.color.id}&&confid=${img1.productDetail.configuration.id}" class="ti-shopping-cart" ></a>
+                                                    <a href="addtowishlist?pid=${img1.productDetail.id}&&uid=${user.id}" class="ti-heart"></a>
                                                 </div>
                                             </div>
                                         </div>
 
+
                                         <!-- Hiển thị thương hiệu -->
-                                        <div class="brand">${img2.productDetail.product.brand.name}</div>
+                                        <div class="brand">${img1.productDetail.product.brand.name}</div>
 
                                         <!-- Hiển thị tên sản phẩm -->
-                                        <h5>${img2.productDetail.product.name}</h5>
-                                        <p>Color: ${img2.productDetail.color.name}</p>
+                                        <h5>${img1.productDetail.product.name}</h5>
+                                        <p>Color: ${img1.productDetail.color.name}</p>
 
                                         <!-- Hiển thị giá tiền -->
-                                        <fmt:formatNumber value="${img2.productDetail.price}" type="number"/>đ
+                                        <fmt:formatNumber value="${img1.productDetail.price}" type="number"/>đ
 
                                     </a>
-                                </div>
+                                </div>    
+                            </c:if>
+
+                        </th>
+                        <th style="text-align: center; vertical-align: middle; padding: 10px;">
+                            <c:if test="${!empty img1}">
+
+
+                                <c:if test="${empty img2}">
+                                    <button id="openModal">Add product</button>
+                                </c:if>
+                                <c:if test="${!empty img2}">
+                                    <a style="float: right; font-size: 30px;" href="compare?productid=${img1.productDetail.id}&&productid3=${img3.productDetail.id}" >&times;</a>
+                                    <div style="height: 100%; display: flex; flex-direction: column; justify-content: space-between;" >
+                                        <a href="information?productId=${img2.productDetail.id}" class="product-link" style="display: block; height: 100%; text-decoration: none; color: inherit;">
+
+                                            <!-- Hiển thị ảnh sản phẩm -->
+                                            <div class="image-container">
+                                                <img src="${pageContext.request.contextPath}/images/${img2.image}" alt="Product Image" style="max-width: 100%; height: auto;">
+                                                <div class="overlay">
+                                                    <div class="icon-container">
+                                                        <a href="information?productId=${img2.productDetail.id}" class="ti-search"></a>
+                                                        <a href="addtocart?pid=${img2.productDetail.product.id}&&colorid=${img2.productDetail.color.id}&&confid=${img2.productDetail.configuration.id}" class="ti-shopping-cart" ></a>
+                                                        <a href="addtowishlist?pid=${img2.productDetail.id}&&uid=${user.id}" class="ti-heart"></a>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <!-- Hiển thị thương hiệu -->
+                                            <div class="brand">${img2.productDetail.product.brand.name}</div>
+
+                                            <!-- Hiển thị tên sản phẩm -->
+                                            <h5>${img2.productDetail.product.name}</h5>
+                                            <p>Color: ${img2.productDetail.color.name}</p>
+
+                                            <!-- Hiển thị giá tiền -->
+                                            <fmt:formatNumber value="${img2.productDetail.price}" type="number"/>đ
+
+                                        </a>
+                                    </div>
+                                </c:if>
                             </c:if>
 
                         </th>
