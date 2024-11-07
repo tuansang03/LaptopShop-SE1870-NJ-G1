@@ -5,8 +5,8 @@
 package controller;
 
 import dal.FeedbackDAOS;
-import model.*;
 import java.util.List;
+import model.*;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -14,14 +14,13 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import java.util.ArrayList;
 
 /**
  *
  * @author PHONG
  */
-@WebServlet(name = "FeedbackManager", urlPatterns = {"/feedbackmanager"})
-public class FeedbackManager extends HttpServlet {
+@WebServlet(name = "DeleteFeedback", urlPatterns = {"/deletefeedback"})
+public class DeleteFeedback extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -40,10 +39,10 @@ public class FeedbackManager extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet FeedbackManager</title>");
+            out.println("<title>Servlet DeleteFeedback</title>");
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet FeedbackManager at " + request.getContextPath() + "</h1>");
+            out.println("<h1>Servlet DeleteFeedback at " + request.getContextPath() + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
@@ -62,57 +61,16 @@ public class FeedbackManager extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         FeedbackDAOS dao = new FeedbackDAOS();
-        String rateselect = "all";
-        String status = "all";
-        try {
-            rateselect = request.getParameter("op");
-        } catch (Exception e) {
-        }
-        try {
-            status = request.getParameter("status");
-        } catch (Exception e) {
-        }
-        if (rateselect==null){
-            rateselect="all";
-        }
-        if (status==null){
-            status="all";
-        }
-        List<Feedback> feedbacklist = filterFeedback(dao.getAllFeedback(rateselect), dao.getFeedbackStatus(), status);
-        List<Feedback> feedbackreply = dao.getAllFeedbackReply();
-        request.setAttribute("feedbacklist", feedbacklist);
-        request.setAttribute("feedbackreply", feedbackreply);
-        request.setAttribute("op", rateselect);
-        request.setAttribute("status", status);
-        request.setAttribute("total", feedbacklist.size());
-        request.getRequestDispatcher("managefeedback.jsp").forward(request, response);
-    }
+        int fid = Integer.parseInt(request.getParameter("fid"));
+        int id = Integer.parseInt(request.getParameter("replyid"));
+        dao.deleteFeedback(id);
+        id=0;
+        Feedback feedback = dao.getFeedback(fid);
+        List<Feedback> listreply = dao.getListReplyFeedback(fid);
+        request.setAttribute("feedback", feedback);
+        request.setAttribute("listreply", listreply);
+        request.getRequestDispatcher("feedbackdetail.jsp").forward(request, response);
 
-    protected List<Feedback> filterFeedback(List<Feedback> list, List<Integer> index, String status) {
-        // Return all feedback if status is "all"
-        if (status.equals("all")) {
-            return list;
-        }
-
-        List<Feedback> fin = new ArrayList<>();
-
-        if (status.equals("replied")) {
-            // Add feedbacks that have IDs in the index list
-            for (Feedback feedback : list) {
-                if (index.contains(feedback.getId())) {
-                    fin.add(feedback);
-                }
-            }
-        } else {
-            // Add feedbacks that do NOT have IDs in the index list
-            for (Feedback feedback : list) {
-                if (!index.contains(feedback.getId())) {
-                    fin.add(feedback);
-                }
-            }
-        }
-
-        return fin;
     }
 
     /**

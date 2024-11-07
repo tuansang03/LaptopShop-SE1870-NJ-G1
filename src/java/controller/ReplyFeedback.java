@@ -67,7 +67,9 @@ public class ReplyFeedback extends HttpServlet {
         User u = (User) session.getAttribute("sale");
         int odid = Integer.parseInt(request.getParameter("orderdetailid"));
         int fid = Integer.parseInt(request.getParameter("fid"));
-        dao.addReply(u.getId(), odid, fid, reply);
+        int rating = Integer.parseInt(request.getParameter("rating"));
+        dao.addReply(u.getId(), odid, rating, fid, reply);
+        reply=null;
         Feedback feedback = dao.getFeedback(fid);
         List<Feedback> listreply = dao.getListReplyFeedback(fid);
         request.setAttribute("feedback", feedback);

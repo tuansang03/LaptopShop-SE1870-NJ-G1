@@ -162,15 +162,26 @@
                     <c:if test="${!empty listreply}">
                         <c:forEach items="${listreply}" var="r">
                             <div class="reply-item">
-                                <p>${r.getFeedbackContent()}</p>
                                 <div class="reply-date">Date: ${r.getFeedbackDate()}</div>
+                                <p>${r.getFeedbackContent()}</p>
+                                <div style="text-align: right;">
+                                    <a href="deletefeedback?fid=${feedback.id}&&replyid=${r.id}" onclick="return confirmDelete();" class="btn btn-danger btn-sm">
+                                        <i class="fas fa-trash-alt"></i>
+                                    </a>
+                                </div>
                             </div>
                         </c:forEach>
                     </c:if>
                 </div>
+                <script>
+                    function confirmDelete() {
+                        return confirm("Are you sure you want to delete this reply?");
+                    }
+                </script>
 
                 <form action="replyfeedback" method="GET" class="reply-form">
                     <input type="hidden" value="${feedback.id}" name="fid"/>
+                    <input type="hidden" value="${feedback.rating}" name="rating"/>
                     <input type="hidden" value="${feedback.orderdetailid.getId()}" name="orderdetailid"/>
                     <input type="text" name="reply" placeholder="Type your reply here..." required/>
                     <input type="submit" value="Reply" />
