@@ -151,36 +151,35 @@ public class UserDAO extends DBContext {
         }
     }
 
-    public int insertUser2(User user) {
-        int userId = -1;  // Biến lưu userId mới
-        String sql = "INSERT INTO [dbo].[User]\n"
-                + "          (?,?,?,?,3,'active')";
+ public int insertUser2(User user) {
+    int userId = -1;  // Biến lưu userId mới
+    String sql = "INSERT INTO [dbo].[User] (userName, password, fullName, email, roleId, status) VALUES (?, ?, ?, ?, 3, 'active')";
 
-        try {
-            // Sử dụng RETURN_GENERATED_KEYS để lấy userId vừa thêm
-            PreparedStatement pre = connection.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS);
+    try {
+        // Sử dụng RETURN_GENERATED_KEYS để lấy userId vừa thêm
+        PreparedStatement pre = connection.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS);
 
-            // Thiết lập các giá trị cho câu lệnh SQL
-            pre.setString(1, user.getUserName());
-            pre.setString(2, user.getPassword());
-            pre.setString(3, user.getFullName());
-            pre.setString(4, user.getEmail());
+        // Thiết lập các giá trị cho câu lệnh SQL
+        pre.setString(1, user.getUserName());
+        pre.setString(2, user.getPassword());
+        pre.setString(3, user.getFullName());
+        pre.setString(4, user.getEmail());
 
-            // Thực thi câu lệnh
-            pre.executeUpdate();
+        // Thực thi câu lệnh với executeUpdate() thay vì executeQuery()
+        pre.executeUpdate();
 
-            // Lấy userId vừa được thêm
-            ResultSet rs = pre.getGeneratedKeys();
-            if (rs.next()) {
-                userId = rs.getInt(1);  // Lấy giá trị khóa chính
-            }
-
-        } catch (SQLException ex) {
-            Logger.getLogger(UserDAO.class.getName()).log(Level.SEVERE, null, ex);
+        // Lấy userId vừa được thêm
+        ResultSet rs = pre.getGeneratedKeys();
+        if (rs.next()) {
+            userId = rs.getInt(1);  // Lấy giá trị khóa chính
         }
 
-        return userId;  // Trả về userId hoặc -1 nếu thất bại
+    } catch (SQLException ex) {
+        Logger.getLogger(UserDAO.class.getName()).log(Level.SEVERE, null, ex);
     }
+
+    return userId;  // Trả về userId hoặc -1 nếu thất bại
+}
 
     public boolean isMailDuplicate(User user) {
         String sql = "SELECT COUNT(*) FROM [User] WHERE email = ?";

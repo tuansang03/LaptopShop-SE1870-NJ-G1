@@ -11,6 +11,8 @@ import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import model.Color;
 import model.Configuration;
 import model.Order;
@@ -234,7 +236,7 @@ public class OderDAO extends DBContext {
                 orderDetail.setUnitPrice(resultSet.getInt("UnitPrice"));
 
                 int orderId = resultSet.getInt("orderid");
-                Order order = getOrderById(orderId);
+                Order order = getOrderById(orderId);    
                 orderDetail.setOrder(order);
 
                 int productDetailId = resultSet.getInt("ProductDetailId");
@@ -302,49 +304,57 @@ public class OderDAO extends DBContext {
     }
 
     public Order getOrderById(int orderId) {
-        Order order = null;
+    Order order = null;
 
-        String orderQuery = "SELECT * FROM [dbo].[Order] WHERE Id = ?";
+    String orderQuery = "SELECT * FROM [dbo].[Order] WHERE Id = ?";
 
-        try (
-                PreparedStatement preparedStatement = connection.prepareStatement(orderQuery)) {
+    try (
+            PreparedStatement preparedStatement = connection.prepareStatement(orderQuery)) {
 
-            preparedStatement.setInt(1, orderId);
-            ResultSet resultSet = preparedStatement.executeQuery();
+        preparedStatement.setInt(1, orderId);
+        ResultSet resultSet = preparedStatement.executeQuery();
 
-            if (resultSet.next()) {
-                order = new Order();
-                order.setId(resultSet.getInt("id"));
-                order.setName(resultSet.getString("name"));
-                order.setAddress(resultSet.getString("address"));
-                order.setPhone(resultSet.getString("phone"));
-                order.setOrderDate(resultSet.getTimestamp("OrderDate").toLocalDateTime());
-                order.setTotalAmountBefore(resultSet.getInt("TotalAmountBefore"));
-                order.setDiscountAmount(resultSet.getInt("DiscountAmount"));
-                order.setTotalAmountAfter(resultSet.getInt("TotalAmountAfter"));
-                order.setPaymentMethod(resultSet.getString("PaymentMethod"));
-                order.setPaymentStatus(resultSet.getString("PaymentStatus"));
-                order.setVnPayTransactionId(resultSet.getString("VnPayTransactionId"));
-                order.setEndDate(resultSet.getTimestamp("EndDate") != null ? resultSet.getTimestamp("EndDate").toLocalDateTime() : null);
-                order.setOrderStatus(resultSet.getString("OrderStatus"));
+        if (resultSet.next()) {
+            order = new Order();
+            order.setId(resultSet.getInt("Id"));
+            order.setName(resultSet.getString("Name"));
+            order.setAddress(resultSet.getString("Address"));
+            order.setPhone(resultSet.getString("Phone"));
+            order.setOrderDate(resultSet.getTimestamp("OrderDate").toLocalDateTime());
+            order.setTotalAmountBefore(resultSet.getInt("TotalAmountBefore"));
+            order.setDiscountAmount(resultSet.getInt("DiscountAmount"));
+            order.setTotalAmountAfter(resultSet.getInt("TotalAmountAfter"));
+            order.setPaymentMethod(resultSet.getString("PaymentMethod"));
+            order.setPaymentStatus(resultSet.getString("PaymentStatus"));
+            order.setVnPayTransactionId(resultSet.getString("VnPayTransactionId"));
+            order.setEndDate(resultSet.getTimestamp("EndDate") != null ? resultSet.getTimestamp("EndDate").toLocalDateTime() : null);
+            order.setOrderStatus(resultSet.getString("OrderStatus"));
+            order.setNote(resultSet.getString("Note"));
+            order.setSaleID(resultSet.getInt("SaleId"));
+            order.setRejectDate(resultSet.getTimestamp("RejectDate") != null ? resultSet.getTimestamp("RejectDate").toLocalDateTime() : null);
+            order.setAcceptedDate(resultSet.getTimestamp("AcceptedDate") != null ? resultSet.getTimestamp("AcceptedDate").toLocalDateTime() : null);
+            order.setIntransitDate(resultSet.getTimestamp("IntransitDate") != null ? resultSet.getTimestamp("IntransitDate").toLocalDateTime() : null);
+            order.setShipmentFailedDate(resultSet.getTimestamp("ShipmentFailedDate") != null ? resultSet.getTimestamp("ShipmentFailedDate").toLocalDateTime() : null);
+            order.setTrackingcode(resultSet.getString("Trackingcode"));
 
-                int userId = resultSet.getInt("UserId");
-                UserDAO userd = new UserDAO();
-                User user = userd.getUserByIdD(userId);
-                order.setUser(user);
+            int userId = resultSet.getInt("UserId");
+            UserDAO userDAO = new UserDAO();
+            User user = userDAO.getUserByIdD(userId);
+            order.setUser(user);
 
-                int voucherId = resultSet.getInt("VoucherId");
-                if (voucherId > 0) {
-                    Voucher voucher = getVoucherById(voucherId);
-                    order.setVoucher(voucher);
-                }
+            int voucherId = resultSet.getInt("VoucherId");
+            if (voucherId > 0) {
+                Voucher voucher = getVoucherById(voucherId);
+                order.setVoucher(voucher);
             }
-        } catch (SQLException e) {
-            e.printStackTrace();
         }
-
-        return order;
+    } catch (SQLException e) {
+        e.printStackTrace();
     }
+
+    return order;
+}
+
 
     public Voucher getVoucherById(int voucherId) {
         Voucher voucher = null;
@@ -1046,10 +1056,13 @@ public class OderDAO extends DBContext {
 
 
     public static void main(String[] args) {
-        OderDAO o = new OderDAO();
-
-//        List<Order> a = o.searchOrderByUserNameAndDate("23", "Null", "Null");
-//        System.out.println(a.size());
+        try {
+            OderDAO o = new OderDAO();
+            OrderDetail x = o.getOrderDetailById(21);
+            System.out.println(x.getOrder());
+        } catch (SQLException ex) {
+            Logger.getLogger(OderDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
 
     }
 }

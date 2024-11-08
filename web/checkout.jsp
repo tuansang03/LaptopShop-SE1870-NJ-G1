@@ -66,13 +66,13 @@
                                     <h3>Billing Details</h3>
                                     <div class="row contact_form">
                                         <div class="col-md-12 form-group">
-                                            Name: <input required value="${name}" type="text" class="form-control" name="name"   placeholder="Name">
+                                            Name: <input readonly required value="${name}" type="text" class="form-control" name="name"   placeholder="Name">
                                         </div>
                                         <div class="col-md-12 form-group">
-                                           Address: <input value="${address}" required type="text" class="form-control" name="address"   placeholder="Address">
+                                           Address: <input readonly value="${address}" required type="text" class="form-control" name="address"   placeholder="Address">
                                         </div>
                                         <div class="col-md-12 form-group">
-                                           Phone: <input value="${phone}" required type="number" class="form-control" name="phone"   placeholder="Phone">
+                                           Phone: <input readonly value="${phone}" required type="number" class="form-control" name="phone"   placeholder="Phone">
                                         </div>
                                         <div class="col-md-12 form-group">
                                            Email: <input readonly value="${email}" type="email" class="form-control" name="email"  placeholder="Email">

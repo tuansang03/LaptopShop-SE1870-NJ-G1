@@ -334,7 +334,10 @@ public class Order {
 
     @Override
     public String toString() {
-        return "Order{" + "Id=" + Id + ", User=" + User + ", Name=" + Name + ", Address=" + Address + ", Phone=" + Phone + ", OrderDate=" + OrderDate + ", Voucher=" + Voucher + ", TotalAmountBefore=" + TotalAmountBefore + ", DiscountAmount=" + DiscountAmount + ", TotalAmountAfter=" + TotalAmountAfter + ", PaymentMethod=" + PaymentMethod + ", PaymentStatus=" + PaymentStatus + ", VnPayTransactionId=" + VnPayTransactionId + ", EndDate=" + EndDate + ", OrderStatus=" + OrderStatus + '}';
+        return "Order{" + "Id=" + Id + ", User=" + User + ", Name=" + Name + ", Address=" + Address + ", Phone=" + Phone + ", OrderDate=" + OrderDate + ", Voucher=" + Voucher + ", TotalAmountBefore=" + TotalAmountBefore + ", DiscountAmount=" + DiscountAmount + ", TotalAmountAfter=" + TotalAmountAfter + ", PaymentMethod=" + PaymentMethod + ", PaymentStatus=" + PaymentStatus + ", VnPayTransactionId=" + VnPayTransactionId + ", EndDate=" + EndDate + ", OrderStatus=" + OrderStatus + ", Note=" + Note + ", saleID=" + saleID + ", RejectDate=" + RejectDate + ", AcceptedDate=" + AcceptedDate + ", IntransitDate=" + IntransitDate + ", ShipmentFailedDate=" + ShipmentFailedDate + ", Trackingcode=" + Trackingcode + '}';
     }
+    
+
+   
 
 }

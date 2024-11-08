@@ -8,7 +8,7 @@
         <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
         <meta name="description" content="">
         <meta name="author" content="">
-        <title>Tạo mới đơn hàng</title>
+        <title>Create new order</title>
         <!-- Bootstrap core CSS -->
         <link href="/vnpay_jsp/assets/bootstrap.min.css" rel="stylesheet"/>
         <!-- Custom styles for this template -->
@@ -23,39 +23,49 @@
 
                 <h3 class="text-muted">VNPAY DEMO</h3>
             </div>
-            <h3>Tạo mới đơn hàng</h3>
+            <h3>Create new order</h3>
             <div class="table-responsive">
                 <form action="/vnpay_jsp/vnpayajax" id="frmCreateOrder" method="post">        
                     <div class="form-group">
-                        <label for="amount">Số tiền</label>
+                        <label for="amount">Amount
+</label>
                         <input class="form-control" data-val="true" data-val-number="The field Amount must be a number." data-val-required="The Amount field is required." id="amount" max="100000000" min="1" name="amount" type="number" value="10000" />
                     </div>
-                     <h4>Chọn phương thức thanh toán</h4>
+                     <h4>Select payment method
+</h4>
                     <div class="form-group">
-                        <h5>Cách 1: Chuyển hướng sang Cổng VNPAY chọn phương thức thanh toán</h5>
+                        <h5>Method 1: Redirect to VNPAY Portal and select payment method
+</h5>
                        <input type="radio" Checked="True" id="bankCode" name="bankCode" value="">
-                       <label for="bankCode">Cổng thanh toán VNPAYQR</label><br>
+                       <label for="bankCode">VNPAYQR payment gateway
+</label><br>
                        
-                       <h5>Cách 2: Tách phương thức tại site của đơn vị kết nối</h5>
+                       <h5>Method 2: Separate the method at the connection unit's site
+</h5>
                        <input type="radio" id="bankCode" name="bankCode" value="VNPAYQR">
-                       <label for="bankCode">Thanh toán bằng ứng dụng hỗ trợ VNPAYQR</label><br>
+                       <label for="bankCode">Payment by VNPAYQR supported application
+</label><br>
                        
                        <input type="radio" id="bankCode" name="bankCode" value="VNBANK">
-                       <label for="bankCode">Thanh toán qua thẻ ATM/Tài khoản nội địa</label><br>
+                       <label for="bankCode">Payment via ATM card/Domestic account
+</label><br>
                        
                        <input type="radio" id="bankCode" name="bankCode" value="INTCARD">
-                       <label for="bankCode">Thanh toán qua thẻ quốc tế</label><br>
+                       <label for="bankCode">Payment by international card
+</label><br>
                        
                     </div>
                     <div class="form-group">
-                        <h5>Chọn ngôn ngữ giao diện thanh toán:</h5>
+                        <h5>Select payment interface language:
+</h5>
                          <input type="radio" id="language" Checked="True" name="language" value="vn">
-                         <label for="language">Tiếng việt</label><br>
+                         <label for="language">Vietnamese</label><br>
                          <input type="radio" id="language" name="language" value="en">
-                         <label for="language">Tiếng anh</label><br>
+                         <label for="language">English</label><br>
                          
                     </div>
-                    <button type="submit" class="btn btn-default" href>Thanh toán</button>
+                    <button type="submit" class="btn btn-default" href>Pay
+</button>
                 </form>
             </div>
             <p>

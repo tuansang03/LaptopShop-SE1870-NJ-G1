@@ -617,6 +617,12 @@
                                     <div class="pt-1">
                                         <p style="font-size: 18px">Order #${currentOrder.getId()} is currently<b style="color: ${colorOrder}"> ${currentOrder.getOrderStatus().isEmpty()? "None":currentOrder.getOrderStatus() }</b></p>
                                     </div>
+                                    <div>
+                                        <c:if test="${currentOrder.getTrackingcode() != null}">
+                                            <h6>Tracking code: <b style="color: red">${currentOrder.getTrackingcode()}</b></h6>
+                                        </c:if>
+                                        
+                                    </div>
                                     <a href="profile?profile=ordermanage"><div class="btn close text-white" ">&times;</div></a>
                                 </div>
                                 <div class="wrapper bg-white">
@@ -761,6 +767,7 @@
                                                 <p class="text-justify pt-2">
                                                     ${currentOrder.getUser().getEmail()}
                                                 </p>
+                                                
 
                                             </div>
                                         </div>

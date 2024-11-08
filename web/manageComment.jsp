@@ -68,7 +68,7 @@
                         <th>ID</th>
                         <th>Product Name</th>
                         <th>Comment Content</th>
-                        <th>UserId</th>
+                        <th>User Id</th>
                         <th>Full Name</th>
                         <th>Date</th>
                         <th>Action</th>

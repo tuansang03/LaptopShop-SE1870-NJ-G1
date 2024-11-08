@@ -22,18 +22,18 @@
 
 
     <div class="col-md-10 content">
-        <h2>Quản Lý Sản Phẩm</h2>
+        <h2>Product Manage</h2>
         <table>
             <thead>
                 <tr>
                     <th>ID</th>
-                    <th>Hình Ảnh</th>
-                    <th>Tên</th>
-                    <th>Mô Tả</th>
-                    <th>Giá</th>
-                    <th>Tồn Kho</th>
-                    <th>Danh Mục</th>
-                    <th>Hành Động</th>
+                    <th>image</th>
+                    <th>Name</th>
+                    <th>Describe</th>
+                    <th>Price</th>
+                    <th>Inventory</th>
+                    <th>Directory</th>
+                    <th>Action</th>
                 </tr>
             </thead>
 

@@ -26,12 +26,14 @@
             <div class="table-responsive">
             <form action="/vnpay_jsp/vnpayquery" id="frmQerydr" method="Post">
                 <div class="form-group">
-                <label for="order_id">Mã giao dịch cần truy vấn (Giá trị của vnp_TxnRef)</label>
+                <label for="order_id">Transaction code to query (Value of vnp_TxnRef)
+</label>
                 <input class="form-control" id="order_id"
                        name="order_id" type="text"/>
                 </div>
                 <div class="form-group">
-                <label for="trans_date">Thời gian khởi tạo giao dịch (Giá trị của vnp_CreateDate yêu cầu thanh toán)</label>
+                <label for="trans_date">Transaction Creation Time (Value of vnp_CreateDate payment request)
+</label>
                 <input class="form-control" id="trans_date"
                        name="trans_date" type="text" placeholder="yyyyMMddHHmmss"/>
             </div>
