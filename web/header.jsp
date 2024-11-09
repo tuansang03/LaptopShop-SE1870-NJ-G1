@@ -26,8 +26,7 @@
 
     </head>
     <body>
-         <c:if test="${sessionScope.user!=null || (sessionScope.user==null && 
-                      sessionScope.sale==null && sessionScope.admin==null)}">
+        
 
 
         <style>
@@ -284,7 +283,7 @@
                 </nav>
             </div>
         </header>
-                                </c:if>
+                           
        
     </body>
 </html>

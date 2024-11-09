@@ -18,14 +18,15 @@
         </group>
         <group name="Group 20240613-10:26:14">
             <file>file:/D:/SWP391000/LaptopShop-SE1870-NJ-G1/src/java/controller/ProfileManage.java</file>
-            <file>file:/D:/SWP391000/LaptopShop-SE1870-NJ-G1/web/managerOrderDisplay.jsp</file>
-            <file>file:/D:/SWP391000/LaptopShop-SE1870-NJ-G1/src/java/controller/SaleStatisticController2.java</file>
-            <file>file:/D:/SWP391000/LaptopShop-SE1870-NJ-G1/src/java/controller/StatisticController.java</file>
-            <file>file:/D:/SWP391000/LaptopShop-SE1870-NJ-G1/web/userprofile.jsp</file>
-            <file>file:/D:/SWP391000/LaptopShop-SE1870-NJ-G1/src/java/controller/LoadInfoCheckOut.java</file>
-            <file>file:/D:/SWP391000/LaptopShop-SE1870-NJ-G1/src/java/dal/StatisticDAO.java</file>
-            <file>file:/D:/SWP391000/LaptopShop-SE1870-NJ-G1/web/index.jsp</file>
-            <file>file:/D:/SWP391000/LaptopShop-SE1870-NJ-G1/web/checkout.jsp</file>
+            <file>file:/D:/SWP391000/LaptopShop-SE1870-NJ-G1/web/updatepostdisplay.jsp</file>
+            <file>file:/D:/SWP391000/LaptopShop-SE1870-NJ-G1/src/java/controller/logout.java</file>
+            <file>file:/D:/SWP391000/LaptopShop-SE1870-NJ-G1/src/java/controller/login.java</file>
+            <file>file:/D:/SWP391000/LaptopShop-SE1870-NJ-G1/src/java/filter/CustomerFilter.java</file>
+            <file>file:/D:/SWP391000/LaptopShop-SE1870-NJ-G1/web/WEB-INF/web.xml</file>
+            <file>file:/D:/SWP391000/LaptopShop-SE1870-NJ-G1/src/java/filter/GuestFilter.java</file>
+            <file>file:/D:/SWP391000/LaptopShop-SE1870-NJ-G1/web/wishlist.jsp</file>
+            <file>file:/D:/SWP391000/LaptopShop-SE1870-NJ-G1/src/java/filter/AdminFilter.java</file>
+            <file>file:/D:/SWP391000/LaptopShop-SE1870-NJ-G1/src/java/filter/SalerFilter.java</file>
         </group>
     </open-files>
 </project-private>

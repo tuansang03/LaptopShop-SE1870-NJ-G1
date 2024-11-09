@@ -21,7 +21,7 @@
   <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-    <c:if test="${sessionScope.user!=null }">
+   
   <!--================ Start Header Menu Area =================-->
 	<%@include file="header.jsp" %>
 	<!--================ End Header Menu Area =================-->
@@ -221,9 +221,6 @@
   <script src="vendors/jquery.ajaxchimp.min.js"></script>
   <script src="vendors/mail-script.js"></script>
   <script src="js/main.js"></script>
-  </c:if>
-        <c:if test="${sessionScope.sale!=null || sessionScope.admin!=null}">
-            <%@include file="notallowpage.jsp" %>
-        </c:if>
+  
 </body>
 </html>

@@ -20,7 +20,7 @@
         <%@include file="sidebar2.jsp" %>
     </head>
     <body>
-<c:if test="${sessionScope.sale!=null}">
+
         <div class="col-md-10 content">
             <c:if test="${not empty errorMessage}">
                 <div class="alert alert-danger alert-dismissible fade show" role="alert">
@@ -269,11 +269,7 @@
                     background-color: #f0f0f0;
                 }
             </style>
- </c:if>
-        <c:if test="${sessionScope.admin!=null || sessionScope.user!=null || (sessionScope.user==null && 
-                      sessionScope.sale==null && sessionScope.admin==null)}">
-            <%@include file="notallowpage.jsp" %>
-        </c:if>
+ 
 
         </div>
 

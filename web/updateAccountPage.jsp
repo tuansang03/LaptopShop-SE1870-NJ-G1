@@ -21,7 +21,7 @@
     </style>
 </head>
 <body>
-    <c:if test="${sessionScope.sale!=null|| sessionScope.admin!=null}">
+   
 
         <c:if test="${sessionScope.sale!=null}">
         <%@ include file="sidebar2.jsp" %>
@@ -105,10 +105,6 @@
 
 <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-</c:if>
-        <c:if test="${ sessionScope.user!=null || (sessionScope.user==null && 
-                      sessionScope.sale==null && sessionScope.admin==null)}">
-            <%@include file="notallowpage.jsp" %>
-        </c:if>
+
 </body>
 </html>

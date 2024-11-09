@@ -54,7 +54,7 @@
     </head>
     <body>
 
-        <c:if test="${sessionScope.user!=null}">
+      
             <%@include file="header.jsp" %>
 
             <style>
@@ -793,9 +793,6 @@
         </div>
     </div>
     <%@include file="footer.jsp" %>
-</c:if>
-<c:if test="${sessionScope.sale!=null || sessionScope.admin!=null}">
-    <%@include file="notallowpage.jsp" %>
-</c:if>
+
 </body>
 </html>

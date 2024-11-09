@@ -17,7 +17,7 @@
         <link rel="stylesheet" href="assets/css/swiper-bundle.min.css">
         <link rel="stylesheet" href="assets/css/nice-select.css">
         <link rel="stylesheet" href="assets/css/main.css">
-<c:if test="${sessionScope.sale!=null}">
+
         <%@include file="sidebar2.jsp" %>
 
 
@@ -93,10 +93,6 @@
 
         </style>
     </div>
-</c:if>
-        <c:if test="${sessionScope.admin!=null || sessionScope.user!=null || (sessionScope.user==null && 
-                      sessionScope.sale==null && sessionScope.admin==null)}">
-            <%@include file="notallowpage.jsp" %>
-        </c:if>
+
 </body>
 </html>
