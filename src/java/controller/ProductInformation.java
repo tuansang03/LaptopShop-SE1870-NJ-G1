@@ -71,20 +71,20 @@ public class ProductInformation extends HttpServlet {
         int id = Integer.parseInt(request.getParameter("productId"));
         session.setAttribute("pId", id);
         ProductDetailDAO pDDAO = new ProductDetailDAO();
-       int productId = pDDAO.getProductIdByProductDetailId(id);
+        int productId = pDDAO.getProductIdByProductDetailId(id);
         List<Image> list = d.getImageById(id);
         ProductDetail pd = d.getProductDetail(id);
-        
+
         List<ProductAttribute> pa = d.getAttributeById(id);
-        
+
         List<Configuration> con = d.listConfigurationById(id);
         List<Color> col = d.listColorById(id, pd.getConfiguration().getId());
-        
+
         List<ProductList> listproduct = d.listProduct("'" + pd.getProduct().getCategory().getName() + "'", null, null, null);
         String price = formatCurrency(d.getProductDetail(id).getPrice());
-         CommentDAO c = new CommentDAO();
+        CommentDAO c = new CommentDAO();
         ArrayList<Comment> cList = c.getCommentByProductId(productId);
-        
+
         request.setAttribute("commentList", cList);
         request.setAttribute("co", pd.getConfiguration().getName());
         request.setAttribute("col", pd.getColor().getName());
@@ -99,17 +99,17 @@ public class ProductInformation extends HttpServlet {
         String sale = formatCurrency2(salep);
         request.setAttribute("sale", sale);
         request.setAttribute("listproduct", listproduct);
-        
+
         FeedbackDAOS fdao = new FeedbackDAOS();
         List<Feedback> feedbacklist = fdao.getFeedbackByProduct(id);
         List<Integer> ratingcount = fdao.getRatingCount(id);
         int numsale = fdao.getSaleNumber(id);
         double rating = fdao.getRatingPoint(id);
-        
+
         request.setAttribute("feedbacklist", feedbacklist);
         request.setAttribute("rating", rating);
         request.setAttribute("ratingcount", ratingcount);
-        request.setAttribute("number", feedbacklist.size());
+        request.setAttribute("number", countRating(feedbacklist));
         request.setAttribute("numsale", numsale);
         request.getRequestDispatcher("single-product.jsp").forward(request, response);
     }
@@ -122,5 +122,15 @@ public class ProductInformation extends HttpServlet {
     public static String formatCurrency2(double amount) {
         DecimalFormat formatter = new DecimalFormat("#,###");
         return formatter.format(amount);
+    }
+
+    public static int countRating(List<Feedback> list) {
+        int count = 0;
+        for (int i = 0; i < list.size(); i++) {
+            if (list.get(i).getReplyFeedbackId() == 0) {
+                count++;
+            }
+        }
+        return count;
     }
 }

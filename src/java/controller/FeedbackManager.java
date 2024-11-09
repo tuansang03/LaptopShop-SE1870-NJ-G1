@@ -14,6 +14,7 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import java.util.ArrayList;
 
 /**
  *
@@ -39,7 +40,7 @@ public class FeedbackManager extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet FeedbackManager</title>");            
+            out.println("<title>Servlet FeedbackManager</title>");
             out.println("</head>");
             out.println("<body>");
             out.println("<h1>Servlet FeedbackManager at " + request.getContextPath() + "</h1>");
@@ -61,18 +62,57 @@ public class FeedbackManager extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         FeedbackDAOS dao = new FeedbackDAOS();
-        String rateselect="all";
-        try{
+        String rateselect = "all";
+        String status = "all";
+        try {
             rateselect = request.getParameter("op");
-        }catch (Exception e){
+        } catch (Exception e) {
         }
-        List<Feedback> feedbacklist = dao.getAllFeedback(rateselect);
+        try {
+            status = request.getParameter("status");
+        } catch (Exception e) {
+        }
+        if (rateselect==null){
+            rateselect="all";
+        }
+        if (status==null){
+            status="all";
+        }
+        List<Feedback> feedbacklist = filterFeedback(dao.getAllFeedback(rateselect), dao.getFeedbackStatus(), status);
         List<Feedback> feedbackreply = dao.getAllFeedbackReply();
         request.setAttribute("feedbacklist", feedbacklist);
         request.setAttribute("feedbackreply", feedbackreply);
         request.setAttribute("op", rateselect);
+        request.setAttribute("status", status);
         request.setAttribute("total", feedbacklist.size());
         request.getRequestDispatcher("managefeedback.jsp").forward(request, response);
+    }
+
+    protected List<Feedback> filterFeedback(List<Feedback> list, List<Integer> index, String status) {
+        // Return all feedback if status is "all"
+        if (status.equals("all")) {
+            return list;
+        }
+
+        List<Feedback> fin = new ArrayList<>();
+
+        if (status.equals("replied")) {
+            // Add feedbacks that have IDs in the index list
+            for (Feedback feedback : list) {
+                if (index.contains(feedback.getId())) {
+                    fin.add(feedback);
+                }
+            }
+        } else {
+            // Add feedbacks that do NOT have IDs in the index list
+            for (Feedback feedback : list) {
+                if (!index.contains(feedback.getId())) {
+                    fin.add(feedback);
+                }
+            }
+        }
+
+        return fin;
     }
 
     /**

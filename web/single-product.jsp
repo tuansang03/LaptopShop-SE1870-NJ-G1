@@ -421,7 +421,7 @@
                                 <li><a class="active" href="listproduct?category%5B%5D=${detail.product.category.name}"><span>Category</span>: ${detail.product.category.name}</a></li>
                             </ul>
                             <br>
-                            Capacity:
+                            Storage :
                             <form action="information" method="get">
                                 <c:forEach items="${config}" var="c">
                                     <button type="submit" name="productId" value="${c.id}" 
@@ -456,7 +456,7 @@
                                 <c:if test="${sessionScope.user != null}">
                                     <a class="button primary-btn" href="addtocart?pid=${detail.product.id}&&colorid=${detail.color.id}&&confid=${detail.configuration.id}">Add to Cart</a>
                                 </c:if>
-                                    <c:if test="${sessionScope.user == null}">
+                                <c:if test="${sessionScope.user == null}">
                                     <a class="button primary-btn" href="login">Add to Cart</a>
                                 </c:if>
                                 <a class="icon_btn" href="addtowishlist?pid=${detail.id}&&uid=${user.id}"><i class="lnr lnr lnr-heart"></i></a>
@@ -618,120 +618,180 @@
 
                             </div>
 
-                                    <c:if test="${sessionScope.user!=null}">
-                                        <div class="col-lg-6">
-                                <div class="review_box p-4 shadow-sm border rounded">
-                                    <h4 class="mb-4">Post a Comment</h4>
-                                    <form action="submitComment" method="post">
-                                        <!-- Comment Content -->
-                                        <div class="form-group mb-3">
-                                            <label for="commentContent" class="form-label">Comment</label>
-                                            <textarea class="form-control" id="commentContent" name="commentContent" rows="4" placeholder="Write your comment here..." required></textarea>
-                                        </div>
+                            <c:if test="${sessionScope.user!=null}">
+                                <div class="col-lg-6">
+                                    <div class="review_box p-4 shadow-sm border rounded">
+                                        <h4 class="mb-4">Post a Comment</h4>
+                                        <form action="submitComment" method="post">
+                                            <!-- Comment Content -->
+                                            <div class="form-group mb-3">
+                                                <label for="commentContent" class="form-label">Comment</label>
+                                                <textarea class="form-control" id="commentContent" name="commentContent" rows="4" placeholder="Write your comment here..." required></textarea>
+                                            </div>
 
-                                        <!-- Submit Button -->
-                                        <div class="text-end">
-                                            <button type="submit" class="btn btn-primary">Submit</button>
-                                        </div>
-                                    </form>
+                                            <!-- Submit Button -->
+                                            <div class="text-end">
+                                                <button type="submit" class="btn btn-primary">Submit</button>
+                                            </div>
+                                        </form>
+                                    </div>
                                 </div>
-                            </div>
-                                    </c:if>
-                                    
-                                    <c:if test="${sessionScope.user==null}">
-                                        <div class="col-lg-6">
-                                <div class="review_box p-4 shadow-sm border rounded">
-                                    <h4 class="mb-4" >Post a Comment</h4>
-                                    
+                            </c:if>
+
+                            <c:if test="${sessionScope.user==null}">
+                                <div class="col-lg-6">
+                                    <div class="review_box p-4 shadow-sm border rounded">
+                                        <h4 class="mb-4" >Post a Comment</h4>
+
                                         <!-- Comment Content -->
                                         <div class="form-group mb-3">
                                             <label for="commentContent" class="form-label" style="text-align: center">Login Now to post a comment</label>
-                                           
+
                                         </div>
                                         <div style="text-align: center; padding: 6px; background: #0060ce; ">
                                             <a href="login" style="color: white">Login</a>
                                         </div>
                                         <!-- Submit Button -->
+                                    </div>
                                 </div>
-                            </div>
-                                    </c:if>
+                            </c:if>
 
                         </div>
                     </div>
 
-                   <div class="tab-pane fade" id="review" role="tabpanel" aria-labelledby="review-tab">
+                    <div class="tab-pane fade" id="review" role="tabpanel" aria-labelledby="review-tab">
                         <div class="row">
-                            <div class="col-lg-6">
+                            <!-- Feedback list section -->
+                            <div class="col-lg-8">
                                 <div class="comment_list">
-                                    <!-- Vòng lặp để duyệt qua danh sách bình luận -->
                                     <c:forEach items="${feedbacklist}" var="feedback">
-                                        <!-- Kiểm tra nếu RepplyCommentId là NULL (bình luận chính) -->
-                                        <c:if test="${feedback.getReplyFeedbackId() == 0}">
-                                            <div class="review_item">
+                                        <!-- Only show feedback with a valid rating -->
+                                        <c:if test="${feedback.getRating() != null && feedback.getRating() > 0 && feedback.getReplyFeedbackId() == 0}">
+                                            <div class="review_item" data-rating="${feedback.getRating()}">
                                                 <div class="media">
                                                     <div class="media-body">
-                                                        <!-- Tên người dùng -->
-                                                        <h4>${feedback.getUser().getFullName()} ${feedback.getRating()}&#9733; </h4>
-                                                        <!-- Ngày bình luận -->
-                                                        <h5>
-                                                            <fmt:formatDate value="${feedback.getFeedbackDate()}" pattern="dd/MM/yyyy HH:mm" />
-
-                                                        </h5>
+                                                        <h4>${feedback.getUser().getFullName()} ${feedback.getRating()}&#9733;</h4>
+                                                        <h5><fmt:formatDate value="${feedback.getFeedbackDate()}" pattern="dd/MM/yyyy HH:mm" /></h5>
                                                     </div>
                                                 </div>
-                                                <!-- Nội dung bình luận -->
-                                                <style>
-                                                    /* Other styles */
-
-                                                    .content-wrap {
-                                                        word-wrap: break-word; /* Allows long words to break to the next line */
-                                                        white-space: pre-wrap; /* Preserves whitespace and line breaks */
-                                                    }
-                                                </style>
-
                                                 <div class="reply-item">
                                                     <p class="content-wrap">${feedback.getFeedbackContent()}</p>
                                                 </div>
 
-                                            </div>
-
-                                            <!-- Vòng lặp lồng kiểm tra các phản hồi cho bình luận chính này -->
-                                            <div class="replies">
-                                                <c:forEach items="${feedbacklist}" var="reply">
-                                                    <!-- Kiểm tra nếu RepplyCommentId của bình luận này trùng với Id của bình luận chính -->
-<c:if test="${reply.getReplyFeedbackId() == feedback.getId()}">
-                                                        <div class="review_item reply">
-                                                            <div class="media">
-                                                                <div class="media-body">
-                                                                    <!-- Hiển thị thêm nhãn "Reply" -->
-                                                                    <h4>${reply.getUser().getFullName()}<c:if test="${reply.getUser().getRole().getId()== 2}">(Saler)</c:if> <span style="font-size: 12px; color: #007bff;">(Reply)</span></h4>
-                                                                    <h5><fmt:formatDate value="${reply.getFeedbackDate()}" pattern="dd/MM/yyyy HH:mm" /></h5>
+                                                <!-- Replies section (show replies only if the parent feedback is visible) -->
+                                                <div class="replies">
+                                                    <c:forEach items="${feedbacklist}" var="reply">
+                                                        <c:if test="${reply.getReplyFeedbackId() == feedback.getId()}">
+                                                            <div class="review_item reply" data-rating="${reply.getRating() != null ? reply.getRating() : 0}">
+                                                                <div class="media">
+                                                                    <div class="media-body">
+                                                                        <h4>${reply.getUser().getFullName()} 
+                                                                            <c:if test="${reply.getUser().getRole().getId() == 2}">(Saler)</c:if>
+                                                                                <span style="font-size: 12px; color: #007bff;">(Reply)</span>
+                                                                            </h4>
+                                                                            <h5><fmt:formatDate value="${reply.getFeedbackDate()}" pattern="dd/MM/yyyy HH:mm" /></h5>
+                                                                    </div>
                                                                 </div>
+                                                                <p>${reply.getFeedbackContent()}</p>
                                                             </div>
-                                                            <p>${reply.getFeedbackContent()}</p>
-                                                        </div>
-                                                    </c:if>
-                                                </c:forEach>
+                                                        </c:if>
+                                                    </c:forEach>
+                                                </div>
+                                                <hr>
                                             </div>
-                                            <hr><!-- Phân cách giữa các comment -->
                                         </c:if>
                                     </c:forEach>
                                 </div>
                             </div>
-
-                            <div class="col-lg-6">
+                            <!-- Filter section for ratings -->
+                            <div class="col-lg-3">
                                 Rating: ${rating}<span style="color: gold;">&#9733;</span>
                                 <c:forEach var="i" begin="0" end="4">
-                                    <h4>
+                                    <h4 class="rating-button" style="cursor: pointer;" 
+                                        onclick="filterByRating(${5 - i}, this)">
                                         <c:forEach var="j" begin="0" end="4">
-                                            <span style="color: ${j < (5 - i) ? 'gold' : 'gray'};">&#9733;</span> 
+                                            <span style="color: ${j < (5 - i) ? 'gold' : 'gray'};">&#9733;</span>
                                         </c:forEach>
-                                        ${5-i} Star (${ratingcount.get(i)} rated)
+                                        ${5 - i} Star (${ratingcount.get(i)} rated)
                                     </h4>
                                 </c:forEach>
+
+                                <!-- Button to show all feedback -->
+                                <button onclick="showAllFeedback()" 
+                                        style="padding: 8px 16px; font-size: 15px; color: black; border-radius: 6px; cursor: pointer;">
+                                    Show All Feedback
+                                </button>
+
                             </div>
                         </div>
                     </div>
+
+                    <!-- JavaScript for filtering feedback by rating and showing all feedback -->
+                    <script>
+                        function filterByRating(rating, element) {
+                            const feedbackItems = document.querySelectorAll('.review_item');
+                            const replies = document.querySelectorAll('.replies');
+
+                            // Remove "selected" class from all rating buttons
+                            const ratingButtons = document.querySelectorAll('.rating-button');
+                            ratingButtons.forEach(button => button.classList.remove('selected'));
+
+                            // Add "selected" class to the clicked button
+                            element.classList.add('selected');
+
+                            feedbackItems.forEach(item => {
+                                const itemRating = parseInt(item.getAttribute('data-rating'), 10);
+                                // Show items with matching rating
+                                if (itemRating === rating) {
+                                    item.style.display = 'block'; // Show items with matching rating
+                                } else {
+                                    item.style.display = 'none'; // Hide items with other ratings
+                                }
+                            });
+
+                            // Also show/hide replies based on parent feedback visibility
+                            replies.forEach(replyContainer => {
+                                const parentFeedback = replyContainer.closest('.review_item');
+                                if (parentFeedback && parentFeedback.style.display !== 'none') {
+                                    replyContainer.style.display = 'block'; // Show replies if parent feedback is visible
+                                } else {
+                                    replyContainer.style.display = 'none'; // Hide replies if parent feedback is hidden
+                                }
+                            });
+                        }
+
+                        // Function to show all feedback
+                        function showAllFeedback() {
+                            const feedbackItems = document.querySelectorAll('.review_item');
+                            const replies = document.querySelectorAll('.replies');
+
+                            // Show all feedback items
+                            feedbackItems.forEach(item => {
+                                item.style.display = 'block'; // Show all feedback
+                            });
+
+                            // Show all replies
+                            replies.forEach(replyContainer => {
+                                replyContainer.style.display = 'block'; // Show all replies
+                            });
+
+                            // Remove "selected" class from all rating buttons
+                            const ratingButtons = document.querySelectorAll('.rating-button');
+                            ratingButtons.forEach(button => button.classList.remove('selected'));
+                        }
+                    </script>
+
+                    <!-- CSS for the selected button -->
+                    <style>
+                        .rating-button.selected {
+                            background-color: #007bff;  /* Blue background for selected button */
+                            color: white;               /* White text for selected button */
+                            font-weight: bold;          /* Make the text bold */
+                        }
+                    </style>
+
+
+
                 </div>
             </div>
         </div>
@@ -760,7 +820,7 @@
                         </a>
                     </c:forEach>
                     <c:if test="${empty listproduct}">
-                        <p>Không có sản phẩm nào để hiển thị.</p>
+                        <p>There is no product to show.</p>
                     </c:if>
                 </div>
 

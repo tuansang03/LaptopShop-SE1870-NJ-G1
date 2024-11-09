@@ -87,12 +87,15 @@ public class FeedbackDAOS extends ProductDAO {
     public void addFeedBack(int uid, int odid, int r, String text) {
         String sql = "INSERT INTO Feedback (UserId, OrderDetailId, Rating, FeedbackContent) values (?, ?, ?, ?)";
         try {
-            PreparedStatement pre = connection.prepareStatement(sql);
+            if(r>0){
+                PreparedStatement pre = connection.prepareStatement(sql);
             pre.setInt(1, uid);
             pre.setInt(2, odid);
             pre.setInt(3, r);
             pre.setString(4, text);
             pre.executeUpdate();
+            }
+            
         } catch (SQLException ex) {
         }
     }
@@ -171,9 +174,10 @@ public class FeedbackDAOS extends ProductDAO {
                 + "FROM Feedback f\n"
                 + "JOIN OrderDetail od ON od.Id = f.OrderDetailId\n"
                 + "JOIN ProductDetail pd ON pd.Id = od.ProductDetailId\n"
-                + "WHERE pd.Id IN (SELECT Id FROM ProductDetail WHERE ProductId = (SELECT ProductId FROM ProductDetail WHERE Id = ?))";
+                + "WHERE pd.Id IN (SELECT Id FROM ProductDetail WHERE ProductId = (SELECT ProductId FROM ProductDetail WHERE Id = ?))\n"
+                + "AND f.ReplyFeedbackId IS NULL"; // Only include rows where ReplyFeedbackId is NULL
         try (PreparedStatement st = connection.prepareStatement(sql)) {
-            st.setInt(1, id);  // Truyền tham số vào câu lệnh SQL
+            st.setInt(1, id);  // Set the parameter in the SQL statement
             try (ResultSet re = st.executeQuery()) {
                 if (re.next()) {
                     double r = re.getDouble("trungbinh");
@@ -181,6 +185,7 @@ public class FeedbackDAOS extends ProductDAO {
                 }
             }
         } catch (SQLException e) {
+            e.printStackTrace();
         }
         return 0;
     }
@@ -204,7 +209,7 @@ public class FeedbackDAOS extends ProductDAO {
     }
 
     public List<Integer> getRatingCount(int id) {
-        List<Integer> list = new ArrayList();
+        List<Integer> list = new ArrayList<>();
         String sql = "SELECT COUNT(*) AS Count\n"
                 + "FROM Feedback f\n"
                 + "JOIN OrderDetail od ON od.Id = f.OrderDetailId\n"
@@ -217,7 +222,7 @@ public class FeedbackDAOS extends ProductDAO {
                 + "        FROM ProductDetail \n"
                 + "        WHERE Id = ?\n"
                 + "    )\n"
-                + ") AND f.Rating = 5\n"
+                + ") AND f.Rating = 5 AND f.ReplyFeedbackId IS NULL\n"
                 + "\n"
                 + "UNION ALL\n"
                 + "\n"
@@ -233,7 +238,7 @@ public class FeedbackDAOS extends ProductDAO {
                 + "        FROM ProductDetail \n"
                 + "        WHERE Id = ?\n"
                 + "    )\n"
-                + ") AND f.Rating = 4\n"
+                + ") AND f.Rating = 4 AND f.ReplyFeedbackId IS NULL\n"
                 + "\n"
                 + "UNION ALL\n"
                 + "\n"
@@ -249,7 +254,7 @@ public class FeedbackDAOS extends ProductDAO {
                 + "        FROM ProductDetail \n"
                 + "        WHERE Id = ?\n"
                 + "    )\n"
-                + ") AND f.Rating = 3\n"
+                + ") AND f.Rating = 3 AND f.ReplyFeedbackId IS NULL\n"
                 + "\n"
                 + "UNION ALL\n"
                 + "\n"
@@ -265,7 +270,7 @@ public class FeedbackDAOS extends ProductDAO {
                 + "        FROM ProductDetail \n"
                 + "        WHERE Id = ?\n"
                 + "    )\n"
-                + ") AND f.Rating = 2\n"
+                + ") AND f.Rating = 2 AND f.ReplyFeedbackId IS NULL\n"
                 + "\n"
                 + "UNION ALL\n"
                 + "\n"
@@ -281,7 +286,7 @@ public class FeedbackDAOS extends ProductDAO {
                 + "        FROM ProductDetail \n"
                 + "        WHERE Id = ?\n"
                 + "    )\n"
-                + ") AND f.Rating = 1;";
+                + ") AND f.Rating = 1 AND f.ReplyFeedbackId IS NULL;";
         try (PreparedStatement st = connection.prepareStatement(sql)) {
             st.setInt(1, id);
             st.setInt(2, id);
@@ -296,9 +301,9 @@ public class FeedbackDAOS extends ProductDAO {
                 }
             }
         } catch (SQLException e) {
+            // Handle exceptions
         }
         return list;
-
     }
 
     public List<Feedback> getAllFeedback(String r) {
@@ -397,26 +402,54 @@ public class FeedbackDAOS extends ProductDAO {
         return list;
     }
 
-    public void addReply(int uid, int odid, int rid, String text) {
-        String sql = "INSERT INTO Feedback (UserId, OrderDetailId, FeedbackContent, ReplyFeedbackId) values (?, ?, ?, ?)";
+    public void addReply(int uid, int odid, int rating, int rid, String text) {
+        String sql = "INSERT INTO Feedback (UserId, OrderDetailId, Rating, FeedbackContent, ReplyFeedbackId) values (?, ?, ?, ?, ?)";
         try {
             PreparedStatement pre = connection.prepareStatement(sql);
             pre.setInt(1, uid);
             pre.setInt(2, odid);
-            pre.setString(3, text);
-            pre.setInt(4, rid);
+            pre.setInt(3, rating);
+            pre.setString(4, text);
+            pre.setInt(5, rid);
 
             pre.executeUpdate();
         } catch (SQLException ex) {
         }
     }
 
+    public void deleteFeedback(int id) {
+        String sql = "DELETE FROM Feedback WHERE Id = ?";
+        try {
+            PreparedStatement pre = connection.prepareStatement(sql);
+            pre.setInt(1, id);
+            pre.executeUpdate();
+        } catch (SQLException ex) {
+        }
+    }
+
+    public List<Integer> getFeedbackStatus() {
+        List<Integer> list = new ArrayList();
+        String sql = "select ReplyFeedbackId from Feedback";
+        try (PreparedStatement st = connection.prepareStatement(sql)) {
+            try (ResultSet rs = st.executeQuery()) {
+                while (rs.next()) {
+                    int i = rs.getInt("ReplyFeedbackId");
+                    if (i != 0) {
+                        list.add(i);
+                    }
+                }
+            }
+        } catch (SQLException e) {
+            // Handle exceptions
+        }
+        return list;
+    }
+
     public static void main(String[] args) {
         FeedbackDAOS dao = new FeedbackDAOS();
-        List<Feedback> list = dao.getListReplyFeedback(25);
-        System.out.println(list.size());
-        for(int i=0; i<list.size(); i++){
-            System.out.println(list.get(i).getId()+", "+list.get(i).getReplyFeedbackId()+", ");
+        List<Integer> list = dao.getFeedbackStatus();
+        for (int i = 0; i < list.size(); i++) {
+            System.out.println(list.get(i));
         }
     }
 }

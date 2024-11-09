@@ -165,9 +165,9 @@
         <div class="container">
             <div class="row">
                 <div class="col-md-4">
-                    <div class="image-container">
+                    <a class="image-container" href="information?productId=${orderdetail.getProductDetail().getId()}">
                         <img src="${pageContext.request.contextPath}/images/${productimage.image}" alt="Product Image"/>
-                    </div>
+                    </a>
                     <div class="feedback-details">
                         <p><strong>Product Name:</strong> ${orderdetail.getProductDetail().getProduct().name}</p>
                         <p><strong>Brand:</strong> ${orderdetail.getProductDetail().getProduct().brand.name}</p>
@@ -252,7 +252,7 @@
                             <c:if test="${empty myfeedback}">
                                 <form action="feedback" method="get" onsubmit="validateForm(event)">
                                     <div class="star-rating">
-                                        <input type="radio" id="star5" name="rating" value="5" required />
+                                        <input type="radio" id="star5" name="rating" value="5"/>
                                         <label for="star5">&#9733;</label>
                                         <input type="radio" id="star4" name="rating" value="4" />
                                         <label for="star4">&#9733;</label>
