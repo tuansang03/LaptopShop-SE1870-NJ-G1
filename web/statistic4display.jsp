@@ -39,7 +39,7 @@
     <div class="form-group mt-4">
     <form action="SaleStatisticController2" method="get">
         <label for="yearInput">Enter Year:</label>
-        <input type="number" id="yearInput" name="year" class="form-control" placeholder="Year" required value="${year}">
+        <input type="number" id="yearInput" min="1900" name="year" class="form-control" placeholder="Year" required value="${year}">
         <input type="hidden" name="service" value="listallz" >
         <button type="submit" class="btn btn-primary mt-2">Submit</button>
     </form>

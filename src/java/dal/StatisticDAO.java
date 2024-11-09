@@ -298,21 +298,18 @@ public List<ProductSales> getTopSellingProducts(int year) {
     
  public List<UserSales> getTop3UsersWithDoneOrdersAndRoleId2(int year, int month) {
     List<UserSales> topUsers = new ArrayList<>();
-    String sql = """
-            SELECT TOP 3 
-                U.Id AS UserId, 
-                U.Username AS UserName, 
-                U.Fullname AS FullName, 
-                COUNT(O.Id) AS TotalOrders
-            FROM [User] U
-            JOIN [Order] O ON U.Id = O.UserId
-            WHERE O.OrderStatus = 'done' 
-                AND U.RoleId = 2
-                AND YEAR(O.OrderDate) = ? 
-                AND MONTH(O.OrderDate) = ?
-            GROUP BY U.Id, U.Username, U.Fullname
-            ORDER BY TotalOrders DESC;
-            """;
+    String sql = "SELECT TOP 3 \n" +
+"                U.Id AS UserId, \n" +
+"                U.Username AS UserName, \n" +
+"                U.Fullname AS FullName, \n" +
+"                COUNT(O.Id) AS TotalOrders\n" +
+"            FROM [User] U\n" +
+"            JOIN [Order] O ON U.Id = O.SaleId\n" +
+"            WHERE O.OrderStatus = 'done' \n" +
+"                AND YEAR(O.OrderDate) = ? \n" +
+"                AND MONTH(O.OrderDate) = ?\n" +
+"            GROUP BY U.Id, U.Username, U.Fullname\n" +
+"            ORDER BY TotalOrders DESC";
 
     try (PreparedStatement stmt = connection.prepareStatement(sql)) {
         stmt.setInt(1, year);
@@ -369,7 +366,7 @@ public List<Integer> calculateMonthlyDoneOrdersForUser(int userId, int year) {
             LEFT JOIN [Order] o ON MONTH(o.OrderDate) = m.Month 
                 AND YEAR(o.OrderDate) = ?
                 AND o.OrderStatus = 'done'
-                AND o.UserId = ?
+                AND o.SaleId = ?
             GROUP BY m.Month
             ORDER BY m.Month;
             """;
