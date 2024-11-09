@@ -150,6 +150,10 @@
                     <span class="label">Rating:</span>
                     <span class="highlight">${feedback.rating}</span>
                 </div>
+                <div class="detail-box">
+                    <span class="label">Feedback Date:</span>
+                    <span>${feedback.getFeedbackDate()}</span>
+                </div>
                 <div class="detail-box" style="width: 100%;">
                     <span class="label">Feedback Content:</span>
                     <textarea readonly>${feedback.getFeedbackContent()}</textarea>

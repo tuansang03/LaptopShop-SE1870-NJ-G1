@@ -42,6 +42,15 @@
             <file>file:/D:/SWP3910/LaptopShop-SE1870-NJ-G1/web/billOrder.jsp</file>
             <file>file:/D:/SWP3910/LaptopShop-SE1870-NJ-G1/web/statistic3display.jsp</file>
         </group>
-        <group/>
+        <group>
+            <file>file:/D:/SWP391_phong4/LaptopShop-SE1870-NJ-G1/web/feedback.jsp</file>
+            <file>file:/D:/SWP391_phong4/LaptopShop-SE1870-NJ-G1/src/java/dal/DBContext.java</file>
+            <file>file:/D:/SWP391_phong4/LaptopShop-SE1870-NJ-G1/src/java/controller/DeleteFeedback.java</file>
+            <file>file:/D:/SWP391_phong4/LaptopShop-SE1870-NJ-G1/web/login.jsp</file>
+            <file>file:/D:/SWP391_phong4/LaptopShop-SE1870-NJ-G1/src/java/controller/ReplyFeedback.java</file>
+            <file>file:/D:/SWP391_phong4/LaptopShop-SE1870-NJ-G1/src/java/controller/ProductInformation.java</file>
+            <file>file:/D:/SWP391_phong4/LaptopShop-SE1870-NJ-G1/src/java/dal/FeedbackDAOS.java</file>
+            <file>file:/D:/SWP391_phong4/LaptopShop-SE1870-NJ-G1/web/feedbackdetail.jsp</file>
+        </group>
     </open-files>
 </project-private>

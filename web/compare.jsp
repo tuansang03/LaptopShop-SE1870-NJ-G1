@@ -265,8 +265,8 @@
                 <div class="row">
                     <div class="col-md-2"></div>
                     <div class="col-md-2">
-                        <h2>Chọn sản phẩm</h2>
-                        <input type="text" id="searchInput" oninput="filterProducts()" placeholder="Nhập từ khóa...">
+                        <h2>Choose a laptop</h2>
+                        <input type="text" id="searchInput" oninput="filterProducts()" placeholder="Search">
                     </div>
 
                     <div class="col-md-8" id="productList"> <!-- Thêm ID cho div chứa danh sách sản phẩm -->

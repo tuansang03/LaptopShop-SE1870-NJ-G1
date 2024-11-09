@@ -87,12 +87,15 @@ public class FeedbackDAOS extends ProductDAO {
     public void addFeedBack(int uid, int odid, int r, String text) {
         String sql = "INSERT INTO Feedback (UserId, OrderDetailId, Rating, FeedbackContent) values (?, ?, ?, ?)";
         try {
-            PreparedStatement pre = connection.prepareStatement(sql);
+            if(r>0){
+                PreparedStatement pre = connection.prepareStatement(sql);
             pre.setInt(1, uid);
             pre.setInt(2, odid);
             pre.setInt(3, r);
             pre.setString(4, text);
             pre.executeUpdate();
+            }
+            
         } catch (SQLException ex) {
         }
     }

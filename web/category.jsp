@@ -82,131 +82,132 @@
     </head>
     <body>
         <c:if test="${sessionScope.user!=null || (sessionScope.user==null && sessionScope.sale==null && sessionScope.admin==null)}">
-              <%@include file="header.jsp" %>
+            <%@include file="header.jsp" %>
 
-              <section class="blog-banner-area" id="category">
-                  <div class="container h-100">
-                      <div class="blog-banner">
-                          <div class="text-center">
-                              <h1>Laptop List</h1>
-                          </div>
-                      </div>
-                  </div>
-              </section>
+            <section class="blog-banner-area" id="category">
+                <div class="container h-100">
+                    <div class="blog-banner">
+                        <div class="text-center">
+                            <h1>Laptop List</h1>
+                        </div>
+                    </div>
+                </div>
+            </section>
 
-              <section class="section-margin--small mb-5">
-                  <div class="container">
-                      <div class="row">
-                          <div class="col-xl-3 col-lg-4 col-md-5">
-                              <form action="listproduct" method="get">
-                                  <div class="sidebar-filter">
-                                      <div class="top-filter-head">Browse Brands</div>
-                                      <div class="common-filter">
-                                          <ul>
-                                              <c:forEach items="${brandlist}" var="b">
-                                                  <li class="filter-list">
-                                                      <input class="pixel-radio" type="checkbox" name="brand[]" value="${b.name}"
-                                                             <c:if test="${fn:contains(selectedBrands, b.name)}">checked</c:if>>
-                                                      <label>${b.name}</label>
-                                                  </li>
-                                              </c:forEach>
-                                          </ul>
-                                      </div>
-                                  </div>
+            <section class="section-margin--small mb-5">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-xl-3 col-lg-4 col-md-5">
+                            <form action="listproduct" method="get">
+                                <div class="input-group filter-bar-search">
+                                    <div class="sorting">
+                                        <select name="price">
+                                            <option value="default" <c:if test="${price == 'default'}">selected</c:if>>Default sorting</option>
+                                            <option value="asc" <c:if test="${price == 'asc'}">selected</c:if>>Sort by price ascending</option>
+                                            <option value="desc" <c:if test="${price == 'desc'}">selected</c:if>>Sort by price descending</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="sidebar-filter">
+                                        <div class="top-filter-head">Browse Brands</div>
+                                        <div class="common-filter">
+                                            <ul>
+                                            <c:forEach items="${brandlist}" var="b">
+                                                <li class="filter-list">
+                                                    <input class="pixel-radio" type="checkbox" name="brand[]" value="${b.name}"
+                                                           <c:if test="${fn:contains(selectedBrands, b.name)}">checked</c:if>>
+                                                    <label>${b.name}</label>
+                                                </li>
+                                            </c:forEach>
+                                        </ul>
+                                    </div>
+                                </div>
 
-                                  <div class="sidebar-filter">
-                                      <div class="top-filter-head">Browse Categories</div>
-                                      <div class="common-filter">
-                                          <ul>
-                                              <c:forEach items="${categorylist}" var="c">
-                                                  <li class="filter-list">
-                                                      <input class="pixel-radio" type="checkbox" name="category[]" value="${c.name}"
-                                                             <c:if test="${fn:contains(selectedCategories, c.name)}">checked</c:if>>
-                                                      <label>${c.name}</label>
-                                                  </li>    
-                                              </c:forEach>
-                                          </ul>
-                                      </div>
-                                  </div>
+                                <div class="sidebar-filter">
+                                    <div class="top-filter-head">Browse Categories</div>
+                                    <div class="common-filter">
+                                        <ul>
+                                            <c:forEach items="${categorylist}" var="c">
+                                                <li class="filter-list">
+                                                    <input class="pixel-radio" type="checkbox" name="category[]" value="${c.name}"
+                                                           <c:if test="${fn:contains(selectedCategories, c.name)}">checked</c:if>>
+                                                    <label>${c.name}</label>
+                                                </li>    
+                                            </c:forEach>
+                                        </ul>
+                                    </div>
+                                </div><br>
+                                <div style="text-align: center;">
+                                    <input type="submit" value="BROWSE" style="width: 100%; height: 30px; background-color: #007bff; border-radius: 10px; color: white; border: none;">
+                                </div>
 
-                                  <input type="submit" value="TÌM KIẾM" style="width: 100px; height: 30px; background-color: background; border-radius: 10px;">
-                              </form>
+                            </form>
 
-                          </div>
+                        </div>
 
-                          <div class="col-xl-9 col-lg-8 col-md-7">
-                              <div class="input-group filter-bar-search">
-                                  <div class="sorting">
-                                      <form action="listproduct">
-                                          <select name="price">
-                                              <option value="default">Default sorting</option>
-                                              <option value="asc">Sort by price ascending</option>
-                                              <option value="desc">Sort by price descending</option>   
-                                          </select>
-                                          <input type="submit"value="Sort" />    
-                                      </form>
-                                  </div>
-                                  <div>
-                                      <div class="input-group filter-bar-search">
-                                          <form action="listproduct">
-                                              <input type="text" name="name" placeholder="Search">
-                                              <input type="submit"value="Search" />    
-                                          </form>
-                                      </div>
-                                  </div>
-                              </div>
+                        <div class="col-xl-9 col-lg-8 col-md-7">
+                            <div class="input-group filter-bar-search">
+                                <div>
+                                    <div class="input-group filter-bar-search">
+                                        <form action="listproduct">
+                                            <input type="text" name="name" placeholder="Search">
+                                            <input type="submit"value="Search" />    
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
 
-                              <c:if test="${!empty productlist}">
-                                  <p class="product-container">(${size} products found)</p>
-                              </c:if>
+                            <c:if test="${!empty productlist}">
+                                <p class="product-container">(${size} products found)</p>
+                            </c:if>
 
-                              <section class="product-container">
-                                  <c:forEach var="p" items="${productlist}">
-                                      <a href="information?productId=${p.detail}" class="product-link">
-                                          <div class="product-item">
-                                              <img src="${pageContext.request.contextPath}/images/${p.img}" alt="${p.name}">
-                                              <div class="brand">${p.brand}</div>
-                                              <h3>${p.name}</h3>
-                                              <p>Giá: ${p.price}</p>
-                                          </div>
-                                      </a>
-                                  </c:forEach>
+                            <section class="product-container">
+                                <c:forEach var="p" items="${productlist}">
+                                    <a href="information?productId=${p.detail}" class="product-link">
+                                        <div class="product-item">
+                                            <img src="${pageContext.request.contextPath}/images/${p.img}" alt="${p.name}">
+                                            <div class="brand">${p.brand}</div>
+                                            <h3>${p.name}</h3>
+                                            <p>Giá: ${p.price}</p>
+                                        </div>
+                                    </a>
+                                </c:forEach>
 
-                                  <c:if test="${empty productlist}">
-                                      <p>There is no product to show.</p>
-                                  </c:if>
-                              </section>
+                                <c:if test="${empty productlist}">
+                                    <p>There is no product to show.</p>
+                                </c:if>
+                            </section>
 
-                              <!-- Pagination Controls -->
-                              <div class="pagination">
-                                  <c:if test="${currentPage > 1}">
-                                      <a href="listproduct?page=${currentPage - 1}">Previous</a>
-                                  </c:if>
+                            <!-- Pagination Controls -->
+                            <div class="pagination">
+                                <c:if test="${currentPage > 1}">
+                                    <a href="listproduct?page=${currentPage - 1}">Previous</a>
+                                </c:if>
 
-                                  <c:forEach var="i" begin="1" end="${totalPages}">
-                                      <a href="listproduct?page=${i}" class="<c:if test='${i == currentPage}'>active</c:if>">${i}</a>
-                                  </c:forEach>
+                                <c:forEach var="i" begin="1" end="${totalPages}">
+                                    <a href="listproduct?page=${i}" class="<c:if test='${i == currentPage}'>active</c:if>">${i}</a>
+                                </c:forEach>
 
-                                  <c:if test="${currentPage < totalPages}">
-                                      <a href="listproduct?page=${currentPage + 1}">Next</a>
-                                  </c:if>
-                              </div>
-                              
-                          </div>
-                      </div>
-                  </div>
-              </section>
+                                <c:if test="${currentPage < totalPages}">
+                                    <a href="listproduct?page=${currentPage + 1}">Next</a>
+                                </c:if>
+                            </div>
 
-              <%@include file="footer.jsp" %>
-              <script src="vendors/jquery/jquery-3.2.1.min.js"></script>
-              <script src="vendors/bootstrap/bootstrap.bundle.min.js"></script>
-              <script src="vendors/skrollr.min.js"></script>
-              <script src="vendors/owl-carousel/owl.carousel.min.js"></script>
-              <script src="vendors/nice-select/jquery.nice-select.min.js"></script>
-              <script src="vendors/nouislider/nouislider.min.js"></script>
-              <script src="vendors/jquery.ajaxchimp.min.js"></script>
-              <script src="vendors/mail-script.js"></script>
-              <script src="js/main.js"></script>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <%@include file="footer.jsp" %>
+            <script src="vendors/jquery/jquery-3.2.1.min.js"></script>
+            <script src="vendors/bootstrap/bootstrap.bundle.min.js"></script>
+            <script src="vendors/skrollr.min.js"></script>
+            <script src="vendors/owl-carousel/owl.carousel.min.js"></script>
+            <script src="vendors/nice-select/jquery.nice-select.min.js"></script>
+            <script src="vendors/nouislider/nouislider.min.js"></script>
+            <script src="vendors/jquery.ajaxchimp.min.js"></script>
+            <script src="vendors/mail-script.js"></script>
+            <script src="js/main.js"></script>
         </c:if>
         <c:if test="${sessionScope.sale!=null || sessionScope.admin!=null}">
             <%@include file="notallowpage.jsp" %>

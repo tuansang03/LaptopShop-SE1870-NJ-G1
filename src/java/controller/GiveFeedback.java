@@ -64,10 +64,11 @@ public class GiveFeedback extends HttpServlet {
         int rating = -1;
         int uid = Integer.parseInt(request.getParameter("uid"));
         int odid = Integer.parseInt(request.getParameter("orderdetailid"));
+        String message = null;
         try {
             rating = Integer.parseInt(request.getParameter("rating"));
         } catch (Exception e) {
-            String error = "";
+            message = "Rating is required!";
         }
 
         try {
@@ -75,19 +76,17 @@ public class GiveFeedback extends HttpServlet {
         } catch (Exception e) {
         }
         OrderDetail orderdetail = dao.getOrderDetail(odid);
-        String message = null;
+
         if (orderdetail.getOrder().getOrderStatus().compareToIgnoreCase("done") == 0) {
             dao.addFeedBack(uid, odid, rating, feedback);
-            message="Feedback successfully!";
-        } else {
-            message = "Can not feedback when order is not done!";
         }
-
         Feedback myfeedback = dao.getFeedbackById(odid);
+        Image productimage = dao.getImageByProductDetailId(orderdetail.getProductDetail().getId());
 
         request.setAttribute("orderdetail", orderdetail);
         request.setAttribute("myfeedback", myfeedback);
         request.setAttribute("odid", odid);
+        request.setAttribute("productimage", productimage);
         request.setAttribute("message", message);
         request.getRequestDispatcher("feedback.jsp").forward(request, response);
 

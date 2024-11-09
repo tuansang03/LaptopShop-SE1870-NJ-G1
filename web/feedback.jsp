@@ -252,7 +252,7 @@
                             <c:if test="${empty myfeedback}">
                                 <form action="feedback" method="get" onsubmit="validateForm(event)">
                                     <div class="star-rating">
-                                        <input type="radio" id="star5" name="rating" value="5" required />
+                                        <input type="radio" id="star5" name="rating" value="5"/>
                                         <label for="star5">&#9733;</label>
                                         <input type="radio" id="star4" name="rating" value="4" />
                                         <label for="star4">&#9733;</label>
