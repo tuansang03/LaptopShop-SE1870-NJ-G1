@@ -22,17 +22,11 @@
 </head>
 <body>
 
-<c:choose>
-    <c:when test="${sessionScope.admin != null}">
+    
         <%@include file="sidebar.jsp" %>
-    </c:when>
-    <c:otherwise>
-        <c:if test="${sessionScope.sale != null || sessionScope.user != null ||(sessionScope.user==null && 
-                      sessionScope.sale==null && sessionScope.admin==null) }">
-            <%@include file="notallowpage.jsp" %>
-        </c:if>
-    </c:otherwise>
-</c:choose>
+   
+   
+
 
 </body>
 </html>

@@ -33,8 +33,7 @@
 
     </head>
     <body>
-        <c:if test="${sessionScope.user!=null || (sessionScope.user==null && 
-                      sessionScope.sale==null && sessionScope.admin==null)}">
+       
         <style>
             .xxxx{
                 width: 450px;
@@ -375,10 +374,7 @@
         <script src="vendors/jquery.ajaxchimp.min.js"></script>
         <script src="vendors/mail-script.js"></script>
         <script src="js/main.js"></script>
-        </c:if>
-        <c:if test="${sessionScope.sale!=null || sessionScope.admin!=null}">
-            <%@include file="notallowpage.jsp" %>
-        </c:if>
+      
     </body>
     
 

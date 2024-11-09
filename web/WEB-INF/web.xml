@@ -1,13 +1,213 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<web-app version="6.0" 
-         xmlns="https://jakarta.ee/xml/ns/jakartaee" 
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
-         xsi:schemaLocation="https://jakarta.ee/xml/ns/jakartaee https://jakarta.ee/xml/ns/jakartaee/web-app_6_0.xsd">
-
+<web-app version="6.0" xmlns="https://jakarta.ee/xml/ns/jakartaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="https://jakarta.ee/xml/ns/jakartaee https://jakarta.ee/xml/ns/jakartaee/web-app_6_0.xsd">
     <welcome-file-list>
         <welcome-file>home</welcome-file>
     </welcome-file-list>
+    <filter>
+        <filter-name>CustomerFilter</filter-name>
+        <filter-class>filter.CustomerFilter</filter-class>
+    </filter>
+    <filter>
+        <filter-name>AdminFilter</filter-name>
+        <filter-class>filter.AdminFilter</filter-class>
+    </filter>
+    <filter>
+        <filter-name>GuestFilter</filter-name>
+        <filter-class>filter.GuestFilter</filter-class>
+    </filter>
+    <filter>
+        <filter-name>SalerFilter</filter-name>
+        <filter-class>filter.SalerFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>SalerFilter</filter-name>
+        <url-pattern>/home.jsp</url-pattern>
+        <url-pattern>/AboutUs.jsp</url-pattern>
+        <url-pattern>/SearchOverviewPage.jsp</url-pattern>
+        <url-pattern>/addnewadress.jsp</url-pattern>
+        <url-pattern>/adressmanage.jsp</url-pattern>
+        <url-pattern>/blog.jsp</url-pattern>
+        <url-pattern>/cart.jsp</url-pattern>
+        <url-pattern>/category.jsp</url-pattern>
+        <url-pattern>/checkout.jsp</url-pattern>
+        <url-pattern>/compare.jsp</url-pattern>
+        <url-pattern>/confirmation.jsp</url-pattern>
+        <url-pattern>/contact.jsp</url-pattern>
+        <url-pattern>/feedback.jsp</url-pattern>
+        <url-pattern>/feedbackdetail.jsp</url-pattern>
+        <url-pattern>/inputProductDetail.jsp</url-pattern>
+        <url-pattern>/insertVoucherDisplay.jsp</url-pattern>
+        <url-pattern>/insertbranddisplay.jsp</url-pattern>
+        <url-pattern>/insertcategory.jsp</url-pattern>
+        <url-pattern>/insertcolor.jsp</url-pattern>
+        <url-pattern>/insertconfigurationdisplay.jsp</url-pattern>
+        <url-pattern>/manageVoucherDisplay.jsp</url-pattern>
+        <url-pattern>/managebranddisplay.jsp</url-pattern>
+        <url-pattern>/managecategorydisplay.jsp</url-pattern>
+        <url-pattern>/managecolordisplay.jsp</url-pattern>
+        <url-pattern>/manageconfigurationdisplay.jsp</url-pattern>
+        <url-pattern>/managestaffdisplay.jsp</url-pattern>
+        <url-pattern>/manageuserdisplay.jsp</url-pattern>
+        <url-pattern>/orderSuccess.jsp</url-pattern>
+        <url-pattern>/statistic2display.jsp</url-pattern>
+        <url-pattern>/statistic3display.jsp</url-pattern>
+        <url-pattern>/statistic7display.jsp</url-pattern>
+        <url-pattern>/statisticdisplay.jsp</url-pattern>
+        <url-pattern>/updateadress.jsp</url-pattern>
+        <url-pattern>/updatebranddisplay.jsp</url-pattern>
+        <url-pattern>/updatecategorydisplay.jsp</url-pattern>
+        <url-pattern>/updatecolordisplay.jsp</url-pattern>
+        <url-pattern>/updateconfigurationdisplay.jsp</url-pattern>
+        <url-pattern>/userprofile.jsp</url-pattern>
+        <url-pattern>/viewDetail.jsp</url-pattern>
+        <url-pattern>/wishlist.jsp</url-pattern>
 
+
+
+
+    </filter-mapping>
+    <filter-mapping>
+        <filter-name>GuestFilter</filter-name>
+        <url-pattern>/admindashboard.jsp</url-pattern>
+        <url-pattern>/addProduct.jsp</url-pattern>
+        <url-pattern>/addstaff.jsp</url-pattern>
+
+        <url-pattern>/editVoucherDisplay.jsp</url-pattern>
+
+        <url-pattern>/inputProductDetail.jsp</url-pattern>
+        <url-pattern>/insertVoucherDisplay.jsp</url-pattern>
+        <url-pattern>/insertbranddisplay.jsp</url-pattern>
+        <url-pattern>/insertcategory.jsp</url-pattern>
+        <url-pattern>/insertcolor.jsp</url-pattern>
+
+        <url-pattern>/insertconfigurationdisplay.jsp</url-pattern>
+
+        <url-pattern>/insertpostdisplay.jsp</url-pattern>
+        <url-pattern>/manageComment.jsp</url-pattern>
+        <url-pattern>/manageProduct.jsp</url-pattern>
+        <url-pattern>/manageVoucherDisplay.jsp</url-pattern>
+        <url-pattern>/managebranddisplay.jsp</url-pattern>
+        <url-pattern>/managecategorydisplay.jsp</url-pattern>
+        <url-pattern>/managecolordisplay.jsp</url-pattern>
+        <url-pattern>/manageconfigurationdisplay.jsp</url-pattern>
+        <url-pattern>/managefeedback.jsp</url-pattern>
+        <url-pattern>/managepostdisplay.jsp</url-pattern>
+        <url-pattern>/managerOrderDisplay.jsp</url-pattern>
+        <url-pattern>/managerOrderDisplay2.jsp</url-pattern>
+        <url-pattern>/managereturn.jsp</url-pattern>
+        <url-pattern>/managestaffdisplay.jsp</url-pattern>
+        <url-pattern>/manageuserdisplay.jsp</url-pattern>
+        <url-pattern>/saledashboard.jsp</url-pattern>
+        <url-pattern>/statistic2display.jsp</url-pattern>
+        <url-pattern>/statistic3display.jsp</url-pattern>
+        <url-pattern>/statistic4display.jsp</url-pattern>
+        <url-pattern>/statistic5display.jsp</url-pattern>
+        <url-pattern>/statistic6display.jsp</url-pattern>
+        <url-pattern>/statistic7display.jsp</url-pattern>
+        <url-pattern>/statistic8display.jsp</url-pattern>
+        <url-pattern>/updateAccountPage.jsp</url-pattern>
+        <url-pattern>/updatebranddisplay.jsp</url-pattern>
+        <url-pattern>/updatecategorydisplay.jsp</url-pattern>
+        <url-pattern>/updatecolordisplay.jsp</url-pattern>
+        <url-pattern>/updateconfigurationdisplay.jsp</url-pattern>
+        <url-pattern>/updatepostdisplay.jsp</url-pattern>
+        <url-pattern>/updatecategorydisplay.jsp</url-pattern>
+
+    </filter-mapping>
+    <filter-mapping>
+        <filter-name>AdminFilter</filter-name>
+        <url-pattern>/home.jsp</url-pattern>
+        <url-pattern>/AboutUs.jsp</url-pattern>
+        <url-pattern>/SearchOverviewPage.jsp</url-pattern>
+        <url-pattern>/addnewadress.jsp</url-pattern>
+        <url-pattern>/adressmanage.jsp</url-pattern>
+        <url-pattern>/blog.jsp</url-pattern>
+        <url-pattern>/cart.jsp</url-pattern>
+        <url-pattern>/category.jsp</url-pattern>
+        <url-pattern>/checkout.jsp</url-pattern>
+        <url-pattern>/compare.jsp</url-pattern>
+        <url-pattern>/confirmation.jsp</url-pattern>
+        <url-pattern>/contact.jsp</url-pattern>
+        <url-pattern>/feedback.jsp</url-pattern>
+        <url-pattern>/feedbackdetail.jsp</url-pattern>
+        <url-pattern>/index.jsp</url-pattern>
+        <url-pattern>/manageComment.jsp</url-pattern>
+        <url-pattern>/managefeedback.jsp</url-pattern>
+        <url-pattern>/managepostdisplay.jsp</url-pattern>
+        <url-pattern>/managerOrderDisplay.jsp</url-pattern>
+        <url-pattern>/managerOrderDisplay2.jsp</url-pattern>
+        <url-pattern>/orderSuccess.jsp</url-pattern>
+        <url-pattern>/saledashboard.jsp</url-pattern>
+        <url-pattern>/sidebar2.jsp</url-pattern>
+        <url-pattern>/single-blog.jsp</url-pattern>
+        <url-pattern>/single-product.jsp</url-pattern>
+        <url-pattern>/statistic4display.jsp</url-pattern>
+        <url-pattern>/statistic5display.jsp</url-pattern>
+        <url-pattern>/statistic6display.jsp</url-pattern>
+        <url-pattern>/statistic8display.jsp</url-pattern>
+        <url-pattern>/tracking-order.jsp</url-pattern>
+        <url-pattern>/updateadress.jsp</url-pattern>
+        <url-pattern>/updatepostdisplay.jsp</url-pattern>
+        <url-pattern>/userprofile.jsp</url-pattern>
+        <url-pattern>/vieworderdetail.jsp</url-pattern>
+        <url-pattern>/wishlist.jsp</url-pattern>
+
+
+
+    </filter-mapping>
+    <filter-mapping>
+        <filter-name>CustomerFilter</filter-name>
+        <url-pattern>/admindashboard.jsp</url-pattern>
+        <url-pattern>/addProduct.jsp</url-pattern>
+        <url-pattern>/addstaff.jsp</url-pattern>
+
+        <url-pattern>/editVoucherDisplay.jsp</url-pattern>
+
+        <url-pattern>/inputProductDetail.jsp</url-pattern>
+        <url-pattern>/insertVoucherDisplay.jsp</url-pattern>
+        <url-pattern>/insertbranddisplay.jsp</url-pattern>
+        <url-pattern>/insertcategory.jsp</url-pattern>
+        <url-pattern>/insertcolor.jsp</url-pattern>
+
+        <url-pattern>/insertconfigurationdisplay.jsp</url-pattern>
+
+        <url-pattern>/insertpostdisplay.jsp</url-pattern>
+        <url-pattern>/manageComment.jsp</url-pattern>
+        <url-pattern>/manageProduct.jsp</url-pattern>
+        <url-pattern>/manageVoucherDisplay.jsp</url-pattern>
+        <url-pattern>/managebranddisplay.jsp</url-pattern>
+        <url-pattern>/managecategorydisplay.jsp</url-pattern>
+        <url-pattern>/managecolordisplay.jsp</url-pattern>
+        <url-pattern>/manageconfigurationdisplay.jsp</url-pattern>
+        <url-pattern>/managefeedback.jsp</url-pattern>
+        <url-pattern>/managepostdisplay.jsp</url-pattern>
+        <url-pattern>/managerOrderDisplay.jsp</url-pattern>
+        <url-pattern>/managerOrderDisplay2.jsp</url-pattern>
+        <url-pattern>/managereturn.jsp</url-pattern>
+        <url-pattern>/managestaffdisplay.jsp</url-pattern>
+        <url-pattern>/manageuserdisplay.jsp</url-pattern>
+        <url-pattern>/saledashboard.jsp</url-pattern>
+        <url-pattern>/statistic2display.jsp</url-pattern>
+        <url-pattern>/statistic3display.jsp</url-pattern>
+        <url-pattern>/statistic4display.jsp</url-pattern>
+        <url-pattern>/statistic5display.jsp</url-pattern>
+        <url-pattern>/statistic6display.jsp</url-pattern>
+        <url-pattern>/statistic7display.jsp</url-pattern>
+        <url-pattern>/statistic8display.jsp</url-pattern>
+        <url-pattern>/updateAccountPage.jsp</url-pattern>
+        <url-pattern>/updatebranddisplay.jsp</url-pattern>
+        <url-pattern>/updatecategorydisplay.jsp</url-pattern>
+        <url-pattern>/updatecolordisplay.jsp</url-pattern>
+        <url-pattern>/updateconfigurationdisplay.jsp</url-pattern>
+        <url-pattern>/updatepostdisplay.jsp</url-pattern>
+        <url-pattern>/updatecategorydisplay.jsp</url-pattern>
+
+
+
+
+
+
+    </filter-mapping>
     <servlet>
         <servlet-name>register</servlet-name>
         <servlet-class>controller.register</servlet-class>
@@ -72,7 +272,6 @@
         <servlet-name>register</servlet-name>
         <url-pattern>/register</url-pattern>
     </servlet-mapping>
-
     <servlet>
         <servlet-name>VerifyOTPServlet</servlet-name>
         <servlet-class>controller.VerifyOTPServlet</servlet-class>
@@ -81,7 +280,6 @@
         <servlet-name>VerifyOTPServlet</servlet-name>
         <url-pattern>/VerifyOTPServlet</url-pattern>
     </servlet-mapping>
-
     <servlet>
         <servlet-name>ResendOTP</servlet-name>
         <servlet-class>controller.ResendOTP</servlet-class>
@@ -90,7 +288,6 @@
         <servlet-name>ResendOTP</servlet-name>
         <url-pattern>/ResendOTP</url-pattern>
     </servlet-mapping>
-
     <servlet>
         <servlet-name>login</servlet-name>
         <servlet-class>controller.login</servlet-class>
@@ -99,7 +296,6 @@
         <servlet-name>login</servlet-name>
         <url-pattern>/login</url-pattern>
     </servlet-mapping>
-
     <servlet>
         <servlet-name>ChangeQuantityProduct</servlet-name>
         <servlet-class>controller.ChangeQuantityProduct</servlet-class>
@@ -108,7 +304,6 @@
         <servlet-name>ChangeQuantityProduct</servlet-name>
         <url-pattern>/changeQuantity</url-pattern>
     </servlet-mapping>
-
     <servlet>
         <servlet-name>LoadProductCart</servlet-name>
         <servlet-class>controller.LoadProductCart</servlet-class>
@@ -117,7 +312,6 @@
         <servlet-name>LoadProductCart</servlet-name>
         <url-pattern>/loadProductCart</url-pattern>
     </servlet-mapping>
-
     <servlet>
         <servlet-name>logout</servlet-name>
         <servlet-class>controller.logout</servlet-class>
@@ -126,7 +320,6 @@
         <servlet-name>logout</servlet-name>
         <url-pattern>/logout</url-pattern>
     </servlet-mapping>
-
     <servlet>
         <servlet-name>manageProduct</servlet-name>
         <servlet-class>controller.manageProduct</servlet-class>
@@ -135,7 +328,6 @@
         <servlet-name>manageProduct</servlet-name>
         <url-pattern>/manageProduct</url-pattern>
     </servlet-mapping>
-
     <servlet>
         <servlet-name>readProduct</servlet-name>
         <servlet-class>controller.readProduct</servlet-class>
@@ -144,7 +336,6 @@
         <servlet-name>readProduct</servlet-name>
         <url-pattern>/readProduct</url-pattern>
     </servlet-mapping>
-
     <servlet>
         <servlet-name>ProductDAO</servlet-name>
         <servlet-class>dal.ProductDAO</servlet-class>
@@ -153,7 +344,6 @@
         <servlet-name>ProductDAO</servlet-name>
         <url-pattern>/ProductDAO</url-pattern>
     </servlet-mapping>
-
     <servlet>
         <servlet-name>addProduct</servlet-name>
         <servlet-class>controller.addProduct</servlet-class>
@@ -162,7 +352,6 @@
         <servlet-name>addProduct</servlet-name>
         <url-pattern>/addProduct</url-pattern>
     </servlet-mapping>
-
     <servlet>
         <servlet-name>inputProductDetail</servlet-name>
         <servlet-class>controller.inputProductDetail</servlet-class>
@@ -190,19 +379,13 @@
     <servlet-mapping>
         <servlet-name>deleteImage</servlet-name>
         <url-pattern>/deleteImage</url-pattern>
-    </servlet-mapping>    
-    
+    </servlet-mapping>
     <servlet>
         <servlet-name>ProcessingCheckOut</servlet-name>
         <servlet-class>controller.ProcessingCheckOut</servlet-class>
     </servlet>
-
     <servlet-mapping>
         <servlet-name>ProcessingCheckOut</servlet-name>
         <url-pattern>/processingCheckOut</url-pattern>
     </servlet-mapping>
-    
-    
-    
-    
 </web-app>

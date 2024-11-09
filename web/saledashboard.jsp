@@ -17,23 +17,23 @@
         <link rel="stylesheet" href="assets/css/swiper-bundle.min.css">
         <link rel="stylesheet" href="assets/css/nice-select.css">
         <link rel="stylesheet" href="assets/css/main.css">
-<c:if test="${sessionScope.sale!=null}">
+
         <%@include file="sidebar2.jsp" %>
 
 
     <div class="col-md-10 content">
-        <h2>Quản Lý Sản Phẩm</h2>
+        <h2>Product Manage</h2>
         <table>
             <thead>
                 <tr>
                     <th>ID</th>
-                    <th>Hình Ảnh</th>
-                    <th>Tên</th>
-                    <th>Mô Tả</th>
-                    <th>Giá</th>
-                    <th>Tồn Kho</th>
-                    <th>Danh Mục</th>
-                    <th>Hành Động</th>
+                    <th>image</th>
+                    <th>Name</th>
+                    <th>Describe</th>
+                    <th>Price</th>
+                    <th>Inventory</th>
+                    <th>Directory</th>
+                    <th>Action</th>
                 </tr>
             </thead>
 
@@ -93,10 +93,6 @@
 
         </style>
     </div>
-</c:if>
-        <c:if test="${sessionScope.admin!=null || sessionScope.user!=null || (sessionScope.user==null && 
-                      sessionScope.sale==null && sessionScope.admin==null)}">
-            <%@include file="notallowpage.jsp" %>
-        </c:if>
+
 </body>
 </html>

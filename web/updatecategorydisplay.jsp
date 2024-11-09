@@ -19,7 +19,7 @@
         <link rel="stylesheet" href="assets/css/main.css">
     </head>
     <body>
-        <c:if test="${sessionScope.admin!=null}">
+     
         <%@include file="sidebar.jsp" %>
 
         <div class="col-md-10 content">
@@ -86,10 +86,6 @@
                 background-color: #f0f0f0;
             }
         </style>
-        </c:if>
-        <c:if test="${sessionScope.sale!=null || sessionScope.user!=null || (sessionScope.user==null && 
-                      sessionScope.sale==null && sessionScope.admin==null)}">
-            <%@include file="notallowpage.jsp" %>
-        </c:if>
+       
     </body>
 </html>

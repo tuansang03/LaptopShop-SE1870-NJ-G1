@@ -19,7 +19,7 @@
         <link rel="stylesheet" href="assets/css/main.css">
     </head>
     <body>
-        <c:if test="${sessionScope.sale!=null}">
+     
         <%@include file="sidebar2.jsp" %>
 
         <div class="col-md-10 content">
@@ -183,10 +183,6 @@
                 window.location.href = 'postmanage?id=' + postId + '&service=updatePostRequest';
             }
         </script>
-        </c:if>
-        <c:if test="${sessionScope.admin!=null || sessionScope.user!=null || (sessionScope.user==null && 
-                      sessionScope.sale==null && sessionScope.admin==null)}">
-            <%@include file="notallowpage.jsp" %>
-        </c:if>
+        
     </body>
 </html>

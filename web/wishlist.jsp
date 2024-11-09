@@ -88,8 +88,7 @@ head    <%--
         </script>
     </head>
     <body>
-        <c:if test="${sessionScope.user!=null || (sessionScope.user==null && 
-                      sessionScope.sale==null && sessionScope.admin==null)}">
+     
         <!--================ Start Header Menu Area =================-->
         <%@include file="header.jsp" %>
         <!--================ End Header Menu Area =================-->
@@ -140,9 +139,6 @@ head    <%--
         <!--================ Start footer Area  =================-->
         <%@include file="footer.jsp" %>
         <!--================ End footer Area  =================-->
-        </c:if>
-        <c:if test="${sessionScope.sale!=null || sessionScope.admin!=null}">
-            <%@include file="notallowpage.jsp" %>
-        </c:if>
+      
     </body>
 </html>

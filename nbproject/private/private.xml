@@ -5,42 +5,23 @@
             <url>src/java/dal/UserDAO.java</url>
             <bookmark id="1">
                 <name/>
-                <line>1037</line>
+                <line>1036</line>
                 <key/>
             </bookmark>
         </file>
     </editor-bookmarks>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group name="Group 20240613-10:26:14">
-            <file>file:/D:/SWP3910/LaptopShop-SE1870-NJ-G1/src/java/dal/FeedbackDAOS.java</file>
-            <file>file:/D:/SWP3910/LaptopShop-SE1870-NJ-G1/web/checkout.jsp</file>
-            <file>file:/D:/SWP3910/LaptopShop-SE1870-NJ-G1/web/category.jsp</file>
-            <file>file:/D:/SWP3910/LaptopShop-SE1870-NJ-G1/web/complaintdisplay.jsp</file>
-            <file>file:/D:/SWP3910/LaptopShop-SE1870-NJ-G1/src/java/model/Config.java</file>
-            <file>file:/D:/SWP3910/LaptopShop-SE1870-NJ-G1/src/java/controller/ReplyFeedback.java</file>
-            <file>file:/D:/SWP3910/LaptopShop-SE1870-NJ-G1/web/adressmanage.jsp</file>
-            <file>file:/D:/SWP3910/LaptopShop-SE1870-NJ-G1/src/java/model/SendMailSSL.java</file>
-            <file>file:/D:/SWP3910/LaptopShop-SE1870-NJ-G1/web/statistic4display.jsp</file>
-            <file>file:/D:/SWP3910/LaptopShop-SE1870-NJ-G1/web/changePassword.jsp</file>
-            <file>file:/D:/SWP3910/LaptopShop-SE1870-NJ-G1/web/css/main.css</file>
-            <file>file:/D:/SWP3910/LaptopShop-SE1870-NJ-G1/web/footer.jsp</file>
-            <file>file:/D:/SWP3910/LaptopShop-SE1870-NJ-G1/web/feedbackdetail.jsp</file>
-            <file>file:/D:/SWP3910/LaptopShop-SE1870-NJ-G1/web/addnewadress.jsp</file>
-            <file>file:/D:/SWP3910/LaptopShop-SE1870-NJ-G1/web/compare.jsp</file>
-            <file>file:/D:/SWP3910/LaptopShop-SE1870-NJ-G1/src/java/controller/ChangeStatusOrderDoneAndDelete.java</file>
-            <file>file:/D:/SWP3910/LaptopShop-SE1870-NJ-G1/web/index_1.jsp</file>
-            <file>file:/D:/SWP3910/LaptopShop-SE1870-NJ-G1/web/statistic2display.jsp</file>
-            <file>file:/D:/SWP3910/LaptopShop-SE1870-NJ-G1/web/admindashboard.jsp</file>
-            <file>file:/D:/SWP3910/LaptopShop-SE1870-NJ-G1/web/blog.jsp</file>
-            <file>file:/D:/SWP3910/LaptopShop-SE1870-NJ-G1/web/addstaff.jsp</file>
-            <file>file:/D:/SWP3910/LaptopShop-SE1870-NJ-G1/src/java/controller/StatisticController.java</file>
-            <file>file:/D:/SWP3910/LaptopShop-SE1870-NJ-G1/src/java/controller/ChangeStatusOrder.java</file>
-            <file>file:/D:/SWP3910/LaptopShop-SE1870-NJ-G1/web/ban.jsp</file>
-            <file>file:/D:/SWP3910/LaptopShop-SE1870-NJ-G1/web/cart.jsp</file>
-            <file>file:/D:/SWP3910/LaptopShop-SE1870-NJ-G1/web/index.jsp</file>
-            <file>file:/D:/SWP3910/LaptopShop-SE1870-NJ-G1/src/java/controller/SaleStatisticController2.java</file>
-            <file>file:/D:/SWP3910/LaptopShop-SE1870-NJ-G1/web/billOrder.jsp</file>
-            <file>file:/D:/SWP3910/LaptopShop-SE1870-NJ-G1/web/statistic3display.jsp</file>
+            <file>file:/D:/SWP391000/LaptopShop-SE1870-NJ-G1/src/java/controller/ProfileManage.java</file>
+            <file>file:/D:/SWP391000/LaptopShop-SE1870-NJ-G1/web/updatepostdisplay.jsp</file>
+            <file>file:/D:/SWP391000/LaptopShop-SE1870-NJ-G1/src/java/controller/logout.java</file>
+            <file>file:/D:/SWP391000/LaptopShop-SE1870-NJ-G1/src/java/controller/login.java</file>
+            <file>file:/D:/SWP391000/LaptopShop-SE1870-NJ-G1/src/java/filter/CustomerFilter.java</file>
+            <file>file:/D:/SWP391000/LaptopShop-SE1870-NJ-G1/web/WEB-INF/web.xml</file>
+            <file>file:/D:/SWP391000/LaptopShop-SE1870-NJ-G1/src/java/filter/GuestFilter.java</file>
+            <file>file:/D:/SWP391000/LaptopShop-SE1870-NJ-G1/web/wishlist.jsp</file>
+            <file>file:/D:/SWP391000/LaptopShop-SE1870-NJ-G1/src/java/filter/AdminFilter.java</file>
+            <file>file:/D:/SWP391000/LaptopShop-SE1870-NJ-G1/src/java/filter/SalerFilter.java</file>
         </group>
         <group/>
     </open-files>

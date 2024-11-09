@@ -46,7 +46,7 @@
         </style>
     </head>
     <body>
-        <c:if test="${sessionScope.admin!=null}">
+      
         <%@include file="sidebar.jsp" %>
 
 
@@ -125,10 +125,6 @@
         </div>
         <script src='./tinymce/tinymce.min.js'></script>
         <script src='./js/tinyMceConfig.js'></script>
-        </c:if>
-        <c:if test="${sessionScope.sale!=null || sessionScope.user!=null || (sessionScope.user==null && 
-                      sessionScope.sale==null && sessionScope.admin==null)}">
-            <%@include file="notallowpage.jsp" %>
-        </c:if>
+       
     </body>
 </html>

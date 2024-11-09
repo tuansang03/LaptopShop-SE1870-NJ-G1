@@ -82,7 +82,7 @@
     </script>
 </head>
 <body>
-    <c:if test="${sessionScope.user!=null }">
+   
     <div class="container mt-5">
         <h2>Chi tiết đơn hàng</h2>
 <form action="ReturnController" method="get" onsubmit="return handleFormSubmit()" enctype="multipart/form-data">
@@ -162,9 +162,6 @@
             return validateForm();
         }
     </script>
-    </c:if>
-        <c:if test="${sessionScope.sale!=null || sessionScope.admin!=null}">
-            <%@include file="notallowpage.jsp" %>
-        </c:if>
+  
 </body>
 </html>

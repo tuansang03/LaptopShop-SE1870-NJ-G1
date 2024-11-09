@@ -61,7 +61,7 @@
         </style>
     </head>
     <body>
-        <c:if test="${sessionScope.user!=null}">
+       
         <!--================ Start Header Menu Area =================-->
         <%@include file="header.jsp" %>
         <!--================ End Header Menu Area =================-->
@@ -109,9 +109,6 @@
         <script src="vendors/owl-carousel/owl.carousel.min.js"></script>
         <script src="vendors/nice-select/jquery.nice-select.min.js"></script>
         <script src="js/main.js"></script>
-        </c:if>
-        <c:if test="${sessionScope.sale!=null || sessionScope.admin!=null}">
-            <%@include file="notallowpage.jsp" %>
-        </c:if>
+       
     </body>
 </html>

@@ -181,8 +181,7 @@
     </style>
 </head>
 <body>
-        <c:if test="${sessionScope.user!=null || (sessionScope.user==null && 
-                      sessionScope.sale==null && sessionScope.admin==null)}">
+        
     <%@include file="header.jsp" %>
     <main>
         <section id="search-results">
@@ -245,8 +244,6 @@
         </section>
     </main>
                         </c:if>
-        <c:if test="${sessionScope.sale!=null || sessionScope.admin!=null}">
-            <%@include file="notallowpage.jsp" %>
-        </c:if>
+      
 </body>
 </html>

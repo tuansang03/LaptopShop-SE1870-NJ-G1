@@ -20,8 +20,7 @@
     </head>
     <body>
         
-<c:if test="${sessionScope.user!=null || (sessionScope.user==null && 
-                      sessionScope.sale==null && sessionScope.admin==null) ||sessionScope.sale!=null }">
+
         <!--================ Start Header Menu Area =================-->
 
         <%@include file="header.jsp" %>
@@ -680,9 +679,6 @@
         <script src="vendors/jquery.ajaxchimp.min.js"></script>
         <script src="vendors/mail-script.js"></script>
         <script src="js/main.js"></script>
-        </c:if>
-        <c:if test="${ sessionScope.admin!=null}">
-            <%@include file="notallowpage.jsp" %>
-        </c:if>
+       
     </body>
 </html>

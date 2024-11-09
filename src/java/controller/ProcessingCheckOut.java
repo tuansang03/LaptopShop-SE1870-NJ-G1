@@ -72,7 +72,7 @@ public class ProcessingCheckOut extends HttpServlet {
         }
 
         if (paymentMethod.equals("nhanhang")) {
-            paymentMethod = "Nhan Hang Thanh Toan";
+            paymentMethod = "Cash on Delivery";
         } else {
             paymentMethod = "Payment";
         }
@@ -101,7 +101,7 @@ public class ProcessingCheckOut extends HttpServlet {
         }
 
         OderDAO oDAO = new OderDAO();
-       if (paymentMethod.equals("Nhan Hang Thanh Toan")) {
+       if (paymentMethod.equals("Cash on Delivery")) {
             int sallerID = oDAO.getSallerMinOrder();
             if (voucherID_raw == null) {
                 oDAO.insertOrderOfCODNoVoucher(user.getId(), name, address, phone, dateTimeLocal, totalBeforeDiscount, (totalAfterDiscount == 0) ? totalBeforeDiscount : totalBeforeDiscount, paymentMethod, message == null ? null : message, sallerID);

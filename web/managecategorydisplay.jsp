@@ -19,7 +19,7 @@
         <link rel="stylesheet" href="assets/css/main.css">
     </head>
 <body>
-    <c:if test="${sessionScope.admin!=null}">
+  
     <%@include file="sidebar.jsp" %>
 
     <div class="col-md-10 content">
@@ -117,10 +117,6 @@
         window.location.href = 'CategoryController?id=' + categoryId + '&service=updateCategoryRequest';
     }
 </script>
-    </c:if>
-<c:if test="${sessionScope.sale!=null || sessionScope.user!=null || (sessionScope.user==null && 
-                      sessionScope.sale==null && sessionScope.admin==null)}">
-            <%@include file="notallowpage.jsp" %>
-        </c:if>
+   
 </body>
 </html>

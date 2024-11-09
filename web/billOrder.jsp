@@ -125,7 +125,7 @@
                                 <td> ${order.getVoucher().getName()} </td>
                             </c:if>    
 
-                            <td><fmt:formatNumber value="${odt.getUnitPrice()}" /> VNĐ</td>
+                            <td><fmt:formatNumber value="${odt.getUnitPrice()}" /> VND</td>
                         </tr>
                     </c:forEach>
 

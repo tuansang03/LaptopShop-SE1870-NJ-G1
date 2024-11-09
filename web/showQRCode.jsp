@@ -109,7 +109,7 @@
                     </span>
                 </h5>
                 <h5>Transaction code: </br><span>${code}</span></h5>
-                <h5>Content: </br><span>Thanh toán đơn hàng#${code}</span></h5>
+                <h5>Content: </br><span>Order Payment #${code}</span></h5>
             </div>
             <div class="right">
                 <h1>QR Code for Payment</h1>

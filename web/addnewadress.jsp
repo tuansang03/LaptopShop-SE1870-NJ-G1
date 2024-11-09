@@ -81,7 +81,7 @@
     </style>
 </head>
 <body>
-     <c:if test="${sessionScope.user!=null}">
+    
     <h1>Add New Address</h1>
     <div class="container">
         <form action="address?id=${sessionScope.user.id}&action=add" method="post"> <!-- Đường dẫn đến servlet hoặc JSP xử lý thêm địa chỉ -->
@@ -107,10 +107,6 @@
         <a href="address?id=${sessionScope.user.id}&action=default" class="back-btn">Back to Manage Addresses</a> <!-- Đường dẫn trở lại trang quản lý địa chỉ -->
     </div>
     
-    </c:if>
-        <c:if test="${sessionScope.sale!=null || sessionScope.admin!=null ||(sessionScope.user==null && 
-                      sessionScope.sale==null && sessionScope.admin==null) }">
-            <%@include file="notallowpage.jsp" %>
-        </c:if>
+    
 </body>
 </html> 

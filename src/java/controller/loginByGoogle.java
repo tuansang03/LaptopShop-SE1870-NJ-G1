@@ -63,75 +63,69 @@ public class loginByGoogle extends HttpServlet {
      */
     @Override
    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        String code = request.getParameter("code");
+      String code = request.getParameter("code");
         GoogleLogin gg = new GoogleLogin();
 
-        try {
-            // Lấy access token từ code
-            String accessToken = gg.getToken(code);
+// Lấy access token từ code
+        String accessToken = gg.getToken(code);
+        HttpSession session = request.getSession();
 
-            // Lấy thông tin tài khoản Google của người dùng
-            GoogleAccount acc = gg.getUserInfo(accessToken);
+// Lấy thông tin tài khoản Google của người dùng
+        GoogleAccount acc = gg.getUserInfo(accessToken);
+        UserDAO userDAO = new UserDAO();
+        User user = userDAO.getUserByEmail(acc.getEmail());
+        String googleEmail = acc.getEmail();
+        String googleName = acc.getName();
 
-            if (acc != null) {
-                // Lưu thông tin người dùng vào session
-                HttpSession session = request.getSession();
-                String googleEmail = acc.getEmail();  // Email từ Google
-                String googleName = acc.getName();    // Tên người dùng từ Google
-
-                // Kiểm tra xem người dùng đã có tài khoản với email này trong hệ thống chưa
-                UserDAO userDAO = new UserDAO();
-                User user = userDAO.getUserByEmail(googleEmail);
-
-                if (user != null) {
-                   if (user.getStatus().equalsIgnoreCase("ban")) {
+        if (user != null) {
+            // Kiểm tra trạng thái của người dùng
+            if (user.getStatus().equalsIgnoreCase("ban")) {
                 session.setAttribute("ban", user);
                 response.sendRedirect("ban.jsp");
                 return;
             }
-                    if (user.getRole().getId() == 3) {
-                session.setAttribute("user", user);
-                response.sendRedirect("home");
-            } else if (user.getRole().getId() == 2) {
-                session.setAttribute("sale", user);
-                response.sendRedirect("SaleStatisticController2?service=listall");
-            } else if (user.getRole().getId() == 1) {
-                session.setAttribute("admin", user);
-                response.sendRedirect("admindashboard.jsp");
+
+            // Kiểm tra role của người dùng và chuyển hướng
+            switch (user.getRole().getId()) {
+                case 1: // Admin
+                    session.setAttribute("admin", user);
+                    response.sendRedirect("admindashboard.jsp");
+                    break;
+                case 2: // Sale
+                    session.setAttribute("sale", user);
+                    response.sendRedirect("SaleStatisticController2?service=listall");
+                    break;
+                case 3: // User
+                    session.setAttribute("user", user);
+                    response.sendRedirect("home");
+                    break;
             }
-                } else {
-                    // Nếu người dùng chưa có tài khoản, tự động tạo tài khoản mới
-                    User newUser = new User();
-                    
-                    newUser.setEmail(googleEmail);
-                    newUser.setFullName(googleName);
-                    String pass = PasswordUtil.hashPassword(PasswordUtil.generateRandomPassword());
-                    newUser.setPassword(pass);  // Nếu không cần mật khẩu khi đăng nhập bằng Google
-                    newUser.setUserName(acc.getName());
-                    Role role = new Role();
-                    role.setId(3);
-                    newUser.setRole(role);
-                    newUser.setStatus("active");
-                    
-                    // Gọi DAO để lưu người dùng mới vào cơ sở dữ liệu
-                   int id = userDAO.insertUser2(newUser);
-                     newUser.setId(id);
-                    // Đăng nhập tự động người dùng vừa tạo
-                    session.setAttribute("user", newUser);
-                     response.sendRedirect("home");
-                }
-            
-                // Chuyển hướng người dùng đến trang chính
-               
-            } else {
-                // Nếu không nhận được thông tin từ Google, chuyển hướng đến trang lỗi
-                response.sendRedirect("errorpage.jsp");
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-            // Nếu có lỗi xảy ra, chuyển hướng đến trang lỗi
-            response.sendRedirect("errorpage.jsp");
+        } else {
+            // Tạo tài khoản mới nếu người dùng chưa tồn tại trong hệ thống
+            User newUser = new User();
+            newUser.setEmail(googleEmail);
+            newUser.setFullName(googleName);
+
+            // Tạo mật khẩu ngẫu nhiên nếu cần thiết
+            String pass = PasswordUtil.hashPassword(PasswordUtil.generateRandomPassword());
+            newUser.setPassword(pass);
+            newUser.setUserName(googleName);
+
+            // Đặt vai trò và trạng thái mặc định cho người dùng mới
+            Role role = new Role();
+            role.setId(3);  // Mặc định là User
+            newUser.setRole(role);
+            newUser.setStatus("active");
+
+            // Lưu người dùng mới vào cơ sở dữ liệu
+            int id = userDAO.insertUser2(newUser);
+            newUser.setId(id);
+
+            // Đăng nhập tự động cho người dùng mới
+            session.setAttribute("user", newUser);
+            response.sendRedirect("home");
         }
+
     }
 
 
