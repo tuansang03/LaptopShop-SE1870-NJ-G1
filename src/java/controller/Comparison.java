@@ -83,17 +83,17 @@ public class Comparison extends HttpServlet {
         } catch (Exception e) {
         }
 
-        if (img2 == null) {
-            img2 = img3;
-            list2 = list3;
-            img3 = null;
-            list3 = null;
-        }
         if (img1 == null) {
             img1 = img2;
             list1 = list2;
             img2 = null;
             list2 = null;
+        }
+        if (img2 == null) {
+            img2 = img3;
+            list2 = list3;
+            img3 = null;
+            list3 = null;
         }
 
         String name = null;
