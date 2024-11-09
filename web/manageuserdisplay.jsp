@@ -18,7 +18,7 @@
     <link rel="stylesheet" href="assets/css/nice-select.css">
     <link rel="stylesheet" href="assets/css/main.css">
 
-    
+    <c:if test="${sessionScope.admin !=null}">
         <%@include file="sidebar.jsp" %>
     </c:if>
     
@@ -38,7 +38,7 @@
     </style>
 </head>
 <body>
-    <c:if test="${sessionScope.sale!=null || sessionScope.admin!=null }">
+    
     <div class="col-md-10 content">
         <h2>Manage Users</h2>
 

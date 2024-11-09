@@ -66,7 +66,7 @@
         </script>
     </head>
     <body>
-        <c:if test="${sessionScope.admin!=null}">
+        
         <div class="container-fluid mt-5">
             <h2>Product Variants</h2>
             <% String errorMessage = (String) session.getAttribute("errorMessage");

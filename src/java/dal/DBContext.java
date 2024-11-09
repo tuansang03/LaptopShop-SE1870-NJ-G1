@@ -31,7 +31,7 @@ public class DBContext {
         //where StudentDBContext is located in dal package, 
         try {
             String user = "sa";
-            String pass = "password";
+            String pass = "123";
             String url = "jdbc:sqlserver://localhost\\SQLEXPRESS:1433;databaseName=SWP391_LaptopShop100";
 
             Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");

@@ -369,7 +369,7 @@
            
             
             <div style="display: flex; width: 100%" >
-                <div style="width: 20%; border-right 1px solid gray">
+                <div style="width: 20%; border-right: 1px solid gray">
                     <div>
                         <p style="font-size: 12px">#${o.getOrder().getId()}</p>
                     </div>

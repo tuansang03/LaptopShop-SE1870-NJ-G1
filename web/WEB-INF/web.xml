@@ -21,7 +21,7 @@
     </filter>
     <filter-mapping>
         <filter-name>SalerFilter</filter-name>
-        <url-pattern>/home.jsp</url-pattern>
+        <url-pattern>/home</url-pattern>
         <url-pattern>/AboutUs.jsp</url-pattern>
         <url-pattern>/SearchOverviewPage.jsp</url-pattern>
         <url-pattern>/addnewadress.jsp</url-pattern>
@@ -61,7 +61,19 @@
         <url-pattern>/userprofile.jsp</url-pattern>
         <url-pattern>/viewDetail.jsp</url-pattern>
         <url-pattern>/wishlist.jsp</url-pattern>
-
+        <url-pattern>/listproduct</url-pattern>
+<url-pattern>/information</url-pattern>
+<url-pattern>/compare</url-pattern>
+<url-pattern>/postlist</url-pattern>
+<url-pattern>/addtocart</url-pattern>
+<url-pattern>/loadProductCart</url-pattern>
+<url-pattern>/loadInfoCheckout</url-pattern>
+<url-pattern>/postdetail</url-pattern>
+<url-pattern>/showwishlist</url-pattern>
+<url-pattern>/profile</url-pattern>
+<url-pattern>/address</url-pattern>
+<url-pattern>/addVoucher</url-pattern>
+<url-pattern>/addtowishlist</url-pattern>
 
 
 
@@ -71,8 +83,9 @@
         <url-pattern>/admindashboard.jsp</url-pattern>
         <url-pattern>/addProduct.jsp</url-pattern>
         <url-pattern>/addstaff.jsp</url-pattern>
-
         <url-pattern>/editVoucherDisplay.jsp</url-pattern>
+        <url-pattern>/checkout.jsp</url-pattern>
+        <url-pattern>/cart.jsp</url-pattern>
 
         <url-pattern>/inputProductDetail.jsp</url-pattern>
         <url-pattern>/insertVoucherDisplay.jsp</url-pattern>
@@ -112,11 +125,25 @@
         <url-pattern>/updateconfigurationdisplay.jsp</url-pattern>
         <url-pattern>/updatepostdisplay.jsp</url-pattern>
         <url-pattern>/updatecategorydisplay.jsp</url-pattern>
-
+<url-pattern>/readProduct</url-pattern>
+<url-pattern>/CustomerManageController</url-pattern>
+<url-pattern>/BrandController</url-pattern> 
+<url-pattern>/ConfigurationManageController</url-pattern>
+<url-pattern>/CategoryController</url-pattern>
+<url-pattern>/ColorController</url-pattern>
+<url-pattern>/StatisticController</url-pattern>
+<url-pattern>/voucherManager</url-pattern>
+<url-pattern>/SaleStatisticController2</url-pattern>
+<url-pattern>/postmanage</url-pattern>
+<url-pattern>/selectOrderbyStatus</url-pattern>
+<url-pattern>/readComment</url-pattern>
+<url-pattern>/feedbackmanager</url-pattern>
+<url-pattern>/searchOrder</url-pattern>
+<url-pattern>/addVoucher</url-pattern>
     </filter-mapping>
     <filter-mapping>
         <filter-name>AdminFilter</filter-name>
-        <url-pattern>/home.jsp</url-pattern>
+        <url-pattern>/home</url-pattern>
         <url-pattern>/AboutUs.jsp</url-pattern>
         <url-pattern>/SearchOverviewPage.jsp</url-pattern>
         <url-pattern>/addnewadress.jsp</url-pattern>
@@ -151,6 +178,22 @@
         <url-pattern>/userprofile.jsp</url-pattern>
         <url-pattern>/vieworderdetail.jsp</url-pattern>
         <url-pattern>/wishlist.jsp</url-pattern>
+
+<url-pattern>/listproduct</url-pattern>
+<url-pattern>/information</url-pattern>
+<url-pattern>/compare</url-pattern>
+<url-pattern>/postlist</url-pattern>
+<url-pattern>/addtocart</url-pattern>
+<url-pattern>/loadProductCart</url-pattern>
+<url-pattern>/loadInfoCheckout</url-pattern>
+<url-pattern>/postdetail</url-pattern>
+<url-pattern>/showwishlist</url-pattern>
+<url-pattern>/profile</url-pattern>
+<url-pattern>/address</url-pattern>
+<url-pattern>/addtowishlist</url-pattern>
+
+
+
 
 
 
@@ -201,6 +244,22 @@
         <url-pattern>/updateconfigurationdisplay.jsp</url-pattern>
         <url-pattern>/updatepostdisplay.jsp</url-pattern>
         <url-pattern>/updatecategorydisplay.jsp</url-pattern>
+<url-pattern>/readProduct</url-pattern>
+<url-pattern>/CustomerManageController</url-pattern>
+<url-pattern>/BrandController</url-pattern> 
+<url-pattern>/ConfigurationManageController</url-pattern>
+<url-pattern>/CategoryController</url-pattern>
+<url-pattern>/ColorController</url-pattern>
+<url-pattern>/StatisticController</url-pattern>
+<url-pattern>/voucherManager</url-pattern>
+<url-pattern>/SaleStatisticController2</url-pattern>
+<url-pattern>/postmanage</url-pattern>
+<url-pattern>/selectOrderbyStatus</url-pattern>
+<url-pattern>/readComment</url-pattern>
+<url-pattern>/feedbackmanager</url-pattern>
+<url-pattern>/searchOrder</url-pattern>
+<url-pattern>/addVoucher</url-pattern>
+
 
 
 

@@ -243,7 +243,6 @@
             </div>
         </section>
     </main>
-                        </c:if>
       
 </body>
 </html>
