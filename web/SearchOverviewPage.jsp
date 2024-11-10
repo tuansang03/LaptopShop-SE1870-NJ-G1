@@ -21,8 +21,10 @@
         }
 
         .product-results, .post-results {
-            width: 48%;
-            margin-right: 30px;
+            width: 90%;
+            
+            margin-left: 150px;
+            gap:10px;
         }
 
         .search-results-container, .post-container {
@@ -31,9 +33,13 @@
             gap: 15px;
         }
 
-        .product-only, .post {
-            width: 32%; /* Ensure 3 products per row */
+        .product-only {
+            width: 16%; /* Ensure 3 products per row */
         }
+        .post{
+            width: 20%
+        }
+
 
         .card {
             border: 1px solid #ccc;
@@ -142,26 +148,36 @@
 }
 .post-container {
     display: flex;
-    flex-wrap: wrap;
-    justify-content: space-between; 
-    gap: 20px; 
+    
+    gap: 10px; 
 }
 
-.post {
-    flex: 1 1 calc(33.333% - 20px); 
-    box-sizing: border-box; 
-    margin-bottom: 30px; 
-}
+
 
 .card {
     display: flex;
-    flex-direction: column;
-    justify-content: space-between;
     height: 100%;
 }
 
 .card-body {
     padding: 15px;
+}
+.sidebar {
+    width: 200px;
+}
+
+.sidebar button {
+    background-color: #f0f0f0;
+    border: none;
+    padding: 10px;
+    width: 100%;
+    text-align: left;
+    cursor: pointer;
+    margin-bottom: 5px;
+}
+
+.sidebar button:hover {
+    background-color: #ddd;
 }
 
 
@@ -184,26 +200,41 @@
         
     <%@include file="header.jsp" %>
     <main>
-        <section id="search-results">
-            <h2 class="x" style="text-align: center; padding: 20px">Search Results</h2>
-            <br/>
-            <h4 class="x" style="color: red">${err}</h4>
-            <div class="search-section" style="margin-left: 30px">
-                <div class="product-results">
-                    <h3 style="border: 1px solid gray; width: 200px; padding: 10px; border-radius: 7px">Products(${pop_size})</h3>
-                    <br/>
+    <section id="search-results">
+        <h2 class="x" style="text-align: center; padding: 20px">Search Results</h2>
+        <br />
+        <h4 class="x" style="color: red">${err}</h4>
+        
+        <div class="search-section" style="display: flex; margin-left: 30px">
+            <!-- Sidebar cho các tùy chọn -->
+            <div class="sidebar" style="margin-right: 20px;">
+                <h3 style="padding: 10px; border-bottom: 1px solid gray;">Options</h3>
+                <ul style="list-style: none; padding: 0;">
+                    <li><button onclick="showResults('product-results')">Products (${pop_size})</button></li>
+                    <li><button onclick="showResults('post-results')">Posts (${listPSize})</button></li>
+                </ul>
+            </div>
+
+            <!-- Kết quả tìm kiếm -->
+            <div class="results-section" style="flex-grow: 1;">
+                <!-- Phần hiển thị sản phẩm -->
+                <div id="product-results" class="product-results" style="display: none;">
+                     
+                    <br />
                     <div class="search-results-container">
+                        <h3 style="text-align: center; width: 90%;">${errorProduct}</h3>
                         <c:forEach items="${pop}" var="o3">
                             <div class="results product-only">
                                 <div class="card">
                                     <div class="card-product__img">
-                                        <img src="${o3.getImage()}" alt="">
+                                        <img src="${pageContext.request.contextPath}/images/${o3.getImage()}" alt="">
                                         <ul class="card-product__imgOverlay">
                                             <li><a href="information?productId=${o3.getProductDetail().getId()}"><i class="ti-search"></i></a></li>
                                             <li><a class="ti-shopping-cart" href="addtocart?pid=${o3.getProductDetail().getProduct().getId()}&&colorid=${o3.getProductDetail().getColor().getId()}&&confid=${o3.getProductDetail().getConfiguration().getId()}"></a></li>
                                             <li><button><i class="ti-heart"></i></button></li>
                                         </ul>
                                     </div>
+                                           
                                     <div class="card-body">
                                         <p>${o3.getProductDetail().getProduct().getBrand().getName()}</p>
                                         <h5 class="card-product__title">
@@ -216,15 +247,19 @@
                         </c:forEach>
                     </div>
                 </div>
-                <div class="post-results">
-                    <h3 style="border: 1px solid gray; width: 170px; padding: 10px; border-radius: 7px; margin-bottom: 33px;">Posts (${listPSize})</h3>
+
+                <!-- Phần hiển thị bài viết -->
+                <div id="post-results" class="post-results" style="display: none;">
+ 
                     <div class="post-container">
+                        <h3 style="text-align: center; width: 90%">${errorPost}</h3>
                         <c:forEach items="${listP}" var="p">
-                            <div class="post tach">
+                            <div class="post postOnly tach">
                                 <div class="card card-blog">
                                     <div class="card-blog__img">
                                         <img class="card-img rounded-0" src="${p.thumbnail}" alt="">
                                     </div>
+                                   
                                     <div class="card-body">
                                         <ul class="card-blog__info">
                                             <li><a href="#" class="bx bxs-user">${p.user.userName}</a></li>
@@ -241,8 +276,22 @@
                     </div>
                 </div>
             </div>
-        </section>
-    </main>
+        </div>
+    </section>
+</main>
+
+<script>
+    // Hàm để hiển thị phần kết quả theo tùy chọn
+    function showResults(sectionId) {
+        document.getElementById('product-results').style.display = 'none';
+        document.getElementById('post-results').style.display = 'none';
+        document.getElementById(sectionId).style.display = 'block';
+    }
+
+    // Hiển thị phần sản phẩm mặc định
+    showResults('product-results');
+</script>
+
       
 </body>
 </html>

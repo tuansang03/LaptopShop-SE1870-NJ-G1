@@ -90,6 +90,7 @@
                               <div class="blog_info text-right">
                                   <div class="post_tag">
 <!--                                      <a href="#">Food,</a>-->
+
                                       Type: <a class="active" href="listproduct?category%5B%5D=${o.category.name}"> ${o.category.name}</a><br/>
                                       
                                       Brand: <a class="active" href="listproduct?brand%5B%5D=${o.brand.name}">${o.brand.name}</a>
@@ -192,7 +193,7 @@
                           
                           <div class="br"></div>
                       </aside>
-                      <aside class="single_sidebar_widget ads_widget">
+<!--                      <aside class="single_sidebar_widget ads_widget">
                           <a href="#">
                               <img class="img-fluid" src="img/blog/add.jpg" alt="">
                           </a>
@@ -274,7 +275,7 @@
                               </li>
 
                           </ul>
-                      </aside>
+                      </aside>-->
                   </div>
               </div>
           </div>

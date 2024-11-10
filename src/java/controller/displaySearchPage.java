@@ -65,47 +65,46 @@ public class displaySearchPage extends HttpServlet {
      * @throws IOException if an I/O error occurs
      */
     @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-//     String minPost = "1";
-//     String maxPost = "5";
-//     if(request.getAttribute("min")!=null&&request.getAttribute("max")!=null){
-//         minPost = request.getParameter("min");
-//         maxPost = request.getParameter("max");
-//     }
+protected void doGet(HttpServletRequest request, HttpServletResponse response)
+        throws ServletException, IOException {
 
-        String query = request.getParameter("query"); // Lấy giá trị từ tham số request
-        String error = "";
-        UserDAO dao = new UserDAO();
-        List<Integer> listId = new ArrayList<>();
-        List<Post> listP = dao.getPostsByTitleOrContent(query);
-        for (int i = 0; i < listP.size(); i++) {
-            Post get = listP.get(i);
-            listId.add(get.getId()); 
+    String query = request.getParameter("query");
+    String error = "";
+    UserDAO dao = new UserDAO();
+    String errorProduct = "";
+    String errorPost = "";
+    
+    List<Integer> listId = new ArrayList<>();
+    List<Post> listP = new ArrayList<>();
+    List<Image> list = new ArrayList<>();
+
+    // Kiểm tra nếu query không trống
+    if (query != null && !query.trim().isEmpty()) {
+        listP = dao.getPostsByTitleOrContent(query);
+        for (Post post : listP) {
+            listId.add(post.getId());
         }
-        int min = listP.get(0).getId();
-        int max = listP.size() + 1;
-        
-        request.setAttribute("listId", listId);
-        // Gọi phương thức với tham số đúng
-        List<Image> list = dao.getPictureListByProductName(query);
-        if (list.isEmpty() && listP.isEmpty()) {
-            error = " ! ! ! There is no product and Post that match your Keyword";
-        } else if (list.isEmpty()) {
-            error = " ! ! ! There is no product that match your Keyword";
-        } else if (listP.isEmpty()) {
-            error = " ! ! ! There is no Post that match your Keyword";
-        }
-        
-        request.setAttribute("min", min);
-        request.setAttribute("max", max);
-        request.setAttribute("pop_size", list.size());
-        request.setAttribute("err", error);
-        request.setAttribute("listP", listP);
-        request.setAttribute("listPSize", listP.size());
-        request.setAttribute("pop", list); // Đặt danh sách hình ảnh vào thuộc tính request
-        request.getRequestDispatcher("SearchOverviewPage.jsp").forward(request, response); // Chuyển hướng đến trang JSP
+
+        list = dao.getPictureListByProductName(query);
     }
+
+      if (list.isEmpty()) {
+        errorProduct = " There is no product that match your Keyword";
+    } if (listP.isEmpty()) {
+        errorPost = "There is no Post that match your Keyword";
+    }
+
+    request.setAttribute("listId", listId);
+    request.setAttribute("pop_size", list.size());
+    request.setAttribute("errorProduct", errorProduct);
+    request.setAttribute("errorPost", errorPost);
+    request.setAttribute("listP", listP);
+    request.setAttribute("listPSize", listP.size());
+    request.setAttribute("pop", list);
+
+    request.getRequestDispatcher("SearchOverviewPage.jsp").forward(request, response);
+}
+
 
     /**
      * Handles the HTTP <code>POST</code> method.

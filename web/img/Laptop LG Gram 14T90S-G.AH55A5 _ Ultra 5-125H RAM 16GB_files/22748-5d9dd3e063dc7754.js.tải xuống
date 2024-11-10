@@ -1,0 +1,149 @@
+"use strict";(self.webpackChunk_N_E=self.webpackChunk_N_E||[]).push([[22748],{48169:function(e,t,n){n.d(t,{R:function(){return I}});var r=n(91987),o=n(41305),i=n(21655),l=n(94734),a=n(25810),s=n(25336),u=n(78719),c=n(63008),d=n(21802),p=Object.defineProperty,h=Object.getOwnPropertySymbols,f=Object.prototype.hasOwnProperty,E=Object.prototype.propertyIsEnumerable,g=(e,t,n)=>t in e?p(e,t,{enumerable:!0,configurable:!0,writable:!0,value:n}):e[t]=n,x=(e,t)=>{for(var n in t||(t={}))f.call(t,n)&&g(e,n,t[n]);if(h)for(var n of h(t))E.call(t,n)&&g(e,n,t[n]);return e},b=(e,t)=>{var n={};for(var r in e)f.call(e,r)&&0>t.indexOf(r)&&(n[r]=e[r]);if(null!=e&&h)for(var r of h(e))0>t.indexOf(r)&&E.call(e,r)&&(n[r]=e[r]);return n};let I=r.forwardRef((e,t)=>{var n,s,{size:d,addonBefore:p,addonAfter:h,bordered:f=!0,disabled:E=!1,readOnly:g=!1}=e,I=b(e,["size","addonBefore","addonAfter","bordered","disabled","readOnly"]);let m=r.useContext(c.X),O=d||m||"m",{decimalSeparator:R}=I,C=e=>e?("string"==typeof e&&(e=parseFloat(e)),new Intl.NumberFormat("."===R?"en-CA":"de-DE",{maximumFractionDigits:10}).format(e)):"",v=e=>e?e.replace("."===R?",":".","").replace(R||".","."):"",D=p?r.createElement(y,{height:u.v[O]},"string"==typeof p?r.createElement(i.uT,{color:"textSecondary",level:1,weight:"regular"},p):r.cloneElement(p,{size:(null==(n=null==p?void 0:p.props)?void 0:n.size)||20})):null,P=h?r.createElement(y,{height:u.v[O],marginLeft:"s16"},"string"==typeof h?r.createElement(i.uT,{color:"textSecondary",level:1,weight:"regular"},h):r.cloneElement(h,{size:(null==(s=null==h?void 0:h.props)?void 0:s.size)||20})):null;return r.createElement(N,{height:u.v[O],disabled:E,readOnly:g,bordered:f,paddingRight:P?"s16":"s0",className:"wrap-input-number"},D,r.createElement(o.Z,x({ref:t,upHandler:r.createElement(l.X,{size:12}),downHandler:r.createElement(a.T,{size:12}),disabled:E,readOnly:g,formatter:C,parser:v},I)),P)});I.displayName="InputNumber";let N=(0,d.default)(s.b)(({theme:e,disabled:t,readOnly:n,bordered:r})=>`
+  ${t?`background: ${null==e?void 0:e.colors.background}; 
+         cursor: not-allowed;`:"background: white;"}
+  ${r?`border: 1px solid ${null==e?void 0:e.colors.border};
+         border-radius: 4px;`:""}
+  &:focus-within{
+    border-color: ${null==e?void 0:e.colors.link500};
+  }
+  display: flex;
+  padding-left: 0.75rem;
+  .rc-input-number {
+      position: relative;
+      flex: 1;
+      padding: 0 1px;
+      &:hover{
+        .rc-input-number-handler-wrap{
+            opacity: 1;
+        }
+      }
+  }
+  .rc-input-number-input-wrap{
+      height: 100%;
+      & input {
+        width: 100%;
+        height: 100%;
+        outline: 0;
+        border: 0;
+        &::placeholder {
+          color: ${null==e?void 0:e.colors.placeholder};
+        }
+        ${t?"cursor: not-allowed;":""}
+    }
+  }
+  .rc-input-number-handler-wrap{
+      opacity: 0;
+      transition: opacity 0.24s linear 0.1s;
+      position: absolute;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      right: 0;
+      line-height: 0;
+      height: 100%;
+      width: 25px;
+      ${r?`border-left: 1px solid ${null==e?void 0:e.colors.border};
+             border-right: 1px solid ${null==e?void 0:e.colors.border};`:""}
+      ${t||n?"display: none;":""}
+  }
+  .rc-input-number-handler-up, 
+  .rc-input-number-handler-down{
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    &:hover path {
+      stroke: ${null==e?void 0:e.colors.link500};
+    }
+  }
+  .rc-input-number-handler-down {
+    ${r?`border-top: 1px solid ${null==e?void 0:e.colors.border};`:""}
+  }
+  .rc-input-number-handler-up-disabled, 
+  .rc-input-number-handler-down-disabled {
+    cursor: not-allowed;
+    background: ${null==e?void 0:e.colors.background};
+    &:hover path {
+      stroke: ${null==e?void 0:e.colors.textSecondary};
+    }
+  }
+`),y=(0,d.default)(s.b)`
+  display: flex;
+  align-items: center;
+`},82389:function(e,t,n){n.d(t,{C:function(){return r}});let r=e=>{var t;let n=null==(t=null==e?void 0:e.popper)?void 0:t["data-popper-placement"];return n?n.startsWith("top")?"arrow-bottom":n.startsWith("bottom")?"arrow-top":n.startsWith("left")?"arrow-right":n.startsWith("right")?"arrow-left":void 0:""}},80392:function(e,t,n){n.d(t,{h:function(){return O}});var r=n(91987),o=n(78719),i=n(57518),l=n(73834),a=n(40128),s=n(48169),u=n(21802),c=Object.defineProperty,d=Object.getOwnPropertySymbols,p=Object.prototype.hasOwnProperty,h=Object.prototype.propertyIsEnumerable,f=(e,t,n)=>t in e?c(e,t,{enumerable:!0,configurable:!0,writable:!0,value:n}):e[t]=n,E=(e,t)=>{for(var n in t||(t={}))p.call(t,n)&&f(e,n,t[n]);if(d)for(var n of d(t))h.call(t,n)&&f(e,n,t[n]);return e},g=(e,t)=>{var n={};for(var r in e)p.call(e,r)&&0>t.indexOf(r)&&(n[r]=e[r]);if(null!=e&&d)for(var r of d(e))0>t.indexOf(r)&&h.call(e,r)&&(n[r]=e[r]);return n};let x={xs:{height:o.y.s28,width:"5.75rem"},s:{height:o.y.s32,width:"6.375rem"},m:{height:o.y.s40,width:"6.375rem"}},b=u.default.div(e=>{var t,n,r,o,i,l;return[a.F,`
+  height: ${x[e.size||"m"].height};
+  width: ${e.block?"100%":x[e.size||"m"].width};
+  border-radius: ${null==(t=e.theme)?void 0:t.borderRadius.s};
+  background: ${e.disabled?null==(n=e.theme)?void 0:n.colors.background:null==(r=e.theme)?void 0:r.colors.tableHeader};
+  ${e.disabled?"":`border: ${null==(o=e.theme)?void 0:o.borderWeight.m} solid ${(null==(i=e.theme)?void 0:i.colors[e.color])||(null==(l=e.theme)?void 0:l.colors.divider)};`}
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+`]}),I=u.default.button(({disabled:e})=>`
+    height: 100%;
+    width: 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    user-select: none;
+    border: none;
+    background: transparent;
+    &:focus {
+      outline: none;
+    }
+    ${e?"cursor: not-allowed;":""}
+`),N=u.default.button(({disabled:e})=>`
+    height: 100%;
+    width: 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    user-select: none;
+    border: none;
+    background: transparent;
+    &:focus {
+      outline: none;
+    }
+    ${e?"cursor: not-allowed;":""}
+`),y=u.default.div(({color:e,theme:t})=>`
+  flex: 1;
+  .wrap-input-number {
+    padding: 0;
+    border: none;
+    background-color: transparent;
+  }
+  .wrap-input-number input {
+    text-align: center;
+    background-color: transparent;
+    font-size: 0.8125rem;
+    font-weight: 500;
+    color: ${e?(null==t?void 0:t.colors[e])||e:"rgb(67, 70, 87)"};
+  }
+`),m=u.default.span`
+  display: inline-flex;
+  align-items: center;
+`,O=e=>{var{min:t=1,max:n=999,quantity:o=1,precision:a,decimalSeparator:u=",",step:c=1,size:d="s",disabled:p,disableInput:h,disableMinus:f,disablePlus:x,className:O,onMinus:R,onPlus:C,setQuantity:v,color:D,block:P,blurOnEnter:A=!1,formatter:_,parser:L}=e,S=g(e,["min","max","quantity","precision","decimalSeparator","step","size","disabled","disableInput","disableMinus","disablePlus","className","onMinus","onPlus","setQuantity","color","block","blurOnEnter","formatter","parser"]);let w=(0,r.useRef)(null),T=e=>{"string"==typeof e&&(e=parseFloat(e)),"number"==typeof e&&(null==v||v(e))},F=()=>{R?R():c&&(null==v||v(o-c))},j=()=>{C?C():c&&(null==v||v(o+c))},k=p||f||o-c<t,M=p||x||o+c>n,G=e=>{var t;13===e.charCode&&(null==(t=w.current)||t.blur())};return(0,r.useEffect)(()=>{let e=w.current;return A&&(null==e||e.addEventListener("keypress",G)),()=>{null==e||e.removeEventListener("keypress",G)}},[A]),r.createElement(b,E({className:O,size:d,block:P,disabled:p,color:D,onClick:e=>e.preventDefault()},S),r.createElement(N,{disabled:k,onClick:F,color:D},r.createElement(m,null,r.createElement(i.l,{color:k?"disable":D||"textPrimary",size:16}))),r.createElement(y,{color:D},r.createElement(s.R,{ref:w,value:o,onFocus:e=>e.target.select(),onChange:T,disabled:p||h,controls:!1,min:t,max:n,step:c,precision:a,decimalSeparator:u,formatter:_,parser:L})),r.createElement(I,{disabled:M,onClick:j,color:D},r.createElement(m,null,r.createElement(l.v,{color:M?"disable":D||"textPrimary",size:16}))))}},73834:function(e,t,n){n.d(t,{v:function(){return o}});var r=n(4334);let o=e=>(0,r.w_)({tag:"svg",attr:{viewBox:"0 0 24 24",fill:"none"},child:[{tag:"path",attr:{fillRule:"evenodd",clipRule:"evenodd",d:"M12.75 4C12.75 3.58579 12.4142 3.25 12 3.25C11.5858 3.25 11.25 3.58579 11.25 4V11.25H4C3.58579 11.25 3.25 11.5858 3.25 12C3.25 12.4142 3.58579 12.75 4 12.75H11.25V20C11.25 20.4142 11.5858 20.75 12 20.75C12.4142 20.75 12.75 20.4142 12.75 20V12.75H20C20.4142 12.75 20.75 12.4142 20.75 12C20.75 11.5858 20.4142 11.25 20 11.25H12.75V4Z",fill:"#82869E"}}]})(e)},76127:function(e,t,n){n.d(t,{p:function(){return o}});var r=n(4334);let o=e=>(0,r.w_)({tag:"svg",attr:{viewBox:"0 0 24 24",fill:"none"},child:[{tag:"path",attr:{fillRule:"evenodd",clipRule:"evenodd",d:"M14.4798 5.35373C14.968 4.86557 15.7594 4.86557 16.2476 5.35373L16.6919 5.79803C17.1801 6.28618 17.1801 7.07764 16.6919 7.56579L16.1819 8.07582L13.9698 5.86375L14.4798 5.35373ZM12.9092 6.92441L6.23644 13.5971L5.68342 16.3622L8.44851 15.8092L15.1212 9.13648L12.9092 6.92441ZM16.707 9.67199L9.3486 17.0304C9.24389 17.1351 9.11055 17.2065 8.96535 17.2355L4.87444 18.0537C4.62855 18.1029 4.37434 18.0259 4.19703 17.8486C4.01971 17.6713 3.94274 17.4171 3.99192 17.1712L4.8101 13.0803C4.83914 12.9351 4.91051 12.8017 5.01521 12.697L13.4192 4.29307C14.4931 3.21912 16.2343 3.21912 17.3083 4.29307L17.7526 4.73737C18.8265 5.81131 18.8265 7.55251 17.7526 8.62645L16.7174 9.66162C16.7157 9.66336 16.714 9.6651 16.7122 9.66683C16.7105 9.66856 16.7088 9.67028 16.707 9.67199ZM3.15918 20.5908C3.15918 20.1766 3.49497 19.8408 3.90918 19.8408H20.2728C20.687 19.8408 21.0228 20.1766 21.0228 20.5908C21.0228 21.005 20.687 21.3408 20.2728 21.3408H3.90918C3.49497 21.3408 3.15918 21.005 3.15918 20.5908Z",fill:"#82869E"}}]})(e)},3494:function(e,t,n){n.d(t,{g:function(){return o}});var r=n(4334);let o=e=>(0,r.w_)({tag:"svg",attr:{viewBox:"0 0 24 24",fill:"none"},child:[{tag:"path",attr:{d:"M8.49976 19.0001L15.4998 12.0001L8.49976 5.00012",stroke:"currentColor",strokeWidth:"1.5",strokeLinecap:"round",strokeLinejoin:"round"}}]})(e)},75601:function(e,t,n){n.d(t,{A:function(){return m}});var r=n(91987),o=n(35874),i=n.n(o),l=n(21802),a=n(40128),s=n(56933),u=n(87900),c=Object.defineProperty,d=Object.defineProperties,p=Object.getOwnPropertyDescriptors,h=Object.getOwnPropertySymbols,f=Object.prototype.hasOwnProperty,E=Object.prototype.propertyIsEnumerable,g=(e,t,n)=>t in e?c(e,t,{enumerable:!0,configurable:!0,writable:!0,value:n}):e[t]=n,x=(e,t)=>{for(var n in t||(t={}))f.call(t,n)&&g(e,n,t[n]);if(h)for(var n of h(t))E.call(t,n)&&g(e,n,t[n]);return e},b=(e,t)=>d(e,p(t)),I=(e,t)=>{var n={};for(var r in e)f.call(e,r)&&0>t.indexOf(r)&&(n[r]=e[r]);if(null!=e&&h)for(var r of h(e))0>t.indexOf(r)&&E.call(e,r)&&(n[r]=e[r]);return n};let N="undefined"!=typeof window,y=e=>{if(!N||!e||"string"!=typeof e)return e;if(e.match(/^https?:\/\/([^/]+)/)){let t=new URL(e);if(t.hostname===window.location.host)return`${t.pathname}${t.search}`}return e},m=e=>{var{children:t,href:n,as:o,prefetch:i=!1}=e,l=I(e,["children","href","as","prefetch"]);let[a,c]=(0,r.useState)({pathname:("string"==typeof n?n:null==n?void 0:n.pathname)||"",query:{},as:o});return((0,r.useEffect)(()=>{async function e(){if(n){if(n=y(n),o=y(o),"string"==typeof n){let e=await (0,s.K)((0,u.Bi)(n));e.pathname||(e.pathname=n),c(b(x({},e),{as:o||n}))}else{let t=await (0,s.K)(n);!t.pathname&&(null==n?void 0:n.pathname)&&(t.pathname=n.pathname),c(b(x(x({},n),t),{as:o||((null==n?void 0:n.pathname)?n:null)||void 0}))}}}e()},[n,o,c]),n)?N?r.createElement(O,x({"data-testid":"TekoLink",href:{pathname:a.pathname,query:a.query},as:a.as,prefetch:i},l),t):r.createElement(O,b(x({"data-testid":"TekoLink",href:n||"",as:o},l),{prefetch:i}),t):r.createElement(r.Fragment,null,t)},O=(0,l.default)(i())`
+  ${a.F}
+  color: black;
+  text-decoration: none;
+`},83834:function(e,t,n){n.d(t,{Z:function(){return l}});var r=n(91987),o=n(21802),i=n(88925);let l=({images:e,alt:t=[],keys:n=[],width:o,height:i,childHeight:l,childWidth:d,isContainBorder:p})=>{let h=1===e.length;if(h)return r.createElement(c,{src:e.shift(),height:i||80,width:o||80,alt:"product"});let f=e.length-4;return r.createElement(a,{width:o,height:i},e.slice(0,4).map((e,o)=>r.createElement(s,{width:d,height:l,isContainBorder:p,src:e,alt:t[o],key:n[o]||o})),f>0&&r.createElement(u,null,"+",f+1))},a=o.default.div(e=>({width:e.width?`${e.width}px`:"80px",height:e.height?`${e.height}px`:"80px",background:"#F8F8FC",borderRadius:"4px",position:"relative",cursor:"pointer"})),s=o.default.img(e=>({borderRadius:"4px",width:e.width?`${e.width}px`:"34px",height:e.height?`${e.height}px`:"34px",margin:"4px 0 0 4px",border:e.isContainBorder?"solid 1px #E4E5F0":"unset"})),u=o.default.div`
+  position: absolute;
+  width: 34px;
+  height: 34px;
+  border-radius: 4px;
+  background: rgba(27, 29, 41, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 12px;
+  line-height: 16px;
+  color: #ffffff;
+  border: 4px;
+  right: 4px;
+  bottom: 4px;
+`,c=(0,o.default)(i.N)`
+  border: 1px solid #e4e5f0;
+`},26533:function(e,t,n){n.d(t,{Z:function(){return i},z:function(){return o}});var r=n(21802);let o=r.default;var i=o},36422:function(e,t,n){n.d(t,{V7:function(){return i},iv:function(){return l},x8:function(){return o},xC:function(){return a}});var r=n(2217);let o=[{id:r.T0,title:"Chờ thanh to\xe1n"},{id:r.p$,title:"Chờ giao h\xe0ng"},{id:r.CN,title:"Đ\xe3 ho\xe0n th\xe0nh"},],i={WAIT_PAYMENT:0,PROCESSING:1,DONE:2},l={0:"WAIT_PAYMENT",1:"PROCESSING",2:"DONE"},a="theLastOrder"},24177:function(e,t,n){var r,o;n.d(t,{h:function(){return r}}),(o=r||(r={})).INLINE_HOME_TOP="INLINE-HOME-TOP",o.INLINE_HOME_BODY="INLINE-HOME-BODY",o.INLINE_PDP_RELATEDPROMO="INLINE-PDP-RELATEDPROMO",o.INLINE_PDP_SERVICE="INLINE-PDP-SERVICE",o.INLINE_PDP_PREVIEW_DESK="INLINE-PDP-PREVIEW-DESK",o.INLINE_PDP_PREVIEW_MOBILE="INLINE-PDP-PREVIEW-MOBILE",o.INLINE_SEARCH="INLINE-SEARCH",o.INLINE_CATEGORY="INLINE-CATEGORY",o.INLINE_BRAND="INLINE-BRAND",o.INLINE_SELLER="INLINE-SELLER",o.INLINE_CART="INLINE-CART",o.INLINE_CHECKOUT="INLINE-CHECKOUT"},5857:function(e,t,n){n.d(t,{D:function(){return o}});var r=n(84443);let o=()=>{let{numberDisplayFormat:e}=(0,r.Wx)(),t=t=>{if(e){let n=t.toString().split("."),r=n[0].replace(RegExp("\\B(?<!\\.\\d*)(?=(\\d{3})+(?!\\d))","g"),e.thousandSeparator);return n[1]&&(r=r+e.decimalSeparator+n[1]),r}};return t}},68735:function(e,t,n){n.d(t,{S:function(){return i}});var r=n(61261),o=n(21655);let i=e=>{let{displayTotalAvailable:t,isMobile:n=!1}=e;return(0,r.jsx)(o.YS,{level:1,color:"warning",children:t})}},8128:function(e,t,n){n.d(t,{j:function(){return g}});var r=n(61261);n(91987);var o=n(21802),i=n(53675),l=n(12808),a=n(8797),s=n(76127),u=n(5857);function c(e,t,n){return t in e?Object.defineProperty(e,t,{value:n,enumerable:!0,configurable:!0,writable:!0}):e[t]=n,e}function d(e){for(var t=1;t<arguments.length;t++){var n=null!=arguments[t]?arguments[t]:{},r=Object.keys(n);"function"==typeof Object.getOwnPropertySymbols&&(r=r.concat(Object.getOwnPropertySymbols(n).filter(function(e){return Object.getOwnPropertyDescriptor(n,e).enumerable}))),r.forEach(function(t){c(e,t,n[t])})}return e}function p(e,t){return t=null!=t?t:{},Object.getOwnPropertyDescriptors?Object.defineProperties(e,Object.getOwnPropertyDescriptors(t)):(function(e,t){var n=Object.keys(e);if(Object.getOwnPropertySymbols){var r=Object.getOwnPropertySymbols(e);n.push.apply(n,r)}return n})(Object(t)).forEach(function(n){Object.defineProperty(e,n,Object.getOwnPropertyDescriptor(t,n))}),e}let h=(0,o.default)(i.F)(()=>"\n    font-size: 1rem;\n    font-weight: bold;\n  "),f=o.default.span(e=>{let{theme:t}=e;return"\n  text-decoration: line-through;\n  color: ".concat(null==t?void 0:t.colors.textSecondary,";\n  font-size: 0.75rem;\n")}),E=(0,o.default)(s.p)(e=>{let{theme:t}=e;return"\n  color: ".concat(null==t?void 0:t.colors.link500,";\n  &.is-disabled {\n    opacity: 0.5;\n    color: ").concat(null==t?void 0:t.colors.textSecondary,"\n  }\n")}),g=e=>{let{price:t,editable:n=!1,onEditPrice:o,disableEditItemPrice:i=!1,strikeThroughDisplayPrice:s,isDesktop:c}=e,g=(0,u.D)();return(0,r.jsxs)(l.JX,{children:[t>=0&&(0,r.jsxs)(a.X,p(d({align:"middle"},c&&{justify:"end"}),{children:[(0,r.jsx)(h,{value:t,formattedValue:g(t),className:"product-price__price"}),n&&(0,r.jsx)(E,d({size:22,className:i?"is-disabled":""},i?{}:{onClick:o}))]})),!!s&&(0,r.jsx)(a.X,p(d({align:"middle"},c&&{justify:"end"}),{children:(0,r.jsx)(f,{className:"product-price__listed-price att-strike-through-display-price",children:s})}))]})}},81301:function(e,t,n){n.d(t,{O:function(){return i},n:function(){return o}});var r=n(91004);let o=e=>{let t=e.allowedUserActions||[];return{disableCheckItem:!t.includes(r.rV.TOGGLE),disableChangeItemQuantity:!t.includes(r.rV.CHANGE_QUANTITY),disableDeleteItem:!t.includes(r.rV.DELETE),disableEditItemPrice:!t.includes(r.rV.REQUEST_CONSULTATION_FEE)}},i=e=>!!e.length&&e.some(e=>!!e.allowedUserActions&&e.allowedUserActions.includes(r.rV.TOGGLE))},2217:function(e,t,n){n.d(t,{A5:function(){return i},CN:function(){return c},D4:function(){return C},K:function(){return R},KM:function(){return m},MS:function(){return d},NK:function(){return h},QM:function(){return f},SQ:function(){return s},Sw:function(){return E},T0:function(){return o},VI:function(){return u},Xf:function(){return x},aA:function(){return l},aD:function(){return O},bx:function(){return g},dh:function(){return b},iM:function(){return v},lz:function(){return I},oU:function(){return p},p$:function(){return a},rD:function(){return y},uT:function(){return N}});var r=n(4998);let o=0,i=1,l=1,a=1,s=2,u=2,c=2,d="DELIVERED",p=1,h=2,f="CREATED",E="PAYMENT_CONFIRMED",g="CANCELLED_DRAFT",x="DELIVERED",b="DELIVERING",I="WAIT_FOR_PROCESS",N="PROCESSING",y="NEED-REFUND",m={new:(0,r.t)("Đơn mới tạo"),active:(0,r.t)("Chờ thanh to\xe1n"),paid:(0,r.t)("Đ\xe3 thanh to\xe1n"),processing:(0,r.t)("Đang xử l\xfd"),cancelled:(0,r.t)("Đ\xe3 hủy"),delivered:(0,r.t)("Đ\xe3 giao h\xe0ng"),returned:(0,r.t)("Đ\xe3 trả h\xe0ng"),reverted:(0,r.t)("Đ\xe3 trả h\xe0ng"),refund:(0,r.t)("Đ\xe3 ho\xe0n tiền")},O={waiting:"",processing:"#f78212",success:"#53c305",canceled:"#d60f29"},R=[{status:"DRAFT",text:null,displayStatus:null,tab:null,color:""},{status:"WAITING_FOR_APPROVAL",text:"Chờ duyệt",displayStatus:"Chờ duyệt",tab:null,color:""},{status:"CREATED",text:null,displayStatus:null,tab:null,color:""},{status:"PENDING",text:"Chờ x\xe1c nhận",displayStatus:"Chờ x\xe1c nhận",tab:o,color:O.processing},{status:"PROCESSING",text:"Đang xử l\xfd",displayStatus:"Đang xử l\xfd",tab:a,color:O.processing},{status:"WAITING_FOR_PAYMENT_CONFIRMATION",text:"Chờ thanh to\xe1n",displayStatus:"Chờ thanh to\xe1n",tab:o,color:O.processing},{status:"PAYMENT_CONFIRMED",text:"Đ\xe3 thanh to\xe1n",displayStatus:"Đ\xe3 thanh to\xe1n",tab:a,color:O.processing},{status:"CANCELLED",text:"Đ\xe3 hủy",displayStatus:"Đ\xe3 hủy",tab:c,color:O.canceled},{status:"REVERTED",text:"Đ\xe3 trả h\xe0ng",displayStatus:"Đ\xe3 trả h\xe0ng",tab:c,color:O.canceled},{status:"RETURNED",text:"Trả h\xe0ng",displayStatus:"Đ\xe3 trả h\xe0ng",tab:c,color:O.canceled},{status:"REFUND",text:"Trả h\xe0ng",displayStatus:"Đ\xe3 trả h\xe0ng",tab:c,color:O.canceled},{status:"NEED_REFUND",text:"Trả h\xe0ng",displayStatus:"Đ\xe3 trả h\xe0ng",tab:c,color:O.canceled},{status:"DELIVERING",text:"Đang giao h\xe0ng",displayStatus:"Đang giao h\xe0ng",tab:a,color:O.processing},{status:"DELIVERED",text:"Ho\xe0n th\xe0nh",displayStatus:"Ho\xe0n th\xe0nh",tab:c,color:O.success}],C=[{status:"NEW",displayStatus:"Mới",color:O.processing},{status:"WAITING_FOR_MANUAL_CONFIRMATION",displayStatus:"Chờ x\xe1c nhận",color:O.processing},{status:"PROVIDER_TRANSFERRING",displayStatus:"Đ\xe3 tiếp nhận",color:O.processing},{status:"PROVIDER_TRANSFERRED",displayStatus:"Đ\xe3 tiếp nhận",color:O.processing},{status:"WAIT_FOR_PRODUCT",displayStatus:"Chờ lấy h\xe0ng",color:O.processing},{status:"WAITING_FOR_PRODUCT",displayStatus:"Chờ giao h\xe0ng",color:O.processing},{status:"PICKING",displayStatus:"Đang lấy h\xe0ng",color:O.processing},{status:"PICKED",displayStatus:"Đ\xe3 lấy h\xe0ng",color:O.processing},{status:"PACKED",displayStatus:"Đ\xf3ng g\xf3i xong",color:O.processing},{status:"DELIVERING",displayStatus:"Đang giao",color:O.processing},{status:"DELIVERED",displayStatus:"Đ\xe3 giao",color:O.success},{status:"PARTIAL_DELIVERED",displayStatus:"Giao một phần",color:O.processing},{status:"RETURNED",displayStatus:"Đ\xe3 trả h\xe0ng",color:O.success},{status:"PARTIAL_CANCELLED",displayStatus:"Đ\xe3 hủy",color:O.success},{status:"CANCELLED",displayStatus:"Đ\xe3 hủy",color:O.canceled},{status:"PROCESSING",displayStatus:"Chờ giao h\xe0ng",color:O.processing},{status:"DELIVERED_AT_AGENCY",displayStatus:"Đ\xe3 giao đại l\xfd",color:O.processing},{status:"WAITING_FOR_WAREHOUSE_CONFIRMATION",displayStatus:"Chờ x\xe1c nhận",color:O.processing},{status:"WAITING_FOR_BACKORDER_CONFIRMATION",displayStatus:"Chờ x\xe1c nhận",color:O.processing},{status:"BACKORDERING",displayStatus:"Chờ h\xe0ng về",color:O.processing},{status:"BACKORDER_INSUFFICIENT_STOCK",displayStatus:"Chờ h\xe0ng về",color:O.processing}],v={WAITING_FOR_MANUAL_CONFIRMATION:"WAITING_FOR_MANUAL_CONFIRMATION",WAIT_FOR_PROCESS:"WAIT_FOR_PROCESS",PROCESSING:"PROCESSING",DELIVERED:"DELIVERED",PAYMENT_CONFIRMED:"PAYMENT_CONFIRMED",PAID:"PAID",PENDING:"PENDING",WAITING_FOR_PAYMENT_CONFIRMATION:"WAITING_FOR_PAYMENT_CONFIRMATION",CANCELLED:"CANCELLED",REVERTED:"REVERTED",RETURNED:"RETURNED",CONFIRMED:"CONFIRMED",WAITING_FOR_PICKING:"WAITING_FOR_PICKING",PACKED:"PACKED",DELIVERING:"DELIVERING",READY_FOR_PICKUP:"READY_FOR_PICKUP",REFUND:"REFUND"}},4998:function(e,t,n){n.d(t,{A:function(){return h},K:function(){return E},t:function(){return f}});var r=n(96556),o=Object.defineProperty,i=Object.defineProperties,l=Object.getOwnPropertyDescriptors,a=Object.getOwnPropertySymbols,s=Object.prototype.hasOwnProperty,u=Object.prototype.propertyIsEnumerable,c=(e,t,n)=>t in e?o(e,t,{enumerable:!0,configurable:!0,writable:!0,value:n}):e[t]=n,d=(e,t)=>{for(var n in t||(t={}))s.call(t,n)&&c(e,n,t[n]);if(a)for(var n of a(t))u.call(t,n)&&c(e,n,t[n]);return e},p=(e,t)=>i(e,l(t));let h="order",f=(e,t)=>r.default.t(e,p(d({},t),{ns:h,interpolation:{escapeValue:!1}})),E={vi:{},en:{"Đơn mới tạo":"Created","Chờ thanh to\xe1n":"Waiting for payment","Đ\xe3 thanh to\xe1n":"Payment confirmed","Đang xử l\xfd":"Processing","Đ\xe3 hủy":"Cancelled","Đ\xe3 giao h\xe0ng":"Delivered","Đ\xe3 trả h\xe0ng":"Returned","Đ\xe3 ho\xe0n tiền":"Refunded","Chờ duyệt":"Waiting for approval","Chờ x\xe1c nhận":"Waiting for confirmation","Trả h\xe0ng":"Returning","Đang giao h\xe0ng":"Delivering","Ho\xe0n th\xe0nh":"Completed","Chờ giao h\xe0ng":"Waiting for delivery","Đang giao":"Delivering","Đ\xe3 giao":"Delivered","Đ\xe3 giao đại l\xfd":"Delivered at agency",Mới:"New","Chờ h\xe0ng về":"Waiting for products","Thanh to\xe1n trả chậm":"Deferred Payment","Đ\xe3 tiếp nhận":"Received","Chờ đủ h\xe0ng":"Waiting for enough stock","Chờ lấy h\xe0ng":"Waiting for products","Đang lấy h\xe0ng":"Picking","Đ\xe3 lấy h\xe0ng":"Picked","Đ\xf3ng g\xf3i xong":"Packed","Giao một phần":"Partial delivered"}}}}]);

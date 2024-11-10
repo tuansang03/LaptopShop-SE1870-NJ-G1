@@ -63,9 +63,12 @@
                                         <div class="form-check form-check-inline">
                                             <input class="form-check-input" type="checkbox" id="color${color.id}" name="colors" value="${color.id}">
                                             <label class="form-check-label" for="color${color.id}">${color.name}</label>
+                                            <div style="background-color:${color.name.toLowerCase()};margin-left: 5px; border: 1px solid black ; width: 20px; height: 20px; padding: 10px 10px">
+                                             </div>
                                         </div>
+                                        
                                     </c:forEach>
-                                </div>
+                               
 
                                 <div class="form-group">
                                     <label for="productColors">Configuration</label><br/>

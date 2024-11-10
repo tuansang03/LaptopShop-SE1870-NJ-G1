@@ -23,7 +23,9 @@
 
         <!--================ Start Header Menu Area =================-->
 
-        <%@include file="header.jsp" %>
+        <c:if test="${!(sessionScope.admin != null || sessionScope.sale != null)}">
+            <%@include file="header.jsp" %>
+        </c:if>
   
 
         
@@ -197,6 +199,8 @@
                                 <div class="blog_info text-right">
                                     <div class="post_tag">
                                         <c:if test="${postDetail.category.name ne 'None'}">
+                                            
+                                            
                                         Type:   <a class="active" style="font-size: 15px;" href="listproduct?category%5B%5D=${postDetail.category.name}">${postDetail.category.name}</a>
                                         </c:if>
                                     </div>
@@ -289,22 +293,9 @@
                                                 <div class="navigation-area">
                             <div class="row">
                                 <div class="col-lg-6 col-md-6 col-12 nav-left flex-row d-flex justify-content-start align-items-center">
-                                    <c:if test="${param.id > param.min}">
-
-                                    <div class="detials pre" style="${pre}">
-                                        <a href="postdetail?id=${postDetail.getId()-1}&postmove=yes"><===Previous Post</a>
-                                   
-                                    </div>
-                                         </c:if>  
+ 
                                 </div>
-                                <c:if test="${param.id < param.max}">
-                                <div class="col-lg-6 col-md-6 col-12 nav-right flex-row d-flex justify-content-end align-items-center">
-                                    <div class="detials next" style="${next}">
-                                        <a href="postdetail?id=${postDetail.getId()+ 1}&postmove=yes">Next Post===></a>
-        
-                                    </div>
-                                </div>
-                                        </c:if>
+                             
                             </div>
                         </div>
                                         

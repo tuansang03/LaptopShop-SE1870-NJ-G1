@@ -1,0 +1,1 @@
+const e=document.createElement("script");e.type="text/javascript",e.src="https://shopfront-cdn.tekoapis.com/_next/static/5E7GdIpTkM2K7Njai2hGC/"+manifestPrefix+"_buildManifest.js",e.defer=!0,document.getElementsByTagName("head")[0].append(e);

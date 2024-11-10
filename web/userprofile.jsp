@@ -149,7 +149,7 @@
                         <div class="col-md-1.5 border-right">
                             <div class="d-flex flex-column align-items-center text-center p-3 py-5">
                                 <img class="rounded-circle mt-5" width="150px" 
-                                     src="https://thumbs.dreamstime.com/z/vector-illustration-isolated-white-background-user-profile-avatar-black-line-icon-user-profile-avatar-black-solid-icon-121102166.jpg?ct=jpeg" alt="Image" width="200""><span class="font-weight-bold">${sessionScope.user.fullName}</span><span class="text-black-50"></span><span> </span></div>
+                                     src="https://media.istockphoto.com/id/1130884625/vector/user-member-vector-icon-for-ui-user-interface-or-profile-face-avatar-app-in-circle-design.jpg?s=612x612&w=0&k=20&c=1ky-gNHiS2iyLsUPQkxAtPBWH1BZt0PKBB1WBtxQJRE=" alt="Image" width="200""><span class="font-weight-bold">${sessionScope.user.fullName}</span><span class="text-black-50"></span><span> </span></div>
                         </div>
                         <!--CHo nay node de code de phan truong hop khi nguoi dung chon cac tuy chon-->
                         <div class="col-md-6 border-right ">
@@ -619,11 +619,10 @@
                                     </div>
                                     <div>
                                         <c:if test="${currentOrder.getTrackingcode() != null}">
-                                            <h6>Tracking code: <b style="color: red">${currentOrder.getTrackingcode()}</b></h6>
+                                            <h6>Tracking code: <b style="color: #cf4646">${currentOrder.getTrackingcode()} <img style="width: 50px" src="https://cdn.haitrieu.com/wp-content/uploads/2022/05/Logo-GHN-Blue-Orange.png"></b></h6>
                                         </c:if>
-                                        
                                     </div>
-                                    <a href="profile?profile=ordermanage"><div class="btn close text-white" ">&times;</div></a>
+                                    <a href="profile?profile=ordermanage&see=all"><div class="btn close text-white" ">&times;</div></a>
                                 </div>
                                 <div class="wrapper bg-white">
                                     <!--            <div class="table-responsive">

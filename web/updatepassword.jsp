@@ -31,9 +31,11 @@
                 <input value="${confirmPassword}" type="password" class="form-control xx" required placeholder="Confirm new password" name="confirmPassword">
 
                 <div class="button-container">
-                    <a style="margin: 0 auto; margin-right:  20px;" href="profile?profile=info" class="cancel-button">Cancel</a>
+                    <a style="margin: 0 auto; margin-right:  20px; color: black" href="profile?profile=info" class="cancel-button" >Cancel</a>
                     <button style="" type="submit" class="save-button">Save</button>
+                    
                 </div>
+                <div><a href="http://localhost:8080/LaptopShop/profile?profile=info" style="background: #a0ceff; padding: 5px 10px; color: black; font-weight: bold">Back</a></div>
             </form>
             <div class="message">
                 <h5 style="color: tomato">${error}</h5>

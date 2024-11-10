@@ -125,7 +125,7 @@ public class ConfigurationManageController extends HttpServlet {
                 request.getRequestDispatcher("manageconfigurationdisplay.jsp").forward(request, response);
             } else {
                 request.setAttribute("listConfiguration", listConfiguration);
-                request.setAttribute("mess", "Delete failed!");
+                request.setAttribute("mess", "Delete failed, Exist product use this configuration!");
                 request.getRequestDispatcher("manageconfigurationdisplay.jsp").forward(request, response);
             }
         }

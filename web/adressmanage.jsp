@@ -73,6 +73,7 @@
                     for (Address address : addresses) {
             %>
             <div class="address-box">
+                
                 <h3><%= address.getNamereceive() %></h3>
                 <p>Phone: <%= address.getPhonenumber() %></p>
                 <p>Address: <%= address.getAddress() %></p>

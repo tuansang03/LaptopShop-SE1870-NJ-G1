@@ -82,15 +82,17 @@ public class LoadInfoCheckOut extends HttpServlet {
         AddressDAO address = new AddressDAO();
         Address getDefaultAdress = address.getDefaultAddressByUserId(user.getId());
 
-         String nameReceiveDefault = getDefaultAdress.getNamereceive();
-            String phoneDefault = getDefaultAdress.getPhonenumber();
-            String addressDefault = getDefaultAdress.getAddress();
-            request.setAttribute("phone", phoneDefault);
-            request.setAttribute("address", addressDefault);
-            request.setAttribute("name", nameReceiveDefault);
+        String nameReceiveDefault = (getDefaultAdress != null && getDefaultAdress.getNamereceive() != null) ? getDefaultAdress.getNamereceive() : "";
+        String phoneDefault = (getDefaultAdress != null && getDefaultAdress.getPhonenumber() != null) ? getDefaultAdress.getPhonenumber() : "";
+        String addressDefault = (getDefaultAdress != null && getDefaultAdress.getAddress() != null) ? getDefaultAdress.getAddress() : "";
+
+        request.setAttribute("phone", phoneDefault);
+        request.setAttribute("address", addressDefault);
+        request.setAttribute("name", nameReceiveDefault);
+
         request.setAttribute("cartItem", cartItem);
         request.setAttribute("totalPrice", totalPrice);
-        
+
         request.setAttribute("email", email);
         request.setAttribute("listImages", listImages);
         request.getRequestDispatcher("checkout.jsp").forward(request, response);

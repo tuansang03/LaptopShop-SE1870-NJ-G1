@@ -127,6 +127,7 @@ public class AdressManage extends HttpServlet {
     }
     
     boolean temp = false;
+    
     if (isdefault != null) {
         for (Address get : list) {
             if (get.isIsdefault()) {
@@ -134,17 +135,25 @@ public class AdressManage extends HttpServlet {
                 address.updateAddress(get);
             }
         }
+       
         
         // Thêm địa chỉ mới với isDefault = true
         Address address1 = new Address(list.size() + 1, name, phone, address2, true);
         address.insertAddress(address1, getCurrentUser.getId());
         mess = "Insert Successful!";
-    } else {
+    } 
+     if(list.size()==1){
+        Address address1 = new Address(list.size() + 1, name, phone, address2, true);
+        address.insertAddress(address1, getCurrentUser.getId());
+    }
+    
+    else {
         // Nếu không có địa chỉ mặc định, thêm địa chỉ mới với isDefault = false
-        Address address1 = new Address(list.size() + 1, name, phone, address2, false);
+        Address address1 = new Address(list.size() + 1, name, phone, address2, true);
         address.insertAddress(address1, getCurrentUser.getId());
         mess = "Insert Successful!";
     }
+    
 
     request.setAttribute("mess", mess);
     response.sendRedirect("address?id=" + getCurrentUser.getId() + "&action=default");
