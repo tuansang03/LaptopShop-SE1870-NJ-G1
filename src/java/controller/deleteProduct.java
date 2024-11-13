@@ -98,10 +98,14 @@ for (ProductDetail productDetail : pDList) {
 
 // Sau khi đã xóa tất cả ProductDetail, xóa sản phẩm
 ProductDAO pDao = new ProductDAO();
-pDao.deleteById(productId1);
+if(pDao.deleteById(productId1)){
+  request.setAttribute("msg", "Delete successful");
+}else{
+    request.setAttribute("error", "Delete fail");
+}
 
 // Chuyển hướng đến trang sản phẩm
-response.sendRedirect("readProduct");
+request.getRequestDispatcher("readProduct").forward(request, response);
     } 
 
     /** 

@@ -7,11 +7,30 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <title>Search</title>
+    <link rel="icon" href="img/Fevicon.png" type="image/png">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" href="img/Fevicon.png" type="image/png">
     <link rel="stylesheet" href="vendors/bootstrap/bootstrap.min.css">
     <link rel="stylesheet" href="vendors/fontawesome/css/all.min.css">
     <link rel="stylesheet" href="css/style.css">
+     <link rel="stylesheet"
+              href="https://unpkg.com/boxicons@latest/css/boxicons.min.css">
+       <link rel="icon" href="img/Fevicon.png" type="image/png">
+        <link rel="stylesheet" href="vendors/bootstrap/bootstrap.min.css">
+        <link rel="stylesheet" href="vendors/fontawesome/css/all.min.css">
+        <link rel="stylesheet" href="vendors/themify-icons/themify-icons.css">
+        <link rel="stylesheet" href="vendors/nice-select/nice-select.css">
+        <link rel="stylesheet" href="vendors/owl-carousel/owl.theme.default.min.css">
+        <link rel="stylesheet" href="vendors/owl-carousel/owl.carousel.min.css">
+
+        <link rel="stylesheet" href="css/style.css">
+
+        <link rel="stylesheet"
+              href="https://cdn.jsdelivr.net/npm/boxicons@latest/css/boxicons.min.css">
+        <!-- or -->
+        <link rel="stylesheet"
+              href="https://unpkg.com/boxicons@latest/css/boxicons.min.css">
+
     <style>
         /* General Layout */
         .search-section {
@@ -240,7 +259,8 @@
                                         <h5 class="card-product__title">
                                             <a href="information?productId=${o3.getProductDetail().getId()}">${o3.getProductDetail().getProduct().getName()} ${o3.getProductDetail().getConfiguration().getName()} (${o3.getProductDetail().getColor().getName()})</a>
                                         </h5>
-                                        <p class="card-product__price">${o3.getProductDetail().getPrice()} VND</p>
+                                   
+                                            <h6 style="color: red"><fmt:formatNumber value="${o3.getProductDetail().getPrice()}" type="number"/>đ</h6>
                                     </div>
                                 </div>
                             </div>

@@ -69,9 +69,9 @@
                     <div class="col-lg-6 offset-lg-3" style="width: 400px   ">
                         <div class="login_form_inner" style="position: absolute ; left: 300px           ">
                             <h3>Verify OTP</h3>
-                            <% if (request.getAttribute("message") != null) { %>
+                            <% if (request.getAttribute("success") != null) { %>
                             <div class="alert alert-info" role="alert">
-                                <%= request.getAttribute("message") %>
+                                <%= request.getAttribute("success") %>
                             </div>
                             <% } %>
                             <form class="row login_form" action="VerifyOTPServlet1" method="POST" id="otpForm">

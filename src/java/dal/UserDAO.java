@@ -656,11 +656,22 @@ public class UserDAO extends DBContext {
 
     public List<Image> getPictureListByProductName(String productName) {
         List<Image> list = new ArrayList<>();
-        String sql = "SELECT i.Id, i.ProductDetailId, i.Image "
-                + "FROM Image i "
-                + "JOIN ProductDetail pd ON i.ProductDetailId = pd.Id "
-                + "JOIN Product p ON pd.ProductId = p.Id "
-                + "WHERE p.Name LIKE ?";
+//        String sql = "SELECT i.Id, i.ProductDetailId, i.Image "
+//                + "FROM Image i "
+//                + "JOIN ProductDetail pd ON i.ProductDetailId = pd.Id "
+//                + "JOIN Product p ON pd.ProductId = p.Id "
+//                + "WHERE p.Name LIKE 
+String sql = "WITH ImageRanking AS (\n"
+                + "    SELECT i.Id, i.ProductDetailId, i.Image,\n"
+                + "           ROW_NUMBER() OVER (PARTITION BY i.ProductDetailId ORDER BY i.Id) AS row_num\n"
+                + "    FROM Image i\n"
+                + "    JOIN ProductDetail pd ON i.ProductDetailId = pd.Id\n"
+                + "    JOIN Product p ON pd.ProductId = p.Id\n"
+                + "    WHERE p.Name LIKE ?\n"
+                + ")\n"
+                + "SELECT Id, ProductDetailId, Image\n"
+                + "FROM ImageRanking\n" +
+        "WHERE row_num = 1";
         try {
             PreparedStatement st = connection.prepareStatement(sql);
             st.setString(1, "%" + productName + "%"); // Tìm kiếm theo tên sản phẩm

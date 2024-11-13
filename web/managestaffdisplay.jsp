@@ -65,7 +65,7 @@
                         <th>Full Name</th>
                         <th>Email</th>
                         <th>Status</th>
-                        <th>Action</th> <!-- Cột Action -->
+                        <!--<th>Action</th>  Cột Action -->
                     </tr>
                 </thead>
 
@@ -89,9 +89,9 @@
                                     </c:otherwise>
                                 </c:choose>
                             </td>
-                            <td>
+<!--                            <td>
                                 <div class="action-buttons">
-                                    <!-- Nút Delete -->
+                                     Nút Delete 
                                     <form action="CustomerManageController" method="GET" style="display:inline;">
                                         <input type="hidden" name="id" value="${user.id}">
                                         <input type="hidden" name="service" value="deleteStaff">
@@ -100,7 +100,7 @@
                                         </button>
                                     </form>
                                 </div>
-                            </td>
+                            </td>-->
                         </tr>
                     </c:forEach>
                 </tbody>

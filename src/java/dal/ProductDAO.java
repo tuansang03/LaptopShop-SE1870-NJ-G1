@@ -217,22 +217,31 @@ public class ProductDAO extends DBContext {
         return generatedId;  // Trả về ID của sản phẩm vừa được thêm
     }
 
-    public void deleteById(int id) {
-        String sql = "DELETE FROM Comment \n"
-                + "WHERE ProductId = ?\n"
-                + "\n"
-                + "\n"
-                + "DELETE FROM Product \n"
-                + "                WHERE Id= ?";
-        try {
-            PreparedStatement pre = connection.prepareStatement(sql);
-            pre.setInt(1, id);
-            pre.setInt(2, id);
-            pre.executeQuery();
-        } catch (SQLException ex) {
-            Logger.getLogger(ProductDAO.class.getName()).log(Level.SEVERE, null, ex);
-        }
+   public boolean deleteById(int id) {
+    // Chuỗi SQL với 2 câu lệnh DELETE
+    String sql = "DELETE FROM Comment WHERE ProductId = ?;\n"
+               + "DELETE FROM Product WHERE Id = ?;";
+    
+    try {
+        // Tạo PreparedStatement từ kết nối hiện tại
+        PreparedStatement pre = connection.prepareStatement(sql);
+        
+        // Thiết lập giá trị cho tham số
+        pre.setInt(1, id);  // Dùng id cho ProductId trong bảng Comment
+        pre.setInt(2, id);  // Dùng id cho Id trong bảng Product
+        
+        // Thực thi câu lệnh SQL và kiểm tra số lượng dòng bị ảnh hưởng
+        int affectedRows = pre.executeUpdate();
+        
+        // Nếu affectedRows lớn hơn 0, tức là ít nhất một bản ghi đã bị xóa
+        return affectedRows > 0;
+    } catch (SQLException ex) {
+        // Log lỗi nếu có ngoại lệ
+        Logger.getLogger(ProductDAO.class.getName()).log(Level.SEVERE, null, ex);
+        return false;
     }
+}
+
 
     public int countProduct() {
         String sql = "SELECT COUNT(*) FROM product"; // Câu lệnh SQL để đếm sản phẩm

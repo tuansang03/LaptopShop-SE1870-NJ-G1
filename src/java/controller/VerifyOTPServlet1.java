@@ -95,7 +95,7 @@ public class VerifyOTPServlet1 extends HttpServlet {
             session.removeAttribute("uRegister");
             session.removeAttribute("otp");
             request.setAttribute("success", "Register successfully!");
-//        request.getRequestDispatcher("login.jsp").forward(request, response);
+        request.getRequestDispatcher("otp_verification1.jsp").forward(request, response);
         } else {
             // OTP không hợp lệ, trả về trang OTP với thông báo lỗi
             request.setAttribute("error", "Invalid OTP. Please try again.");

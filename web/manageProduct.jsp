@@ -14,6 +14,16 @@
         <link rel="stylesheet" href="assets/css/animate.css">
         <link rel="stylesheet" href="assets/css/main.css">
 
+          <style>
+        .msg {
+            color: green;
+            font-weight: bold;
+        }
+        .error {
+            color: red;
+            font-weight: bold;
+        }
+    </style>
         <script>
             function confirmDelete() {
                 return confirm("Are you sure you want to delete this product?");
@@ -23,7 +33,13 @@
         <%@include file="sidebar.jsp" %>
 
     <div class="col-md-10 content">
-        
+         <c:if test="${not empty msg}">
+        <div class="msg">${msg}</div>
+    </c:if>
+    
+    <c:if test="${not empty error}">
+        <div class="error">${error}</div>
+    </c:if>
         <h2>Manage Product</h2>
         <form action="searchProductByName" method="GET" class="form-inline mb-3">
     <input type="text" name="name" class="form-control mr-2" placeholder="Search by product name" value="${param.keyword}">

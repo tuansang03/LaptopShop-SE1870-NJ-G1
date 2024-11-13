@@ -140,6 +140,7 @@ public class StatisticController extends HttpServlet {
 //            request.setAttribute("list", list);
 //            request.setAttribute("action2", "action2");
 //            request.getRequestDispatcher("statistic3display.jsp").forward(request, response);
+
 request.setAttribute("action2", "action2");
 request.getRequestDispatcher("statistic3display.jsp").forward(request, response);
         }

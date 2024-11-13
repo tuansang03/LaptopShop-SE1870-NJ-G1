@@ -5,24 +5,24 @@
             <url>src/java/dal/UserDAO.java</url>
             <bookmark id="1">
                 <name/>
-                <line>1036</line>
+                <line>1047</line>
                 <key/>
             </bookmark>
         </file>
     </editor-bookmarks>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
-        <group name="Group 20240613-10:26:14">
-            <file>file:/D:/SWP391000/LaptopShop-SE1870-NJ-G1/src/java/controller/ProfileManage.java</file>
-            <file>file:/D:/SWP391000/LaptopShop-SE1870-NJ-G1/web/updatepostdisplay.jsp</file>
-            <file>file:/D:/SWP391000/LaptopShop-SE1870-NJ-G1/src/java/controller/logout.java</file>
-            <file>file:/D:/SWP391000/LaptopShop-SE1870-NJ-G1/src/java/controller/login.java</file>
-            <file>file:/D:/SWP391000/LaptopShop-SE1870-NJ-G1/src/java/filter/CustomerFilter.java</file>
-            <file>file:/D:/SWP391000/LaptopShop-SE1870-NJ-G1/web/WEB-INF/web.xml</file>
-            <file>file:/D:/SWP391000/LaptopShop-SE1870-NJ-G1/src/java/filter/GuestFilter.java</file>
-            <file>file:/D:/SWP391000/LaptopShop-SE1870-NJ-G1/web/wishlist.jsp</file>
-            <file>file:/D:/SWP391000/LaptopShop-SE1870-NJ-G1/src/java/filter/AdminFilter.java</file>
-            <file>file:/D:/SWP391000/LaptopShop-SE1870-NJ-G1/src/java/filter/SalerFilter.java</file>
-        </group>
         <group/>
+        <group name="Group 20240613-10:26:14">
+            <file>file:/D:/FINAL_SWP391/LaptopShop-SE1870-NJ-G1/web/index.jsp</file>
+            <file>file:/D:/FINAL_SWP391/LaptopShop-SE1870-NJ-G1/web/SearchOverviewPage.jsp</file>
+            <file>file:/D:/FINAL_SWP391/LaptopShop-SE1870-NJ-G1/web/login.jsp</file>
+            <file>file:/D:/FINAL_SWP391/LaptopShop-SE1870-NJ-G1/src/java/controller/displaySearchPage.java</file>
+            <file>file:/D:/FINAL_SWP391/LaptopShop-SE1870-NJ-G1/src/java/controller/AdressManage.java</file>
+            <file>file:/D:/FINAL_SWP391/LaptopShop-SE1870-NJ-G1/src/java/controller/SearchHeader.java</file>
+            <file>file:/D:/FINAL_SWP391/LaptopShop-SE1870-NJ-G1/web/otp_verification1.jsp</file>
+            <file>file:/D:/FINAL_SWP391/LaptopShop-SE1870-NJ-G1/src/java/dal/UserDAO.java</file>
+            <file>file:/D:/FINAL_SWP391/LaptopShop-SE1870-NJ-G1/src/java/controller/VerifyOTPServlet1.java</file>
+            <file>file:/D:/FINAL_SWP391/LaptopShop-SE1870-NJ-G1/src/java/controller/addProduct.java</file>
+        </group>
     </open-files>
 </project-private>

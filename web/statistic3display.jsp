@@ -80,7 +80,7 @@
     <div class="form-group mt-4">
     <form action="StatisticController" method="get">
         <label for="yearInput">Enter Year:</label>
-        <input type="number" id="yearInput" name="year" class="form-control" placeholder="Year" required>
+        <input type="number" value="${year}" id="yearInput" name="year" class="form-control" placeholder="Year" required>
         <input type="hidden" name="service" value="list" >
         <button type="submit" class="btn btn-primary mt-2">Submit</button>
     </form>

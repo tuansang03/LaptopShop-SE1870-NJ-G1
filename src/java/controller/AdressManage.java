@@ -142,14 +142,14 @@ public class AdressManage extends HttpServlet {
         address.insertAddress(address1, getCurrentUser.getId());
         mess = "Insert Successful!";
     } 
-     if(list.size()==1){
+     if(list.size()<1){
         Address address1 = new Address(list.size() + 1, name, phone, address2, true);
         address.insertAddress(address1, getCurrentUser.getId());
     }
     
     else {
         // Nếu không có địa chỉ mặc định, thêm địa chỉ mới với isDefault = false
-        Address address1 = new Address(list.size() + 1, name, phone, address2, true);
+        Address address1 = new Address(list.size() + 1, name, phone, address2, false);
         address.insertAddress(address1, getCurrentUser.getId());
         mess = "Insert Successful!";
     }
