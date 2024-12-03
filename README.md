@@ -18,7 +18,7 @@
 
 ![Invoices](https://github.com/tuansang03/LaptopShop-SE1870-NJ-G1/blob/main/images/Invoices.png)
 
-![Manager Order](https://github.com/tuansang03/LaptopShop-SE1870-NJ G1/blob/main/images/manager_order.png)
+![Manager Order](https://github.com/tuansang03/LaptopShop-SE1870-NJ-G1/blob/main/images/manager_order.png)
 
 #### © 2024 Tuấn Sang.
 
