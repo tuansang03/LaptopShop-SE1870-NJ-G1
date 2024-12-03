@@ -98,7 +98,7 @@ public class SendMailSSL {
                     + "</div>"
                     + "<div style='padding: 20px;'>"
                     + "<p style='font-size: 16px;'>Dear customer,</p>"
-                    + "<p style='font-size: 16px;'>Thank you for your order! Please visit the <a href='http://localhost:8080/LaptopShop/billOfOrder?odID=" + orderDetailsID + "'>Link</a> to view and check the original invoice:</p>"
+                    + "<p style='font-size: 16px;'>Thank you for your order! Please visit the <a href='http://localhost:9999/LaptopShop/billOfOrder?odID=" + orderDetailsID + "'>Link</a> to view and check the original invoice:</p>"
                     + "</div>"
                     + "<div style='background-color: #e0e0e0; padding: 10px; text-align: center; border-bottom-left-radius: 8px; border-bottom-right-radius: 8px;'>"
                     + "<p style='font-size: 14px; color: #555;'>We appreciate your business and hope you enjoy your purchase. If you have any questions, feel free to contact us.</p>"

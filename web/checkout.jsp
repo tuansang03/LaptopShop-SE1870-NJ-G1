@@ -65,7 +65,7 @@
                                 <div class="col-lg-8">
                                     <h3>Billing Details</h3>
                                     <h4> <c:if test="${empty address}">
-        <a href="http://localhost:8080/LaptopShop/addnewadress.jsp">Add New Address</a>
+        <a href="http://localhost:9999/LaptopShop/addnewadress.jsp">Add New Address</a>
         <h6>Before order, you must enter your address </h6>
     </c:if></h4>
                                     <div class="row contact_form">

@@ -13,7 +13,7 @@ public class Iconstant {
 
     public static final String GOOGLE_CLIENT_SECRET = "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";
 
-    public static final String GOOGLE_REDIRECT_URI = "http://localhost:8080/LaptopShop/google-callback";
+    public static final String GOOGLE_REDIRECT_URI = "http://localhost:9999/LaptopShop/google-callback";
 
     public static final String GOOGLE_GRANT_TYPE = "authorization_code";
 
